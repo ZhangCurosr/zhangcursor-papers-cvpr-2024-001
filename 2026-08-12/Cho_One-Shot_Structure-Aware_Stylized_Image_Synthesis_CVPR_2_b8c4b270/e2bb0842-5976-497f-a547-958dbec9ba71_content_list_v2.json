@@ -1,0 +1,3543 @@
+[
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "One-Shot Structure-Aware Stylized Image Synthesis"
+                    }
+                ],
+                "level": 1
+            },
+            "bbox": [
+                220,
+                130,
+                748,
+                151
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Hansam Cho<sup>1,2∗</sup>, Jonghyun Lee<sup>1,2∗</sup>, Seunggyu Chang<sup>1</sup>, Yonghyun Jeong<sup>1†</sup> <sup>1</sup>NAVER Cloud, <sup>2</sup>School of Industrial and Management Engineering, Korea University {chosam95, tomtom1103}@korea.ac.kr, {seunggyu.chang, yonghyun.jeong}@navercorp.com"
+                    }
+                ]
+            },
+            "bbox": [
+                140,
+                179,
+                828,
+                253
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/a23b9f2f8a0b209716fa448c662562e3828adfce61fea2ed1541a5f4f2017e4a.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": [
+                    {
+                        "type": "text",
+                        "content": "(b) One-shot image stylization with OOD reference image"
+                    }
+                ]
+            },
+            "bbox": [
+                142,
+                266,
+                823,
+                525
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Figure 1. OSASIS is able to (a) stylize an input image with a single reference image while robustly preserving the structure and content of the input image. It is also able to (b) incorporate out-of-domain (OOD) data as the reference image while other baseline methods fail"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                536,
+                893,
+                565
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "Abstract"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                233,
+                577,
+                315,
+                593
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "While GAN-based models have been successful in image stylization tasks, they often struggle with structure preservation while stylizing a wide range of input images. Recently, diffusion models have been adopted for image stylization but still lack the capability to maintain the original quality of input images. Building on this, we propose OS-ASIS: a novel one-shot stylization method that is robust in structure preservation. We show that OSASIS is able to effectively disentangle the semantics from the structure of an image, allowing it to control the level of content and style implemented to a given input. We apply OSASIS to various experimental settings, including stylization with outof-domain reference images and stylization with text-driven manipulation. Results show that OSASIS outperforms other stylization methods, especially for input images that were rarely encountered during training, providing a promising solution to stylization via diffusion models. The source code can befound at https://github.com/hansam95/OSASIS."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                593,
+                472,
+                867
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "1. Introduction"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                501,
+                578,
+                632,
+                593
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In the literature of generative models, image stylization refers to training a model in order to transfer the style of a reference image to various input images during inference [21, 22, 28]. However, collecting a sufficient number of images that share a particular style for training can be difficult. Consequently, one-shot stylization has emerged as a viable and practical solution, with generative adversarial networks (GANs) showing promising results [2, 16, 36, 38, 39]."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                597,
+                893,
+                734
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Despite significant advancements in GAN-based stylization techniques, the accurate preservation of an input image’s structure continues to pose a significant challenge. This difficulty is particularly pronounced for input images that contain elements infrequently encountered during training, often characterized by complex structural nuances that diverge from those observed in more commonly presented images. Figure 1(a) illustrates this challenge, where entities such as hands and microphones, when processed through GAN-based stylization, diverge considerably from their original structural integrity. In addition, GAN-based stylization methods often fail to accurately separate the structure and style of the reference image during inference. As shown in Figure 1(b), the lack of disentanglement results in structural artifacts from reference images bleeding into the stylized image."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                734,
+                893,
+                902
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": []
+            },
+            "bbox": [
+                104,
+                2,
+                181,
+                41
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": [
+                    {
+                        "type": "text",
+                        "content": "This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore."
+                    }
+                ]
+            },
+            "bbox": [
+                235,
+                0,
+                810,
+                46
+            ]
+        },
+        {
+            "type": "page_footnote",
+            "content": {
+                "page_footnote_content": [
+                    {
+                        "type": "text",
+                        "content": "<sup>*</sup>Work done during an internship at NAVER Cloud. <sup>†</sup>Corresponding author."
+                    }
+                ]
+            },
+            "bbox": [
+                93,
+                875,
+                369,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "8302"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                92,
+                470,
+                167
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Recently, diffusion models (DMs) have shown remarkable performance in various image-related tasks, including high-fidelity image generation [25, 26], super resolution [27], and text-driven image manipulation [13, 15, 17]. For image stylization, several studies, including DiffuseIT [15] and InST [37], have been proposed. However, they primarily focus on developing a diffusion model framework tailored to the stylization task. In contrast, our work prioritizes preserving the structure of the input image over solely introducing an appropriate diffusion model for stylization. As illustrated in Figure 1(a), it can be seen that the capability to preserve structure doesn’t stem from diffusion models itself, but from our methodology."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                169,
+                470,
+                364
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In this study, we propose One-shot Structure-Aware Stylized Image Synthesis (OSASIS), which effectively disentangles the structure and transferable semantics of a style image within the structure of a diffusion model. OSASIS selects an appropriate encoding timestep of a structural latent code to control the strength of structure preservation and enhances its preservation ability through a structurepreserving network. To acquire a semantically meaningful latent, we utilize the semantic encoder proposed in diffusion autoencoders (DiffAE) [23]. Following the approach of mind the gap (MTG) [39], we bridge the domain gap by finetuning a pretrained DM using a combination of directional CLIP losses. Once trained, we find that by properly conditioning the semantic latent code, our method achieves structure-aware image stylization."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                366,
+                470,
+                593
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We conduct qualitative and quantitative experiments on a wide range of input and style images. By quantitatively extracting data with rare structural elements from the training set (i.e. low-density images), we show that OSASIS is robust in structure preservation, outperforming other methods. In addition, we directly optimize the semantic latent code for text-driven manipulation. Combining the optimized latent with the finetuned DM, OSASIS is able to generate stylized images with manipulated attributes."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                594,
+                470,
+                732
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2. Background"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                750,
+                205,
+                766
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2.1. Diffusion Models"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                776,
+                246,
+                791
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Diffusion models are latent variable models that are trained to reverse a forward process[8]. The forward process, which is defined as a Markov chain with a Gaussian transition defined in Eq.1, involves iteratively mapping an image to a predefined prior "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { N } ( \\mathbf { 0 } , \\mathbf { I } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "over "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "T"
+                    },
+                    {
+                        "type": "text",
+                        "content": "steps. DDPM[8] proposes to parameterize the reverse process defined in Eq. 2 with a noise prediction network "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\boldsymbol { \\epsilon } _ { \\boldsymbol { \\theta } } ( \\mathbf { x } _ { t } , t )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", which is trained with the"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                795,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "loss function "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { \\mathrm { s i m p l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in Eq.3."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                90,
+                691,
+                107
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "q ( \\mathbf { x } _ { t } | \\mathbf { x } _ { t - 1 } ) = N ( \\mathbf { x } _ { t } ; \\sqrt { 1 - \\beta _ { t } } \\mathbf { x } _ { t - 1 } , \\beta _ { t } \\mathbf { I } )\\tag{1}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/9a46d5fc7c51e1b590b54db22ee3b040fc92145c8c7753d7c59a8bc91f1fc2d8.jpg"
+                }
+            },
+            "bbox": [
+                558,
+                121,
+                831,
+                138
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "p _ { \\theta } ( \\mathbf { x } _ { t - 1 } | \\mathbf { x } _ { t } ) = N ( \\mathbf { x } _ { t - 1 } ; \\mu _ { \\theta } ( \\mathbf { x } _ { t } , t ) , \\sigma _ { t } \\mathbf { I } )\\tag{2}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/60842688a638c4af90c8ff212563fc669b3dea4682eb6e7c104ade4e9b010a44.jpg"
+                }
+            },
+            "bbox": [
+                562,
+                140,
+                828,
+                157
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathrm { w h e r e } \\quad \\mu _ { \\theta } ( \\mathbf { x } _ { t } , t ) = { \\frac { 1 } { \\sqrt { 1 - \\beta _ { t } } } } ( \\mathbf { x } _ { t } - { \\frac { \\beta _ { t } } { \\sqrt { 1 - \\alpha _ { t } } } } \\epsilon _ { \\theta } ( \\mathbf { x } _ { t } , t ) )",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/fd954194c24fec0f03a5146d1745411a7335068c2d26ca2e57d92ec4037eff18.jpg"
+                }
+            },
+            "bbox": [
+                519,
+                160,
+                887,
+                193
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathcal { L } _ { \\mathrm { s i m p l e } } = \\mathbb { E } _ { t , \\mathbf { x } _ { 0 } , \\epsilon } \\left[ \\| \\epsilon _ { \\theta } ( \\mathbf { x } _ { t } , t ) - \\epsilon ) \\| ^ { 2 } \\right] , \\epsilon \\sim \\mathcal { N } ( \\mathbf { 0 } , \\mathbf { I } )\\tag{3}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/cd48d2db85f465f34bd25b915cac157b99a8215f782fed31588c4bfe13099ca9.jpg"
+                }
+            },
+            "bbox": [
+                517,
+                193,
+                852,
+                220
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In contrast to DDPM, DDIM [29] defines the forward process as non-Markovian and derives the corresponding reverse process as Eq. 5, in which "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f _ { \\theta } ( x _ { t } , t )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the model’s prediction of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\mathrm { 0 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". DDIM also introduces an image encoding method by deriving ordinary differential equations (ODEs) corresponding with the reverse process. By reversing the ODE, DDIM introduces an image encoding process, defined as Eq. 4."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                229,
+                893,
+                352
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbf { x } _ { t + 1 } = \\sqrt { \\alpha _ { t + 1 } } f _ { \\theta } ( \\mathbf { x } _ { t } , t ) + \\sqrt { 1 - \\alpha _ { t + 1 } } \\epsilon _ { \\theta } ( \\mathbf { x } _ { t } , t )\\tag{4}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/41598030061b6d8d4bfd4131ef322363de9c56d4fffb00dc82327be70014d7fe.jpg"
+                }
+            },
+            "bbox": [
+                537,
+                363,
+                852,
+                382
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbf { x } _ { t - 1 } = \\sqrt { \\alpha _ { t - 1 } } f _ { \\theta } ( \\mathbf { x } _ { t } , t ) + \\sqrt { 1 - \\alpha _ { t - 1 } } \\epsilon _ { \\theta } ( \\mathbf { x } _ { t } , t )\\tag{5}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/a7da09a0321856db1edf5d955bd679311340003535aebb79870832032bfa505b.jpg"
+                }
+            },
+            "bbox": [
+                537,
+                385,
+                852,
+                402
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathrm { w h e r e } f _ { \\theta } ( \\mathbf { x } _ { t } , t ) = \\frac { \\mathbf { x } _ { t } - \\sqrt { 1 - \\alpha _ { t } } \\epsilon _ { \\theta } ( \\mathbf { x } _ { t } , t ) } { \\sqrt { \\alpha _ { t } } }",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/770aa808f80dfba10a15290f77bacc12f70338506e0a48400877008ceec75609.jpg"
+                }
+            },
+            "bbox": [
+                555,
+                406,
+                849,
+                439
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "For our work, we adopt specific terminologies to refer to the forward and reverse process of DDPM, in which we call forward DDPM and reverse DDPM, respectively. Similarly, the denoising reverse process of DDIM is referred to as reverse DDIM, while the deterministic image encoding process of DDIM is referred to as forward DDIM."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                450,
+                893,
+                542
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2.2. Diffusion Autoencoders"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                551,
+                718,
+                566
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "DiffAE [23] proposes a semantic encoder "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathrm { E n c } _ { \\phi }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "that encodes a given image "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\mathrm { 0 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to a semantically rich latent variable "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "represented as:"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                569,
+                892,
+                616
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "{ \\bf z } _ { \\mathrm { s e m } } = \\mathrm { E n c } _ { \\phi } \\left( { \\bf x } _ { 0 } \\right) .\\tag{6}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/3b0e283fe7d975951c4e8a6dbc066679a5f658833cd2080d28c2a761b74f03fa.jpg"
+                }
+            },
+            "bbox": [
+                627,
+                621,
+                763,
+                637
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "This latent variable has been shown to be linear, decodable, and semantically meaningful, hence being an attractive property that our model seeks to leverage. Similar to the aforementioned forward DDIM, DiffAE is also able to encode an image given "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to a fully reconstructable latent "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { T }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by Eq. 7, in which we denote forward DiffAE. Correspondingly, the forward DiffAE encoded latent "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { T }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "can be decoded by conditioning itself and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to the reverse process defined as Eq. 8, referred to as reverse DiffAE."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                650,
+                893,
+                786
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { r } { \\mathbf { x } _ { t + 1 } = \\sqrt { \\alpha _ { t + 1 } } f _ { \\theta } ( \\mathbf { x } _ { t } , t , \\mathbf { z } _ { \\mathrm { s e m } } ) + \\sqrt { 1 - \\alpha _ { t + 1 } } \\epsilon _ { \\theta } ( \\mathbf { x } _ { t } , t , \\mathbf { z } _ { \\mathrm { s e m } } ) } \\end{array}\\tag{7}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/3f9453e5867bd5a4f2f4f1546c53984466f78b006349ef6b89ff52ddc3b065f8.jpg"
+                }
+            },
+            "bbox": [
+                500,
+                797,
+                892,
+                816
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbf { x } _ { t - 1 } = \\sqrt { \\alpha _ { t - 1 } } f _ { \\theta } ( \\mathbf { x } _ { t } , t , \\mathbf { z } _ { \\mathrm { s e m } } ) + \\sqrt { 1 - \\alpha _ { t - 1 } } \\epsilon _ { \\theta } ( \\mathbf { x } _ { t } , t , \\mathbf { z } _ { \\mathrm { s e m } } )\\tag{8}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/03a9224037675935e15c7ac3bd237791b5017e1843cee7d6cbcab6a233e5c370.jpg"
+                }
+            },
+            "bbox": [
+                500,
+                834,
+                892,
+                853
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathrm { w h e r e } \\quad f _ { \\theta } ( \\mathbf { x } _ { t } , t , \\mathbf { z } _ { \\mathrm { s e m } } ) = \\frac { \\mathbf { x } _ { t } - \\sqrt { 1 - \\alpha _ { t } } \\epsilon _ { \\theta } ( \\mathbf { x } _ { t } , t , \\mathbf { z } _ { \\mathrm { s e m } } ) } { \\sqrt { \\alpha _ { t } } }",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/bd396e8b8fcb38af814b3cf44e8ac6ba46119cb652b7fe04a261e057f7fe9107.jpg"
+                }
+            },
+            "bbox": [
+                517,
+                869,
+                887,
+                904
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "8303"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/b0700ce1dac2d22b794da6e2a70a1be236f7ad68e55170c16fabdfabb8757a6b.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Fi g ur e 2. O v er vi e w of O S A SI S. D uri n g fi n et u ni n g, cr o s s- d o m ai n l o s s c o m p ar e s t h e p h ot or e ali sti c i m a g e ( b o u n d e d y ell o w) t o it s st yli z e d c o u nt er p art s ( b o u n d e d gr e e n). C o n c urr e ntl y, t h e i n- d o m ai n l o s s g a u g e s t h e ali g n m e nt of dir e cti o n al s hift s wit hi n t h e s a m e d o m ai n, w hi c h ar e d eli n e at e d b y y ell o w a n d gr e e n. R e c o n str u cti o n l o s s c o m p ar e s t h e ori gi n al st yl e i m a g e wit h a r e c o n str u ct e d c o u nt er p art. I nt uiti v el y, t h e c o m bi n ati o n of t h e dir e cti o n al l o s s e s g u ar a nt e e s t h at f or e a c h it er ati o n t h e g e n er at e d "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { B } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "i s p o siti o n e d f or pr oj e cti o n v e ct or s fr o m "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { B } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "a n d "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { A } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "t o b e c olli n e ar t o it s cr o s s- d o m ai n a n d i n- d o m ai n c o u nt er p art s i n t h e C LI P s p a c e."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                168,
+                88,
+                808,
+                372
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3. M et h o d s"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                465,
+                176,
+                481
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "O ur a p pr o a c h ai m s t o a c hi e v e eff e cti v e st yli z ati o n b y i niti all y di s e nt a n gli n g t h e str u ct ur al a n d s e m a nti c i nf or m ati o n of i m a g e s. We d e fi n e str u ct ur al i nf or m ati o n a s t h e o v er all o utli n e of a n i m a g e, w h er e a s w e f urt h er d e c o n str u ct t h e s em a nti c s of a n i m a g e i nt o a c o m bi n ati o n of c o nt e nt a n d st yl e. T o i niti all y di s e nt a n gl e t h e s e m a nti c s fr o m t h e str u ct ur e, w e e m pl o y t w o di sti n ct l at e nt c o d e s: t h e str u ct ur al l at e nt c o d e "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x _ { t _ { 0 } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "a n d t h e s e m a nti c l at e nt c o d e "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". We fi n et u n e a pr etr ai n e d D DI M "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\theta } ^ { A }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "c o n diti o n e d o n t h e s e m a nti c l at e nt c o d e "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "vi a C LI P dir e cti o n al l o s s e s i n or d er t o bri d g e t h e d om ai n g a p b et w e e n t h e i n p ut a n d st yl e i m a g e s. O n c e fi n et u n e d, w e c o ntr ol t h e a m o u nt of l o w-l e v el vi s u al f e at ur e s e. g . t e xt ur e a n d c ol or), r ef err e d t o a s st yl e, a n d hi g h-l e v el vi s u al f e at ur e s ( e. g . o bj e ct a n d i d e ntit y), r ef err e d t o a s c o nt e nt d uri n g i nf er e n c e. Pr o p er c o n diti o ni n g of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "t o t h e fi n et u n e d D DI M all o w s u s t o a c hi e v e t hi s c o ntr ol, eff e cti v el y p erf or mi n g st yli z ati o n. F urt h er m or e, w e dir e ctl y o pti mi z e t h e s e m a nti c l at e nt c o d e "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "f or t e xt- dri v e n m a ni pul ati o n. B y c o m bi ni n g t h e o pti mi z e d l at e nt wit h t h e fi n et u n e d D DI M, O S A SI S i s a bl e t o pr o d u c e st yli z e d i m a g e s wit h m a ni p ul at e d attri b ut e s. Fi g ur e pr o vi d e s a n o v er vi e w of o ur m et h o d."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                484,
+                470,
+                818
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3. 1. Tr ai ni n g"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                821,
+                183,
+                838
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "T o e n s ur e t h at t h e c h a n g e s i n t h e C LI P e m b e d di n g s p a c e o c c ur i n t h e d e sir e d dir e cti o n, w e pr e p ar e a si n gl e i m a g e "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { B } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "fr o m a st yli z e d d o m ai n ( d e n ot e d d o m ai n B) a n d ai m t o c o n v ert it t o a p h ot or e ali sti c d o m ai n ( d e n ot e d d o m ai n"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                839,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "A). R e c e nt st u di e s h a v e s h o w n t h at pr etr ai n e d D M s c a n g e n er at e d o m ai n- s p e ci fi c i m a g e s b a s e d o n u n s e e n d o m ai n i m a g e s [1 3 2 0 ]. B uil di n g o n t hi s, w e utili z e a pr etr ai n e d D D P M "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\theta }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "t o g e n er at e a si n gl e i m a g e "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { A } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "fr o m d o m ai n A t h at i s s e m a nti c all y ali g n e d wit h "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { B } ^ { \\mathrm { s t y l e } } . \\ { I } _ { B } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "i s e n c o d e d t o a s p e ci fi c ti m e st e p "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { t } _ { 0 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "b y utili zi n g t h e f or w ar d D D P M:"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                465,
+                893,
+                560
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "{ \\bf x _ { t } } _ { 0 } = \\sqrt { \\alpha _ { { \\bf t } _ { 0 } } } { \\bf x } _ { 0 } + \\sqrt { 1 - \\alpha _ { { \\bf t } _ { 0 } } } { \\bf z } , ~ { \\bf z } \\sim \\mathcal { N } ( { \\bf 0 } , { \\bf I } ) ,\\tag{9}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/bbe1d0db3fae5973b0944ddd82b27f12ddaad4bc5d89386ecf391537b0d8abad.jpg"
+                }
+            },
+            "bbox": [
+                539,
+                569,
+                849,
+                587
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "a n d s u b s e q u e ntl y fr o m "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\mathbf { t } _ { 0 } } , I _ { A } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "i s g e n er at e d b y f oll o wi n g t h e r e v er s e D D P M:"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                598,
+                892,
+                630
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbf { x } _ { t - 1 } = \\frac { 1 } { \\sqrt { 1 - \\beta _ { t } } } ( \\mathbf { x } _ { t } - \\frac { \\beta _ { t } } { \\sqrt { 1 - \\alpha _ { t } } } \\epsilon _ { \\theta } ( \\mathbf { x } _ { t } , t ) ) + \\sigma _ { t } \\mathbf { z } ,\\tag{1 0}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/1e8b506c39d0e57d1e3bb0c4794ea03d4df3ecbac45b07f74ad7b4aec8f77f40.jpg"
+                }
+            },
+            "bbox": [
+                514,
+                637,
+                849,
+                670
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "w h er e "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } \\sim \\mathcal { N } ( \\mathbf { 0 } , \\mathbf { I } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Aft er i niti ali zi n g "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { A } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "a n d "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { B } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", w e pr o c e e d t o fr e e z e a pr etr ai n e d D DI M "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\theta } ^ { \\bar { A } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "a n d t h e s e m a nti c e n c o d er "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\operatorname { E n c } _ { \\phi }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "pr o p o s e d b y Diff A E, w hi c h i s utili z e d d uri n g t h e i m a g e e n c o di n g pr o c e s s. A d diti o n all y, w e cr e at e a c o p y of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\theta } ^ { A }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "c all e d "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\theta } ^ { B }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", w hi c h i s fi n et u n e d t hr o u g h a c o m bi n ati o n of C LI P dir e cti o n al l o s s e s a n d a r e c o n str u cti o n l o s s. D uri n g tr ai ni n g, w e n ot e t h at "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { A } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "i s g e n er at e d fr o m t h e pr etr ai n e d Diff A E. C o n s e q u e ntl y, o ur m et h o d e n a bl e s tr ai ni n g wit h o ut t h e n e c e s sit y f or a d at a s et."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                679,
+                893,
+                819
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "St r u ct u r al L at e nt C o d e "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\theta } ^ { B }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "o pti mi z e s t o w ar d s g e n er ati n g "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { B } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "t h at r e fl e ct s t h e s e m a nti c s of t h e st yl e i m a g e. H o we v er, si n c e "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { A } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "a n d "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { B } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "st a y s fi x e d w hil e "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { A } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "i s c o nst a ntl y g e n er at e d, it i s cr u ci al t o c ar ef ull y c h o o s e a n e n c o di n g pr o c e s s t h at g e n er at e s "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { B } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "t h at pr e s er v e s t h e str u ct ur al integrity of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { A } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". In order to achieve this, we utilize forward DiffAE to encode "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { A } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by computing Eq. 7. First, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { A } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is encoded into a semantic latent code "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } } ^ { \\mathrm { i n } } = \\mathrm { E n c } _ { \\phi } ( \\bar { I _ { A } ^ { \\mathrm { i n } } } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". By following the forward process, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is conditioned to the frozen DDIM "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\theta } ^ { A }"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                821,
+                893,
+                902
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "8304"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                988,
+                516,
+                1000
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                90,
+                470,
+                167
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { r } { { \\bf x } _ { t + 1 } = \\sqrt { \\alpha _ { t + 1 } } f _ { \\theta } ( { \\bf x } _ { t } , t , { \\bf z } _ { \\mathrm { s e m } } ^ { \\mathrm { i n } } ) + \\sqrt { 1 - \\alpha _ { t + 1 } } \\epsilon _ { \\theta } ^ { A } ( { \\bf x } _ { t } , t , { \\bf z } _ { \\mathrm { s e m } } ^ { \\mathrm { i n } } ) } \\end{array}\\tag{11}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/f50de2e178c58fd7b53906292b657bf8adcc4669843694e97f30872907e88ded.jpg"
+                }
+            },
+            "bbox": [
+                76,
+                178,
+                470,
+                199
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "resulting in "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { A } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "encoded to a structural latent code "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\mathbf { t } _ { 0 } } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". The input image is encoded to a specific timestep "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { t } _ { \\mathrm { 0 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "which can be adjusted to control the level of structure preservation."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                223,
+                470,
+                271
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Structure-Preserving Network Although the structural latent code "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\mathbf { t } _ { 0 } } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "succeeds in preserving the overall structure of the generated images "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { A } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", the encoding process defined in Eq. 11 inherently adds noise, which inevitably results in the loss of structural information. To address this, we introduce a structure-preserving network (SPN), which utilizes a 1x1 convolution that effectively preserves the spatial information and structural integrity of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { A } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". To generate the output of the next timestep "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { t - 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", we use reverse DiffAE with SPN:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                276,
+                470,
+                412
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbf { x } _ { t } ^ { S P N } = S P N ( I _ { A } ^ { \\mathrm { i n } } )\\tag{12}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/f7e206031615b19bf705cb7d4deaae22ed0e92a63e0aedaa1e59c77c808de69e.jpg"
+                }
+            },
+            "bbox": [
+                202,
+                419,
+                343,
+                438
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbf { x } _ { t } ^ { \\prime } = \\mathbf { x } _ { t } + \\lambda _ { S P N } * \\mathbf { x } _ { t } ^ { S P N }\\tag{13}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/879cbcc7d45a80ffa7d6c06813e07a45a95188985633c07a5437640dae56dd6b.jpg"
+                }
+            },
+            "bbox": [
+                184,
+                439,
+                359,
+                458
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { r } { { \\bf x } _ { t - 1 } = \\sqrt { \\alpha _ { t - 1 } } f _ { \\theta } ( { \\bf x } _ { t } ^ { \\prime } , t , { \\bf z } _ { \\mathrm { s e m } } ^ { \\mathrm { i n } } ) + \\sqrt { 1 - \\alpha _ { t - 1 } } \\epsilon _ { \\theta } ^ { B } ( { \\bf x } _ { t } ^ { \\prime } , t , { \\bf z } _ { \\mathrm { s e m } } ^ { \\mathrm { i n } } ) } \\end{array}\\tag{14}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/27fcc3f4eb8c3551bd882b33106e9e3cbd6e1f39a6cfa686147e3d89b2a98404.jpg"
+                }
+            },
+            "bbox": [
+                76,
+                460,
+                470,
+                481
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We add the output of the SPN to "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\bf x } _ { t } , ~ e . g"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". the previous timestep output of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\theta } ^ { B }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and feed it into our training target "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\theta } ^ { B }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". We regulate the degree of spatial information reflected in the model by multiplying the output of the SPN "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { t } ^ { S P N }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\lambda _ { S P N }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". After fully reversing the timesteps, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { B } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is generated."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                505,
+                470,
+                582
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Loss Function Inspired by MTG [39], we train "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\theta } ^ { B }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by optimizing our total loss, which is comprised of the crossdomain loss, in-domain loss, and reconstruction loss. The cross-domain loss aims to align the direction of changes from domain A to domain B, ensuring that the change from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { A } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { B } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is kept consistent with the change from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { I } _ { A } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { B } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Although the cross-domain loss provides the changes in semantic information for the model to optimize upon, it often leads to unintended changes when implemented alone. Hence the in-domain loss is introduced to provide additional information, measuring the similarity of changes within both domains A and B."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                588,
+                470,
+                772
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The reconstruction loss provides additional guidance in capturing the cross-domain change from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { A } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { B } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Similar to our encoding process of Eq. 11, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { A } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is encoded to a structural latent code "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\mathbf { t } _ { 0 } } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "conditioned on semantic latent code "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Following Eq. 12- 14, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "i . e ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "the process of generating the output of the next timestep conditioned on "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { \\tilde { z } } _ { \\mathrm { s e m } } ^ { \\mathrm { s t y l e } } , \\hat { I } _ { B } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is generated. The reconstruction loss is calculated by comparing "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { I } _ { B } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "with "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { B } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", comprised of the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "loss, perceptual similarity loss [35], and the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "CLIP embedding loss. Detailed information regarding the loss function and experimental setup is available in the supplementary material."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                772,
+                470,
+                902
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                90,
+                893,
+                151
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.2. Sampling"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                155,
+                611,
+                171
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Mixing Content and Style Once trained, the model "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\theta } ^ { B }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is capable of stylizing images from domain A to B. Stylizing an image involves mixing two images in its latent space. While this process is straightforward with StyleGAN [10], it is still an ongoing research area for diffusion models. Unlike the original DiffAE which conditions a single semantic latent code "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to the feature maps of DDIM, we discover that properly conditioning "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to the feature maps of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\theta } ^ { B }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "achieves content and style mixing. This is done by conditioning "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to its low-level feature maps to transfer the style of a style image, and conditioning "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to its highlevel feature maps to transfer the content of an input image. The change point of conditioning is set as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f _ { c h }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Since "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\theta } ^ { B }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is a UNet-based model, conditioning the two latents is symmetrical. To preserve the structural information of the input image, we use "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\mathbf { t } _ { 0 } } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "as the structural latent code. The detailed process of sampling is described in the supplementary material."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                171,
+                893,
+                444
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Text-driven Manipulation Instead of optimizing a model, we directly optimize the semantic latent code of input image "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to achieve text-driven manipulation. Similar to previous works [13], we use CLIP directional loss for optimization. After optimization, the optimized "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "can be passed into the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\theta } ^ { B }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to incorporate the style into the image. Comprehensive details about the experimental approach for text-driven manipulation are available in the supplementary material."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                450,
+                893,
+                587
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4. Experiments"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                594,
+                633,
+                611
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "For evaluating our approach, we focus on images from low-density regions that include rarely encountered attributes during training. This is ideal for demonstrating the structure-preserving ability of our method as low-density region images contain diverse objects and occlusions that obscure the subject. To select these images, we leverage the property that the encoded stochastic subcode "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { T }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "tends to show residuals of the original input image rather than being normally distributed, as shown by DiffAE [23]. We randomly select 20,000 images from the FFHQ dataset [10], which is the dataset "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\theta } ^ { A }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "was trained on. We reconstruct each image using its semantic subcode "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and stochastic subcode "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { T } \\sim \\mathcal { N } ( \\mathbf { 0 } , \\mathbf { I } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "(i.e. stochastic reconstruction). We compare the reconstructed image with the original image using perceptual similarity loss [35] to determine the quality of the reconstruction. We hypothesize that high-density region images that contain frequently encountered attributes would be reconstructed accurately, whereas those from lowdensity regions would not. Figure 3 shows that our hypothesis is well supported. Finally, we select the images from the top 100 highest LPIPS score group (i.e. low-density) and lowest LPIPS score group (i.e. high-density)."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                613,
+                893,
+                902
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "8305"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/b31284b547f2c9e0ce66137d348b04d23073abe5578b5287f43502c5e6899d9f.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 3. High and Low-density images. Full Recon. refers to reconstruction via conditioning its encoded "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { T }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", whereas Stochastic Recon. refers to reconstruction via conditioning its encoded "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { T } \\sim \\mathcal { N } ( \\mathbf { 0 } , \\mathbf { I } )"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                84,
+                90,
+                457,
+                287
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                364,
+                470,
+                411
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.1. Qualitative Comparison"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                419,
+                300,
+                435
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In Figure 4, we present a comparative analysis of the performance of OSASIS against other stylization methods. Our results demonstrate that OSASIS outperforms other methods in terms of preserving the overall structure while stylizing. MTG [39] and JoJoGAN [2] use outdated inversion methods that struggle to preserve the diverse structure of input images. Nonetheless, recent advancements in GANbased inversion techniques have demonstrated significant improvements in handling out-of-distribution input images for editing purposes [24, 31, 33]. To ensure a fair comparison, we employ HFGI [31] for MTG and JoJoGAN. Despite these adjustments, OSASIS remains distinguished in its structural preservation capabilities. Furthermore, GANbased methods produce unintended modifications, such as changes in facial expressions. Since DiffuseIT [15] stylizes images without training, they struggle to overcome the domain gap between the input and style images. InST [37] utilizes textual inversion to deduce the style image’s concept and subsequently conditions its generation procedure on this concept. However, the guidance strategy outlined in [7] tends to produce style-concentrated images, leading to unintended variations such as changes in facial expressions and identities. Moreover, as noted in InST, there are difficulties in faithfully transferring the color of the style images. More qualitative comparison results are provided in the supplementary material."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                436,
+                472,
+                830
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.2. Quantitative Comparison"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                838,
+                310,
+                854
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We conduct a quantitative comparison with other methods. By using ArtFID [32] as a metric for effective stylization and the identity similarity measure with ArcFace [3] to assess content preservation. For measuring structure preservation, we employ the structure distance metric [30]. For our source of style images, we select five style images from each of three datasets: i) AAHQ [18], ii) MetFaces [11], iii) style images used in previous researches. In Table 1, we evaluate OSASIS against MTG [39], JoJoGAN [2], DiffuseIT [15], and InST [37]. For our initial pretrained "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\theta } ^ { A }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and all baseline models, we use publicly available pretrained models that were trained on FFHQ. As previously mentioned, HFGI [31] is employed to invert input images for MTG and JoJoGAN. Note that Table 1 presents outcomes only for low-density images, while a comprehensive comparison is presented in the supplementary material. Our results indicate that while MTG occasionally achieves a better ArtFID score than our model, we outperform significantly in terms of identity similarity and structure preservation. Additionally, while DiffuseIT excels at preserving the identity and the structure of the image, it exhibits inferior stylization results compared to GAN-based methods due to a domain gap between the input and style images."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                854,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/790ff858888d58a74f3ae794f74b7598032dc30ecf4b819976e115abaf572747.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 1. Quantitative comparison. ArtFID evaluates the pertinence of stylization, whereas ID similarity and structure distance measure whether the stylized image stays true to its original input."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td rowspan=1 colspan=1>Methods</td><td rowspan=1 colspan=1>ArtFID↓AAHQ  MetFaces   Prev</td></tr><tr><td rowspan=3 colspan=1>MTG+HFGIJoJoGAN+HFGIDiffuseIT</td><td rowspan=1 colspan=1>36.39     38.02     37.27</td></tr><tr><td rowspan=1 colspan=1>40.41     44.74     41.09</td></tr><tr><td rowspan=1 colspan=1>44.93     53.35     48.18</td></tr><tr><td rowspan=1 colspan=1>InSTOSASIS(Ours)</td><td rowspan=1 colspan=1>38.16     50.33     35.8634.89     43.20     33.20</td></tr><tr><td rowspan=1 colspan=1>Methods</td><td rowspan=1 colspan=1>ID Similarity↑AAHQ  MetFaces   Prev</td></tr><tr><td rowspan=1 colspan=1>MTG+HFGI</td><td rowspan=1 colspan=1>0.3730    0.4656    0.4063</td></tr><tr><td rowspan=1 colspan=1>JoJoGAN+HFGI</td><td rowspan=1 colspan=1>0.5145    0.5207    0.4743</td></tr><tr><td rowspan=1 colspan=1>DiffuseIT</td><td rowspan=2 colspan=1>0.6992    0.7158    0.69940.2253    0.2188   0.22380.6825    0.7323    0.7029</td></tr><tr><td rowspan=1 colspan=1>InSTOSASIS(Ours)</td></tr><tr><td rowspan=1 colspan=1>Methods</td><td rowspan=1 colspan=1>Structure Distance↓AAHQ  MetFaces   Prev</td></tr><tr><td rowspan=1 colspan=1>MTG+HFGI</td><td rowspan=1 colspan=1>0.0386    0.0350    0.0360</td></tr><tr><td rowspan=1 colspan=1>JoJoGAN+HFGI</td><td rowspan=1 colspan=1>0.0411    0.0454    0.0430</td></tr><tr><td rowspan=1 colspan=1>DiffuseIT</td><td rowspan=1 colspan=1>0.0309    0.0300   0.0310</td></tr><tr><td rowspan=1 colspan=1>InST</td><td rowspan=1 colspan=1>0.0492    0.0443    0.0488</td></tr><tr><td rowspan=1 colspan=1>OSASIS(Ours)</td><td rowspan=1 colspan=1>0.0361    0.0295   0.0391</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                521,
+                89,
+                869,
+                409
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                467,
+                895,
+                770
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.3. OOD Reference Image"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                777,
+                714,
+                792
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "OSASIS is able to stylize images with out-of-domain (OOD) reference images, a feature that is not commonly seen in GAN-based methods. OSASIS can effectively disentangle semantics from the structure, resulting in only the style factor of the style image being transferred to the input image. In contrast, GAN-based methods have entangled style codes in terms of structure and semantics, which"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                795,
+                895,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "8306"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "<sub>St</sub>y<sup>l</sup> Input"
+                    }
+                ]
+            },
+            "bbox": [
+                98,
+                104,
+                153,
+                147
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/ce42fb82b41c6ec59699ff1bd8998d41f55a4d5d86f0050b201338675445dde1.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                80,
+                147,
+                151,
+                314
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/dca9c03da5dfdb8bf860731ea848f7246c2e0aaa3d342037e40cb2dbb038f353.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "MTG"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                155,
+                88,
+                299,
+                314
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/1f6fa84d1af96f1e98f96483e2103e3e7f9343cbcb133636d897affc660f2fff.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "JoJoGAN"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                302,
+                88,
+                447,
+                314
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/f4e29b316ef985ad294b00d5940bb34edaf96b9dca4c9389a1be511eed7e6cea.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "DiffuseIT"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                450,
+                88,
+                593,
+                314
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/b14c780f4817b47eb509ca386187546a284eb61609e06447c0c0a26b182912d7.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "InST"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                598,
+                88,
+                743,
+                315
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/02ccee6fe7381fd4ecd7517aa9a807240ee1dc316f5ffb130acfa2a21d4fa12e.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": [
+                    {
+                        "type": "text",
+                        "content": "OSASIS (Ours)"
+                    }
+                ]
+            },
+            "bbox": [
+                745,
+                88,
+                890,
+                314
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/90ce65ba9067a6744df856e28e580bdc489ccb68e5a35f696ecb7c8487b6a711.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 4. Comparison with other stylization methods. Note that our method successfully preserves the low-density attributes while other baseline methods fail to do so."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                78,
+                377,
+                153,
+                588
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/249ffd675d70af2c1a23ba69b21b97e490b5c5d5bd1809ffafe85f7996b8c2a3.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "MTG"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                153,
+                361,
+                299,
+                588
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/8e410c9df97ff874551813f8cb4a9d02f528f4ce591909aba85d73d49b624595.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "JoJoGAN"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                302,
+                361,
+                447,
+                588
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/120439f194ccad967a8d10d7907d2d8491d8472f659cd782a9299d11667ff519.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": [
+                    {
+                        "type": "text",
+                        "content": "DiffuseIT"
+                    }
+                ]
+            },
+            "bbox": [
+                449,
+                361,
+                594,
+                588
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/91a16a8f5ec7eaa832b5e5a855360cfd6275a4c5382643b006577a9d7dc3829f.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "InST"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                596,
+                361,
+                743,
+                588
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/8ca76f179679d6b52ae417306f4309a46ac4d97ade863ca8d0d1097c2d2dffdd.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": [
+                    {
+                        "type": "text",
+                        "content": "OSASIS (Ours)"
+                    }
+                ]
+            },
+            "bbox": [
+                745,
+                361,
+                890,
+                588
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "makes it difficult to transfer only the style factor from the reference image. As shown in Figure 5, OSASIS is able to stylize images with OOD reference images while preserving its content, whereas other baseline methods suffer from severe artifacts. Although DiffuseIT and InST manage to avoid severe artifacts, they still struggle with addressing domain gap and handling strong concept conditioning."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                654,
+                470,
+                762
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.4. Stylization Results on Other Datasets"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                775,
+                400,
+                791
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To evaluate the generalization capabilities of our method across various datasets, we executed stylization on several distinct datasets: AFHQ-dog [1], LSUN-church [34], and DeepFashion [19]. Figure 6 displays the efficacy and versatility of our approach across these diverse datasets. Notably, our method exhibits proficiency beyond facial stylization, adeptly adapting to various image domains."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                794,
+                470,
+                902
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/a3e4741d7a7d05e0ef9a0fac203ce6bf85b91c3e9ecd5e844d6a575ae4b75319.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 5. Stylization with OOD reference images. Due to the limited capabilities of GAN-based inversion methods, the baseline methods fail in disentangling the structure and semantics of the style image. This results in structural artifacts being transferred into the output image, whereas OSASIS successfully extracts only the semantics."
+                    },
+                    {
+                        "type": "text",
+                        "content": "Table 2. Quantitative ablation study of SPN"
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td></td><td>ArtFID↓</td><td>ID Sim↑</td><td>SD↓</td></tr><tr><td>w/o SPN</td><td>36.41</td><td>0.6595</td><td>0.0371</td></tr><tr><td>w SPN  $\\overline { { ( \\lambda _ { S P N } { = } 0 . 1 ) } }$ </td><td>34.89</td><td>0.6825</td><td>0.0361</td></tr><tr><td>w SPN  $( \\lambda _ { S P N } { = } 0 . 5 )$ </td><td>36.62</td><td>0.7177</td><td>0.0348</td></tr><tr><td>w SPN  $( \\lambda _ { S P N } { = } 1 . 0 )$ </td><td>43.15</td><td>0.7321</td><td>0.0355</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                509,
+                651,
+                879,
+                728
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.5. Stylization with Text-driven Manipulation"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                758,
+                859,
+                775
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "For text-driven manipulation, we directly optimize "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "using CLIP directional loss. Once "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is optimized, it can be used to stylize the input image with the aforementioned mixing process. In Figure 7, we show our qualitative results of stylization with text-driven manipulation, where our model successfully incorporates the style of a reference image with manipulated attributes while being robust in content preservation."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                780,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "8307"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/c76dfe0f14cc20f429dc74ed0153b923eb04a7c1a2c726b76ec21f9dc2958e5e.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "LSUN-church"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                78,
+                88,
+                349,
+                296
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/c85104ae5b2a995a7409ca62dad75365578abcf336d8c646e2a34ce2bb64cb5b.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "AFHQ-Dog"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                352,
+                88,
+                620,
+                296
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/799c540e56e1bd08212f94189e494ac177e908b54679dae9e9af2ef0c0a33c06.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "DeepFashion"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                633,
+                87,
+                890,
+                297
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/2c43546b5e6195a186b09dc09fdc9fd375635845021f41146c6644ba681c4ef7.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 6. Stylization result of OSASIS on LSUN-church, AFHQ-dog, and DeepFashion."
+                    },
+                    {
+                        "type": "text",
+                        "content": "Figure 7. Stylization with text-driven manipulation. The optimized semantic code doesn’t overwrite or harm the structure and style of the image, thus preserving the overall structure while manipulating attributes."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                89,
+                348,
+                459,
+                478
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/c193d44355d8e4075f2b6789a83419c65823bda26166a0f839cbf86dd49b292a.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                78,
+                584,
+                168,
+                665
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/51fa68323ab6a90c1f0654f587787a59b8c5efc8f141d03de695100ca6d030ea.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Structure"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Style"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                176,
+                547,
+                272,
+                700
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/590e3eddbac29c00f78d6c091c29ac5858b1f44fbc1e5f62606e1c92b8355e16.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Content"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                272,
+                546,
+                370,
+                700
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/960131441d5c17a51d20b32ba741c3140abda871fa02f078b52a65145aacab6a.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Generated"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Figure 8. Ablation study of latent codes. The result shows that OSASIS is capable of effectively disentangling the structure from the semantics. By conditioning the semantic codes appropriately, we are able to control the content and style factors in the generated image."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                369,
+                547,
+                467,
+                699
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.6. Ablation Study"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                806,
+                230,
+                821
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Latent Code Furthermore, we conduct ablation studies to shed light on the nature of mixing content and style into the feature maps of the UNet. In the first row of Figure 8, we perform normal stylization on an input image, i.e. by encoding its structural latent code "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x _ { t _ { 0 } } ^ { \\mathrm { { i n } } } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ", conditioning "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } } ^ { \\mathrm { s t y l e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to low-level feature maps, and conditioning "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { s e m } } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to high-level feature maps. The second row shows the results of the semantic codes being conditioned oppositely. The resulting generated image 1) holds the structural integrity encoded from the structural latent code "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x _ { t _ { 0 } } ^ { \\mathrm { { i n } } } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "2) preserves the content from the given content image (i.e. identity, facial expressions), and 3) retains the stylized attributes of the given style image (i.e. skin complexion). We show that by conditioning the semantic codes to their respective feature maps, OSASIS achieves control over mixing content and style."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                824,
+                470,
+                902
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                347,
+                893,
+                500
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Structure-Preserving Network Our SPN is implemented to aid the structural latent code "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\mathbf { t } _ { 0 } } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in preserving the overall structure of the stylized image, due to the encoding process Eq.11 being formulated to add noise. Figure 9 shows the effects of our SPN, where the third column is a stylized sample without, and the fourth column is a stylized sample with SPN. It can be seen that the stochastic latent code "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\mathbf { t } _ { 0 } } ^ { \\mathrm { i n } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "faithfully preserves the overall structure of the image, but without SPN, objects along the edges of content images (e.g. hands, poles, fingers) are distorted. To investigate the effect of SPN further, we conduct a quantitative ablation study. Table 2 validates the efficacy of SPN, indicating substantial improvements in ID similarity and structure distance, thereby cementing its importance for maintaining content and structural integrity. It’s important to note, however, that a λ<sub>SPN</sub> value above 0.1 might overemphasize structural aspects, which can compromise the stylization quality, suggesting the necessity for careful calibration of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\lambda _ { S P N }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to achieve an optimal balance in stylization."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                503,
+                893,
+                792
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5. Related Work"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                801,
+                643,
+                818
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.1. One-shot Image Stylization"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                821,
+                746,
+                838
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Stylizing input images with only one reference image originates from neural style transfer, first introduced by Gatys et al. [6]. However, this method requires the stylized image to be optimized every generation, which was addressed"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                839,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "8308"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "With SPN"
+                    }
+                ]
+            },
+            "bbox": [
+                393,
+                92,
+                457,
+                106
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Without SPN"
+                    }
+                ]
+            },
+            "bbox": [
+                290,
+                92,
+                375,
+                106
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Style"
+                    }
+                ]
+            },
+            "bbox": [
+                222,
+                93,
+                258,
+                107
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/13118a1ec918b0857724a3b38383f97e62867332f15966c2345b0ba1e9b278c8.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Input"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Figure 9. Ablation study of SPN. The results demonstrate that SPN is a crucial to ensure the preservation of the underlying structure while applying the stylization process."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                99,
+                108,
+                473,
+                323
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "by Johnson et al. [9] by introducing an image transform network for fast stylization. However, traditional NST methods are limited in their ability to capture the semantic information of input and style images."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                375,
+                470,
+                435
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "For GAN-based models, one-shot image stylization is achieved by using one-shot adaptation methods, which aims to transfer a generator to a new domain using a single reference image. One-shot adaptation methods typically involve finetuning a generator using only a single reference image. Once the generator is finetuned, these methods can unconditionally generate stylized images, and by using GAN inversion techniques, they also achieve input image stylization. StyleGAN-NADA [5], while applicable to one-shot image stylization tasks, exhibits limited capability, primarily due to its initial development for text-driven style transfer purposes. The first successful GAN-based one-shot adaptation method is MTG [39], which uses CLIP directional loss to finetune the generator and mitigate overfitting problems. Other works have since focused on improving generation quality [16], content preservation [36], and entity transfer [38]. In contrast to one-shot adaptation approaches, our method aims to stylize real images with a single reference image instead of generating stylized synthesized images. Therefore, we refer to our method as one-shot image stylization. From our perspective, the work that is most comparable to our own is JoJoGAN [2]. JoJoGAN generates a training dataset by random style mixing and finetunes a generator to create a style mapper."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                435,
+                472,
+                800
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.2. Image Manipulation with Diffusion Models"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                808,
+                446,
+                824
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Image manipulation has advanced significantly in recent years, with methods presented by StyleGAN2 [12] being widely explored. However, the potential of diffusion models for high-quality image manipulation has been elucidated in recent research. DiffAE [23] introduces a semantic encoder that generates semantically meaningful latent vectors for diffusion models, which can be manipulated for attribute editing. DiffusionCLIP [13] demonstrates the effectiveness of diffusion-based text-guided image manipulation by finetuning a DDIM with CLIP directional loss. Asyrp [17] uncovers a semantic latent space in the architecture of diffusion models.The authors train the h-space manipulation module with CLIP directional loss, achieving consistent image editing results. While DiffusionCLIP and Asyrp employ CLIP directional loss, their focus is on text-guided manipulation whereas our work targets image-guided manipulation. DiffuseIT [15] aims to perform image translation guided by either text or image using a CLIP and a pretrained ViT [4]. Their approach leverages the reverse process of DDPM and incorporates CLIP and ViT to guide the image generation process. InST [37] employs textual inversion to extract the concept from a style image. By conditioning the generation process on this extracted concept, InST is able to stylize input images."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                825,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                92,
+                895,
+                380
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "6. Conclusion"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                401,
+                620,
+                419
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We have introduced OSASIS, a novel one-shot image stylization method based on diffusion models. In contrast to GAN-based and other diffusion-based stylization methods, OSASIS shows robust structure awareness in stylization, effectively disentangling the structure and semantics from an image. While OSASIS demonstrates significant advancements in structure-aware stylization, several limitations exist. A notable constraint of OSASIS is its training time, which is longer than comparison methods. This extended training duration is a trade-off for the method’s enhanced ability to maintain structural integrity and adapt to various styles. Additionally, OSASIS requires training for each style image. This requirement can be seen as a limitation in scenarios where rapid deployment across multiple styles is needed. Despite these challenges, the robustness of OS-ASIS in preserving the structural integrity of the input images, its effectiveness in out-of-domain reference stylization, and its adaptability in text-driven manipulation make it a promising approach in the field of stylized image synthesis. Future work will address these limitations, particularly in optimizing training efficiency and reducing the necessity for individual style image training, to enhance the practicality and applicability of OSASIS in diverse real-world scenarios."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                425,
+                895,
+                790
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Acknowledgment We thank the ImageVision team of NAVER Cloud for their thoughtful advice and discussions. Training and experiments were done on the Naver Smart Machine Learning (NSML) platform [14]. This study was supported by BK21 FOUR."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                824,
+                895,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "8309"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "References"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                78,
+                89,
+                176,
+                106
+            ]
+        },
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[1] Yunjey Choi, Youngjung Uh, Jaejun Yoo, and Jung-Woo Ha. Stargan v2: Diverse image synthesis for multiple domains. In Proceedings ofthe IEEE/CVF conference on computer vision and pattern recognition, pages 8188–8197, 2020. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[2] Min Jin Chong and David Forsyth. Jojogan: One shot face stylization. In European Conference on Computer Vision, pages 128–152. Springer, 2022. 1, 5, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[3] Jiankang Deng, Jia Guo, Niannan Xue, and Stefanos Zafeiriou. Arcface: Additive angular margin loss for deep face recognition. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, pages 4690–4699, 2019. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[4] Alexey Dosovitskiy, Lucas Beyer, Alexander Kolesnikov, Dirk Weissenborn, Xiaohua Zhai, Thomas Unterthiner, Mostafa Dehghani, Matthias Minderer, Georg Heigold, Sylvain Gelly, et al. An image is worth 16x16 words: Transformers for image recognition at scale. arXiv preprint arXiv:2010.11929, 2020. 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[5] Rinon Gal, Or Patashnik, Haggai Maron, Amit H Bermano, Gal Chechik, and Daniel Cohen-Or. Stylegan-nada: Clipguided domain adaptation of image generators. ACM Transactions on Graphics (TOG), 41(4):1–13, 2022. 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[6] Leon A Gatys, Alexander S Ecker, and Matthias Bethge. Image style transfer using convolutional neural networks. In Proceedings ofthe IEEE conference on computer vision and pattern recognition, pages 2414–2423, 2016. 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[7] Jonathan Ho and Tim Salimans. Classifier-free diffusion guidance. In NeurIPS 2021 Workshop on Deep Generative Models and Downstream Applications, 2021. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[8] Jonathan Ho, Ajay Jain, and Pieter Abbeel. Denoising diffusion probabilistic models. Advances in Neural Information Processing Systems, 33:6840–6851, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[9] Justin Johnson, Alexandre Alahi, and Li Fei-Fei. Perceptual losses for real-time style transfer and super-resolution. In Computer Vision–ECCV 2016: 14th European Conference, Amsterdam, The Netherlands, October 11-14, 2016, Proceedings, Part II 14, pages 694–711. Springer, 2016. 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[10] Tero Karras, Samuli Laine, and Timo Aila. A style-based generator architecture for generative adversarial networks. In Proceedings ofthe IEEE/CVF conference on computer vision and pattern recognition, pages 4401–4410, 2019. 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[11] Tero Karras, Miika Aittala, Janne Hellsten, Samuli Laine, Jaakko Lehtinen, and Timo Aila. Training generative adversarial networks with limited data. Advances in neural information processing systems, 33:12104–12114, 2020. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[12] Tero Karras, Samuli Laine, Miika Aittala, Janne Hellsten, Jaakko Lehtinen, and Timo Aila. Analyzing and improving the image quality of stylegan. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, pages 8110–8119, 2020. 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[13] Gwanghyun Kim, Taesung Kwon, and Jong Chul Ye. Diffusionclip: Text-guided diffusion models for robust image manipulation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 2426– 2435, 2022. 2, 3, 4, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[14] Hanjoo Kim, Minkyu Kim, Dongjoo Seo, Jinwoong Kim, Heungseok Park, Soeun Park, Hyunwoo Jo, KyungHyun Kim, Youngil Yang, Youngkwan Kim, et al. Nsml: Meet the mlaas platform with a real-world case study. arXiv preprint arXiv:1810.09957, 2018. 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[15] Gihyun Kwon and Jong Chul Ye. Diffusion-based image translation using disentangled style and content representation. arXiv preprint arXiv:2209.15264, 2022. 2, 5, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[16] Gihyun Kwon and Jong Chul Ye. One-shot adaptation of gan in just one clip. arXiv preprint arXiv:2203.09301, 2022. 1, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[17] Mingi Kwon, Jaeseok Jeong, and Youngjung Uh. Diffusion models already have a semantic latent space. arXiv preprint arXiv:2210.10960, 2022. 2, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[18] Mingcong Liu, Qiang Li, Zekui Qin, Guoxin Zhang, Pengfei Wan, and Wen Zheng. Blendgan: Implicitly gan blending for arbitrary stylized face generation. Advances in Neural Information Processing Systems, 34:29710–29722, 2021. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[19] Ziwei Liu, Ping Luo, Shi Qiu, Xiaogang Wang, and Xiaoou Tang. Deepfashion: Powering robust clothes recognition and retrieval with rich annotations. In Proceedings of IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2016. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[20] Chenlin Meng, Yutong He, Yang Song, Jiaming Song, Jiajun Wu, Jun-Yan Zhu, and Stefano Ermon. SDEdit: Guided image synthesis and editing with stochastic differential equations. In International Conference on Learning Representations, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[21] Utkarsh Ojha, Yijun Li, Jingwan Lu, Alexei A Efros, Yong Jae Lee, Eli Shechtman, and Richard Zhang. Few-shot image generation via cross-domain correspondence. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 10743–10752, 2021. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[22] Justin NM Pinkney and Doron Adler. Resolution dependent gan interpolation for controllable image synthesis between domains. arXiv preprint arXiv:2010.05334, 2020. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[23] Konpat Preechakul, Nattanat Chatthee, Suttisak Wizadwongsa, and Supasorn Suwajanakorn. Diffusion autoencoders: Toward a meaningful and decodable representation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 10619–10629, 2022. 2, 4, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[24] Daniel Roich, Ron Mokady, Amit H Bermano, and Daniel Cohen-Or. Pivotal tuning for latent-based editing of real images. ACM Transactions on graphics (TOG), 42(1):1–13, 2022. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[25] Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, and Bjorn Ommer. High-resolution image¨ synthesis with latent diffusion models. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 10684–10695, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[26] Chitwan Saharia, William Chan, Saurabh Saxena, Lala Li, Jay Whang, Emily Denton, Seyed Kamyar Seyed Ghasemipour, Burcu Karagol Ayan, S Sara Mahdavi, Rapha Gontijo Lopes, et al. Photorealistic text-to-image diffusion models with deep language understanding. arXiv preprint arXiv:2205.11487, 2022. 2"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                84,
+                114,
+                468,
+                170
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "8310"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[27] Chitwan Saharia, Jonathan Ho, William Chan, Tim Salimans, David J Fleet, and Mohammad Norouzi. Image superresolution via iterative refinement. IEEE Transactions on Pattern Analysis and Machine Intelligence, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[28] Guoxian Song, Linjie Luo, Jing Liu, Wan-Chun Ma, Chunpong Lai, Chuanxia Zheng, and Tat-Jen Cham. Agilegan: stylizing portraits by inversion-consistent transfer learning. ACM Transactions on Graphics (TOG), 40(4):1–13, 2021. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[29] Jiaming Song, Chenlin Meng, and Stefano Ermon. Denoising diffusion implicit models. In International Conference on Learning Representations, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[30] Narek Tumanyan, Omer Bar-Tal, Shai Bagon, and Tali Dekel. Splicing vit features for semantic appearance transfer. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 10748–10757, 2022. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[31] Tengfei Wang, Yong Zhang, Yanbo Fan, Jue Wang, and Qifeng Chen. High-fidelity gan inversion for image attribute editing. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, 2022. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[32] Matthias Wright and Bjorn Ommer. Artfid: Quantitative¨ evaluation of neural style transfer. In Pattern Recognition: 44th DAGM German Conference, DAGM GCPR 2022, Konstanz, Germany, September 27–30, 2022, Proceedings, pages 560–576. Springer, 2022. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[33] Yiran Xu, Zhixin Shu, Cameron Smith, Seoung Wug Oh, and Jia-Bin Huang. In-n-out: Faithful 3d gan inversion with volumetric decomposition for face editing. arXiv preprint arXiv:2302.04871, 2023. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[34] Fisher Yu, Ari Seff, Yinda Zhang, Shuran Song, Thomas Funkhouser, and Jianxiong Xiao. Lsun: Construction of a large-scale image dataset using deep learning with humans in the loop. arXiv preprint arXiv:1506.03365, 2015. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[35] Richard Zhang, Phillip Isola, Alexei A Efros, Eli Shechtman, and Oliver Wang. The unreasonable effectiveness of deep features as a perceptual metric. In Proceedings of the IEEE conference on computer vision and pattern recognition, pages 586–595, 2018. 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[36] Yabo Zhang, Yuxiang Wei, Zhilong Ji, Jinfeng Bai, Wangmeng Zuo, et al. Towards diverse and faithful one-shot adaption of generative adversarial networks. In Advances in Neural Information Processing Systems, 2022. 1, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[37] Yuxin Zhang, Nisha Huang, Fan Tang, Haibin Huang, Chongyang Ma, Weiming Dong, and Changsheng Xu. Inversion-based style transfer with diffusion models. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 10146–10156, 2023. 2, 5, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[38] Zicheng Zhang, Yinglu Liu, Congying Han, Tiande Guo, Ting Yao, and Tao Mei. Generalized one-shot domain adaption of generative adversarial networks. arXiv preprint arXiv:2209.03665, 2022. 1, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[39] Peihao Zhu, Rameen Abdal, John Femiani, and Peter Wonka. Mind the gap: Domain gap control for single shot domain adaptation for generative adversarial networks. In International Conference on Learning Representations, 2021. 1, 2, 4, 5, 8"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                78,
+                93,
+                468,
+                147
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "8311"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                514,
+                957
+            ]
+        }
+    ]
+]

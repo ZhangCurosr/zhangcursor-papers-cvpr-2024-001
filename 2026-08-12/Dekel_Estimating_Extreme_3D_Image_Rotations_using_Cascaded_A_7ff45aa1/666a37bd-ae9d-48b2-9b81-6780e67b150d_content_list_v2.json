@@ -1,0 +1,3306 @@
+[
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "Estimating Extreme 3D Image Rotations using Cascaded Attention"
+                    }
+                ],
+                "level": 1
+            },
+            "bbox": [
+                148,
+                130,
+                821,
+                152
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Shay Dekel Bar Ilan University Ramat-Gan, Israel shaydekel@gmail.com"
+                    }
+                ]
+            },
+            "bbox": [
+                120,
+                181,
+                294,
+                251
+            ]
+        },
+        {
+            "type": "list",
+            "content": {
+                "list_type": "text_list",
+                "attribute": "unordered",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "Yosi Keller"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "Bar Ilan University"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "Ramat-Gan, Israel"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "yosi.keller@gmail.com"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                333,
+                181,
+                524,
+                251
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "Abstract"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                233,
+                285,
+                313,
+                303
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Estimating large, extreme inter-image rotations is critical for numerous computer vision domains involving images related by limited or non-overlapping fields of view. In this work, we propose an attention-based approach with a pipeline of novel algorithmic components. First, as rotation estimation pertains to image pairs, we introduce an inter-image distillation scheme using Decoders to improve embeddings. Second, whereas contemporary methods compute a 4D correlation volume (4DCV) encoding inter-image relationships, we propose an Encoder-based cross-attention approach between activation maps to compute an enhanced equivalent of the 4DCV. Finally, we present a cascaded Decoder-based technique for alternately refining the crossattention and the rotation query. Our approach outperforms current state-of-the-art methods on extreme rotation estimation. We make our code publicly available<sup>1</sup>."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                318,
+                470,
+                561
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "1. Introduction"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                588,
+                209,
+                604
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Estimating the relative pose between a pair of images is a crucial task in computer vision, which is used in various applications such as indoor navigation, augmented reality, autonomous driving, 3D reconstruction [40, 44], camera localization [5, 45, 47], simultaneous localization and mapping [12, 38], and novel view synthesis [35, 42]. The current approach to image registration involves extracting features, matching them, and establishing correspondence between them. However, this approach is ineffective for input pairs with little or no overlap, making it difficult to establish sufficient feature correspondences for matching, such as in the images shown in Fig. 1."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                613,
+                470,
+                795
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Numerous applications [1, 32, 49] necessitate precise estimation of inter-image rotations. The prevalent approach for extreme 3D rotation estimation between images with limited or no overlap, as in Fig. 1, relates to the seminal work of Coughlan and Yuille [10]. They introduced a technique premised on linear structures within an image, primarily arising from three mutually orthogonal directions"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                795,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Martin Cad<sup>ˇ</sup> ´ık FIT, Brno University of Technology Brno, Czech Republic cadik@fit.vut.cz"
+                    }
+                ]
+            },
+            "bbox": [
+                560,
+                179,
+                849,
+                251
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/5695b56a355d2f3113cb69fb85138c8a1aec8bc6b69ae62dbc7f642eac294a6a.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                508,
+                285,
+                694,
+                573
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/7315e4a645a4f61635ec4c2ea7e208c3864156a2e5fbce356154df844fe34522.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 1. The estimation of extreme 3D image rotations. First row: Images pair with a small overlap. Second row: non-overlapping image pairs. The proposed scheme estimates the relative rotation between image pairs."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                696,
+                285,
+                883,
+                574
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "- one vertical (building walls) and two horizontal (ground pavements, roads, etc.). Similarly, ”Single View Metrology” by Criminisi et al. [11] and extensions [26, 41, 61] utilize parallel image lines and corresponding vanishing points [19] for camera calibration. Furthermore, relative camera rotation can be estimated via illumination cues [2], by analyzing lighting and shadow directions."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                671,
+                893,
+                779
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In this work, we propose a deep-learning approach for estimating significant, extreme inter-image rotations. Unlike classical formulations [10, 11] that explicitly detect hand-crafted cues such as lines, shadows, and vanishing points, our method directly regresses the relative rotation from input images through a deep neural network. Inspired by recent successful applications of Transformers [53] in computer vision tasks including object detection [8] and image recognition [24], we adapt Transformers for multiple tasks within the proposed pipeline shown in Fig. 2, expanding beyond previous applications of Transformers."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                780,
+                895,
+                901
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": []
+            },
+            "bbox": [
+                106,
+                2,
+                181,
+                41
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": [
+                    {
+                        "type": "text",
+                        "content": "This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore."
+                    }
+                ]
+            },
+            "bbox": [
+                235,
+                0,
+                810,
+                46
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2588"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                92,
+                470,
+                137
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "First, we apply Transformers-Decoders to improve the input image embeddings by distilling inter-image information between the images by cross-decoding, where each embedding uses the other’s embedding as a query. This better encodes images with respect to each other. Second, a Transformer-Encoder computes a stacked multihead attention to encode cross-attention between the latent representations of image pairs. Thus, it improves on the 4D correlation volume (4DCV) used in prior works [15, 21, 30, 39, 51], where 4DCVs were calculated by inner products. Instead of a single layer of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "N ^ { 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "inner products as in 4DCV, the proposed Transformer-Encoder-based approach leverages multi-head attention’s advanced architecture to better encode interactions between activation map entries. Third, we further improve the cross-attention encoding using a cascade of two decoders and a learnt rotation query, to jointly refine the cross-attention encoding and the rotation query. The proposed scheme is a general-purpose attention-based architecture for estimating attributes related to two input images such as optical flow, registration, relative pose regression, etc. This work was motivated by extreme rotation estimation, and we reserve other applications for future work, as those will require additional task-specific modifications."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                137,
+                472,
+                486
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Interestingly, the attention maps computed by our scheme, shown in Section 3.2, show that the Transformer-Encoder assigns high attention scores to image regions containing rotation-informative image cues, emphasizing vertical and horizontal lines. We also observe that the proposed approach can predict the rotation of non-overlapping image pairs with state-of-the-art (SOTA) accuracy. Our framework is end-to-end trainable and optimizes a regression loss. It is evaluated on three dataset benchmarks: StreetLearn [36], SUN360 [54] and InteriorNet [29], with different overlap classes in indoor and outdoor locations and under varying illumination. The experimental results in Section 4 show our model to provide state-of-the-art (SOTA) accuracy."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                487,
+                472,
+                683
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In summary, our contributions are as follows."
+                    }
+                ]
+            },
+            "bbox": [
+                94,
+                684,
+                398,
+                699
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• We propose a novel scheme for estimating extreme rotations, including scenarios with minimal image overlap."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                704,
+                468,
+                734
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• Image embeddings are enhanced via cross-decoding, distilling inter-image information."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                734,
+                468,
+                765
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• A Transformer-Encoder cross-attention mechanism is proposed to encode the latent space interactions between image pairs."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                765,
+                470,
+                809
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• A decoder-decoder module infers relative rotation from the cross-attention encoding by learning and applying quaternionic rotation queries."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                810,
+                470,
+                856
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• Quantitative evaluations demonstrate favorable performance compared to state-of-the-art rotation estimation techniques on indoor and outdoor datasets."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                856,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2. Related Work"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                89,
+                643,
+                106
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Our rotation estimation approach represents a specific case of the more general problem of relative pose estimation, particularly relative pose regression (RPR). The prevalent relative rotation estimation technique detects and matches 2D feature points [e.g., SIFT [34], SURF [4]] between images. For pose localization tasks [50], PnP schemes estimate the relative 3D rotation, and the query image camera pose is determined given the anchor image’s 3D coordinates and pose. Other schemes for 3D rotation estimation utilized 3D Fourier transforms [22, 23], whose magnitude is invari ant to translations. Recent methods apply end-to-end trainable deep networks to both images [3, 14]. Graph neural networks (GNNs) enabled multi-image RPR via aggregating localization cues across video frames [52, 55]. Neural radiance fields (NeRFs) have been explored as an alternative to traditional image or feature point storage for RPR encoding. Some schemes employ rotation-specific parametrizations, notably quaternions and Euler angles, to estimate relative 3D rotations [59]. Such parametrizations, especially quaternions, address the discontinuities intrinsic to rotation representations, attributed to the Double-Cover property. Levinson et al. [27] investigated the SVD orthogonalization approach for 3D rotation estimation via neural networks. By projecting the inferred rotation matrices onto the rotation group using SVD, they showcased that its integration supersedes conventional representations, advancing the state-of-the-art in diverse deep learning paradigms. Further, Mohlin et al. [37] introduced a neural network-based estimation of the parameters for the Fisher distribution matrix, representing the probability distributions of 3D rota tions. By optimizing the negative log-likelihood loss of this distribution, they surpassed prior benchmarks in several real-world datasets. Similarly, this optimization methodology was used by Liu et al. to estimate the head pose [33]. As a noteworthy baseline, Rockwell et al. [43] devised a Vision Transformer (ViT) to approximate the eightpoint algorithm for direct relative pose estimation between two images, showing competitive performance across diverse scenarios. The methods above predominantly rely on substantial overlap between input image pairs. A pronounced rotation, resulting in limited overlap, could jeop ardize the accuracy of these estimations. Specifically, such techniques are ineffective for aligning non-overlapping images. Caspi and Irani [9] demonstrated the feasibility of aligning two image sequences with non-overlapping fields of view in both temporal and spatial dimensions, provided the cameras are in proximity. This alignment leverages shared temporal variations within the sequences. In a parallel vein, Shakil [46] established that multiple nonoverlapping video sequences, captured by uncalibrated video cameras, can be synchronized through inherent temporal fluctuations and inter-frame motion within the sequences."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                116,
+                895,
+                902
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2589"
+                    }
+                ]
+            },
+            "bbox": [
+                480,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Extending beyond mere imagery, the challenge of registering non-overlapping RGB-D scans [20, 48] serves as a notable derivative. In such cases, a holistic representation of the scene is typically deduced. In our study, we adopt the framework delineated by Cai et al. [7], where the task is to estimate the extreme relative 3D rotation from a pair of input images. Cai et al. introduced a scheme in which a CNN is used to embed the images, followed by the computation of a 4D correlation volume (4DCV) from the embeddings. An MLP is then applied to this correlation volume, optimizing it using a cross-entropy loss, resulting in state-of-the-art (SOTA) accuracy for non-overlapping images. Intrinsically, 4DCVs are an extension of Bilinear Pooling [25, 31], encoding pairwise correlations across all entities of the 2D embedding maps corresponding to the image pair. Given their encoding capability, 4DCVs have found applications in tasks necessitating long-range spatial correspondences, evident in the RAFT SOTA optical flow [51] and other optical flow models [15, 21, 56]. In a related context, 3D correlation volumes have been utilized in deep stereo matching tasks [18, 28, 30, 39], where the pixels in one image are matched with constrained spatial support in its counterpart. Diverging from these methods, our proposal emphasizes the computation of an analogous 4DCV by evaluating the cross-attention between the activation maps of the image pair through multi-head Transformer-Encoder and an associated activation mask. Specifically, this Transformer-Encoder effectively realizes the functions of multiple aggregated correlation volumes [53] via multi-head attention (MHA). Moreover, we propose an inter-image embedding distillation using Transformer-Decoders, and also improve the rotation inference using a cascaded alternating rotation decoding."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                92,
+                472,
+                590
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3. Rotation Estimation Using Cascaded Attention"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                599,
+                468,
+                635
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The proposed methodology estimates the relative 3D rotation "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\mathbf { R } } \\in \\mathbb { R } ^ { 3 \\times 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "between input image pairs "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { I } _ { 1 } , \\mathbf { I } _ { 2 } \\in \\mathbb { R } ^ { H \\times W }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "outlined in Fig. 2. Siamese residual U-nets [57] with weight sharing encode inputs into activation maps "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\widehat { \\mathbf { I } } _ { 1 } , \\widehat { \\mathbf { I } } _ { 2 } \\in"
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbb { R } ^ { c \\times K _ { 1 } \\times K _ { 2 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "c"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the number of channels and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "K _ { 1 }"
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "K _ { 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are spatial dimensions. To improve embeddings "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\widehat { \\mathbf { I } } _ { 1 } , \\widehat { \\mathbf { I } } _ { 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "via cross-decoding, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\widehat { \\mathbf { I } } _ { 1 } , \\widehat { \\mathbf { I } } _ { 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are cross-propagated into weightsharing Transformer Decoder-0 units. Each input embedding extracts task-relevant representations "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\mathbf { I } } _ { 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\bar { \\mathbf { I } } } _ { 2 }"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                643,
+                468,
+                780
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To further relate the two input images, we compute the cross-attention "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { T } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "an enhanced equivalent of the 4D correlation volume (4DCV) used in prior works [15, 21, 30, 39, 51]. Therefore, we have vectorized the rows "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\bar { I _ { 1 } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\bar { I _ { 2 } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "as two sequences "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\in \\mathbb { R } ^ { c \\times K _ { 1 } K _ { 2 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", concatenated as a single tensor "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\begin{array} { r } { T \\in \\ \\mathbb { R } ^ { c \\times 2 K _ { 1 } K _ { 2 } } } \\end{array}"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and apply a Transformer-Encoder as in Section "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "3 . 2"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". The rotation is decoded on the basis of cross-attention "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { T } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "using a novel attention-based architecture that uses a cascade of two Transformer-Decoders. Initially, Transformer Decoder-1 is utilized to augment T<sup>ˆ</sup> by incorporating it as a query, with guidance provided by a learnable quaternion "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\mathbf { q } } \\in \\mathbb { R } ^ { 4 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "as input. Subsequently, the output of Transformer Decoder-1, denoted as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\bar { \\mathbf { T } } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", is introduced as input to the subsequent Transformer Decoder-2, further refining the query "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\mathbf { q } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Finally, a fully connected MLP layer is applied to predict the relative rotation encoded as quaternion "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\tilde { q } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ". The 3D rotation is regressed using its quaternion representation, q, as discussed in Section 3.4."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                780,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                90,
+                893,
+                244
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.1. Image Embedding Distillation by Cross-Decoding"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                253,
+                892,
+                285
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Given the embeddings "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\widehat { \\bf I } _ { 1 } , \\widehat { \\bf I } _ { 2 } \\in \\mathbb { R } ^ { c \\times K _ { 1 } \\times K _ { 2 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "of the input images, we aim to refine the embeddings by distilling the information between the input images. For that, we apply a Transformer-Decoder that is applied to each embedding, where the other embedding is used as the decoder’s query. In order to transform activation maps into Transformercompatible inputs, we follow the same sequence preparation procedure as in [8]. The activation maps "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { I } } _ { 1 } , \\hat { \\mathbf { I } } _ { 2 } \\in"
+                    },
+                    {
+                        "type": "text",
+                        "content": "<sub>R</sub>c× "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\dot { K } _ { 1 } \\times K _ { 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are first flattened to a sequential representation "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\widehat { \\bf I } _ { 1 } , \\widehat { \\bf I } _ { 2 } \\in \\mathbb { R } ^ { c \\times K _ { 1 } K _ { 2 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Each position in the activation map is further assigned with a learned encoding to preserve the spatial information of each location. To reduce the number of parameters, two one-dimensional encodings are learned separately for the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "X , Y"
+                    },
+                    {
+                        "type": "text",
+                        "content": "axes. Specifically, for an activation map bI we define the sets of positional embedding vectors "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { E } _ { u } ^ { \\phantom { } } \\in \\mathbb { R } ^ { K _ { 1 } \\times C / 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { E } _ { v } \\in \\dot { \\mathbb { R } } ^ { K _ { 2 } \\times C / 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", such that a spatial position "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( i , j ) , i \\in { 1 . . K _ { 1 } , j \\in 1 . . K _ { 2 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", is encoded by concatenating the two corresponding embedding vectors:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                291,
+                893,
+                566
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbf { E } _ { p o s } ^ { i , j } = \\left[ \\mathbf { E } _ { u } ^ { i } \\right] \\in \\mathbb { R } ^ { C } .\\tag{1}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/6d0cc74095f66252df62ad6f7e4bd01f8e0533f26c0b8f8bfa58abd8e47dfdb0.jpg"
+                }
+            },
+            "bbox": [
+                622,
+                575,
+                767,
+                611
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The processed sequence, serving as input to the Transformer is thus given by:"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                619,
+                892,
+                651
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\widehat { \\mathbf { I } } = \\widehat { \\mathbf { I } } + \\mathbf { E } _ { \\mathbf { A } } \\in \\mathbb { R } ^ { K _ { 1 } K _ { 2 } \\times C } ,\\tag{2}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/7cb1b3cfe4e8347bd496e674087db73aaba0c365841bb8d1d1c708ef081f2a18.jpg"
+                }
+            },
+            "bbox": [
+                606,
+                660,
+                784,
+                679
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { E _ { A } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the positional encoding of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\widehat { \\mathbf { I } } } ."
+                    }
+                ]
+            },
+            "bbox": [
+                500,
+                689,
+                777,
+                708
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.2. Cross-Attention Computation using a Transformer-Encoder"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                498,
+                717,
+                892,
+                747
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The cross-attention between the refinement of representations of input images "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\bar { I _ { 1 } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\bar { I _ { 2 } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is computed using a Transformer-Encoder with "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "l \\ = \\ 2"
+                    },
+                    {
+                        "type": "text",
+                        "content": "layers and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "h \\ = \\ 4"
+                    },
+                    {
+                        "type": "text",
+                        "content": "attention heads for each layer. An ablation study of this configuration is given in Section 4.6. The cross-attention maps computed by the Transformer-Encoder are an improved equivalent of the 4D correlation volumes [7, 51], encoding the interactions (inner-products) between all the image cues in the activation maps. By default, a Transformer-Encoder computes the self-attention maps of the input sequence. Hence, the cross-attention T<sup>ˆ</sup> of the vectorized and concatenated activation maps T is computed by applying the attention mask M given in Eq. 3. The mask M nullifies the self-attention terms in the attention maps computed throughout the Transformer-Encoder, while retaining the cross-attention terms,"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                756,
+                893,
+                878
+            ]
+        },
+        {
+            "type": "page_footnote",
+            "content": {
+                "page_footnote_content": [
+                    {
+                        "type": "text",
+                        "content": "<sup>1</sup>https://github.com/dekelshay/AttExtremeRotation"
+                    }
+                ]
+            },
+            "bbox": [
+                517,
+                886,
+                851,
+                900
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2590"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/87130066afe558dfdf6d51bebeec595e77083794f7b4fc3491287bdb87ec95e0.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 2. The proposed architecture utilizes weight-sharing Siamese CNNs to encode the input image pair "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( I _ { 1 } , I _ { 2 } ) \\in \\mathbb { R } ^ { H \\times W }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "into feature maps "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( \\hat { I } _ { 1 } , \\hat { I } _ { 2 } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". These feature maps are then cross-decoded by the weight sharing Transformer Decoder-0 layers, cross-distilling "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( \\hat { I } _ { 1 } , \\hat { I } _ { 2 } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "into the representations "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\bar { I } } _ { 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\overline { { \\bar { I } } } _ { 2 } ^ { \\mathsf { ^ { a } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". The concatenated refined embeddings "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "T"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are input to the Transformer-Encoder alongside an attention mask M to derive the cross-attention encoding "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { T } . \\hat { T }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "enters a cascade of two Transformer Decoders, where the first, Transformer Decoder 1, enhances the cross-attention as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\bar { T } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "guided by the learned quaternion rotation query "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\bar { q } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "The second, Transformer Decoder-2, encodes the rotation as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\bar { q } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "transformed via a multilayer perceptron (MLP) to predict the relative quaternion rotation q˜."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                83,
+                92,
+                883,
+                247
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/30713afc4f543a77bd2ca5c309884478b51216a078c8784549501d9722f88795.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 3. Computing the cross-attention using a Transformer-Encoder and the input mask, M. The mask M zeros the selfattention terms, retaining only the cross-attention terms."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                88,
+                361,
+                455,
+                537
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                614,
+                470,
+                736
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbf { M } = \\left[ \\begin{array} { c c c c c } { - \\infty } & { - \\infty } & { \\cdots } & { 0 } & { 0 } \\\\ { - \\infty } & { - \\infty } & { \\cdots } & { 0 } & { 0 } \\\\ { \\vdots } & { \\vdots } & { \\ddots } & { \\vdots } & \\\\ { 0 } & { 0 } & { \\cdots } & { - \\infty } & { - \\infty } \\\\ { 0 } & { 0 } & { \\cdots } & { - \\infty } & { - \\infty } \\end{array} \\right]\\tag{3}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/643ba9a35cbe105d08e5183fe04f953e27dc0d37699e6e98afbc22f93e6981d4.jpg"
+                }
+            },
+            "bbox": [
+                140,
+                743,
+                403,
+                830
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The use of the mask M and the corresponding structure of the attention maps is shown in Fig. 3. Any pair of image patches could hold valuable information about the overall geometric relationships in an image. The Transformer-"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                840,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Encoder can uncover these hints implicitly. The regions in the input images that contain rotation-related cues, explicitly or implicitly, receive higher attention scores, as seen in Section 2 of the Supplementary Materials section. This leads to a more meaningful and concise input for the distillation and the subsequent MLP layer, ultimately improving the estimation accuracy. The same as in [7], even when the image pairs are non-overlapping, the Transformer-Encoder formulation can predict the rotation using straight lines only present in a single image, the same as human cognitive capabilities. For example, in the extreme scenario of nonoverlapping image pairs the roll angle can be estimated from a single image, by implicitly assuming that buildings and their edges are perpendicular to ground level. Similarly, the relative elevation angle can be estimated by assuming that the streets and pavements are parallel to the ground plane or by computing the corresponding vanishing points. Most training and test datasets in this domain depict urban scenes, adhering to these assumptions."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                361,
+                893,
+                650
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.3. Cascaded Attention-based Decoding"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                669,
+                815,
+                685
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Given the cross-attention tensor "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { T } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "that encodes interrelations between the paired input images, our objective is inferring the 3D relative rotation quaternion. To achieve this, we propose an innovative cascaded decoding scheme that alternately refines both the query rotation and cross-attention. Initially, Transformer Decoder-1, enhances "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { T } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "based on the learned quaternion q to compute "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\overline { { \\overline { { \\mathbf { T } } } } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "Next, the refined crossattention "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\overline { { \\overline { { \\mathbf { T } } } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is queried by q to deduce the rotated encoding "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\overline { { \\bar { \\bf q } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "using Transformer Decoder-2. This cascaded inference approach could be extended via additional dual units. However, we observed no performance gains from additional cascades. Since the decoder inputs are semantic representations, positional encodings are excluded."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                698,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2591"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                514,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.4. Relative Rotation Regression"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                90,
+                336,
+                107
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The encoded quaternion vector "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\overline { { \\bar { \\bf q } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is subsequently input to a Multi-Layer Perceptron (MLP) regressor, computing the quaternion output denoted "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\tilde { \\mathbf { q } } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "This resultant quaternion is given by "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { q } = [ q _ { w } , q _ { x } , q _ { y } , q _ { z } ]"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". The training loss is formulated as:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                113,
+                470,
+                188
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbf { L } = \\mid q _ { 0 } - \\tilde { \\mathbf { q } } / \\mid \\mid \\tilde { \\mathbf { q } } \\mid \\mid _ { 2 } ,\\tag{4}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/f1e689408e38bf04ff7a70a6b6cab08d64cec87844eeb359aa86dd4608c46d6e.jpg"
+                }
+            },
+            "bbox": [
+                197,
+                189,
+                348,
+                205
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "q _ { 0 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\tilde { q }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are the groundtruth and predicted quaternions, respectively. Normalization ensures that the quaternion is a valid 3D rotation representation."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                210,
+                470,
+                257
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4. Experimental Results"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                270,
+                282,
+                286
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The proposed scheme was experimentally verified by applying it to contemporary benchmark datasets with overlapping and nonoverlapping image pairs. Our experimental setup rigorously adhered to the paradigm established by Cai et al. [7], using identical datasets and image overlap categories. Utilizing their provided source "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathrm { c o d e } ^ { 2 } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ", to create perspective views from panoramic images, ensuring that the input images were the same in both studies, allowing fair comparisons with previous SOTA results and other contemporary schemes. For that, we also used the same Residual-Unet backbone network [58] as in [7]. Section 4.1 details the image datasets we used and their processing, according to Cai et al. [7], to derive the training and test datasets. Training details are given in Section 4.2. We compare with recent SOTA schemes listed in Section 4.3 using the geodesic error measure used in previous work [7]"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                295,
+                472,
+                537
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbf { E } = \\operatorname { a r c c o s } \\left( { \\frac { t r ( \\mathbf { R } ^ { T } \\mathbf { R } ^ { * } ) - 1 } { 2 } } \\right) ,\\tag{5}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/a017d4c1a315fc5faa9aec28ab94c836181b0a19918da9eadfc194f971402f67.jpg"
+                }
+            },
+            "bbox": [
+                161,
+                546,
+                383,
+                580
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where R is the predicted rotation matrix and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R } ^ { * }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the groundtruth relative rotation matrix for each image pair. The experimental comparisons are reported in Section 4.4 and the attention maps are visualized in Section 2 of the Supplementary Materials to provide an intuitive interpretation of the cross-attention scores computed by the Transformer-Encoder. We studied the cross-dataset generalization properties of the proposed scheme in Section 4.5, while ablation studies of the different parameters, design choices and parameters are reported in Section 4.6."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                589,
+                472,
+                742
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.1. Image Datasets and their Processing"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                750,
+                393,
+                766
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We used the following datasets and train/test splits used in previous works:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                772,
+                468,
+                803
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "InteriorNet [29] is a synthetic data set to understand and map interior scenes. A subset of 10,050 panoramas from 112 different houses was used, where the images of 82 houses were used for training and those of 30 houses were used for testing, respectively."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                803,
+                470,
+                880
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "StreetLearn [36] is an outdoor dataset consisting of approximately 140,000 panoramic views of Pittsburgh and Manhattan. We used 56K panoramic views from Manhattan, from which we randomly chose 1000 panoramic views for testing."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                90,
+                893,
+                166
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "SUN360 [54] is an indoor collection of high-resolution panoramas that cover a full view of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "3 6 0 ^ { \\circ } \\times 1 8 0 ^ { \\circ }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "for a variety of environmental scenes downloaded from the Internet. It also provides location category labels. We used 7K and 2K panoramas for training and testing, respectively."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                167,
+                893,
+                243
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "As these datasets contain panoramic images, we generated 200 perspective "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "1 2 8 \\times 1 2 8"
+                    },
+                    {
+                        "type": "text",
+                        "content": "images by randomly cropping 200 different locations in each panoramic image. This sampling strategy ensures a consistent distribution of ground-truth image pairs with pitch resolutions spanning "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "[ - 4 5 ^ { \\circ } , 4 5 ^ { \\circ } ]"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and yaw resolutions encompassing "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\left[ - 1 8 0 ^ { \\circ } , 1 8 0 ^ { \\circ } \\right]"
+                    },
+                    {
+                        "type": "text",
+                        "content": "We estimate only the Yaw and the Pitch angles, presuming a null roll between paired images. We avoided generating textureless image pairs, that is, images that mainly contain ceilings or floors in a house or skies in an outdoor scenes, by limiting the pitch rang to "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "[ - 4 5 ^ { \\circ } , 4 5 ^ { \\circ } ]"
+                    },
+                    {
+                        "type": "text",
+                        "content": "for the outdoor dataset and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "[ - 3 0 ^ { \\circ } , 3 0 ^ { \\circ } ]"
+                    },
+                    {
+                        "type": "text",
+                        "content": "for the indoor datasets. There is no overlap between the train and test datasets. To compare our results with prior research and to analyze the influence of camera translation on our rotation estimation approach, we partitioned the Interior-Net and StreetLearn datasets into two groups: images with and without camera translations. The non-translated images were acquired by randomly selecting pairs of cropped images from a single panorama. In contrast, datasets that include translations (known as StreetLearn-T and InteriorNet-T) were generated by randomly selecting pairs of cropped images from different panoramas, where translations are less than 3m. However, our method was not used to estimate these translations. We evaluated our performance in overlapping and nonoverlapping pairs and use the setup of Cai et al. [7] by dividing the datasets into three overlap classes:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                244,
+                895,
+                666
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Large, contains highly overlapping pairs up to relative rotations of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "4 5 ^ { \\circ }"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                667,
+                892,
+                696
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Small, contains pairs that partially overlap with relative rotation angles "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\in [ 4 5 ^ { \\circ } , 9 0 ^ { \\circ } ]"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                698,
+                892,
+                728
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "None, contains pairs without overlap with relative rotations "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "> 9 0 ^ { \\circ }"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                729,
+                892,
+                758
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.2. Training Details"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                770,
+                661,
+                786
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We use a pre-trained Residual-Unet [58] (same as in Cai et al. [7]) as a backbone to compute the feature maps of the two input images "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( \\hat { I } _ { 1 } , \\hat { I } _ { 2 } ) \\in \\bar { \\mathbb { R } } ^ { c \\times k _ { 1 } \\times k _ { 2 } } = \\mathbb { R } ^ { 1 2 8 \\times 3 \\hat { 2 } \\times 3 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "According to Fig. 2, subsequently, these feature maps are cross-propagated into dedicated decoder units, resulting in the refinement of representations "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\bar { I _ { 1 } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\bar { \\bar { I _ { 2 } } } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ". The refinements of the representations "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\bar { I _ { 1 } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\bar { I _ { 2 } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "were reshaped and concatenated along the axis of the samples to form the tensor "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { T } \\in \\mathbb { R } ^ { ( 2 \\cdot 3 2 \\cdot 3 2 ) ^ { \\sim } \\times 1 2 8 } = \\mathbb { R } ^ { 2 0 4 8 \\times 1 2 8 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". T was the input to the Transformer-Encoder, consisting of l = 2 layers with ReLU nonlinearity and a dropout of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "p = 0 . 1"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Each encoder layer uses "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "h = 4 ~ \\mathrm { { M H A } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "heads and a hidden dimension of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "C _ { h } ="
+                    },
+                    {
+                        "type": "text",
+                        "content": "768. An ablation study of the Transformer-Encoder parameters is given in Section 4.6. The Transformer-Encoder’s output "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { T }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is then fed into a dual-path structure comprising two concatenated decoders. The primary decoder receives a learnt quaternion vector initialized by white Gaussian noise, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\bar { q } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "as input and the cross-attention "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\dot { T }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "as a query, and produces "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\bar { T } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", enhancing contextual nuances, while the subsequent decoder gets "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\check { \\bar { T } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "as an input and the same empty quaternion vector, q¯ as a query, and generates "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\bar { q } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "encapsulating pivotal rotational attributes. The two sequential attentionbased decoders use "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "l = 2"
+                    },
+                    {
+                        "type": "text",
+                        "content": "layers with h = 2 MHA heads and a hidden dimension of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "C _ { h } = 7 6 8 ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Finally, the MLP regressor that computes the quaternion representation for the regression loss in Eq. 4. The MLP regressor contains two fully connected layers. Throughout all experiments, the model is optimized using an Adam optimizer with an initial learning rate of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\lambda = 5 e - 4 ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", with "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\beta _ { 1 } = 0 . 9 , \\beta _ { 2 } = 0 . 9 9 9"
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon = 1 0 ^ { - 1 0 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and a batch size of 20. Our model is implemented in PyTorch, it is end-to-end trainable, and all experiments were performed on an 8GB NVIDIA GeForce GTX 2080 GPU."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                794,
+                893,
+                902
+            ]
+        },
+        {
+            "type": "page_footnote",
+            "content": {
+                "page_footnote_content": [
+                    {
+                        "type": "text",
+                        "content": "<sup>2</sup>https://github.com/RuojinCai/ExtremeRotation_code"
+                    }
+                ]
+            },
+            "bbox": [
+                94,
+                886,
+                442,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2592"
+                    }
+                ]
+            },
+            "bbox": [
+                480,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                92,
+                472,
+                484
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.3. Comparative baselines"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                494,
+                289,
+                511
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In line with Cai et al. [7], we compare our method with contemporary schemes using the datasets in Section 4.1:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                518,
+                470,
+                550
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "A SIFT-based approach [6]. A method for matching SIFT features [34] using RANSAC [17] in image pairs of the same panorama, and estimating the relative rotation matrix using Homography equations or the Essential matrix."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                550,
+                470,
+                611
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "CNN-based methods [13]. Deep learning schemes that detect and encode local image features using SuperPoint-Net [13] and D2-Net [16]."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                611,
+                470,
+                656
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Self-supervised interest point [59]. A scheme by Zhou et al. [59] (Reg6D) that applies a CNN to approximate the mappings between various rotation representations and fits continuous 5D and 6D rotation representations, instead of the commonly used Euler and quaternion representations."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                657,
+                470,
+                733
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Extreme rotation estimation [7]. A deep learning technique to estimate the relative 3D rotation of image pairs in an extreme setting [7] where the images have little or no overlap. They proposed a network that automatically learns implicit visual cues by computing a 4D correlation volume."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                733,
+                470,
+                809
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Attention-based methods. We also compare to recent work by Rockwell et al. [43] (8PointVit) using a Vision Transformer (ViT) to estimate the relative pose. Although Rockwell et al. achieve competitive results in multiple settings, their approach is less suited for extreme view changes."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                810,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.4. Experimental comparisons"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                90,
+                743,
+                107
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The results of the comparison of the proposed scheme with baselines and SOTA schemes are reported in Table 1. We report the mean and median of the geodesic error given in Eq. 5 and the percentage of image pairs whose estimated relative rotation error was less than "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "1 0 ^ { \\circ }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". We compared the accuracy of our proposed model to the schemes detailed in Section 4.3. The proposed approach is shown to be accurate for both indoor and outdoor scenes and significantly outperforms the baseline schemes in all overlap categories. For nonoverlapping pairs, correspondence-based methods such as SIFT [6], SuperPointNet [13], Reg6D [59] and 8PointViT [43] failed to provide any estimates, as they require feature correspondence. The DenseCorrVol approach [7] provides accurate results in extreme cases, but our approach outperforms it. Qualitative experimental results are given in Section 1 of the Supplementary Materials section. The qualitative results of the rotation estimation are shown in Fig. 4 for the StreetLearn and SUN360 datasets, for the large, small and nonoverlapping cases. We show the full panoramas, the footprints of the cropped images that were used as inputs for the proposed scheme and the footprint of the estimated image crop based on the estimated rotation. In all cases, we achieve high estimation accuracy."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                114,
+                895,
+                463
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.5. Cross-Dataset Generalization"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                473,
+                764,
+                488
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The cross-dataset generalization properties of our approach were evaluated using the Holicity dataset [60]. The Manhattan dataset was used to train the models, while the London dataset was used for testing. The test images were divided into three overlap classes according to Section 4.1. We compared the generalization of our approach with Cai et al.’s [7]. The results, in Table 2, show that our approach outperformed Cai et al in all overlap classes."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                488,
+                893,
+                609
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.6. Ablation Study"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                619,
+                653,
+                636
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Transformer-Encoder parameters. Table 3 summarizes multiple Transformer-Encoder configurations for each overlap category. The expressive power of the Transformer-Encoder depends on the number of heads and layers. The more are used, the better the expressive power. However, using an excessive number might lead to overfitting, and the optimal constellation, in terms of accuracy in Table 3, is given by "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "h = 4 , l = 2"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". In particular, this constellation is a sweetspot so that increasing the number of heads or layers results in reduced accuracy."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                642,
+                893,
+                794
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Backbone ablation. In Table 4, we examine the depth of the Residual-Unet [58] backbone by altering the number of residual blocks it contains. Increasing the number of residual blocks enhances the backbone’s expressive capability, but an excessively deep architecture may result in overfitting. We found that using three residual blocks is the optimal choice, which aligns with our original decision."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                795,
+                895,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2593"
+                    }
+                ]
+            },
+            "bbox": [
+                480,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/2bfa0355ff15312351be1395f2d990ebb6aac4c1b46637a6265cb8c43058d505.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 1. Relative rotation estimation results. We utilized the InteriorNet, SUN360, and StreetLearn datasets and show the average and median of geodesic errors. We also present the percentage of image pairs with relative rotation error below "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "1 0 ^ { \\circ }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", for the overlap categories in Section 4.1. The gray numbers indicate errors exceeding 50%. The asterisk ∗ signifies that the mean and median errors did not lead to pose estimation, and their calculations are performed only on successful image pairs."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td colspan=\"2\"></td><td colspan=\"3\">InteriorNet</td><td colspan=\"3\">InteriorNet-T</td><td colspan=\"3\">SUN360</td><td colspan=\"3\">StreetLearn</td><td colspan=\"3\">StreetLearn-T</td></tr><tr><td colspan=\"2\">Overlap Method</td><td>Avg(°↓) Med(°↓) 10°(%↑) Avg(°↓) Med(°↓) 10°(%↑) Avg(°↓) Med(°↓) 10°(%↑) Avg(°↓) Med(°↓) 10°(%↑) Avg(°↓) Med(°↓) 10°(%↑)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td rowspan=\"6\">Large</td><td>SIFT* [34]</td><td>6.09</td><td>4.00</td><td>84.86</td><td>7.78</td><td>2.95</td><td>55.52</td><td>5.46</td><td>3.88</td><td>93.10</td><td>5.84</td><td>3.16</td><td>91.18</td><td>18.86</td><td>3.13</td><td>22.37</td></tr><tr><td>SuperPoint* [13]</td><td>5.40</td><td>3.53</td><td>87.10</td><td>5.46</td><td>2.79</td><td>65.97</td><td>4.69</td><td>3.18</td><td>92.12</td><td>6.23</td><td>3.61</td><td>91.18</td><td>6.38</td><td>1.79</td><td>16.45</td></tr><tr><td>Reg6D [59]</td><td>9.05</td><td>5.90</td><td>68.49</td><td>17.00</td><td>11.95</td><td>41.79</td><td>16.51</td><td>12.43</td><td>40.39</td><td>11.70</td><td>8.87</td><td>58.24</td><td>36.71</td><td>24.79</td><td>23.03</td></tr><tr><td>DenseCorrVo [7]</td><td>1.53</td><td>1.10</td><td>99.26</td><td>2.89</td><td>1.10</td><td>97.61</td><td>1.00</td><td>0.94</td><td>100.00</td><td>1.19</td><td>1.02</td><td>99.41</td><td>9.12</td><td>2.91</td><td>87.50</td></tr><tr><td>8PointViT [43]</td><td>0.48</td><td>0.40</td><td>100.00</td><td>2.90</td><td>1.83</td><td>97.91</td><td></td><td></td><td></td><td>0.62</td><td>0.52</td><td>100.00</td><td>4.08</td><td>2.43</td><td>90.13</td></tr><tr><td>Ours</td><td>0.43</td><td>0.38</td><td>99.65</td><td>1.75</td><td>0.95</td><td>98.8</td><td>0.85</td><td>0.45</td><td>99.95</td><td>0.58</td><td>0.48</td><td>99.31</td><td>3.88</td><td>1.69</td><td>87.20</td></tr><tr><td rowspan=\"6\">Small</td><td>SIFT* [34]</td><td>24.18</td><td>8.57</td><td>39.73</td><td>18.16</td><td>10.01</td><td>18.52</td><td>13.71</td><td>6.33</td><td>56.77</td><td>16.22</td><td>7.35</td><td>55.81</td><td>38.78</td><td>13.81</td><td>5.68</td></tr><tr><td>SuperPoint* [13]</td><td>16.72</td><td>8.43</td><td>21.58</td><td>11.61</td><td>5.82</td><td>11.73</td><td>17.63</td><td>7.70</td><td>26.69</td><td>19.29</td><td>7.60</td><td>24.58</td><td>6.80</td><td>6.85</td><td>0.95</td></tr><tr><td>Reg6D [59]</td><td>25.71</td><td>15.56</td><td>33.56</td><td>42.93</td><td>28.92</td><td>23.15</td><td>42.55</td><td>32.11</td><td>9.40</td><td>24.77</td><td>15.11</td><td>30.56</td><td>46.61</td><td>34.33</td><td>13.88</td></tr><tr><td>DenseCorrVol [7]</td><td>6.45</td><td>1.61</td><td>95.89</td><td>10.24</td><td>1.38</td><td>89.81</td><td>3.09</td><td>1.41</td><td>98.50</td><td>2.32</td><td>1.41</td><td>98.67</td><td>13.04</td><td>3.49</td><td>84.23</td></tr><tr><td>8PointViT [43]</td><td>1.84</td><td>0.94</td><td>99.32</td><td>4.48</td><td>2.38</td><td>96.30</td><td></td><td></td><td></td><td>1.46</td><td>1.09</td><td>100.00</td><td>9.19</td><td>3.25</td><td>87.7</td></tr><tr><td>Ours</td><td>1.55</td><td>0.872</td><td>99.85</td><td>4.25</td><td>0.777</td><td>97.55</td><td>2.109</td><td>0.831</td><td>98.99</td><td>1.21</td><td>0.718</td><td>99.122</td><td>7.48</td><td>1.8666</td><td>88.996</td></tr><tr><td rowspan=\"6\">None</td><td>SIFT* [34]</td><td>109.30</td><td>92.86</td><td>0.00</td><td>93.79</td><td>113.86</td><td>0.00</td><td>127.61</td><td>129.07</td><td>0.00</td><td>83.49</td><td>90.00</td><td>0.38</td><td>85.90</td><td>106.84</td><td>0.38</td></tr><tr><td>SuperPoint* [13]</td><td>120.28</td><td>120.28</td><td>0.00</td><td></td><td></td><td>0.00</td><td>149.80</td><td>165.24</td><td>0.00</td><td></td><td></td><td>0.00</td><td></td><td></td><td>0.00</td></tr><tr><td>Reg6D [59]</td><td>48.36</td><td>32.93</td><td>10.82</td><td>60.91</td><td>51.26</td><td>11.14</td><td>64.74</td><td>56.55</td><td>3.77</td><td>28.48</td><td>18.86</td><td>24.39</td><td>49.23</td><td>35.66</td><td>11.86</td></tr><tr><td>8PointViT [43]</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>DenseCorrVol [7]</td><td>37.69</td><td>3.15</td><td>61.97</td><td>49.44</td><td>4.17</td><td>58.36</td><td>34.92</td><td>4.43</td><td>61.39</td><td>5.77</td><td>1.53</td><td>96.41</td><td>30.98</td><td>3.50</td><td>72.69</td></tr><tr><td>Ours</td><td>35.13</td><td>2.814</td><td>65.20</td><td>45.32</td><td>4.05</td><td>59.56</td><td>32.46</td><td>4.19</td><td>63.17</td><td>5.33</td><td>1.20</td><td>96.22</td><td>28.13</td><td>3.25</td><td>72.43</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                76,
+                88,
+                888,
+                325
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/6165062e4c1a165961c25b3c28e40b4aa1bb9e50a54a96cbaf509dc94a034ccd.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                86,
+                400,
+                503,
+                636
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/d1f8ac124cd578efd82ee8770cce93af17a23e579a69a327ae42856c7033043a.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 4. Rotation estimation results. The panoramic and cropped groundtruth images are marked with green and yellow dots. The predicted footprint of one of the cropped images is marked by the red-dotted line. The first row shows the results of the matching of images with large overlaps. The second and last rows show the matching of small overlap and non-overlapping images."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                516,
+                398,
+                898,
+                633
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/ce74862bd1214f6f22ac5527b2d6c19e0848ac805404c3526c9280cafe0dc104.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 2. Cross-dataset generalization. We trained the models on the Manhattan dataset and tested them on the London dataset. The average geodesic error is reported."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td>Overlap</td><td>Ours [°]</td><td>Cai et al. [7] [°]</td></tr><tr><td>Large</td><td>9.55</td><td>11.23</td></tr><tr><td>Small</td><td>16.33</td><td>20.87</td></tr><tr><td>None</td><td>38.48</td><td>40.82</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                137,
+                707,
+                406,
+                779
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "3D rotation encoding and training losses. The ablations of different rotation encodings and their corresponding training losses were evaluated and are presented in Table 5. The evaluation was performed by applying the Residual-"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                839,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Unet backbone [58] and a proposed Transformer-Encoderbased cross-attention method to image pairs from the Stree-Learn dataset with large overlaps. For the discrete formulation, in line with Cai et al. [7], the pitch and yaw angles were discretized into 360 bins ∈ [−180<sup>◦</sup>, 180<sup>◦</sup>], and a crossentropy loss was used to train the network. These results were compared to those obtained using the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "regression loss, as described in Eq. 4 in our scheme. The results in Table 5 show that our "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "regression outperforms the discrete Euler angle approach proposed by Cai et al. [7]."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                708,
+                893,
+                861
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Architecture Ablations To evaluate the proposed architecture and assess the contribution of each proposed component, the use of the different Transformer Decoders in particular, we conducted a series of experiments employing various architectural variations of the proposed architecture introduced in Section 3 and Fig. 2. The results are shown in Table 6 and the corresponding architectures are shown in the"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                869,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2594"
+                    }
+                ]
+            },
+            "bbox": [
+                480,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/d15a660ab21b472047dd7efb17aaea397a4415cbe4ab6d687b68e7abd7d8f6a9.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 3. Ablation of the Transformer-Encoder parameters using the StreeLearn dataset. For each overlap class, there is an optimal configuration that balances the Transformer-Encoder’s expressive power and overfitting."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td rowspan=\"2\">Overlap</td><td rowspan=\"2\">Heads</td><td rowspan=\"2\">Layers</td><td colspan=\"3\">Rotational error</td></tr><tr><td>Avg [°]</td><td>Med [°]</td><td>10°[%]</td></tr><tr><td rowspan=\"5\">Large</td><td>1</td><td>1</td><td>1.21</td><td>0.97</td><td>99.1</td></tr><tr><td>4</td><td>1</td><td>0.82</td><td>0.65</td><td>99.1</td></tr><tr><td>2</td><td>2</td><td>0.87</td><td>0.71</td><td>99.12</td></tr><tr><td>4</td><td>2</td><td>0.58</td><td>0.48</td><td>99.31</td></tr><tr><td>4</td><td>4</td><td>0.65</td><td>0.59</td><td>99.2</td></tr><tr><td rowspan=\"5\">Small</td><td>1</td><td>1</td><td>7.13</td><td>3.26</td><td>94.99</td></tr><tr><td>4</td><td>1</td><td>6.42</td><td>2.46</td><td>95.32</td></tr><tr><td>2</td><td>2</td><td>5.44</td><td>2.05</td><td>96.55</td></tr><tr><td>4</td><td>2</td><td>1.21</td><td>0.718</td><td>99.122</td></tr><tr><td>4</td><td>4</td><td>4.61</td><td>0.98</td><td>95.43</td></tr><tr><td rowspan=\"5\">None</td><td>1</td><td>1</td><td>7.43</td><td>2.88</td><td>91.55</td></tr><tr><td>4</td><td>1</td><td>6.15</td><td>2.55</td><td>92.55</td></tr><tr><td>2</td><td>2</td><td>6.23</td><td>3.02</td><td>91.35</td></tr><tr><td>4</td><td>2</td><td>5.33</td><td>1.20</td><td>96.22</td></tr><tr><td>4</td><td>4</td><td>5.78</td><td>1.87</td><td>95.22</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                78,
+                89,
+                485,
+                369
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/52a071dd56a16edc63de5f92f93a0040408a1d631ddc8038db4bfe59b56db9cc.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 4. Backbone Ablation. We evaluate the depth of the Residual-Unet backbone network [58], used in our scheme, by changing the number of residual blocks."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td>Backbone</td><td>Layers</td><td>Rotational error Avg [°] Med [°] 10°[%]</td><td></td></tr><tr><td>1</td><td>Conv(k=7, s=2, d=64) 1× Residual blocks  $\\scriptstyle \\mathrm { C o n v } ( \\mathrm { k } = 3 , \\mathrm { s } = 1 , \\mathrm { d } = 5 1 2 )$   $\\mathrm { C o n v } ( \\mathrm { k } { = } 3 , \\mathrm { s } { = } 1 , \\mathrm { d } { = } 2 5 6 )$ </td><td>2.95 1.53</td><td>94.13</td></tr><tr><td>2</td><td> $\\scriptstyle \\mathrm { C o n v } ( \\mathbf { k } = 7 , 5 = 2 , \\mathrm { d } = 6 4 )$  2× Residual blocks  $\\scriptstyle \\mathrm { C o n v } ( \\mathrm { k } = 3 , \\mathrm { s } = 1 , \\mathrm { d } = 5 1 2 )$  Conv(k=3, s=1, d=256)</td><td>1.75</td><td>1.05 96.13</td></tr><tr><td>3</td><td>Conv(k=7, s=2, d=64) 3 × Residual blocks Conv(k=3, s=1, d=512) Conv(k=3, s=1, d=256)</td><td>1.21</td><td>0.7818 99.122</td></tr><tr><td>4</td><td>Conv(k=7, s=2, d=64) 4× Residual blocks Conv(k=3, s=1, d=512) Conv(k=3, s=1, d=256)</td><td>1.45</td><td>0.86 97.12</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                76,
+                450,
+                468,
+                756
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                824,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/1f7d9ac43f79086a28bb8af88cb5668f8e913270bf5f20a62ef2cee9f116f033.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 5. Ablation of 3D rotation encoding and training losses. We compare the 3D rotations encodings by Euler angles and quaternions in discrete and continuous domains and the corresponding training losses."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td colspan=\"2\">Representation Loss function</td><td colspan=\"3\">Rotational error Avg [°] Med [°] 10°[%]</td></tr><tr><td>Quaternions Euler angles Cross-Entropy</td><td> $L _ { 2 }$  Regression</td><td>1.21 2.37</td><td>0.78 1.46</td><td>99.122 98.13</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                514,
+                89,
+                877,
+                179
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Supplementary Materials. In each experiment, we used a particular partial configuration of the proposed Transformer Decoders and evaluated the resulting estimation error using the StreetLearn dataset with large overlaps between the input images. The results in Table 6 show that the proposed configuration outperforms all other configurations. In particular, configuration #1 shows that using the sequential attention-based decoders, TD1 and TD2 improves the accuracy significantly. The cross-decoding by TD0 provides additional, but not as significant improvement."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                270,
+                895,
+                424
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/ff0588bfc9cdfaaea42cb99ff8fa6e01c8b7bdb6fc35ea236459140baa78b39c.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 6. Architectural ablation study. We compare the estimation accuracy of different configurations of Transformers Decoders (TDs). The corresponding architectures are shown in the Supplementary Materials, and the first configuration is shown in Section 3 and Fig. 2."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td></td><td>TD0</td><td>TD1</td><td>TD2</td><td>Avg [°]</td><td>Med [°]</td><td>10°[%]</td></tr><tr><td>0</td><td>+</td><td>+</td><td>+</td><td>0.58</td><td>0.48</td><td>99.3</td></tr><tr><td>1</td><td>一</td><td>+</td><td>+</td><td>0.98</td><td>0.81</td><td>95.15</td></tr><tr><td>2</td><td>-</td><td>-</td><td>1</td><td>3.35</td><td>2.44</td><td>88.16</td></tr><tr><td>3</td><td>-</td><td>+</td><td>-</td><td>1.76</td><td>1.55</td><td>93.12</td></tr><tr><td>4</td><td>+</td><td>+</td><td>一</td><td>0.86</td><td>0.72</td><td>95.64</td></tr><tr><td>5</td><td>+</td><td>-</td><td>一</td><td>1.97</td><td>1.65</td><td>92.82</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                501,
+                446,
+                888,
+                559
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5. Conclusion"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                672,
+                619,
+                689
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We present a novel formulation for estimating the relative rotation between a pair of images. In particular, we study the estimation of rotations between images with small and no overlap. We propose an attention-based approach using a Transformer-Encoder to calculate the cross-attention between image pair embedding maps, which outperforms the previous use of 4D correlation volumes [7, 51] and a decoder-decoder mechanism to estimate the output quaternion. Our framework can be trained end-to-end and optimizes a regression loss. It has been experimentally shown to outperform previous SOTA schemes [7] on multiple datasets used in contemporary work. In particular, for the challenging small and nonoverlapping cases."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                703,
+                895,
+                902
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2595"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "References"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                78,
+                89,
+                176,
+                106
+            ]
+        },
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[1] Hadar Averbuch-Elor and Daniel Cohen-Or. Ringit: Ringordering casual photos of a temporal event. ACM Trans. Graph., 34(3), 2015. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[2] Alexandru O. Balan, Michael J. Black, Horst Haussecker, and Leonid Sigal. Shining a light on human pose: On shadows, shading and the estimation of pose and shape. In IEEE International Conference on Computer Vision (ICCV), pages 1–8, 2007. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[3] Vassileios Balntas, Shuda Li, and Victor Prisacariu. Relocnet: Continuous metric learning relocalisation using neural nets. In European Conference on Computer Vision (ECCV), September 2018. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[4] Herbert Bay, Tinne Tuytelaars, and Luc Van Gool. Surf: Speeded up robust features. In European Conference on Computer Vision (ECCV), pages 404–417. Springer, 2006. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[5] Eric Brachmann, Alexander Krull, Sebastian Nowozin, Jamie Shotton, Frank Michel, Stefan Gumhold, and Carsten Rother. Dsac-differentiable ransac for camera localization. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), pages 6684–6692, 2017. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[6] Matthew Brown, Richard I Hartley, and David Nister. Mini-´ mal solutions for panoramic stitching. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), pages 1–8. IEEE, 2007. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[7] Ruojin Cai, Bharath Hariharan, Noah Snavely, and Hadar Averbuch-Elor. Extreme rotation estimation using dense correlation volumes. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2021. 3, 4, 5, 6, 7, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[8] Nicolas Carion, Francisco Massa, Gabriel Synnaeve, Nicolas Usunier, Alexander Kirillov, and Sergey Zagoruyko. End-toend object detection with transformers. In Andrea Vedaldi, Horst Bischof, Thomas Brox, and Jan-Michael Frahm, editors, European Conference on Computer Vision (ECCV), pages 213–229, Cham, 2020. Springer International Publishing. 1, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[9] Yaron Caspi and Michal Irani. Aligning non-overlapping sequences. International Journal of Computer Vision, 48(1):39–51, 2002. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[10] J.M. Coughlan and A.L. Yuille. Manhattan world: compass direction from a single image by bayesian inference. In IEEE International Conference on Computer Vision (ICCV), volume 2, pages 941–947 vol.2, 1999. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[11] Antonio Criminisi, Ian Reid, and Andrew Zisserman. Single view metrology. In IEEE International Conference on Computer Vision (ICCV), pages 434–441. IEEE Computer Society, 1999. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[12] Andrew J Davison, Ian D Reid, Nicholas D Molton, and Olivier Stasse. Monoslam: Real-time single camera slam. IEEE Transactions on Pattern Analysis and Machine Intelligence, 29(6):1052–1067, 2007. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[13] Daniel DeTone, Tomasz Malisiewicz, and Andrew Rabinovich. Superpoint: Self-supervised interest point detection and description. In IEEE Conf. Comput. Vis. Pattern Recog. Worksh., 2018. 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[14] Mingyu Ding, Zhe Wang, Jiankai Sun, Jianping Shi, and"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "Ping Luo. Camnet: Coarse-to-fine retrieval for camera relocalization. In IEEE International Conference on Computer Vision (ICCV), October 2019. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[15] Alexey Dosovitskiy, Philipp Fischer, Eddy Ilg, Philip Hausser, Caner Hazirbas, Vladimir Golkov, Patrick Van Der Smagt, Daniel Cremers, and Thomas Brox. Flownet: Learning optical flow with convolutional networks. In IEEE International Conference on Computer Vision (ICCV), pages 2758–2766, 2015. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[16] Mihai Dusmanu, Ignacio Rocco, Tomas Pajdla, Marc Pollefeys, Josef Sivic, Akihiko Torii, and Torsten Sattler. D2-Net: A Trainable CNN for Joint Detection and Description of Local Features. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2019. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[17] Martin A Fischler and Robert C Bolles. Random sample consensus: a paradigm for model fitting with applications to image analysis and automated cartography. Communications ofthe ACM, 24(6):381–395, 1981. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[18] Xiaodong Gu, Zhiwen Fan, Siyu Zhu, Zuozhuo Dai, Feitong Tan, and Ping Tan. Cascade cost volume for high-resolution multi-view stereo and stereo matching. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), pages 2495–2504, 2020. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[19] R. I. Hartley and A. Zisserman. Multiple View Geometry in Computer Vision. Cambridge University Press, ISBN: 0521540518, second edition, 2004. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[20] Shengyu Huang, Zan Gojcic, Mikhail Usvyatsov, and Konrad Schindler Andreas Wieser. Predator: Registration of 3D point clouds with low overlap. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[21] Di Jia, Kai Wang, ShunLi Luo, TianYu Liu, and Ying Liu. Braft: Recurrent all-pairs field transforms for optical flow based on correlation blocks. IEEE Signal Processing Letters, 28:1575–1579, 2021. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[22] Y. Keller, A. Averbuch, and Y. Shkolnisky. Algebraically accurate volume registration using euler’s theorem and the 3D pseudopolar FFT. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), volume 2, pages 795– 800 vol. 2, 2005. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[23] Y. Keller, Y. Shkolnisky, and A. Averbuch. Volume registration using the 3D pseudopolar fourier transform. IEEE Transactions on Signal Processing, 54(11):4323– 4331, 2006. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[24] Alexander Kolesnikov, Alexey Dosovitskiy, Dirk Weissenborn, Georg Heigold, Jakob Uszkoreit, Lucas Beyer, Matthias Minderer, Mostafa Dehghani, Neil Houlsby, Sylvain Gelly, Thomas Unterthiner, and Xiaohua Zhai. An image is worth 16x16 words: Transformers for image recognition at scale. In International Conference on Learning Representations, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[25] S. Kong and C. Fowlkes. Low-rank bilinear pooling for finegrained classification. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), pages 7025– 7034, Los Alamitos, CA, USA, jul 2017. IEEE Computer Society. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[26] Jinwoo Lee, Minhyuk Sung, Hyunjoon Lee, and Junho Kim. Neural geometric parser for single image camera calibration. In Andrea Vedaldi, Horst Bischof, Thomas Brox, and Jan-Michael Frahm, editors, European Conference on Computer"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                84,
+                114,
+                468,
+                155
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2596"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "Vision (ECCV), pages 541–557, Cham, 2020. Springer International Publishing. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[27] Jake Levinson, Carlos Esteves, Kefan Chen, Noah Snavely, Angjoo Kanazawa, Afshin Rostamizadeh, and Ameesh Makadia. An analysis of SVD for deep rotation estimation. Advances in Neural Information Processing Systems (NIPS), 33, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[28] Minhua Li, Qingling Chang, Yuhan Wang, Xinglin Liu, Shiting Xu, and Yan Cui. Stereo matching with multiscale hybrid cost volume. IEEE Access, 10:100128–100136, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[29] Wenbin Li, Sajad Saeedi, John McCormac, Ronald Clark, Dimos Tzoumanikas, Qing Ye, Yuzhong Huang, Rui Tang, and Stefan Leutenegger. Interiornet: Mega-scale multisensor photo-realistic indoor scenes dataset. In British Machine Vision Conference, 2018. 2, 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[30] Zhengfa Liang, Yulan Guo, Yiliu Feng, Wei Chen, Linbo Qiao, Li Zhou, Jianfeng Zhang, and Hengzhu Liu. Stereo matching using multi-level cost volume and multi-scale feature constancy. IEEE Transactions on Pattern Analysis and Machine Intelligence, 2019. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[31] Tsung-Yu Lin, Aruni RoyChowdhury, and Subhransu Maji. Bilinear cnn models for fine-grained visual recognition. In IEEE International Conference on Computer Vision (ICCV), 2015. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[32] Chenxi Liu, Alex Schwing, Kaustav Kundu, Raquel Urtasun, and Sanja Fidler. Rent3d: Floor-plan priors for monocular layout estimation. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2015. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[33] Hai Liu, Shuai Fang, Zhaoli Zhang, Duantengchuan Li, Ke Lin, and Jiazhang Wang. Mfdnet: Collaborative poses perception and matrix fisher distribution for head pose estimation. IEEE Transactions on Multimedia, 24:2449–2460, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[34] David G Lowe. Distinctive image features from scaleinvariant keypoints. International Journal of Computer Vision, 60(2):91–110, 2004. 2, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[35] Ben Mildenhall, Pratul P. Srinivasan, Matthew Tancik, Jonathan T. Barron, Ravi Ramamoorthi, and Ren Ng. Nerf: Representing scenes as neural radiance fields for view synthesis. In European Conference on Computer Vision (ECCV), 2020. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[36] Piotr Mirowski, Andras Banki-Horvath, Keith Anderson, Denis Teplyashin, Karl Moritz Hermann, Mateusz Malinowski, Matthew Koichi Grimes, Karen Simonyan, Koray Kavukcuoglu, Andrew Zisserman, et al. The StreetLearn environment and dataset. arXiv preprint arXiv:1903.01292, 2019. 2, 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[37] David Mohlin, Josephine Sullivan, and Gerald Bianchi.´ Probabilistic orientation estimation with matrix fisher distributions. Advances in Neural Information Processing Systems (NIPS), 33, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[38] Raul Mur-Artal, Jose Maria Martinez Montiel, and Juan D Tardos. Orb-slam: a versatile and accurate monocular slam system. IEEE Transactions on Robotics, 31(5):1147–1163, 2015. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[39] Guang-Yu Nie, Ming-Ming Cheng, Yun Liu, Zhengfa Liang, Deng-Ping Fan, Yue Liu, and Yongtian Wang. Multi-level context ultra-aggregation for stereo matching. In IEEE/CVF Conference on Computer Vision and Pattern Recognition"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "(CVPR), pages 3283–3291, 2019. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[40] Onur Ozyesil, Vladislav Voroninski, Ronen Basri, and Amit Singer. A survey of structure from motion. arXiv preprint arXiv:1701.08493, 2017. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[41] Yiming Qian and James H. Elder. A reliable online method for joint estimation of focal length and camera rotation. In European Conference on Computer Vision (ECCV), page 249–265, Berlin, Heidelberg, 2022. Springer-Verlag. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[42] Gernot Riegler and Vladlen Koltun. Free view synthesis. In European Conference on Computer Vision (ECCV), 2020. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[43] Chris Rockwell, Justin Johnson, and David F. Fouhey. The 8-point algorithm as an inductive bias for relative pose prediction by vits. In International Conference on 3D Vision (3DV), 2022. 2, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[44] Johannes L Schonberger and Jan-Michael Frahm. Structurefrom-motion revisited. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2016. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[45] Johannes L Schonberger, Marc Pollefeys, Andreas Geiger,¨ and Torsten Sattler. Semantic visual localization. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), pages 6896–6906, 2018. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[46] O. Shakil. An efficient video alignment approach for nonoverlapping sequences with free camera movement. In ICASSP, volume 2, pages II–II, 2006. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[47] Yoli Shavit and Yosi Keller. Camera pose auto-encoders for improving pose regression. In European Conference on Computer Vision (ECCV), pages 140–157, Cham, 2022. Springer Nature Switzerland. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[48] Che Sun, Yunde Jia, Yi Guo, and Yuwei Wu. Globalaware registration of less-overlap rgb-d scans. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), pages 6357–6366, June 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[49] Dekel (Basha) T., Moses Y., and Avidan S. Photo sequencing. International Journal ofComputer Vision, 110(3):275 – 289, 2014. Cited by: 8. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[50] Hajime Taira, Masatoshi Okutomi, Torsten Sattler, Mircea Cimpoi, Marc Pollefeys, Josef Sivic, Tomas Pajdla, and Akihiko Torii. Inloc: Indoor visual localization with dense matching and view synthesis. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), pages 7199–7209, 2018. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[51] Zachary Teed and Jia Deng. Raft: Recurrent all-pairs field transforms for optical flow. In European Conference on Computer Vision (ECCV), page 402–419, Berlin, Heidelberg, 2020. Springer-Verlag. 2, 3, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[52] M. Turkoglu, E. Brachmann, K. Schindler, G. J. Brostow, and A. Monszpart. Visual camera re-localization using graph neural networks and relative pose supervision. In International Conference on 3D Vision (3DV), pages 145–155, Los Alamitos, CA, USA, dec 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[53] Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N Gomez, ukasz Kaiser, and Illia Polosukhin. Attention is all you need. In I. Guyon, U. Von Luxburg, S. Bengio, H. Wallach, R. Fergus, S. Vishwanathan, and R. Garnett, editors, Advances in Neural Information Processing Systems (NIPS), volume 30. Curran Associates, Inc., 2017. 1, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[54] Jianxiong Xiao, Krista A Ehinger, Aude Oliva, and Antonio Torralba. Recognizing scene viewpoint using panoramic"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                109,
+                93,
+                467,
+                119
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2597"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "place representation. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), pages 2695–2702. IEEE, 2012. 2, 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[55] Fei Xue, Xin Wu, Shaojun Cai, and Junqiu Wang. Learning multi-view camera relocalization with graph neural networks. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), pages 11372–11381, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[56] Gengshan Yang and Deva Ramanan. Volumetric correspondence networks for optical flow. In H. Wallach, H. Larochelle, A. Beygelzimer, F. d'Alche-Buc, E. Fox, and R.´ Garnett, editors, Advances in Neural Information Processing Systems (NIPS), volume 32. Curran Associates, Inc., 2019. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[57] Zhengxin Zhang, Qingjie Liu, and Yunhong Wang. Road extraction by deep residual u-net. IEEE Geoscience and Remote Sensing Letters, 15:749–753, 2018. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[58] Zhengxin Zhang, Qingjie Liu, and Yunhong Wang. Road extraction by deep residual u-net. IEEE Geoscience and Remote Sensing Letters, 15(5):749–753, 2018. 5, 6, 7, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[59] Yi Zhou, Connelly Barnes, Jingwan Lu, Jimei Yang, and Hao Li. On the continuity of rotation representations in neural networks. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), pages 5745–5753, 2019. 2, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[60] Yichao Zhou, Jingwei Huang, Xili Dai, Linjie Luo, Zhili Chen, and Yi Ma. HoliCity: A city-scale data platform for learning holistic 3D structures. 2020. arXiv:2008.03286 [cs.CV]. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[61] Rui Zhu, Xingyi Yang, Yannick Hold-Geoffroy, Federico Perazzi, Jonathan Eisenmann, Kalyan Sunkavalli, and Manmohan Chandraker. Single view metrology in the wild. In Andrea Vedaldi, Horst Bischof, Thomas Brox, and Jan-Michael Frahm, editors, European Conference on Computer Vision (ECCV), pages 316–333, Cham, 2020. Springer International Publishing. 1"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                111,
+                93,
+                468,
+                132
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2598"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ]
+]

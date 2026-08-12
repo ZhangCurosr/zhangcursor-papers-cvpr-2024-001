@@ -1,0 +1,3177 @@
+[
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "RobustSAM: Segment Anything Robustly on Degraded Images"
+                    }
+                ],
+                "level": 1
+            },
+            "bbox": [
+                166,
+                130,
+                802,
+                152
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Wei-Ting Chen<sup>1,2†</sup> Yu-Jiet Vong<sup>1</sup> Sy-Yen Kuo<sup>1</sup> Sizhou Ma<sup>2*</sup> Jian Wang<sup>2*</sup>"
+                    }
+                ]
+            },
+            "bbox": [
+                156,
+                179,
+                810,
+                199
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "<sup>1</sup>National Taiwan University <sup>2</sup>Snap Inc."
+                    }
+                ]
+            },
+            "bbox": [
+                299,
+                215,
+                627,
+                234
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/279214721c0205a8cacc4238c56a2b7dcbb062dfef52de8187275b734d0c2c02.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 1. Comparative results of SAM and RobustSAM under different degradations using unseen datasets: RobustSAM outperforms with precise boundaries and intact structures, where SAM falters with errors and fragmentation. Red star points and bounding boxe are our examples’ input prompts."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                93,
+                267,
+                870,
+                594
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "Abstract"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                233,
+                667,
+                313,
+                684
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Segment Anything Model (SAM) has emerged as a transformative approach in image segmentation, acclaimed for its robust zero-shot segmentation capabilities and flexible prompting system. Nonetheless, its performance is challenged by images with degraded quality. Addressing this limitation, we propose the Robust Segment Anything Model (RobustSAM), which enhances SAM’s performance on lowquality images while preserving its promptability and zeroshot generalization. Our method leverages the pre-trained SAM model with only marginal parameter increments and computational requirements. The additional parameters of RobustSAM can be optimized within 30 hours on eight GPUs, demonstrating its feasibility and practicality for typ-"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                703,
+                472,
+                902
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "ical research laboratories. We also introduce the Robust-Seg dataset, a collection of 688K image-mask pairs with different degradations designed to train and evaluate our model optimally. Extensive experiments across various segmentation tasks and datasets confirm RobustSAM’s superior performance, especially under zero-shot conditions, underscoring its potential for extensive real-world application. Additionally, our method has been shown to effectively improve the performance of SAM-based downstream tasks such as single image dehazing and deblurring."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                669,
+                893,
+                821
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": []
+            },
+            "bbox": [
+                104,
+                2,
+                181,
+                41
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": [
+                    {
+                        "type": "text",
+                        "content": "This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore."
+                    }
+                ]
+            },
+            "bbox": [
+                235,
+                1,
+                810,
+                46
+            ]
+        },
+        {
+            "type": "page_footnote",
+            "content": {
+                "page_footnote_content": [
+                    {
+                        "type": "text",
+                        "content": "Project Page: https://robustsam.github.io"
+                    }
+                ]
+            },
+            "bbox": [
+                522,
+                862,
+                745,
+                877
+            ]
+        },
+        {
+            "type": "page_footnote",
+            "content": {
+                "page_footnote_content": [
+                    {
+                        "type": "text",
+                        "content": "† Part of the work done during internship at Snap Research."
+                    }
+                ]
+            },
+            "bbox": [
+                522,
+                875,
+                841,
+                888
+            ]
+        },
+        {
+            "type": "page_footnote",
+            "content": {
+                "page_footnote_content": [
+                    {
+                        "type": "text",
+                        "content": "* Co-corresponding authors"
+                    }
+                ]
+            },
+            "bbox": [
+                522,
+                887,
+                678,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "4081"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                514,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "1. Introduction"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                90,
+                209,
+                106
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Accurate image segmentation is crucial to various downstream applications such as robotics, augmented/virtual reality, and content creation. Segment Anything Model (SAM) [29] has opened a new chapter in image segmentation in the wild: Utilizing the comprehensive SA-1B dataset, which comprises over a billion annotated masks, SAM generalizes to a huge variety of objects and can accurately segment a scene given minimalistic prompts, ranging from point annotations to bounding boxes. This innovative approach revolutionizes zero-shot segmentation by seamlessly adapting to various applications."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                116,
+                470,
+                281
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "As SAM demonstrates its versatility across diverse segmentation tasks [21, 25, 52, 66, 66, 73, 88], attention has turned to its robustness and scalability when confronting complex and challenging scenarios. Specifically, enhancing its robustness on degraded images remains a frontier to be explored. A body of literature [24, 58, 61, 71] has pointed out that the performance of SAM decreases with imaging degradations like low lighting, noise, blur, adverse weather, and compression artifacts. These degradations significantly impact the quality of the segmentation masks that SAM generates, directly influencing downstream tasks relying on these masks. Specifically, recent image restoration works such as dehazing [26], deblurring [41], and superresolution [50] have been utilizing these masks or latent features as a structure prior which generalizes to unseen scenes. However, these works assume that SAM can produce reliable and accurate masks even in degraded conditions. If the robustness of SAM is compromised in these cases, the benefit of integrating prior knowledge becomes constrained, limiting their applicability to real-world scenarios."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                281,
+                472,
+                598
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To address this challenge, one intuitive approach is to utilize existing image restoration techniques [9, 31, 56] to preprocess the images before feeding them into SAM. Although these methods can improve the image quality to a degree, there is no guarantee that the selected image restoration techniques would be able to improve image segmentation [7, 12, 40, 64, 70]. This is because most image restoration algorithms are optimized for human visual perception rather than the specific demands of segmentation models like SAM."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                598,
+                472,
+                750
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "An alternative strategy involves directly fine-tuning SAM on degraded images. However, direct adjustments to the SAM decoder or integrating a new decoder module can profoundly impair the model’s generalizability on zeroshot tasks. Furthermore, blindly fine-tuning SAM with degraded images can lead to catastrophic forgetting, where the network inadvertently loses its knowledge learned from the original, clean images [16, 30]."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                750,
+                470,
+                869
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To this end, we introduce RobustSAM, which achieves robustness in handling degraded images while retaining zero-shot functionality. Our method proposes two novel modules: the Anti-Degradation Token Generation Module and the Anti-Degradation Mask Feature Generation Module. Supervised by consistency losses with features extracted from paired clear images by original SAM, these modules are designed to extract degradation-invariant segmentation features. We also fine-tuned the original output token of SAM, adapting it to our robust segmentation approach. By freezing the original modules from SAM during training, the proposed method enhanced its ability to process degraded images while preserving its effectiveness on zero-shot segmentation."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                871,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                92,
+                893,
+                272
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Moreover, the proposed additional modules in Robust-SAM can be trained efficiently. In contrast to the original SAM, which demands training on hundreds of GPUs, RobustSAM can be trained within 30 hours on eight A100s. This marks the accessibility of RobustSAM, making it ready to be integrated into various application scenarios. Extensive experiments demonstrate that our Robust-SAM performs well in clear and degraded scenarios. Furthermore, we found that RobustSAM benefits SAM-based downstream tasks in degraded scenarios, such as single image dehazing and deblurring, by providing a more robust prior, thereby enhancing their effectiveness."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                273,
+                893,
+                454
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To enhance the capabilities and robustness of Robust-SAM, we introduce the Robust-Seg dataset. Robust-Seg combines 43K meticulously annotated images from 7 existing datasets. Each image is subject to 15 different types of carefully modeled synthetic degradation, resulting in a comprehensive collection of 688K images in Robust-Seg. This extensive dataset aims to push the boundaries of image segmentation and serve as a valuable resource for future research."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                455,
+                893,
+                590
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To summarize, our contributions are as follows:"
+                    }
+                ]
+            },
+            "bbox": [
+                517,
+                592,
+                836,
+                606
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• We propose RobustSAM, a zero-shot segmentation model built upon the Segment Anything model, with enhanced robustness against various image degradations. This enhanced robustness is shown to improve the performance of downstream applications significantly."
+                    }
+                ]
+            },
+            "bbox": [
+                517,
+                608,
+                893,
+                698
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• We construct the Robust-Seg dataset, a collection of 688K image-mask pairs with different degradations. We hope Robust-Seg will establish a new benchmark for segmentation models on degraded images."
+                    }
+                ]
+            },
+            "bbox": [
+                517,
+                699,
+                893,
+                761
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2. Related Work"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                775,
+                643,
+                791
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2.1. Segment Anything Model"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                800,
+                733,
+                818
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Segment Anything Model (SAM) [29] achieves unprecedented performance in image segmentation, advancing various subdomains in computer vision [51]. SAM accepts intuitive prompts such as points or bounding boxes, demonstrating exceptional zero-shot transfer learning capability across diverse segmentation tasks and new image distributions. Its adaptability is proven across various domains, including medical imaging [91], [66], [18], [62], camouflaged object detection [66], and salient object segmentation [51]. In addition to its segmentation capability, SAM plays a foundational role in enhancing computer vision tasks, including semantic segmentation [91], [62], [4], image editing [85], and video object tracking [78], [11]. While SAM demonstrates promising capabilities, its performance is challenged by poor image quality [24, 58, 61, 71], affecting segmentation and downstream task accuracy."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                825,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "4082"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                90,
+                472,
+                258
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2.2. Robust Segmentation"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                296,
+                277,
+                313
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In the domains of autonomous driving and surveillance analysis, a multitude of studies [14, 16, 59, 74, 81, 92] have identified a decrease in CNN-based segmentation performance when dealing with degraded images, which leads to the development of various remedial approaches. For instance, QualNet [28] explores quality-agnostic feature extraction through a reversible encoding scheme, while URIE [64] addresses multiple image impairments, enhancing segmentation stability through classification constraints. Concurrently, FIFO [35] propels segmentation frameworks to learn fog-resistant features via a fog pass filter mechanism. However, these technologies primarily focus on a single type of degradation, potentially lacking robustness against multiple image degradations. Moreover, this strategy of jointly training with downstream tasks may dilute the zero-shot advantage of SAM."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                329,
+                472,
+                573
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2.3. Image Restoration"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                611,
+                256,
+                627
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In the field of image restoration, methods targeting single types of degradation such as SRCNN [13] pioneered the application of convolutional neural networks to the enhancement of image quality. Subsequent innovations have emerged across different domains, achieving notable successes in super-resolution (SR) [34, 46, 90], denoising [1, 2, 53, 89], dehazing [8, 19, 36], deraining [57, 60, 79], underwater enhancement [49, 77] and deblurring [15, 32, 33]. Attempts like MPRNet [87], and HINet [6] have been made to address multiple degradations through a single network. Recently, transformer-based methods have also gained traction in image restoration tasks [44, 72, 86]. Nonetheless, while multi-degradation approaches such as All-in-One [39], IPT [3], and AirNet [37] offer greater flexibility and improved performance, they aim to enhance visual quality for human perception, instead of improving the performance of downstream tasks such as segmentation."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                643,
+                472,
+                902
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3. Proposed Method"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                89,
+                674,
+                107
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.1. Preliminary: Segment Anything Model"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                114,
+                838,
+                131
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We provide a concise overview of the SAM framework [29]. As shown in the lower half of Figure 2, SAM incorporates three key components: an image encoder, a prompt encoder, and a mask decoder. The image encoder processes input images using the Vision Transformer (ViT). The prompt encoder handles sparse prompt inputs (such as points, boxes, and text) and dense inputs (masks), transforming them into appropriate representations. The mask decoder is a modified Transformer decoder block [69]. It combines image and prompt embeddings with an output token to generate mask features. This process involves prompt self-attention and bidirectional cross-attention between the prompts and image embeddings. Notably, the mask decoder uses transpose convolutions to create detailed mask features. The output token per mask, derived from token-to-image attention, is transformed by an MLP into a dynamic classifier. When multiplied with the mask features, this classifier yields the final segmentation mask."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                138,
+                893,
+                411
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.2. Robust Segment Anything Model"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                420,
+                792,
+                438
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We propose RobustSAM, which addresses image degradation while preserving the zero-shot learning capabilities of SAM. Diverging from standard approaches that fine-tune SAM or jointly train complex adaptation modules, Robust-SAM employs a minimalistic yet deliberate enhancement."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                444,
+                893,
+                521
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.2.1 Model Overview"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                540,
+                669,
+                555
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Figure 2 gives an overview of the proposed Robust-SAM. The key contribution of RobustSAM is the Anti-Degradation Output Token Generation (AOTG) and Anti-Degradation Mask Feature Generation (AMFG) modules, which extract degradation-invariant information that is aligned those extracted from clear images by the original SAM. This is achieved by generating clear-degraded image pairs through 15 types of synthetic degradation augmentation. Different losses are then applied to enforce the consistency between clear and degraded features, as well as the predicted segmentation and ground truth. Notice that although supervised with synthetic degradations, Robust-SAM generalizes well to real-world images, as shown in Sec. 5."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                564,
+                893,
+                776
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Training. To train RobustSAM, we begin by applying a degradation augmentation to a clear input image and then feeding the resulting degraded image into RobustSAM. Initially, the model leverages its Image Encoder to extract features from this degraded image. Unlike the original SAM framework, we finetuned the output token, now called the Robust Output Token (ROT). This ROT, along with the prompt token and the features extracted by the Image Encoder, is processed through the original SAM layers to generate mask feature (degrade) "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "F _ { M F D }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and Robust Output Token per mask "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "T _ { R O }"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                780,
+                893,
+                902
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "4083"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/24145103aa162ade36013c27b84fbefa297701ab78e4ac0b8dc7d153273c4487.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 2. Overview of our proposed RobustSAM. RobustSAM augments the original SAM by incorporating five essential components (in purple). During training, clear images are fed through the original SAM modules "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathrm { ( i n \\ g r a y ) }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to produce features for clear scenes. Subsequently, degraded images, generated through augmentation of clear inputs, are processed by RobustSAM, yielding features for degraded scenarios. These are then refined via Anti-degradation modules, ensuring consistency with features from clear scenes. This methodology, supported by a segmentation loss, achieves precise segmentation outcomes in both clear and degraded image conditions. During inference, only RobustSAM is used to predict a segmentation mask from an input image. Note: The prompt encoder is excluded for conciseness, and the padlock icons represent fixed components loaded from the original SAM model that are not updated during training."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                78,
+                90,
+                890,
+                351
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                76,
+                487,
+                468,
+                531
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The AOTG block processes the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "T _ { R O }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to extract information resilient to degradation, transforming it into "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { T } _ { R O }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Simultaneously, the AMFG block refines the mask and complementary features from the Image Encoder’s early and final layers "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( F _ { M F D }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "F _ { C F D } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", removing degradationrelated information to produce refined features "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( \\hat { F } _ { M F D }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { F } _ { C F D } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Following the architecture proposed in [27], a Feature Fusion block combines these refined features into our final robust mask feature for improving the segmentation quality."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                532,
+                470,
+                684
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In parallel, the original clear image is processed by standard SAM to extract clear versions of the complementary feature "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( F _ { C F C } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", mask feature "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( F _ { M F C } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and output token "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( T _ { O C } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Consistency losses between these clear features and refined features from RobustSAM ensure alignment with undegraded image outputs. The segmentation results from the degraded input are then compared against the ground truth using a segmentation loss function."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                684,
+                470,
+                805
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In our degradation augmentation approach, we include 15 types of degradations and an identity mapping. This ensures that clear images retain their quality, avoiding performance drops in non-degraded scenarios."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                805,
+                470,
+                867
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Inference. During inference, only the RobustSAM (Figure 2, top half) is used to generate the segmentation mask."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                869,
+                467,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In the following, we give a detailed discussion on the proposed Anti-Degradation Output Token Generation and Anti-Degradation Mask Feature Generation modules."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                487,
+                893,
+                532
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.2.2 Anti-Degradation Mask Feature Generation"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                498,
+                556,
+                861,
+                571
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "As shown in Figure 3, the input features are first processed by Instance Normalization (IN). Inspired by previous work [23, 64, 68], the purpose of IN is to standardize the variations associated with image degradation. Intuitively, this removes the style attributes while preserving the core content. This step is essential to mitigate the influence of individual image distortions, ensuring the content’s stability under diverse degradation conditions. Parallel to this, inspired by [64], we include another branch that applies Batch Normalization (BN). BN is crucial as it addresses the potential loss of detail resulting from the IN process, as indicated by [55, 64]."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                582,
+                893,
+                763
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We then merge the features generated by BN and IN individually. An attention mechanism scrutinizes the merged features to generate attention maps, which dynamically weigh the importance of each feature type, thus synthesizing a feature set that encapsulates the advantages of both normalization techniques [64]. To compensate for any semantic information that may have been lost, this enhanced feature set is concatenated with the original input features along the channel dimension. Additionally, we integrate channel attention, akin to the squeeze-and-excitation approach (SEC) [20, 43], to refine the feature integration adaptively."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                765,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "4084"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                514,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/48b75e22ad4a82ff7225e6b3dd54b88990ddf4cb0e85642172ac7fdcd1a3dd1a.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 3. Overview of the proposed Anti-degradation Mask Feature Generation (AMFG) and Anti-degradation Output Token Generation (AOTG). SEC denotes Squeeze-and-Excitation Channel attention."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                88,
+                90,
+                880,
+                227
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                296,
+                468,
+                342
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Inspired by [22, 75, 80, 82, 84], we introduced the Fourier Degradation Suppression module to enhance the integrated features by transforming them from the spatial to the frequency domain using the Fourier transform. This technique leverages the amplitude components to capture style information about image degradation. By applying a 1×1 convolution, we focus on isolating and removing degradation elements. Meanwhile, the phase components are preserved to maintain the structural integrity. Following this, an inverse Fourier transform brings the refined features back to the spatial domain. This process treats degradations as image styles and generates degradation-invariant features for robust segmentation."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                342,
+                470,
+                537
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "This module is applied to two features generated by preceding modules: the complementary feature (degrade) "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "F _ { C F D }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and the mask feature (degrade) "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "F _ { M F D }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". To ensure that these refined features maintain consistency with the corresponding features extracted by the SAM model "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( i . e ."
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "F _ { C F C }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "F _ { M F C } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "when using clear images as input, we employ the Mask Feature Consistency Loss "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( \\mathcal { L } _ { \\mathrm { M F C } } )"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                537,
+                470,
+                645
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathcal { L } _ { \\mathrm { M F C } } = \\Vert \\hat { F } _ { C F D } - F _ { C F C } \\Vert _ { 2 } + \\Vert \\hat { F } _ { M F D } - F _ { M F C } \\Vert _ { 2 }\\tag{1}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/74d7da3385610fca2f511befe996fcf1200a9758a57936ad6bee112e6847e3b3.jpg"
+                }
+            },
+            "bbox": [
+                89,
+                651,
+                437,
+                670
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "By minimizing each part of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { L } } _ { \\mathrm { M F C } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", we ensure that the refined features remain consistent with those extracted under clear image conditions, thus guaranteeing the robustness and consistency of the features across different degradations."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                678,
+                470,
+                739
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.2.3 Anti-Degradation Output Token Generation"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                756,
+                441,
+                772
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The Anti-Degradation Output Token Generation module is dedicated to refining Robust Output Token per mask "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( T _ { R O } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to remove degradation-related information. Unlike conventional mask features, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "T _ { R O }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "primarily functions to ensure the clarity of classification boundaries, thus containing less texture information. Therefore, we found that using a lightweight module to filter information sensitive to degradation is sufficient. As depicted on the right side of Figure"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                780,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "3, this module utilizes multiple layers of Instance Normalization followed by a single MLP layer. This strategy aims to maintain computational efficiency while ensuring that the model can recover robust mask information from inputs affected by degradation. The refined token "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { T } _ { R O }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is then compared with the output token "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "T _ { O C }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "extracted under clear input conditions by the original SAM to calculate Token Consistency Loss "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { L } } _ { \\mathrm { T C } }"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                296,
+                893,
+                417
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathcal { L } _ { \\mathrm { T C } } = \\Vert \\hat { T } _ { R O } - T _ { O C } \\Vert _ { 2 }\\tag{2}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/d503e2d38b682fdf2210dee58a11a16a4b2befa9990df406fd44fac4684755f2.jpg"
+                }
+            },
+            "bbox": [
+                616,
+                428,
+                776,
+                446
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "This loss ensures that the refined token remains consistent with those extracted under clear image conditions. After processing through the MLP, the output is combined with the Robust Mask Feature to generate the final mask."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                458,
+                893,
+                520
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.2.4 Overall Loss"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                536,
+                643,
+                553
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The overall loss function integrates the Mask Feature Consistency Loss "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( \\mathcal { L } _ { \\mathrm { M F C } } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", Token Consistency Loss "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( \\mathcal { L } _ { \\mathrm { T C } } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and the Segmentation Loss "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( \\mathcal { L } _ { \\mathrm { S e g } } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to form a comprehensive penalty for the model. The overall loss is expressed as:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                560,
+                893,
+                622
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathcal { L } _ { \\mathrm { O v e r a l l } } = \\mathcal { L } _ { \\mathrm { M F C } } + \\lambda _ { 1 } \\mathcal { L } _ { \\mathrm { T C } } + \\lambda _ { 2 } \\mathcal { L } _ { \\mathrm { S e g } }\\tag{3}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/655ce83f2ff1b6162b18acb51f0b52d7aa0afb6ca2d467657f3ebf8e99337622.jpg"
+                }
+            },
+            "bbox": [
+                576,
+                633,
+                816,
+                650
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Here, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { \\mathrm { S e g } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is a combined segmentation loss that incorporates both Dice [47] and Focal losses [65]:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                662,
+                892,
+                693
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathcal { L } _ { \\mathrm { S e g } } = \\mathcal { L } _ { \\mathrm { D i c e } } ( P , G ) + \\lambda _ { 3 } \\mathcal { L } _ { \\mathrm { F o c a l } } ( P , G )\\tag{4}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/b1e5d975b8424d3989fb338d7872870b7fb3da68aac09a758501b398f4d57cd3.jpg"
+                }
+            },
+            "bbox": [
+                570,
+                704,
+                821,
+                722
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where P is the predicted mask, G is the ground truth mask, and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\lambda _ { 1 } { - } \\lambda _ { 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are hyperparameters for weighting different losses. This composite loss function is designed to ensure enhancement in segmentation quality while bolstering the robustness of the model against degradation."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                732,
+                893,
+                809
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4. Implementation Details"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                498,
+                821,
+                722,
+                839
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.1. Dataset"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                847,
+                596,
+                862
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To train and evaluate RobustSAM, we constructed a comprehensive Robust-Seg dataset, featuring 688,000 imagemask pairs. This dataset is composed of images from several existing datasets, specifically LVIS [17], ThinObject-5k [45], MSRA10K [10], NDD20 [67], STREETS [63], FSS-1000 [42], and COCO [48]. In this dataset, we incorporate original clear images and versions augmented with 15 types of synthetic degradations, including blur, noise, low light, adverse weather conditions, and so on. This approach ensures the model is extensively trained and robust to various image qualities."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                869,
+                892,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "4085"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/09d41131dbb3fa18f026f28fb50dc4177c950218a13701c813514a4b04e24cfb.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 1. Comparative computational requirements for SAM and RobustSAM."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td rowspan=\"3\"></td><td colspan=\"4\">Training</td><td colspan=\"2\">Inference</td></tr><tr><td>Learnable Params</td><td>#GPU</td><td>Batch Size</td><td>Time (h)</td><td>FPS</td><td>Mem.</td></tr><tr><td>SAM</td><td>1250 MB</td><td>256</td><td>256</td><td>N/A</td><td>2.90</td><td>9.63G</td></tr><tr><td>RobustSAM</td><td>403 MB</td><td>8</td><td>8</td><td>30</td><td>2.80</td><td>10.08G</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                104,
+                88,
+                441,
+                156
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                219,
+                472,
+                356
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "During training, we utilize the entire training sets (and their augmentations) of MSRA10K, ThinObject-5k, and LVIS. The test sets (and their augmentations) of MSRA10k and LVIS are used to validate the segmentation accuracy of the model. To challenge the zero-shot generalization of the model, we test it against the full range of images (and their augmentations) from the NDD20, STREETS, FSS-1000, and COCO datasets."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                357,
+                470,
+                478
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In addition, we conduct extensive testing using the complete BDD-100k [83] and LIS [5, 76] datasets, which include a variety of real-world degradations such as low-light, blur, rain, and snow. This approach ensures a thorough evaluation of RobustSAM’s performance in realistic scenarios and its robustness to adverse environmental conditions typically encountered in real-world applications."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                479,
+                470,
+                587
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.2. Training Detail"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                597,
+                232,
+                613
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "During the training phase of RobustSAM, we keep the pretrained SAM parameters frozen, focusing only on optimizing the proposed modules for robustness. We train Robust-SAM using point-based prompts."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                621,
+                470,
+                681
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "RobustSAM significantly enhances segmentation quality and is designed for fast and efficient training. With a learning rate of 0.0005 for 40 epochs, the training is completed in 30 hours for 130,000 iterations on 8 Nvidia A100 GPUs. Table 1 details the training and inference performance of RobustSAM compared to SAM. RobustSAM not only delivers improved segmentation outcomes but does so with remarkable training efficiency compared to SAM."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                683,
+                472,
+                805
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.3. Evaluation Protocol"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                815,
+                267,
+                832
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To evaluate the performance of RobustSAM, we employ several metrics: Intersection over Union (IoU), Dice Coefficient (Dice), Pixel Accuracy (PA), and Average Precision (AP) at various threshold levels."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                839,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/7627d1c4df3ca8662afea2b73215b6c63b8455958e526659d0c67ed50b58e970.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 2. Performance Comparison on test set of MSRA10k [10] datasets (seen datasets with synthetic degradations) in Robust-Seg dataset using point prompts for “Degrade”, “Clear”, and “Average” scenarios. “Degrade” refers to the set of images subjected to 15 different types of degradation, “Clear” refers to the original, undegraded images, and “Average” represents the weighted sum average of the “Degrade” and “Clear” scenarios. The words with boldface indicate the best results, and those with underline indicate the second-best results."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td rowspan=\"2\">Method</td><td colspan=\"2\">Degrade</td><td colspan=\"2\">Clear</td><td colspan=\"2\">Average</td></tr><tr><td>IoU</td><td>PA</td><td>IoU</td><td>PA</td><td>IoU</td><td>PA</td></tr><tr><td>SAM</td><td>0.8194</td><td>0.9108</td><td>0.8402</td><td>0.9235</td><td>0.8207</td><td>0.9116</td></tr><tr><td>HQ-SAM</td><td>0.8358</td><td>0.9202</td><td>0.8604</td><td>0.9328</td><td>0.8373</td><td>0.9210</td></tr><tr><td>AirNet+SAM</td><td>0.8157</td><td>0.9193</td><td>0.8236</td><td>0.9294</td><td>0.8162</td><td>0.9199</td></tr><tr><td>URIE+SAM</td><td>0.8217</td><td>0.9125</td><td>0.8450</td><td>0.9245</td><td>0.8231</td><td>0.9132</td></tr><tr><td>RobustSAM</td><td>0.8609</td><td>0.9640</td><td>0.8726</td><td>0.9649</td><td>0.8616</td><td>0.9641</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                529,
+                88,
+                867,
+                175
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/6c854334ac789d66c096eab9a3906e53f819899645a1618a17b646652a780277.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 3. Performance comparison on the test set of LVIS [17] dataset (a seen dataset with synthetic degradations) in Robust-Seg dataset using Bounding Box prompts."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td rowspan=\"2\">Method</td><td colspan=\"2\">Degrade</td><td colspan=\"2\">Clear</td><td colspan=\"2\">Average</td></tr><tr><td>IoU</td><td>PA</td><td>IoU</td><td>PA</td><td>IoU</td><td>PA</td></tr><tr><td>SAM</td><td>0.7341</td><td>0.9181</td><td>0.7415</td><td>0.9282</td><td>0.7346</td><td>0.9187</td></tr><tr><td>HQ-SAM</td><td>0.7405</td><td>0.9242</td><td>0.7502</td><td>0.9319</td><td>0.7411</td><td>0.9246</td></tr><tr><td>AirNet+SAM</td><td>0.7352</td><td>0.9198</td><td>0.7419</td><td>0.9293</td><td>0.7356</td><td>0.9204</td></tr><tr><td>URIE+SAM</td><td>0.7336</td><td>0.9182</td><td>0.7406</td><td>0.9277</td><td>0.7340</td><td>0.9188</td></tr><tr><td>RobustSAM</td><td>0.7506</td><td>0.9327</td><td>0.7592</td><td>0.9339</td><td>0.7511</td><td>0.9328</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                527,
+                329,
+                867,
+                416
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/62bb60cd209b2d8de1e0119e3e4d7defee2cecf4834c6499873df2224a613f4c.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 4. Zero-shot segmentation comparison on the whole NDD20 [67], STREETS [63], and FSS-1000 [42] (unseen datasets with synthetic degradations) in Robust-Seg dataset using point prompts."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td rowspan=\"2\">Method</td><td colspan=\"2\">Degrade</td><td colspan=\"2\">Clear</td><td colspan=\"2\">Average</td></tr><tr><td>IoU</td><td>PA</td><td>IoU</td><td>PA</td><td>IoU</td><td>PA</td></tr><tr><td>SAM</td><td>0.7981</td><td>0.9555</td><td>0.8295</td><td>0.9707</td><td>0.8000</td><td>0.9565</td></tr><tr><td>HQ-SAM</td><td>0.8079</td><td>0.9617</td><td>0.8448</td><td>0.9756</td><td>0.8102</td><td>0.9625</td></tr><tr><td>AirNet+SAM</td><td>0.7988</td><td>0.9629</td><td>0.8312</td><td>0.9752</td><td>0.8008</td><td>0.9637</td></tr><tr><td>URIE+SAM</td><td>0.7904</td><td>0.9593</td><td>0.8288</td><td>0.9740</td><td>0.7928</td><td>0.9602</td></tr><tr><td>RobustSAM</td><td>0.8195</td><td>0.9778</td><td>0.8529</td><td>0.9817</td><td>0.8216</td><td>0.9780</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                517,
+                487,
+                877,
+                579
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/abb6511e597a9e8854e038b035970a77999264bb59ccce70d01ec7780dbc996d.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 5. Zero-shot segmentation comparison on the whole COCO [48] (unseen datasets with synthetic degradations) in Robust-Seg dataset using Bounding Box prompts."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td rowspan=\"2\">Method</td><td colspan=\"4\">Performance Metrics</td></tr><tr><td>AP</td><td>APs</td><td>APM</td><td>APL</td></tr><tr><td>SAM</td><td>0.5002</td><td>0.3168</td><td>0.4292</td><td>0.5243</td></tr><tr><td>HQ-SAM</td><td>0.5052</td><td>0.2920</td><td>0.4267</td><td>0.5517</td></tr><tr><td>AirNet+SAM</td><td>0.4926</td><td>0.3068</td><td>0.4263</td><td>0.5187</td></tr><tr><td>URIE+SAM</td><td>0.4980</td><td>0.3186</td><td>0.4319</td><td>0.5215</td></tr><tr><td>RobustSAM</td><td>0.5130</td><td>0.3192</td><td>0.4416</td><td>0.5518</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                560,
+                665,
+                836,
+                760
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5. Experimental Results"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                842,
+                705,
+                861
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In this section, we present the evaluation results of the proposed RobustSAM."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                869,
+                892,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "4086"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/bafb9611c19c8f000f61e51b1f68453070b4e335923e45fed6d118f6d2cdfa26.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 4. Qualitative Analysis of Segmentation: A visual comparison on unseen datasets highlighting the performance improvements of the RobustSAM over existing strategies."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                86,
+                88,
+                882,
+                419
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/f471c96b3d0c3d790f6b0be067ddc450f94f4bc6987ae593b72d360684180802.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 6. Zero-shot segmentation comparison on the whole BDD-100k [83] and LIS [5, 76] datasets (unseen datasets with real-world degradations) using point prompts."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td rowspan=\"2\">Method</td><td colspan=\"2\">Point</td><td colspan=\"2\">Bounding Box</td></tr><tr><td>IoU</td><td>Dice</td><td>IoU</td><td>Dice</td></tr><tr><td>SAM</td><td>0.3056</td><td>0.3837</td><td>0.8808</td><td>0.9171</td></tr><tr><td>HQ-SAM</td><td>0.2943</td><td>0.3712</td><td>0.8877</td><td>0.9245</td></tr><tr><td>AirNet+SAM</td><td>0.3245</td><td>0.4550</td><td>0.8776</td><td>0.9129</td></tr><tr><td>URIE+SAM</td><td>0.3042</td><td>0.3828</td><td>0.8799</td><td>0.9165</td></tr><tr><td>RobustSAM</td><td>0.3717</td><td>0.8926</td><td>0.8958</td><td>0.9416</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                137,
+                487,
+                413,
+                583
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.1. Performance Evaluation"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                665,
+                302,
+                681
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In the landscape of image segmentation under challenging conditions, our RobustSAM framework is compared with several existing methods to establish its efficacy. We benchmark against the foundational SAM model and a strategic two-stage methodology where images are first passed through universal image restoration techniques to refine input quality, subsequently followed by SAM-driven segmentation. To that end, we incorporate AirNet [37], a stateof-the-art general visual quality enhancement method tailored for unknown degradation. Furthermore, we integrate URIE [64], an image restoration approach optimized to set the stage for more effective segmentation. Additionally, we compare with HQ-SAM [27], which is a high-quality iteration of the original SAM."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                689,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Comparison on Seen Datasets. We evaluate the performance of our proposed methods within the framework of Robust-Seg on seen datasets: LVIS [17] and MSRA10K [10]. Specifically, we assess the methods on the test sets of these datasets. The results show that our approach yields superior performance, effectively handling the varied challenges posed by these diverse scenes. Additionally, RobustSAM demonstrates its strength in significantly improving segmentation in degraded scenarios while maintaining or enhancing performance in clear scenes. Detailed results are presented in Table 2 and Table 3, demonstrating our method’s efficacy across different segmentation scenarios."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                489,
+                893,
+                686
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Zero-shot Segmentation Comparison. We first assessed our methods on the entire NDD20 [67], STREETS [63], and FSS-1000 [42] and COCO [48] datasets, all of which are synthesized degradations designed to challenge segmentation models. These test sets’ results, which highlight our approaches’ adaptability and accuracy, are detailed in Table 4 and Table 5. Moreover, to validate our methods’ capabilities against real-world degradations, we expanded our evaluation to include the entire BDD-100k [83] and LIS datasets [5, 76]. These datasets are particularly challenging due to their wide variety of real-world degradations, ranging from weather conditions to noise and variable lighting. The results of these assessments are provided in Table 6. In addition, we present the qualitative comparison of segmentation in Figure 4. These results indicate that RobustSAM possesses significant robustness in zero-shot segmentation, maintaining high performance across different degradations."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                689,
+                895,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "4087"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/e741129c271285435571bc3a94566c65c9351a8e0b44e8dfe523e6716f82442b.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Dehazing"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Deblurring"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                106,
+                93,
+                277,
+                401
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/63df436abdac5f832afcd3319f13cbeb699c8d3554e96a67093347f581707ac1.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                284,
+                99,
+                441,
+                401
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/d42aac08d74cbe153fa937ba8a525dc0d59f66c540220bc2d5ec1ac8c7febb45.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 5. Enhancing SAM-based applications: A qualitative demonstration of RobustSAM’s superiority in refining SAM-based single image dehazing and deblurring."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td rowspan=\"2\">Module</td><td colspan=\"2\">Metric</td></tr><tr><td>IoU</td><td>PA</td></tr><tr><td>Baseline</td><td></td><td></td></tr><tr><td>SAM SAM-Finetune</td><td>0.3056</td><td>0.8911</td></tr><tr><td>SAM-Finetune Decoder</td><td>0.1871</td><td>0.7691</td></tr><tr><td></td><td>0.2476</td><td>0.8691</td></tr><tr><td>SAM-Finetune Output Token</td><td>0.3194</td><td>0.9036</td></tr><tr><td>RobustSAM</td><td></td><td></td></tr><tr><td>wAMFG</td><td>0.3455</td><td>0.9059</td></tr><tr><td>w AMFG-F</td><td>0.3535</td><td>0.9120</td></tr><tr><td>w AMFG-F+AOTG</td><td>0.3651</td><td>0.9193</td></tr><tr><td>w AMFG-F+AOTG+ROT (ALL)</td><td>0.3717</td><td>0.9226</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                140,
+                472,
+                408,
+                626
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/577e4b5f15978fd7e3b2d68f6a186128a6c9b3bcf2952e232f50dfc1c85443e4.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 7. Efficacy of Proposed Modules: An evaluation on the BDD-100k [83] and LIS [5, 76] datasets reveals that each of the proposed modules enhances the performance of RobustSAM. (We use point prompts in this comparison.)"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Table 8. Quantitative evaluation for Dehazing [26] and Deblurring [41] tasks using different priors."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td rowspan=\"2\">Prior</td><td colspan=\"2\">Dehazing</td><td colspan=\"2\">Deblurring</td></tr><tr><td>PSNR</td><td>SSIM</td><td>PSNR</td><td>SSIM</td></tr><tr><td>SAM</td><td>21.677</td><td>0.8451</td><td>27.491</td><td>0.9066</td></tr><tr><td>RobustSAM</td><td>23.159</td><td>0.8685</td><td>29.351</td><td>0.9229</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                137,
+                708,
+                411,
+                772
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                840,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.2. Ablation Study"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                90,
+                653,
+                106
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To further understand the impact of our contributions, we conducted an ablation study. All experiments were performed on the BDD-100k [83] and LIS [5, 76] datasets."
+                    }
+                ]
+            },
+            "bbox": [
+                500,
+                113,
+                892,
+                160
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Fine-tune SAM? We fine-tuned the SAM model in various configurations: fine-tuning the entire model, the decoder, and the output token. The results are presented in Table 7. It was observed that fine-tuning the entire SAM model or its decoder drastically reduces its zero-shot capabilities, leading to a significant drop in performance. Fine-tuning only output token resulted in performance improvements; however, they were still inferior compared to RobustSAM."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                162,
+                893,
+                284
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Effectiveness of Proposed Modules. Furthermore, we validated the effectiveness of each proposed module, including the Anti-degradation Mask Feature Generation Module (AMFG), ADM with Fourier Degradation Suppression module (AMFG-F), Anti-degradation Output Token Generation (AOTG), and Robust Output Token (ROT). The findings presented in Table 7 show that each introduced module positively influences RobustSAM’s overall performance, with the AMFG module demonstrating the most significant enhancement."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                286,
+                893,
+                439
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.3. Improving SAM-prior Tasks"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                446,
+                758,
+                463
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To validate whether our RobustSAM can enhance the performance of applications based on SAM priors under degraded image conditions, we selected single image dehazing [26] and single image deblurring [41] as test cases. Following the original papers’ settings for these tasks, we utilized SAM and RobustSAM as their priors and evaluated their performance on SOTS dataset [38] for dehazing and GoPro dataset [54] for deblurring. The findings, presented in Table 8 and Figure 5, demonstrate that employing RobustSAM yields superior performance on downstream tasks. This enhancement can be attributed to RobustSAM’s improved segmentation accuracy on degraded images, providing a more robust prior for these tasks."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                469,
+                893,
+                667
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "6. Conclusion"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                679,
+                619,
+                695
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "This paper introduces RobustSAM, which excels in segmenting images under diverse degradations. The model’s strength is rooted in its components—particularly the Anti-degradation Mask Feature Generation Module, Antidegradation Output Token Generation, and Robust Output Token modules. To verify the effectiveness of RobustSAM, we proposed a large-scale dataset called Robust-Seg. Furthermore, we prove RobustSAM’s superiority extends to improving SAM-based tasks such as dehazing and deblurring, confirming its value as a dependable tool for image processing under degraded conditions. Its performance sets a new standard for robustness in zero-shot segmentation, offering a promising direction for future research."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                704,
+                893,
+                902
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "4088"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "References"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                78,
+                89,
+                176,
+                106
+            ]
+        },
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[1] Abdelrahman Abdelhamed, Marcus A Brubaker, and Michael S Brown. Noise flow: Noise modeling with conditional normalizing flows. In ICCV, 2019. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[2] Tim Brooks, Ben Mildenhall, Tianfan Xue, Jiawen Chen, Dillon Sharlet, and Jonathan T Barron. Unprocessing images for learned raw denoising. In CVPR, 2019. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[3] Hanting Chen, Yunhe Wang, Tianyu Guo, Chang Xu, Yiping Deng, Zhenhua Liu, Siwei Ma, Chunjing Xu, Chao Xu, and Wen Gao. Pre-trained image processing transformer. In CVPR, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[4] Jiaqi Chen, Zeyu Yang, and Li Zhang. Semantic segment anything. https://github.com/fudan-zvg/ Semantic-Segment-Anything, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[5] Linwei Chen, Ying Fu, Kaixuan Wei, Dezhi Zheng, and Felix Heide. Instance segmentation in the dark. IJCV, 2023. 6, 7, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[6] Liangyu Chen, Xin Lu, Jie Zhang, Xiaojie Chu, and Chengpeng Chen. Hinet: Half instance normalization network for image restoration. In CVPR, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[7] Wei-Ting Chen, I-Hsiang Chen, Chih-Yuan Yeh, Hao-Hsiang Yang, Hua-En Chang, Jian-Jiun Ding, and Sy-Yen Kuo. Rvsl: Robust vehicle similarity learning in real hazy scenes based on semi-supervised learning. In ECCV, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[8] Wei-Ting Chen, Jian-Jiun Ding, and Sy-Yen Kuo. Pms-net: Robust haze removal based on patch map for single images. In CVPR, 2019. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[9] Wei-Ting Chen, Zhi-Kai Huang, Cheng-Che Tsai, Hao-Hsiang Yang, Jian-Jiun Ding, and Sy-Yen Kuo. Learning multiple adverse weather removal via two-stage knowledge learning and multi-contrastive regularization: Toward a unified model. In CVPR, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[10] Ming-Ming Cheng, Niloy J. Mitra, Xiaolei Huang, Philip H. S. Torr, and Shi-Min Hu. Global contrast based salient region detection. IEEE TPAMI, 2015. 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[11] Yangming Cheng, Liulei Li, Yuanyou Xu, Xiaodi Li, Zongxin Yang, Wenguan Wang, and Yi Yang. Segment and track anything. arXiv preprint arXiv:2305.06558, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[12] Steven Diamond, Vincent Sitzmann, Frank Julca-Aguilar, Stephen Boyd, Gordon Wetzstein, and Felix Heide. Dirty pixels: Towards end-to-end image processing and perception. ACM TOG, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[13] Chao Dong, Chen Change Loy, Kaiming He, and Xiaoou Tang. Learning a deep convolutional network for image super-resolution. In ECCV, 2014. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[14] Kazuki Endo, Masayuki Tanaka, and Masatoshi Okutomi. Semantic segmentation of degraded images using layer-wise feature adjustor. In WACV, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[15] Hongyun Gao, Xin Tao, Xiaoyong Shen, and Jiaya Jia. Dynamic scene deblurring with parameter selective sharing and nested skip connections. In CVPR, 2019. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[16] Dazhou Guo, Yanting Pei, Kang Zheng, Hongkai Yu, Yuhang Lu, and Song Wang. Degraded image semantic segmentation with dense-gram networks. TIP, 2019. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[17] Agrim Gupta, Piotr Dollar, and Ross Girshick. LVIS: A dataset for large vocabulary instance segmentation. In CVPR, 2019. 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[18] Dongsheng Han, Chaoning Zhang, Yu Qiao, Maryam"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "Qamar, Yuna Jung, SeungKyu Lee, Sung-Ho Bae, and Choong Seon Hong. Segment anything model (sam) meets glass: Mirror and transparent objects cannot be easily detected. arXiv preprint arXiv:2305.00278, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[19] Kaiming He, Jian Sun, and Xiaoou Tang. Single image haze removal using dark channel prior. PAMI, 2010. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[20] Jie Hu, Li Shen, and Gang Sun. Squeeze-and-excitation networks. In CVPR, 2018. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[21] Mingzhe Hu, Yuheng Li, and Xiaofeng Yang. Skinsam: Empowering skin cancer segmentation with segment anything model. arXiv preprint arXiv:2304.13973, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[22] Jiaxing Huang, Dayan Guan, Aoran Xiao, and Shijian Lu. Rda: Robust domain adaptation via fourier adversarial attacking. In ICCV, 2021. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[23] Xun Huang and Serge Belongie. Arbitrary style transfer in real-time with adaptive instance normalization. In ICCV, 2017. 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[24] Yihao Huang, Yue Cao, Tianlin Li, Felix Juefei-Xu, Di Lin, Ivor W Tsang, Yang Liu, and Qing Guo. On the robustness of segment anything. arXiv preprint arXiv:2305.16220, 2023. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[25] Wei Ji, Jingjing Li, Qi Bi, Wenbo Li, and Li Cheng. Segment anything is not always perfect: An investigation of sam on different real-world applications. arXiv preprint arXiv:2304.05750, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[26] Zheyan Jin, Shiqi Chen, Yueting Chen, Zhihai Xu, and Huajun Feng. Let segment anything help image dehaze. arXiv preprint arXiv:2306.15870, 2023. 2, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[27] Lei Ke, Mingqiao Ye, Martin Danelljan, Yifan Liu, Yu-Wing Tai, Chi-Keung Tang, and Fisher Yu. Segment anything in high quality. arXiv:2306.01567, 2023. 4, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[28] Insoo Kim, Seungju Han, Ji-won Baek, Seong-Jin Park, Jae-Joon Han, and Jinwoo Shin. Quality-agnostic image recognition via invertible decoder. In CVPR, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[29] Alexander Kirillov, Eric Mintun, Nikhila Ravi, Hanzi Mao, Chloe Rolland, Laura Gustafson, Tete Xiao, Spencer Whitehead, Alexander C. Berg, Wan-Yen Lo, Piotr Dollár, and Ross Girshick. Segment anything. arXiv:2304.02643, 2023. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[30] James Kirkpatrick, Razvan Pascanu, Neil Rabinowitz, Joel Veness, Guillaume Desjardins, Andrei A Rusu, Kieran Milan, John Quan, Tiago Ramalho, Agnieszka Grabska-Barwinska, et al. Overcoming catastrophic forgetting in neural networks. PNAS, 2017. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[31] Ashutosh Kulkarni, Shruti S Phutke, and Subrahmanyam Murala. Unified transformer network for multi-weather image restoration. In ECCV, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[32] Orest Kupyn, Volodymyr Budzan, Mykola Mykhailych, Dmytro Mishkin, and Jiˇrí Matas. Deblurgan: Blind motion deblurring using conditional adversarial networks. In CVPR, 2018. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[33] Orest Kupyn, Tetiana Martyniuk, Junru Wu, and Zhangyang Wang. Deblurgan-v2: Deblurring (orders-of-magnitude) faster and better. In ICCV, 2019. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[34] Christian Ledig, Lucas Theis, Ferenc Huszár, Jose Caballero, Andrew Cunningham, Alejandro Acosta, Andrew Aitken, Alykhan Tejani, Johannes Totz, Zehan Wang, et al. Photorealistic single image super-resolution using a generative adversarial network. In CVPR, 2017. 3"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                84,
+                114,
+                468,
+                155
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "4089"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[35] Sohyun Lee, Taeyoung Son, and Suha Kwak. Fifo: Learning fog-invariant features for foggy scene segmentation. In CVPR, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[36] Boyun Li, Yuanbiao Gou, Jerry Zitao Liu, Hongyuan Zhu, Joey Tianyi Zhou, and Xi Peng. Zero-shot image dehazing. TIP, 2020. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[37] Boyun Li, Xiao Liu, Peng Hu, Zhongqin Wu, Jiancheng Lv, and Xi Peng. All-in-one image restoration for unknown corruption. In CVPR, 2022. 3, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[38] Boyi Li, Wenqi Ren, Dengpan Fu, Dacheng Tao, Dan Feng, Wenjun Zeng, and Zhangyang Wang. Reside: A benchmark for single image dehazing. arXiv preprint arXiv:1712.04143, 2017. 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[39] Ruoteng Li, Robby T Tan, and Loong-Fah Cheong. All in one bad weather removal using architectural search. In CVPR, 2020. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[40] Siyuan Li, Iago Breno Araujo, Wenqi Ren, Zhangyang Wang, Eric K Tokuda, Roberto Hirata Junior, Roberto Cesar-Junior, Jiawan Zhang, Xiaojie Guo, and Xiaochun Cao. Single image deraining: A comprehensive benchmark analysis. In CVPR, 2019. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[41] Siwei Li, Mingxuan Liu, Yating Zhang, Shu Chen, Haoxiang Li, Hong Chen, and Zifei Dou. Sam-deblur: Let segment anything boost image deblurring. arXiv preprint arXiv:2309.02270, 2023. 2, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[42] Xiang Li, Tianhan Wei, Yau Pun Chen, Yu-Wing Tai, and Chi-Keung Tang. Fss-1000: A 1000-class dataset for fewshot segmentation. CVPR, 2020. 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[43] Xia Li, Jianlong Wu, Zhouchen Lin, Hong Liu, and Hongbin Zha. Recurrent squeeze-and-excitation context aggregation net for single image deraining. In ECCV, 2018. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[44] Jingyun Liang, Jiezhang Cao, Guolei Sun, Kai Zhang, Luc Van Gool, and Radu Timofte. Swinir: Image restoration using swin transformer. In ICCV, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[45] Jun Hao Liew, Scott Cohen, Brian Price, Long Mai, and Jiashi Feng. Deep interactive thin object selection. In WACV, 2021. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[46] Bee Lim, Sanghyun Son, Heewon Kim, Seungjun Nah, and Kyoung Mu Lee. Enhanced deep residual networks for single image super-resolution. In CVPRW, 2017. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[47] Tsung-Yi Lin, Priya Goyal, Ross Girshick, Kaiming He, and Piotr Dollár. Focal loss for dense object detection. In ICCV, 2017. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[48] Tsung-Yi Lin, Michael Maire, Serge Belongie, James Hays, Pietro Perona, Deva Ramanan, Piotr Dollár, and C Lawrence Zitnick. Microsoft coco: Common objects in context. In ECCV, 2014. 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[49] Risheng Liu, Xin Fan, Ming Zhu, Minjun Hou, and Zhongxuan Luo. Real-world underwater enhancement: Challenges, benchmarks, and solutions under natural light. IEEE TCSVT. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[50] Zhihe Lu, Zeyu Xiao, Jiawang Bai, Zhiwei Xiong, and Xinchao Wang. Can sam boost video super-resolution? arXiv preprint arXiv:2305.06524, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[51] Jun Ma and Bo Wang. Segment anything in medical images. arXiv preprint arXiv:2304.12306, 2023. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[52] Zhiheng Ma, Xiaopeng Hong, and Qinnan Shangguan. Can sam count anything? an empirical study on sam counting. arXiv preprint arXiv:2304.10817, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[53] Ben Mildenhall, Jonathan T Barron, Jiawen Chen, Dillon"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "Sharlet, Ren Ng, and Robert Carroll. Burst denoising with kernel prediction networks. In CVPR, 2018. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[54] Seungjun Nah, Tae Hyun Kim, and Kyoung Mu Lee. Deep multi-scale convolutional neural network for dynamic scene deblurring. In CVPR, 2017. 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[55] Hyeonseob Nam and Hyo-Eun Kim. Batch-instance normalization for adaptively style-invariant neural networks. NIPS, 2018. 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[56] Prashant W Patil, Sunil Gupta, Santu Rana, Svetha Venkatesh, and Subrahmanyam Murala. Multi-weather image restoration via domain translation. In ICCV, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[57] Rui Qian, Robby T Tan, Wenhan Yang, Jiajun Su, and Jiaying Liu. Attentive generative adversarial network for raindrop removal from a single image. In CVPR, 2018. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[58] Yu Qiao, Chaoning Zhang, Taegoo Kang, Donghun Kim, Shehbaz Tariq, Chenshuang Zhang, and Choong Seon Hong. Robustness of sam: Segment anything under corruptions and beyond. arXiv preprint arXiv:2306.07713, 2023. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[59] AN Rajagopalan et al. Improving robustness of semantic segmentation to motion-blur using class-centric augmentation. In CVPR, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[60] Dongwei Ren, Wangmeng Zuo, Qinghua Hu, Pengfei Zhu, and Deyu Meng. Progressive image deraining networks: A better and simpler baseline. In CVPR, 2019. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[61] Xinru Shan and Chaoning Zhang. Robustness of segment anything model (sam) for autonomous driving in adverse weather conditions. arXiv preprint arXiv:2306.13290, 2023. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[62] Qiuhong Shen, Xingyi Yang, and Xinchao Wang. Anything-3d: Towards single-view anything reconstruction in the wild. arXiv preprint arXiv:2304.10261, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[63] Corey Snyder and Minh Do. Streets: A novel camera network dataset for traffic flow. NIPS, 2019. 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[64] Taeyoung Son, Juwon Kang, Namyup Kim, Sunghyun Cho, and Suha Kwak. Urie: Universal image enhancement for visual recognition in the wild. In ECCV, 2020. 2, 3, 4, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[65] Carole H Sudre, Wenqi Li, Tom Vercauteren, Sebastien Ourselin, and M Jorge Cardoso. Generalised dice overlap as a deep learning loss function for highly unbalanced segmentations. In MICCAI, 2017. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[66] Lv Tang, Haoke Xiao, and Bo Li. Can sam segment anything? when sam meets camouflaged object detection. arXiv preprint arXiv:2304.04709, 2023. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[67] Cameron Trotter, Georgia Atkinson, Matt Sharpe, Kirsten Richardson, A Stephen McGough, Nick Wright, Ben Burville, and Per Berggren. Ndd20: A large-scale few-shot dolphin dataset for coarse and fine-grained categorisation. arXiv preprint arXiv:2005.13359, 2020. 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[68] Dmitry Ulyanov, Andrea Vedaldi, and Victor Lempitsky. Instance normalization: The missing ingredient for fast stylization. arXiv preprint arXiv:1607.08022, 2016. 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[69] Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N Gomez, Łukasz Kaiser, and Illia Polosukhin. Attention is all you need. NIPS, 2017. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[70] Rosaura G Vidal, Sreya Banerjee, Klemen Grm, Vitomir Struc, and Walter J Scheirer. Ugˆ 2: A video benchmark for assessing the impact of image restoration and enhancement on automatic visual recognition. In WACV, 2018. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[71] Yuqing Wang, Yun Zhao, and Linda Petzold. An empirical study on the robustness of the segment anything model"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                78,
+                93,
+                468,
+                132
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "4090"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "(sam). arXiv preprint arXiv:2305.06422, 2023. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[72] Zhendong Wang, Xiaodong Cun, Jianmin Bao, Wengang Zhou, Jianzhuang Liu, and Houqiang Li. Uformer: A general u-shaped transformer for image restoration. In CVPR, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[73] Junde Wu, Rao Fu, Huihui Fang, Yuanpei Liu, Zhaowei Wang, Yanwu Xu, Yueming Jin, and Tal Arbel. Medical sam adapter: Adapting segment anything model for medical image segmentation. arXiv preprint arXiv:2304.12620, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[74] Weihao Xia, Zhanglin Cheng, Yujiu Yang, and Jing-Hao Xue. Cooperative semantic segmentation and image restoration in adverse environmental conditions. arXiv preprint arXiv:1911.00679, 2019. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[75] Qinwei Xu, Ruipeng Zhang, Ya Zhang, Yanfeng Wang, and Qi Tian. A fourier-based framework for domain generalization. In CVPR, 2021. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[76] Hong Yang, Wei Kaixuan, Chen Linwei, and Fu Ying. Crafting object detection in very low light. In BMVC, 2021. 6, 7, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[77] Hao-Hsiang Yang, Kuan-Chih Huang, and Wei-Ting Chen. Laffnet: A lightweight adaptive feature fusion network for underwater image enhancement. In ICRA, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[78] Jinyu Yang, Mingqi Gao, Zhe Li, Shang Gao, Fangjing Wang, and Feng Zheng. Track anything: Segment anything meets videos. arXiv preprint arXiv:2304.11968, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[79] Wenhan Yang, Robby T Tan, Jiashi Feng, Jiaying Liu, Zongming Guo, and Shuicheng Yan. Deep joint rain detection and removal from a single image. In CVPR, 2017. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[80] Yanchao Yang and Stefano Soatto. Fda: Fourier domain adaptation for semantic segmentation. In CVPR, 2020. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[81] Zhou Yang, Weisheng Dong, Xin Li, Jinjian Wu, Leida Li, and Guangming Shi. Self-feature distillation with uncertainty modeling for degraded image recognition. In ECCV, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[82] Zizheng Yang, Jie Huang, Jiahao Chang, Man Zhou, Hu Yu, Jinghao Zhang, and Feng Zhao. Visual recognition-driven image restoration for multiple degradation with intrinsic semantics recovery. In CVPR, 2023. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[83] Fisher Yu, Wenqi Xian, Yingying Chen, Fangchen Liu, Mike Liao, Vashisht Madhavan, Trevor Darrell, et al. Bdd100k: A diverse driving video database with scalable annotation tooling. arXiv preprint arXiv:1805.04687, 2(5):6, 2018. 6, 7, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[84] Hu Yu, Naishan Zheng, Man Zhou, Jie Huang, Zeyu Xiao, and Feng Zhao. Frequency and spatial dual guidance for image dehazing. In ECCV, 2022. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[85] Tao Yu, Runseng Feng, Ruoyu Feng, Jinming Liu, Xin Jin, Wenjun Zeng, and Zhibo Chen. Inpaint anything: Segment anything meets image inpainting. arXiv preprint arXiv:2304.06790, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[86] Syed Waqas Zamir, Aditya Arora, Salman Khan, Munawar Hayat, Fahad Shahbaz Khan, and Ming-Hsuan Yang. Restormer: Efficient transformer for high-resolution image restoration. In CVPR, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[87] Syed Waqas Zamir, Aditya Arora, Salman Khan, Munawar Hayat, Fahad Shahbaz Khan, Ming-Hsuan Yang, and Ling Shao. Multi-stage progressive image restoration. In CVPR, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[88] Kaidong Zhang and Dong Liu. Customized segment anything model for medical image segmentation. arXiv preprint arXiv:2304.13785, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[89] Kai Zhang, Wangmeng Zuo, and Lei Zhang. Ffdnet: Toward a fast and flexible solution for cnn-based image denoising. TIP, 2018. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[90] Yulun Zhang, Yapeng Tian, Yu Kong, Bineng Zhong, and Yun Fu. Residual dense network for image super-resolution. In CVPR, 2018. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[91] Yizhe Zhang, Tao Zhou, Peixian Liang, and Danny Z Chen. Input augmentation with sam: Boosting medical image segmentation with segmentation foundation model. arXiv preprint arXiv:2304.11332, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[92] Ziqi Zhou, Zheng Wang, Huchuan Lu, Song Wang, and Meijun Sun. Multi-type self-attention guided degraded saliency detection. In AAAI, 2020. 3"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                111,
+                93,
+                419,
+                106
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "4091"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                514,
+                957
+            ]
+        }
+    ]
+]

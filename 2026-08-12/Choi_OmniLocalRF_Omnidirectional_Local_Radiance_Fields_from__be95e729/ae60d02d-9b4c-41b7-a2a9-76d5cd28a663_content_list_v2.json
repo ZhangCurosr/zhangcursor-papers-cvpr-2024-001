@@ -1,0 +1,3964 @@
+[
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "OmniLocalRF: Omnidirectional Local Radiance Fields from Dynamic Videos"
+                    }
+                ],
+                "level": 1
+            },
+            "bbox": [
+                94,
+                128,
+                874,
+                151
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Dongyoung Choi"
+                    }
+                ]
+            },
+            "bbox": [
+                218,
+                181,
+                359,
+                199
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Hyeonjoong Jang"
+                    }
+                ]
+            },
+            "bbox": [
+                433,
+                181,
+                576,
+                199
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Min H. Kim"
+                    }
+                ]
+            },
+            "bbox": [
+                648,
+                181,
+                751,
+                196
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "KAIST"
+                    }
+                ]
+            },
+            "bbox": [
+                450,
+                205,
+                514,
+                222
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "Abstract"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                233,
+                256,
+                313,
+                275
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Omnidirectional cameras are extensively used in various applications to provide a wide field of vision. However, they face a challenge in synthesizing novel views due to the inevitable presence of dynamic objects, including the photographer, in their wide field of view. In this paper, we introduce a new approach called Omnidirectional Local Radiance Fields (OmniLocalRF) that can render staticonly scene views, removing and inpainting dynamic objects simultaneously. Our approach combines the principles oflocal radiancefields with the bidirectional optimization of omnidirectional rays. Our input is an omnidirectional video, and we evaluate the mutual observations of the entire angle between the previous and current frames. To reduce ghosting artifacts ofdynamic objects and inpaint occlusions, we devise a multi-resolution motion mask prediction module. Unlike existing methods that primarily separate dynamic components through the temporal domain, our method uses multi-resolution neural feature planes for precise segmentation, which is more suitable for long 360<sup>◦</sup> videos. Our experiments validate that OmniLocalRF outperforms existing methods in both qualitative and quantitative metrics, especially in scenarios with complex realworld scenes. In particular, our approach eliminates the need for manual interaction, such as drawing motion masks by hand and additional pose estimation, making it a highly effective and efficient solution."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                287,
+                472,
+                684
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "1. Introduction"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                708,
+                209,
+                724
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Omnidirectional cameras such as Ricoh Theta or Insta360 allow capturing panoramic 360<sup>◦</sup> views in a single shot. Various applications with omnidirectional images such as spherical depth estimation [53, 58, 59], novel view synthesis [2, 3, 5–7, 11, 18, 31, 35] and geometry reconstruction [3, 18] aiming at large-scale static scenes have recently been explored. In particular, synthesizing 360<sup>◦</sup> novel views can provide continuous views from unobserved camera angles while maintaining its details."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                734,
+                470,
+                871
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "However, recent novel view synthesis methods struggle to apply to omnidirectional input for the following reasons."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                871,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/c9c8a6405850be353896ac2cc3d8240fbd555a6f8e973a10d10767a43306e076.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                506,
+                241,
+                887,
+                376
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/5ed8e79b4b6cd895af2bc66160f1994dbb4b984a6fefa59a47acfc84333f86d9.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "(a) Conventional neural rendering"
+                    },
+                    {
+                        "type": "text",
+                        "content": "(b) OmniLocalRF (ours)"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Figure 1. We introduce omnidirectional local radiance fields for photorealistic view synthesis of static scenery from 360<sup>◦</sup> videos. Our method effectively removes dynamic objects (including the photographer) without manual interaction. Also, it achieves highresolution details in the inpainted regions by means of bidirectional observations of omnidirectional local radiance fields. Refer to the supplemental video for more results."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                522,
+                392,
+                887,
+                505
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "When capturing omnidirectional videos to record static environments, dynamic objects are prone to be captured as an extension of the field of view, and capturing a photographer is inevitable unless employing a dedicated hardware or remote controller. When synthesizing novel views, these captured objects are represented as ghosting artifacts onto the rendered results [37]. Despite these problems, existing methods have achieved 360<sup>◦</sup> view synthesis, relying on constrained capturing conditions, where it minimizes the advent of dynamic objects [3, 11] or requiring dedicated hardware [5–7, 31, 35], which are not suitable for casual 360<sup>◦</sup> photography."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                626,
+                893,
+                809
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Low-rank decomposition through robust principal component analysis [15, 16, 57] and existing optimizationbased methods [13, 14] effectively eliminate dynamic objects on the image domain. However, their applicability is limited to scenarios involving multiple images captured from the same viewpoints. Recent view synthesis works [32, 33, 46, 54] detach dynamic objects during static view synthesis by modeling dynamic objects along the temporal domain. However, they are inappropriate for long 360<sup>◦</sup> videos because of the neural model’s capacities."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                809,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": []
+            },
+            "bbox": [
+                104,
+                2,
+                181,
+                41
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": [
+                    {
+                        "type": "text",
+                        "content": "This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore."
+                    }
+                ]
+            },
+            "bbox": [
+                235,
+                1,
+                810,
+                46
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6871"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                514,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                90,
+                470,
+                151
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In this paper, we propose omnidirectional local radiance fields (OmniLocalRF) that can render novel views of static scene environments from casual dynamic 360<sup>◦</sup> videos. We formulate local radiance fields (LocalRF) [26] into a novel bidirectional training scheme designed explicitly for omnidirectional video input. We develop a module that uses multi-resolution neural feature planes to predict motion masks of every frame and segment framedependent components. Our LocalRF-based approach enables us to synthesize views and estimate camera poses from long videos. We automatically remove and inpaint dynamic objects while performing large-scale omnidirectional view synthesis. See Figure 1."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                152,
+                470,
+                348
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "It is worth noting that different from conventional perspective cameras, omnidirectional cameras capture continuous scene information across multiple frames. This unique characteristic allows us to design a novel optimization approach that involves the bidirectional evaluation of samples taken from distant frames through an omnidirectional contraction scheme. This method enables us to effectively remove and inpaint broken dynamic objects through backward refinement, demonstrating omnidirectional reconstruction and decoupling of dynamic objects across complex real-world scenes. In summary, our contributions are:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                348,
+                472,
+                530
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• A view synthesis method based on bidirectional optimization through distant frames while conserving locality across radiance fields,"
+                    }
+                ]
+            },
+            "bbox": [
+                99,
+                530,
+                470,
+                575
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• A new motion mask prediction module that accurately segments dynamic objects, even in 360<sup>◦</sup> videos without requiring a pretrained model, and"
+                    }
+                ]
+            },
+            "bbox": [
+                99,
+                575,
+                470,
+                621
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• A camera pose estimation technique based on local view synthesis of 360<sup>◦</sup> videos."
+                    }
+                ]
+            },
+            "bbox": [
+                99,
+                621,
+                468,
+                650
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Our code is freely available for research purposes<sup>1</sup>."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                650,
+                415,
+                667
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2. Related work"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                680,
+                215,
+                696
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Omnidirectional view synthesis. OmniPhotos [3] and Jang et al. [18] reconstruct geometry from 360<sup>◦</sup> videos using mesh representation. Several approaches [5–7, 31, 35] use a spherical camera rig to render images at unobserved camera positions. MatryODShka [1] proposes a multisphere image representation for omnidirectional view synthesis. However, these methods do not work for 360<sup>◦</sup> videos casually taken with dynamic objects."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                709,
+                470,
+                830
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Recent advancements for rendering 360<sup>◦</sup> images, e.g., Mip-NeRF360 [2] and EgoNeRF [11], use volume rendering to create omnidirectional images. Mip-"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                830,
+                470,
+                878
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "NeRF360 extends the capabilities of Neural Radiance Fields (NeRF) [27] to unbounded scenes, while EgoNeRF uses the Yin-Yang grid to obtain a balanced polar representation of neural features. However, these methods limit use in scenarios with dynamic objects in the training dataset, as they are designed for egocentric scenes captured using a selfie stick or by excluding dynamic objects with a motion mask."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                90,
+                893,
+                212
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Removing dynamic objects. Novel view synthesis methods generally aim to reconstruct static objects through the multi-view stereo [2, 27, 43, 47]. In existing works, separating dynamic and static objects by pretrained model [9, 17] on input images and modeling them respectively enables rendering static geometry if multi-view of dynamic objects are sufficiently provided in a dataset [21, 25, 32, 33]. In 360<sup>◦</sup> videos that do not provide enough multi-view cues of dynamic objects, modeling them across the 3D space is challenging due to geometric inconsistency over time."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                215,
+                893,
+                368
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To reduce ghosting artifacts caused by dynamic objects in view synthesis, several models [36, 43] exclude dynamic objects using an external segmentation model [9, 10]. However, these models fail to mask out objects that are not labeled, such as shadows. Recent works, such as D<sup>2</sup>NeRF [54] and Neuraldiff [46], segment dynamic objects by reconstructing them in 3D space across the temporal domain, but require an extensive parameterization, making them less scalable for long 360<sup>◦</sup> videos. OmnimatteRF [24] estimates delicate motion masks from rough masks provided by Mask R-CNN [17] with optical flow [45], but still needs a pretrained segmentation model. RobustNeRF [37] discriminates between inliers and outliers based on photometric error and down-weights the outliers to decrease the effect of dynamic objects during training. Nevertheless, using a limited number of ray samples driven by downweighting outliers slows down the training procedure, and these models are not scalable for long 360<sup>◦</sup> videos."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                367,
+                895,
+                641
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Pose estimation. Conventional view synthesis relies on Structure from Motion (SfM) methods, like COLMAP [38] and OpenMVG [29], for camera poses, but these can be challenging to compute for large-scale data, leading to poor view synthesis quality. Several NeRF variants [4, 19, 23, 51] optimize radiance fields and poses jointly, but struggle to estimate camera poses for 360<sup>◦</sup> videos with dynamic objects [26]. RoDynRF [25] uses Mask R-CNN to separate dynamic and static components, but it is not scalable and requires a pretrained segmentation model. LocalRF [26] succeeds in long trajectory pose calibration but is susceptible to artifacts caused by dynamic objects."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                643,
+                895,
+                827
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3. Omnidirectional Local Radiance Fields"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                498,
+                840,
+                854,
+                858
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Overview. Our goal is to generate photorealistic static scenes from unobserved viewpoints using long 360<sup>◦</sup> videos, including dynamic objects as input. We optimize multiple radiance fields with continuous local frames while sliding frame windows and produce high-quality view synthesis. However, training blocks solely with local frames can result in ghosting artifacts from dynamic objects. To address this, we use an omnidirectional local radiance fields approach and a motion mask module to separate dynamic and static objects. We also propose a novel bidirectional optimization method to enhance the stability of static structural representations and eliminate residual artifacts. Our method produces superior rendering results than existing methods."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                869,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_footnote",
+            "content": {
+                "page_footnote_content": [
+                    {
+                        "type": "text",
+                        "content": "<sup>1</sup>https://vclab.kaist.ac.kr/cvpr2024p1/"
+                    }
+                ]
+            },
+            "bbox": [
+                94,
+                886,
+                397,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6872"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                90,
+                470,
+                260
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.1. Preliminaries"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                270,
+                217,
+                285
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We render the color "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { C } } ( \\mathbf { r } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by volume rendering samples "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "whose density and color are "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\left( \\sigma _ { i } , \\mathbf { c } _ { i } \\right)"
+                    },
+                    {
+                        "type": "text",
+                        "content": ") along a ray r and train the radiance fields "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to predict "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( \\sigma _ { i } , \\mathbf { c } _ { i } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "from the L1 photometric error between "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { C } } ( \\mathbf { r } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and input image "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { C } ( \\mathbf { r } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "as it is more robust against outliers than MSE:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                292,
+                470,
+                372
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathcal { L } _ { \\mathrm { r g b } } = \\left. \\hat { \\mathbf { C } } ( \\mathbf { r } ) - \\mathbf { C } ( \\mathbf { r } ) \\right. _ { 1 } .\\tag{1}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/f3960fd3292e6c6d9eb003f91997c4fa93986a69f82175abc842e66d0a119577.jpg"
+                }
+            },
+            "bbox": [
+                184,
+                382,
+                361,
+                411
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To extend NeRF to cover a large scale, we also use the contraction equation [2] over sample points:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                422,
+                468,
+                454
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\operatorname { c o n t r a c t } ( \\mathbf { x } ) = \\left\\{ \\begin{array} { c c } { \\mathbf { x } } & { \\| \\mathbf { x } \\| \\leq 1 } \\\\ { \\left( 2 - \\frac { 1 } { \\| \\mathbf { x } \\| } \\right) \\left( \\frac { \\mathbf { x } } { \\| \\mathbf { x } \\| } \\right) } & { \\| \\mathbf { x } \\| > 1 } \\end{array} \\right. ,\\tag{2}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/eece3e66314840a58f2ad976a5ea4c11aa9b107f222e9e9b0d6644d0a1774feb.jpg"
+                }
+            },
+            "bbox": [
+                117,
+                465,
+                423,
+                503
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Using the contraction function in radiance fields, which maps world coordinates onto a contracted space, aids in large-scale view synthesis by focusing nearby regions while representing distant components [26, 44]. However, they face challenges in long camera trajectories due to static model allocation."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                515,
+                470,
+                606
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Our approach uses multiple TensoRFs [8] to perform view synthesis and camera registration from videos, following LocalRF [26]. We allocate a NeRF block "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { m } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "where m "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\in \\{ 1 , \\cdots , M \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and insert input frames "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { C } _ { k }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "with the corresponding camera poses "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "[ R \\mid t ] _ { k } , k \\in \\{ 1 , \\cdot \\cdot \\cdot , K \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "into a temporal window "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { W } _ { m } ="
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\left\\{ ( \\mathbf { C } _ { w ( m , 1 ) } , [ R \\mid t ] _ { w ( m , 1 ) } ) , \\cdot \\cdot \\cdot , ( \\mathbf { C } _ { w ( m , N ) } , [ R \\mid t ] _ { w ( m , N ) } ) \\right\\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "w ( m , n )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "denotes the frame number of m-th windows’ n-th frame. If the distance between the camera "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "[ R \\mid t ] _ { w ( m , N ) }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and the block center becomes too large, we stop inserting frames and optimize the block "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { m } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "with the camera poses "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "[ R \\ | \\ t ] _ { w ( m , n ) }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "n \\in \\{ 1 , \\cdots , N \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "using "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { W } _ { m }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". After optimizing a "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { m } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "block, we create a new block "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { m + 1 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "with its window "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { W } _ { m + 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and insert frames until the end of the videos."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                606,
+                470,
+                833
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.2. Bidirectional Optimization by Distant Frames"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                845,
+                465,
+                862
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Previous reconstruction approaches [2, 11, 37, 48] predefine the reconstruction range before optimization and train a single NeRF-based module with registered poses. LocalRF [26] progressively allocates NeRF modules and performs large-scale reconstruction in a local manner without requiring camera priors. However, the vanilla LocalRF has limitations in leveraging global information and is susceptible to slowly moving objects that appear stationary from a local perspective. To overcome these issues, we propose a novel solution that leverages the omnidirectional nature of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "3 6 0 ^ { \\circ }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "view synthesis while taking advantage of locality. This improves overall reconstruction quality."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                869,
+                468,
+                901
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/467e6d8e96314d9defeb9da332e6a2ae1be890aba98f79b6f9fc1980c5f5fe20.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 2. In the perspective video of marching forward, optimized radiance blocks "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { p } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "may not be visible in the frame used to train current radiance fields "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { c } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". However, in omnidirectional video, every uncontracted space of the optimized blocks can be seen, enabling effective bidirectional optimization. The boundary indicates the radiance fields’ focusing region uncontracted."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                519,
+                83,
+                875,
+                186
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                280,
+                893,
+                431
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "As shown in Figure 2, in perspective videos of marching forward, distant frames contain only a small amount of information needed to refine poses and radiance fields. This is inefficient and can lead to instability. However, in "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "3 6 0 ^ { \\circ }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "videos, distant frames contain a substantial amount of data to refine radiance fields. As a result, we propose a bidirectional optimization by distant frames as part of progressive optimization, which can globally refine radiance fields and poses for omnidirectional view synthesis."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                431,
+                893,
+                568
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Forward step. As we progressively optimize multiple radiance fields "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { m } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", there are "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta . }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "that OmniLocalRF currently optimizes and a group of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R } \\mathbf { F } _ { \\ominus _ { p } } , p \\in \\{ 1 , \\cdot \\cdot \\cdot , c -"
+                    },
+                    {
+                        "type": "text",
+                        "content": "1}, which are already converged. In LocalRF, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "c is trained only with its temporal window "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { W } } _ { c }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "using the photometric loss defined as:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                570,
+                893,
+                661
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathcal { L } _ { \\mathrm { r g b , s } } ^ { \\mathrm { f o r } } = \\sum _ { \\mathbf { r } _ { \\mathrm { s r c } } \\in \\mathcal { R } } \\left. \\hat { \\mathbf { C } } _ { c } ( \\mathbf { r } _ { \\mathrm { s r c } } ) - \\mathbf { C } ( \\mathbf { r } _ { \\mathrm { s r c } } ) \\right. _ { 1 } ,\\tag{3}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/da513aed31b1aeb9d5e67a50c253b11b0568b7eb879699aa2afbb5698ad23fc9.jpg"
+                }
+            },
+            "bbox": [
+                565,
+                664,
+                825,
+                699
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { r } _ { \\mathrm { s r c } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "represents a ray from the current window "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { W } } _ { c } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "limiting the use of global frames. Here we additionally refine "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { \\mathrm { } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "using prior frames outside "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { W } _ { c }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and refer to it as a forward step since it proceeds in the same direction as window sliding."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                705,
+                892,
+                780
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "As shown in Figure 3(a), to concentrate on the areas where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { c } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "occupies, we render a depth value through "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { c } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "at the pixel "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { p } _ { \\mathrm { s r c } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "the origin of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { r } _ { \\mathrm { s r c } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ", on "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "w ( c , i ) \\cdot"
+                    },
+                    {
+                        "type": "text",
+                        "content": "-th frame, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "w ( c , i ) \\in \\mathcal { W } _ { c } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and obtain projected pixels "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { p } _ { \\mathrm { d s t } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to the w "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\scriptstyle ( p , j )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "-th frame which is a randomly selected member in "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { W } _ { p }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "but not included in "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { W } } _ { c }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                780,
+                893,
+                872
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbf { p } _ { \\mathrm { d s t } } = \\Pi { \\Bigl ( } [ R \\mid t ] _ { w ( c , i )  w ( p , j ) } \\Pi ^ { - 1 } ( \\mathbf { p } _ { \\mathrm { s r c } } , { \\hat { D } } _ { c } ( \\mathbf { r } _ { \\mathrm { s r c } } ) ) { \\Bigl ) } .\\tag{4}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/d14635cdfa826e6e6f377fd6da536cd0cafe30cec1b3b1ea1c2dacc5a1e9d3ac.jpg"
+                }
+            },
+            "bbox": [
+                508,
+                877,
+                857,
+                904
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6873"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/13e344ac1a39aa20c9e871730cc70d007a18f56a4a91aa087590736874ff5bea.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                501,
+                287,
+                890,
+                465
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/825550bbaf82623598562a2ea8b22b531a5250d2b4cef34a5b77acd4507b0827.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 3. Our bidirectional optimization for omnidirectional videos. (a) In the forward step, we project the poin "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { P } _ { c } ( \\mathbf { r } _ { \\mathrm { s r c } } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "rendered by "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { c } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to the destination frame "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "w ( p , j )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", used to train the previous radiance block "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { p } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". We then render the color and depth through "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { c } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\boldsymbol { \\Theta } _ { p } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", respectively, and use the L1 photometric error between the fully rendered color "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { C } } _ { c } ( \\mathbf { r } _ { \\mathrm { d s t } } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and the bilinearly interpolated input image "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\mathbf { C } } ( \\mathbf { r } _ { \\mathrm { d s t } } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "(Eq. (6)) to update "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { c } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and a mask module. (b) In the backward step, we switch the source and destination frames and refine "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { \\varepsilon } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "through the valid rays from static areas that meet "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { R } } _ { \\mathrm { R } } ."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                163,
+                65,
+                800,
+                212
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Here "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { D } _ { c }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is a rendered depth value using "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { c } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "[ R \\mid t ] _ { w ( c , i )  w ( p , j ) }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the relative camera matrix from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "w ( c , i )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "-th to "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "w ( p , j )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "-th frame. Π() denotes the equirectangular projection operator, and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\Pi ^ { - 1 } ( )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "backprojects a pixel on an equirectangular image to the world space."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                296,
+                470,
+                375
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We then render a depth value and a color value along r<sub>dst</sub> which casts from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { p } _ { \\mathrm { d s t } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "through "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { p } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { c } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", respectively. In order to exclusively use the reliable samples, we choose valid rays which satisfy"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                375,
+                470,
+                435
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathcal { R } _ { C } = \\big \\{ \\mathbf { r } | ( 1 - \\mathcal { T } ) \\hat { D } _ { p } ( \\mathbf { r } ) \\leq \\hat { D } _ { c } ( \\mathbf { r } ) \\leq ( 1 + \\mathcal { T } ) \\hat { D } _ { p } ( \\mathbf { r } ) , \\hat { D } _ { c } ( \\mathbf { r } ) \\leq 1 \\big \\} ,\\tag{5}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/f6f04f4ab3c59369b15fb8eb71725faf2f268477a7ee992cd20da0b25a4464a7.jpg"
+                }
+            },
+            "bbox": [
+                78,
+                443,
+                460,
+                460
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { D } _ { p }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is a rendered depth by "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { p } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\tau"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the valid margin of photometric refinement, constant at 0.05. The regions satisfying Eq. (5) are co-visible from two RF blocks. In cases where static geometry exists, causing occlusion, the rendering depths between the two RF blocks differ significantly, preventing the execution of bidirectional optimization. We update "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and a mask module from the conventional photometric loss in Eq. (3) with"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                473,
+                470,
+                595
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathcal { L } _ { \\mathrm { r g b , \\mathrm { d } } } ^ { \\mathrm { f o r } } = \\sum _ { \\mathbf { r } _ { \\mathrm { d s t } } \\in \\mathcal { R } _ { \\mathrm { C } } } \\left. \\left( 1 - \\hat { M } ( \\mathbf { r } _ { \\mathrm { d s t } } ) \\right) \\left( \\hat { \\mathbf { C } } _ { c } ( \\mathbf { r } _ { \\mathrm { d s t } } ) - \\bar { \\mathbf { C } } ( \\mathbf { r } _ { \\mathrm { d s t } } ) \\right) \\right. _ { 1 } ,\\tag{6}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/77d24d5265a49cca54e7de3c55cdbba9f9cfe9f7bdca967970d9130b246f2ab1.jpg"
+                }
+            },
+            "bbox": [
+                89,
+                602,
+                433,
+                630
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { C } } _ { c }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "denotes a rendered color by "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { \\mathrm { } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "within "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { R } _ { \\mathrm { C } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "We bilinearly interpolate input color based on the projected pixel’s coordinates to estimate the color C<sup>¯</sup> . "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { M } ( \\mathbf { r } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the estimated motion mask of r using the global mask module, detailed in Section 3.3. "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { c } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "additionally uses the static regions of frames beyond the temporal window to maintain locality and incorporate richer view information."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                640,
+                468,
+                747
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Backward step. We illustrate the backward process in Figure 3(b). We cast a ray from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { r } _ { \\mathrm { s r c } } ^ { \\prime }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "on w "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\prime ( p , j )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "-th frames, which is used as the destination frame in the forward step, and render a depth value with a color value through "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { p } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "We then supervise the rendered color by the color of the input frame as:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                750,
+                470,
+                840
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathcal { L } _ { \\mathrm { r g b , s } } ^ { \\mathrm { b a c k } } = \\sum _ { \\mathbf { r } ^ { \\prime } \\mathrm { s r c } \\in \\mathcal { R } } \\left\\| \\left( 1 - \\hat { M } ( \\mathbf { r } ^ { \\prime } \\mathrm { s r c } ) \\right) \\left( \\hat { \\mathbf { C } } _ { p } ( \\mathbf { r } ^ { \\prime } \\mathrm { s r c } ) - \\mathbf { C } ( \\mathbf { r } ^ { \\prime } \\mathrm { s r c } ) \\right) \\right\\| _ { 1 } ,\\tag{7}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/14a509dc4cfbb6138dd87752f6bc33844ca4d8a113bca470909894574349bd38.jpg"
+                }
+            },
+            "bbox": [
+                89,
+                847,
+                433,
+                875
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { C } } _ { p }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "indicates a rendered color by "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { p } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Unless we"
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                883,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Figure 4. Ablation study on the impact of the backward step. (b) Solely employing the forward step results in a blurred image. (c) Omitting the utilization of Eq. (7) leads to overfitting on distant frames. (d) Our bidirectional optimization shows great quality in representing details."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                465,
+                892,
+                535
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "use Eq. "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( 7 ) , \\mathbf { R F } _ { \\Theta _ { p } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "overfits to render distant frames while distorting adjacent views as shown in Figure 4(c)."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                544,
+                892,
+                574
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We get the projected pixel "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { p } _ { \\mathrm { d s t } } ^ { \\prime }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "on "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "w ( c , i )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "-th frame as follows:"
+                    }
+                ]
+            },
+            "bbox": [
+                500,
+                574,
+                892,
+                603
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbf { p } _ { \\mathrm { d s t } } ^ { \\prime } = \\Pi { \\Bigl ( } [ R \\mid t ] _ { w ( p , j )  w ( c , i ) } \\Pi ^ { - 1 } ( \\mathbf { p } _ { \\mathrm { s r c } } ^ { \\prime } , { \\hat { D } _ { p } ( \\mathbf { r } _ { \\mathrm { s r c } } ^ { \\prime } ) } ) { \\Bigr ) } ,\\tag{8}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/4981f14a74851951e85348cb0acb5993336e2dff8b5e5aa114299943e0a56ec3.jpg"
+                }
+            },
+            "bbox": [
+                508,
+                612,
+                859,
+                638
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where the source and destination frame are reversed in Eq. (4). We render a color with a depth through "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { p } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and also render a depth value using "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { c } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "at "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { r } _ { \\mathrm { d s t } } ^ { \\prime }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". The photometric loss for backward refinement supervises the color rendered by "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { p } }"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                647,
+                893,
+                724
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathcal { L } _ { \\mathrm { r g b , d } } ^ { \\mathrm { b a c k } } = \\sum _ { \\mathbf { r } _ { \\mathrm { d s t } } ^ { \\prime } \\in \\mathcal { R } _ { \\mathrm { P } } } \\left. \\left( 1 - \\hat { M } ( \\mathbf { r } _ { \\mathrm { d s t } } ^ { \\prime } ) \\right) \\left( \\hat { \\mathbf { C } } _ { p } ( \\mathbf { r } _ { \\mathrm { d s t } } ^ { \\prime } ) - \\bar { \\mathbf { C } } ( \\mathbf { r } _ { \\mathrm { d s t } } ^ { \\prime } ) \\right) \\right. _ { 1 } .\\tag{9}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/b88610b14190c156075fec2a80cf4f4ba8f040e5651551c1169a309b0e6bcaae.jpg"
+                }
+            },
+            "bbox": [
+                513,
+                734,
+                854,
+                765
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { R } _ { \\mathrm { P } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "denotes the valid ray bundles where the terms "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { D } _ { c } ( \\mathbf { r } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { D } _ { p } ( \\mathbf { r } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are reversed in Eq. (5), and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\bf C } ( { \\bf r } _ { \\mathrm { d s t } } ^ { \\prime } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is a bilinear interpolation of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { C } ( \\mathbf { r } _ { \\mathrm { { d s t } } } ^ { \\prime } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "based on "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { p } _ { \\mathrm { d s t } } ^ { \\prime } , \\mathbf { a }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "pixel origin of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathrm { \\bf { r } } _ { \\mathrm { { d s t } } } ^ { \\prime } ."
+                    }
+                ]
+            },
+            "bbox": [
+                500,
+                779,
+                892,
+                825
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "During the forward and backward steps, we use rays from frames close to the target RF block (source frame) and from frames far away from the block (destination frame). In this manner, we utilize four photometric loss functions, Eqs. (3), (6), (7), and (9). Then, Eq. (3) is used to train "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { c } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "through both dynamic and static regions of the close frame. In this process, geometrically inconsistent areas are mapped to the mask module as dynamic objects. Eq. (6) refines "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { c } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by far frame that have been used to train "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { p } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "As we already obtained the motion mask, we use only information from static regions to minimize the intervention of dynamic objects while refining. We also apply this approach in the backward step, exclusively updating static regions during additional refinement of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { p } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "(Eqs. (7), (9)). Through this way, the overlapped regions in "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { c } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { p } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are refined concurrently using distant frames."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                825,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6874"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                514,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/1f738844878aead19269fdb13617e2232543271854bc37d8a05442d479ff555c.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 5. For motion mask prediction, we cast a ray r from the k-th frame and render the static structure "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { C } } ^ { \\mathrm { s t } } ( \\mathbf { r } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "through volume rendering using radiance fields "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". We extract multi-resolution features of normalized "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( u , v )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by traversing feature plane set "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { Z } _ { k }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and concatenate them into a single code "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { ( u , v ) } ^ { k }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". We estimate dynamic color "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { C } } ^ { \\mathrm { d y } } ( \\mathbf { r } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and motion mask "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { M } ( \\mathbf { r } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and render the final results "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { C } } ( \\mathbf { r } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "through dynamic compositing "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( \\mathrm { E q . } \\dot { ( 1 0 ) } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". We jointly update the mask module "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\left( \\mathcal { Z } _ { t } , F _ { \\Theta _ { D } } \\right)"
+                    },
+                    {
+                        "type": "text",
+                        "content": "with radiance fields "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "using L1 photometric loss. We supervise "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { C } } ^ { \\mathrm { d y } } ( \\mathbf { r } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\tilde { \\mathbf { C } } ( \\mathbf { r } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "for unique factorization (Eq. (11)) and regularize the alpha of the mask (Eq. (12))."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                169,
+                66,
+                799,
+                244
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                327,
+                470,
+                496
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.3. Motion Mask Prediction"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                506,
+                302,
+                522
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We use a set of neural feature planes for each frame to estimate a motion mask. To do so, we decode a feature code from a multi-resolution feature plane. Our mask module is compatible with a pixel-wise ray marching NeRF setup and can be optimized jointly while rendering static objects. Figure 5 provides an overview of our motion mask prediction."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                531,
+                470,
+                623
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Mask module architecture. We leverage a Bayesian learning framework for segmenting dynamic components inspired by DynIBaR [22] that combines IBRNet [49] with 2D CNN. We create a low-resolution equirectangular feature plane set "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { Z } _ { k }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "for each frame to handle delicate frame-dependent components. The feature plane set comprises multi-resolution planes, denoted by "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { Z } _ { k } ~ ="
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\left\\{ \\mathcal { Z } _ { k } ^ { 1 } , \\mathcal { Z } _ { k } ^ { \\dot { 2 } } , \\cdot \\cdot \\cdot , \\mathcal { Z } _ { k } ^ { L } \\right\\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", where the height of each plane is "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "h _ { k } ^ { l } ="
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\grave { h } _ { k } ^ { 0 } / 2 ^ { l - \\ddot { 1 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", with "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "l \\in \\{ 1 , \\cdots , L \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". This approach follows previous works "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "[ 1 2 , 3 0 , 4 2 , 4 7 ]"
+                    },
+                    {
+                        "type": "text",
+                        "content": "that have shown better spatial context-aware inference under a multi-resolution manner. We use 4 feature channels, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "h _ { k } ^ { 0 } = 1 2 8"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L = 4"
+                    },
+                    {
+                        "type": "text",
+                        "content": "for all our experiments."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                627,
+                470,
+                824
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To render an omnidirectional image, a camera ray r is generated by multiplying the camera matrix with an equirectangular backprojected ray from pixel "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathbf { p } } ( u , v )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "on the k-th frame. Before casting a ray from p, we interpolate multi-resolution features at normalized "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( u , v )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by traversing "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { Z } _ { k }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and concatenate L levels of features into a single code. We use a global, shallow, multi-layer perceptron (MLP) "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "F _ { \\Theta _ { D } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to decode the feature code and obtain the color of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathrm { { d y } \\mathrm { { - } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "namic objects "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { C } } ^ { \\mathrm { d y } } ( \\mathbf { r } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "with the alpha value of the motion mask "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { M } ( \\mathbf { r } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "at the ray r."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                825,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                498,
+                327,
+                892,
+                405
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Motion mask optimization. We compute the final color "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { C } } _ { m } ( \\mathbf { r } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by compositing dynamic results "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { C } } ^ { \\mathrm { d y } } ( \\mathbf { r } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "with static results "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { C } } _ { m } ^ { \\mathrm { s t } } ( \\mathbf { r } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", rendered by "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { m } }"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                409,
+                893,
+                457
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\hat { \\mathbf { C } } _ { m } ( \\mathbf { r } ) = \\hat { M } ( \\mathbf { r } ) \\hat { \\mathbf { C } } ^ { \\mathrm { d y } } ( \\mathbf { r } ) + ( 1 - \\hat { M } ( \\mathbf { r } ) ) \\hat { \\mathbf { C } } _ { m } ^ { \\mathrm { s t } } ( \\mathbf { r } ) .\\tag{10}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/cd991a1467e06367edc87ef7cd9f901c7164c1f3c7d01cc01adda32fee6b46a7.jpg"
+                }
+            },
+            "bbox": [
+                527,
+                464,
+                834,
+                483
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We update the mask module, consisting of the feature plane set and MLP, with radiance fields by propagating the L1 photometric loss of rendered colors (Section 3.2)."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                492,
+                892,
+                537
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The mask blended dynamic color in Eq. (10) has a variety of combinations of a mask and a dynamic color. When transient components have an intermediate alpha value due to the ambiguity in factorization, radiance fields try to compensate residuals and leave floating artifacts. Therefore, we supervise a dynamic color by Gaussian noise added input color C<sup>˜</sup> (r):"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                537,
+                893,
+                643
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathcal { L } _ { \\mathrm { r g b } } ^ { \\mathrm { m a s k } } = \\sum _ { \\mathbf { r } \\in \\mathcal { R } } \\left\\| \\hat { \\mathbf { C } } ^ { \\mathrm { d y } } ( \\mathbf { r } ) - \\tilde { \\mathbf { C } } ( \\mathbf { r } ) \\right\\| _ { 1 } ,\\tag{11}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/5a5f2ac798ed1305c8ea37f57f4544eb4ba4a823382ee2bba6e08f699c435471.jpg"
+                }
+            },
+            "bbox": [
+                583,
+                652,
+                808,
+                686
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "which ensures a unique factorization while preventing our model from relying on the mask module to express fine details. We regularize the motion mask by the total variation (TV) loss and the binary loss for forcing the mask converged into a binary value while smoothing it as:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                695,
+                893,
+                772
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathcal { L } _ { \\mathrm { r e g } } ^ { \\mathrm { m a s k } } = \\mathcal { L } _ { \\mathrm { T V } } ^ { \\mathrm { m a s k } } + \\mathcal { L } _ { \\mathrm { b i n } } ^ { \\mathrm { m a s k } } .\\tag{12}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/8f70e3c175353a11c52ff69fc01694ee7e130c0cf93f45a6caf73d6dfa6be3ab.jpg"
+                }
+            },
+            "bbox": [
+                616,
+                780,
+                776,
+                800
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Refer to the supplementary material for details on the mask regularizers."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                808,
+                892,
+                838
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.4. Progressive Optimization"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                847,
+                732,
+                863
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We optimize "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "blocks, camera poses, feature plane sets, and mask MLP by sliding a window over the input video."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                869,
+                892,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6875"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We insert frames into the window and optimize poses using "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { c } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "(Eq. (3)). If the poses fall outside the contraction range of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { c } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", currently targeted radiance field, we move to the refining step. In the refining step, we perform bidirectional optimization by simultaneously updating the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { c } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and the randomly selected "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R F } _ { \\Theta _ { p } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "that has been previously optimized. We use LocalRF’s optical flow loss and normalized monocular depth supervision for robust pose estimation. To render novel views, we search for the nearest frame from the given viewpoints. If a frame is used to train two adjacent radiance blocks, we blend the results based on their position among overlapped frames."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                92,
+                472,
+                273
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4. Experimental Results"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                285,
+                282,
+                301
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Our method takes 12 hours for 125 frames on a machine equipped with a single NVIDIA A6000 GPU and an Intel Xeon Silver 4214R 2.40 GHz CPU with 256 GB RAM. Refer to the supplemental material for further implementation details. To evaluate OmniLocalRF in large-scale view synthesis from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "3 6 0 ^ { \\circ }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "videos, we compare our approach against Mip-NeRF360 [2] and EgoNeRF [11], known for strong performance in omnidirectional view synthesis. Additionally, we also compare our approach with "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\scriptstyle \\mathrm { D } ^ { 2 } \\mathrm { N e R F }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "[54] and RobustNeRF [37], both of which aim to reconstruct static structures from dynamic videos. Since these methods require precomputed camera pose, we utilize the pose estimated by OpenVSLAM [40] as camera priors. We also compare ours with LocalRF [26] that self-calibrate poses during view synthesis. For a comprehensive comparison, we evaluate both LocalRF and our method under two conditions: one with camera priors provided for pose refinement and the other without camera priors, starting from scratch and estimating the poses during view synthesis."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                310,
+                472,
+                599
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.1. Dataset and Metrics"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                606,
+                269,
+                621
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We capture and provide a new dataset from six outdoor scenes captured with an Insta360 camera, consisting of 5760×2880 resolution 30 fps 360<sup>◦</sup> videos each. These are casual videos designed to capture backgrounds that include a photographer and dynamic objects like pedestrians. Considering reasonable training time and memory size, we use half-resolution input images. However, in the case of D<sup>2</sup>NeRF, we have to use a quarter of the spatial resolution for rendering due to GPU memory constraints of 48 GB. We use a total of 125 images, taking every fourth frame from the first 500 frames. Test frames are selected for every tenth frame among 125 images, including the first image, resulting in 112 training images with 13 test images. For all test images in every scene, we manually create motion masks for validation. We then compare the rendered results with the dynamic objects masked ground truth and report PSNR, SSIM [50], and LPIPS [55]. We also measure weightedto-spherically uniform PSNR and SSIM [41] (PSNR<sup>WS</sup> and"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                628,
+                472,
+                902
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/1eb24c0917523279b809cb368dfcd4b29f53c89e1e97a8bcad4f133cd11cc914.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 6. Masked results for evaluation in the real dataset. We manually create motion masks for the test views and compute the metrics after inpainting masked regions with gray. While our method masks the dynamic areas robustly, conventional neural rendering methods still exhibit residual artifacts due to temporal and spatial inconsistency."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                503,
+                88,
+                888,
+                256
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "SSIM<sup>WS</sup>), taking into account the distortion near the pole in equirectangular images."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                352,
+                892,
+                382
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We generate three synthetic 360<sup>◦</sup> videos, each containing dynamic objects floating within the scene for evaluating pose estimation accuracy by absolute trajectory error (ATE) and relative pose error (RPE) between ground truth poses as standard visual odometry metrics [20, 39, 56]. The synthetic videos have a resolution of 2880×1440, consisting of 125 images each. Out of these, 13 images are allocated for testing, following the procedure used with the real dataset. Additionally, we provide view synthesis results of existing methods and our method for comprehensive comparisons."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                382,
+                893,
+                535
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.2. Quantitative Evaluation"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                542,
+                723,
+                559
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Dynamic objects in test images are excluded using manually created masks when computing metrics. As both LocalRF and our method can estimate camera poses during view synthesis, we present the metrics for models trained with and without preprocessed camera poses by OpenVS-LAM [40]. According to Tables 1 and 2, scalable models like Mip-NeRF360, EgoNeRF, and LocalRF showed relatively high performance. D<sup>2</sup>NeRF and RobustNeRF, which target reconstructing static structures from dynamic videos, achieve lower scores due to a limited model capacity. To ensure fair comparisons, we exclude the transient data of test views. However, dynamic objects frequently appear outside the masks as artifacts, leading to a decrease in the metrics, as illustrated in Figure 6. As a result, our method outperforms existing methods thanks to its effective dynamic ob ject removal and locality even without given camera poses."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                565,
+                895,
+                809
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.3. Qualitative Evaluation"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                498,
+                816,
+                710,
+                833
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In Figures 7 and 8, we conduct a qualitative comparison of our OmniLocalRF with the baseline methods. Our method effectively mitigates ghosting artifacts while preserving locality, allowing us to represent details in large-scale realworld data, even in locally occluded regions. Methods like EgoNeRF, Mip-NeRF360, and LocalRF, which lack dynamic handling, face challenges when reconstructing static scenes, relying solely on geometric consistency across input data. Even though their masked metrics indicate high performance, these methods suffer from ghosting artifacts, making them less suitable for practical applications that demand high-quality static view synthesis."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                839,
+                895,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6876"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/314e921a45335e8f60358e5103e0e8e96be17950827b7a8eb0b813e258864849.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Mip-NeRF360 EgoNeRF Test view"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Our rendered views"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                80,
+                90,
+                888,
+                205
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/6b4d5b0c08093b5bf5ac6de1d4e1132a0745d517589f7c59d1162737736a5e97.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 7. An example of qualitative comparisons on the Lone Monk scene within the synthetic dataset. We additionally address results of Mip-NeRF360 from static-only videos (static only) that do not include dynamic objects at the first column. Our results demonstrate the effective removal of dynamic objects while preserving details in the expansive scene."
+                    },
+                    {
+                        "type": "text",
+                        "content": "Figure 8. Qualitative comparisons on the real dataset. Our method can render locally unobserved areas with fine details throughout the bidirectional optimization with a self-supervised mask module. D<sup>2</sup>NeRF sometimes encounters challenges in distinguishing between static backgrounds and dynamic objects, which results in the omission of certain regions in the Library scene. Refer to the supplemental video."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                80,
+                256,
+                888,
+                526
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/6be64543e66aa50302b48cddca5a089a3f4a163831d0542be851231bd4cc26ae.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 1. Quantitative comparisons of the synthetic dataset. The averages of the metrics are measured across three synthetic scenes. Refer to Figure 7 for qualitative comparisons."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td></td><td>PSNR ↑</td><td>PSNRWS ↑</td><td>SSIM ↑</td><td>SSIMWS ↑</td><td>LPIPS ↓</td></tr><tr><td>Mip-NeRF360 [2], static only</td><td>29.48</td><td>29.85</td><td>0.8625</td><td>0.8628</td><td>0.2699</td></tr><tr><td>Ours wo/ pose, static only</td><td>30.29</td><td>30.24</td><td>0.8679</td><td>0.8681</td><td>0.2561</td></tr><tr><td>Mip-NeRF360 [2]</td><td>25.59</td><td>25.32</td><td>0.8455</td><td>0.8464</td><td>0.2973</td></tr><tr><td>EgoNeRF [11]</td><td>23.99</td><td>23.67</td><td>0.8044</td><td>0.7951</td><td>0.3949</td></tr><tr><td>LocalRF [26] w/ pose</td><td>25.50</td><td>25.31</td><td>0.8454</td><td>0.8427</td><td>0.2897</td></tr><tr><td>D2NeRF [54]</td><td>19.91</td><td>19.43</td><td>0.6212</td><td>0.5929</td><td>0.6298</td></tr><tr><td>RobustNeRF [37]</td><td>20.59</td><td>19.79</td><td>0.7326</td><td>0.7096</td><td>0.4734</td></tr><tr><td>Ours w/ pose</td><td>29.76</td><td>29.68</td><td>0.8633</td><td>0.8628</td><td>0.2624</td></tr><tr><td>LocalRF [26] wo/ pose</td><td>25.22</td><td>25.02</td><td>0.8389</td><td>0.8354</td><td>0.2949</td></tr><tr><td>Ours wo/ pose</td><td>29.93</td><td>29.85</td><td>0.8648</td><td>0.8648</td><td>0.2610</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                78,
+                638,
+                465,
+                728
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/0329ca13ab6d630757414299fc864557ab4b3bbaaa75527d63167fbaccb88f55.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 2. Quantitative comparisons of the real dataset. We report the averages of the metrics measured across six real scenes. Refer to Figure 8 for qualitative comparisons."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td></td><td>PSNR ↑</td><td>PSNRWS ↑</td><td>SSIM↑</td><td>SSIMWS ↑</td><td>LPIPS ↓</td></tr><tr><td>Mip-NeRF360 [2]</td><td>26.88</td><td>26.44</td><td>0.8094</td><td>0.7977</td><td>0.3585</td></tr><tr><td>EgoNeRF [11]</td><td>25.95</td><td>25.38</td><td>0.7609</td><td>0.7424</td><td>0.4383</td></tr><tr><td>LocalRF [26] w/ pose</td><td>26.56</td><td>26.22</td><td>0.8041</td><td>0.7966</td><td>0.3471</td></tr><tr><td>D2NeRF [54]</td><td>20.95</td><td>20.34</td><td>0.6105</td><td>0.5829</td><td>0.5100</td></tr><tr><td>RobustNeRF [37]</td><td>20.78</td><td>19.56</td><td>0.7093</td><td>0.6679</td><td>0.4864</td></tr><tr><td>Ours w/ pose</td><td>27.72</td><td>27.09</td><td>0.8171</td><td>0.8085</td><td>0.3299</td></tr><tr><td>LocalRF [26] wo/ pose</td><td>26.56</td><td>26.23</td><td>0.8034</td><td>0.7984</td><td>0.3410</td></tr><tr><td>Ours wol pose</td><td>27.73</td><td>27.13</td><td>0.8165</td><td>0.8088</td><td>0.3297</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                80,
+                779,
+                465,
+                863
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                76,
+                869,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                597,
+                893,
+                688
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Since D<sup>2</sup>NeRF parameterizes radiance along spatial and temporal domains with a single NeRF module, it often fails to separate dynamic components. It renders blurry results because of the large spatial and time complexity of input videos. RobustNeRF employs the iteratively reweighted least squares (IRLS) approach for patch-wise outlier down-weighting, which decouples transient artifacts from geometrically consistent structures through adaptive loss reweighting. However, in the omnidirectional videos, the overall geometry reconstruction quality is compromised due to the large scene scale, making it challenging to distinguish static from dynamic objects based on the photometric error over patches. For a fair comparison, we additionally train RobustNeRF for twice the number of iterations compared to Mip-NeRF360, taking into account the slowdown caused by the IRLS approach, but still fail to represent fine details effectively."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                689,
+                895,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6877"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "chart",
+            "content": {
+                "image_source": {
+                    "path": "images/4081c0710353d461d959edc411b0897351b29ee8c490f95a5735dd3b86b6cf60.jpg"
+                },
+                "content": "",
+                "chart_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 9. An example of pose comparisons on the Pavillion scene including dynamic objects. Our method shows robustness in estimating camera pose in the presence of dynamic objects."
+                    }
+                ],
+                "chart_footnote": []
+            },
+            "bbox": [
+                81,
+                82,
+                467,
+                175
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/1058b457000d07e59bf7e7dee5978f2af0f75a66b6be05b22365f9dba0f8b8d8.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 3. Comparisons of pose accuracy on the synthetic dataset. We average the results from three scenes."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td></td><td>RPEr ↓</td><td>RPEt↓</td><td>ATE↓</td></tr><tr><td>OpenMVG [29]</td><td>0.10761</td><td>0.01799</td><td>0.00218</td></tr><tr><td>LocalRF [26]</td><td>0.10404</td><td>0.00096</td><td>0.00376</td></tr><tr><td>Ours</td><td>0.10398</td><td>0.00081</td><td>0.00165</td></tr><tr><td>OpenMVG [29], static only</td><td>0.10706</td><td>0.01796</td><td>0.00187</td></tr><tr><td>LocalRF [26], static only</td><td>0.10398</td><td>0.00071</td><td>0.00208</td></tr><tr><td></td><td>0.10399</td><td>0.00074</td><td>0.00165</td></tr><tr><td>Ours, static only</td><td></td><td></td><td></td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                81,
+                252,
+                465,
+                343
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                353,
+                470,
+                400
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.4. Pose Estimation Comparison"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                407,
+                336,
+                422
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We compare our method with OpenMVG [29], an SfMbased pose estimator, and LocalRF in Figure 9. We report the relative rotation error (RPE ), relative translation error (RPE<sub>t</sub>), and ATE. We also estimate the camera trajectories from the ground truth videos to eliminate the influence of dynamic objects. We align the estimated pose with the ground truth, addressing scale factor and rotation discrepancies, before computing ATE. As shown in Table 3, the pose optimized through our approach is robust in the presence of dynamic objects, showing similar results in the static-only videos."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                431,
+                472,
+                598
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.5. Ablation Study"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                604,
+                230,
+                621
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We conduct an ablation study for our proposed mask module and bidirectional optimization: (a) Removing Eq. (6) degrades overall quality as the local blocks use fewer input images for training. (b) The omission of source rays’ photometric supervision during the backward step (Eq. (7)) significantly degrades the model as it tends to converge on reconstructing distant regions as described in Figure 4(c). (c) We observe that incorporating distant frames through the backward step enables the model to capture and refine detailed information. (d) Geometrical inconsistencies in the temporal domain of dynamic objects often lead to the introduction of larger artifacts compared to the regions masked out during test views, as shown in Figure 6. Consequently, the absence of the mask module adversely affects both the qualitative and quantitative aspects of the results. (e) The exclusion of Eq. (3) during mask optimization results in intermediate alpha values within the motion mask due to the ambiguity in factorization and leaves floating artifacts,"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                628,
+                472,
+                902
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/478bc09919e4037de39285cdc939264681de08694b9d90c44544a51721242074.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 4. Ablation study results of our model. Reported metrics are averaged over the six scenes on our real dataset (Section 4.5)."
+                    }
+                ],
+                "table_footnote": [
+                    {
+                        "type": "text",
+                        "content": "which yields lower metrics than the entire model. Table 4 quantitatively compares results."
+                    }
+                ],
+                "html": "<table><tr><td></td><td>PSNR ↑</td><td>SSIM↑</td><td>LPIPS↓</td></tr><tr><td>(a) No forward step</td><td>27.64</td><td>0.8127</td><td>0.3356</td></tr><tr><td>(b) Backward step w/o  $\\mathcal { L } _ { \\mathrm { r g b , s } } ^ { \\mathrm { b a c k } }$ </td><td>26.23</td><td>0.7800</td><td>0.3866</td></tr><tr><td>(c) No backward step</td><td>27.63</td><td>0.8086</td><td>0.3447</td></tr><tr><td>(d) No mask module</td><td>26.08</td><td>0.7876</td><td>0.3630</td></tr><tr><td>(e) No mask photometric supervision</td><td>25.27</td><td>0.7894</td><td>0.3593</td></tr><tr><td>Complete model</td><td>27.73</td><td>0.8165</td><td>0.3297</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                503,
+                108,
+                887,
+                195
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5. Discussion and Conclusions"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                244,
+                756,
+                261
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We have presented OmniLocalRF, a novel method for omnidirectional view synthesis in dynamic 360<sup>◦</sup> videos. Our approach integrates LocalRF with a mask module and bidirectionally refines distant NeRF blocks to remove dynamic artifacts and fill in occluded regions, resulting in accurate static structure reconstruction while preserving fine details within large scenes. Our method also accurately estimates camera trajectories during view synthesis, making it suitable for various applications such as street viewers and augmented reality environments."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                270,
+                893,
+                420
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Our model can synthesize static structures from 360<sup>◦</sup> videos without motion masks and camera priors. However, it faces the usual challenges associated with neural rendering-based view synthesis. For instance, it is unable to inpaint regions that are completely occluded in the videos because NeRF-based models are trained using photometric loss between input images. To overcome this limitation, incorporating perceptual loss [28] or generative models [34, 52], such as stable diffusion, can be helpful."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                421,
+                893,
+                556
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We use linear interpolation in equirectangular space, which has grids with the same size of zenith and azimuth angles, to predict motion masks. Operating in this space can mitigate data redundancy compared to utilizing an undistorted cube map. However, this space can lead to inefficient oversampling near polar regions in mask predictions. To address this issue, we could use uniformly sampled spherical grids in future works."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                556,
+                893,
+                678
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Even though our model globally refines the local blocks based on photometric error, we do not deal with the global bundle adjustment and loop closure for pose estimation, which are used in completed SLAM systems. Adding these components to our approach would enable more robust and accurate pose estimation. While our model is capable of generating static structures from 360<sup>◦</sup> videos, it faces several challenges that require further refinement."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                678,
+                893,
+                800
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "Acknowledgements"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                811,
+                669,
+                829
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Min H. Kim acknowledges the MSIT/IITP of Korea (RS-2022-00155620, 2022-0-00058, and 2017-0-00072), LIG, and Samsung Electronics."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                837,
+                893,
+                883
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6878"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "References"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                78,
+                89,
+                176,
+                106
+            ]
+        },
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[1] Benjamin Attal, Selena Ling, Aaron Gokaslan, Christian Richardt, and James Tompkin. MatryODShka: Real-Time 6DoF Video View Synthesis using Multi-Sphere Images. In ECCV, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[2] Jonathan T Barron, Ben Mildenhall, Dor Verbin, Pratul P Srinivasan, and Peter Hedman. Mip-NeRF 360: Unbounded Anti-Aliased Neural Radiance Fields. In CVPR, pages 5470– 5479, 2022. 1, 2, 3, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[3] Tobias Bertel, Mingze Yuan, Reuben Lindroos, and Christian Richardt. OmniPhotos: Casual 360° VR Photography. TOG, 39(6):266:1–12, 2020. 1, 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[4] Wenjing Bian, Zirui Wang, Kejie Li, Jia-Wang Bian, and Victor Adrian Prisacariu. NoPe-NeRF: Optimising Neural Radiance Field with No Pose Prior. In CVPR, pages 4160– 4169, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[5] Michael Broxton, Jay Busch, Jason Dourgarian, Matthew DuVall, Daniel Erickson, Dan Evangelakos, John Flynn, Ryan Overbeck, Matt Whalen, and Paul Debevec. A Low Cost Multi-Camera Array for Panoramic Light Field Video Capture. In SIGGRAPH Asia Posters, New York, NY, USA, 2019. Association for Computing Machinery. 1, 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[6] Michael Broxton, Jay Busch, Jason Dourgarian, Matthew DuVall, Daniel Erickson, Dan Evangelakos, John Flynn, Peter Hedman, Ryan Overbeck, Matt Whalen, and Paul Debevec. DeepView Immersive Light Field Video. In ACM SIGGRAPH Immersive Pavilion. Association for Computing Machinery, 2020."
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[7] Michael Broxton, John Flynn, Ryan Overbeck, Daniel Erickson, Peter Hedman, Matthew Duvall, Jason Dourgarian, Jay Busch, Matt Whalen, and Paul Debevec. Immersive Light Field Video with a Layered Mesh Representation. TOG, 39 (4), 2020. 1, 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[8] Anpei Chen, Zexiang Xu, Andreas Geiger, Jingyi Yu, and Hao Su. TensoRF: Tensorial Radiance Fields. In ECCV, pages 333–350. Springer, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[9] Liang-Chieh Chen, Yukun Zhu, George Papandreou, Florian Schroff, and Hartwig Adam. Encoder-Decoder with Atrous Separable Convolution for Semantic Image Segmentation. In ECCV, pages 801–818, 2018. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[10] Bowen Cheng, Maxwell D Collins, Yukun Zhu, Ting Liu, Thomas S Huang, Hartwig Adam, and Liang-Chieh Chen. Panoptic-Deeplab: A Simple, Strong, and Fast Baseline for Bottom-Up Panoptic Segmentation. In CVPR, pages 12475– 12485, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[11] Changwoon Choi, Sang Min Kim, and Young Min Kim. Balanced Spherical Grid for Egocentric View Synthesis. In CVPR, pages 16590–16599, 2023. 1, 2, 3, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[12] Sara Fridovich-Keil, Giacomo Meanti, Frederik Rahbæk Warburg, Benjamin Recht, and Angjoo Kanazawa. K-planes: Explicit Radiance Fields in Space, Time, and Appearance. In CVPR, pages 12479–12488, 2023. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[13] Miguel Granados, Hans-Peter Seidel, and Hendrik PA Lensch. Background Estimation from Non-Time Sequence Images. In Proceedings of Graphics Interface 2008, pages 33–40, 2008. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[14] Miguel Granados, James Tompkin, Kwang In Kim, Oliver Grau, Jan Kautz, and Christian Theobalt. How Not to Be Seen—Object Removal from Videos of Crowded Scenes. In CGF, pages 219–228. Wiley Online Library, 2012. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[15] Charles Guyon, Thierry Bouwmans, and El-Hadi Zahzah. Foreground Detection via Robust Low Rank Matrix Decomposition Including Spatio-Temporal Constraint. In ACCV, pages 315–320. Springer, 2012. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[16] Charles Guyon, Thierry Bouwmans, and El-Hadi Zahzah. Moving Object Detection via Robust Low Rank Matrix Decomposition with IRLS Scheme. In Int. Symp. Visual Computing, pages 665–674. Springer, 2012. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[17] Kaiming He, Georgia Gkioxari, Piotr Dollar, and Ross Gir-´ shick. Mask R-CNN. In ICCV, pages 2961–2969, 2017. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[18] Hyeonjoong Jang, Andreas Meuleman, Dahyun Kang,´ Donggun Kim, Christian Richardt, and Min H. Kim. Egocentric Scene Reconstruction from an Omnidirectional Video. TOG, 41(4), 2022. 1, 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[19] Yoonwoo Jeong, Seokjun Ahn, Christopher Choy, Anima Anandkumar, Minsu Cho, and Jaesik Park. Self-Calibrating Neural Radiance Fields. In ICCV, pages 5846–5854, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[20] Johannes Kopf, Xuejian Rong, and Jia-Bin Huang. Robust Consistent Video Depth Estimation. In CVPR, pages 1611– 1621, 2021. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[21] Zhengqi Li, Simon Niklaus, Noah Snavely, and Oliver Wang. Neural Scene Flow Fields for Space-Time View Synthesis of Dynamic Scenes. In CVPR, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[22] Zhengqi Li, Qianqian Wang, Forrester Cole, Richard Tucker, and Noah Snavely. DynIBaR: Neural Dynamic Image-Based Rendering. In CVPR, 2023. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[23] Chen-Hsuan Lin, Wei-Chiu Ma, Antonio Torralba, and Simon Lucey. BARF: Bundle-Adjusting Neural Radiance Fields. In CVPR, pages 5741–5751, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[24] Geng Lin, Chen Gao, Jia-Bin Huang, Changil Kim, Yipeng Wang, Matthias Zwicker, and Ayush Saraf. OmnimatteRF: Robust Omnimatte with 3D Background Modeling. In ICCV, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[25] Yu-Lun Liu, Chen Gao, Andreas Meuleman, Hung-Yu Tseng, Ayush Saraf, Changil Kim, Yung-Yu Chuang, Johannes Kopf, and Jia-Bin Huang. Robust Dynamic Radiance Fields. In CVPR, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[26] Andreas Meuleman, Yu-Lun Liu, Chen Gao, Jia-Bin Huang, Changil Kim, Min H Kim, and Johannes Kopf. Progressively Optimized Local Radiance Fields for Robust View Synthesis. In CVPR, pages 16539–16548, 2023. 2, 3, 6, 7, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[27] Ben Mildenhall, Pratul P Srinivasan, Matthew Tancik, Jonathan T Barron, Ravi Ramamoorthi, and Ren Ng. NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis. In ECCV, pages 405–421. Springer, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[28] Ashkan Mirzaei, Tristan Aumentado-Armstrong, Konstantinos G Derpanis, Jonathan Kelly, Marcus A Brubaker, Igor Gilitschenski, and Alex Levinshtein. SPIn-NeRF: Multiview Segmentation and Perceptual Inpainting with Neural Radiance Fields. In CVPR, pages 20669–20679, 2023. 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[29] Pierre Moulon, Pascal Monasse, Romuald Perrot, and Renaud Marlet. OpenMVG: Open Multiple View Geometry. In"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                84,
+                114,
+                468,
+                169
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6879"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "Int. Workshop on Reproducible Research in Pattern Recognition, pages 60–74. Springer, 2017. 2, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[30] Thomas Muller, Alex Evans, Christoph Schied, and Alexan-¨ der Keller. Instant Neural Graphics Primitives with a Multiresolution Hash Encoding. TOG, 41(4):1–15, 2022. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[31] Ryan S. Overbeck, Daniel Erickson, Daniel Evangelakos, Matt Pharr, and Paul Debevec. A System for Acquiring, Processing, and Rendering Panoramic Light Field Stills for Virtual Reality. TOG, 37(6), 2018. 1, 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[32] Keunhong Park, Utkarsh Sinha, Jonathan T Barron, Sofien Bouaziz, Dan B Goldman, Steven M Seitz, and Ricardo Martin-Brualla. Nerfies: Deformable Neural Radiance Fields. In ICCV, pages 5865–5874, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[33] Keunhong Park, Utkarsh Sinha, Peter Hedman, Jonathan T Barron, Sofien Bouaziz, Dan B Goldman, Ricardo Martin-Brualla, and Steven M Seitz. HyperNeRF: a Higher-Dimensional Representation for Topologically Varying Neural Radiance Fields. TOG, 40(6):1–12, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[34] Ben Poole, Ajay Jain, Jonathan T Barron, and Ben Mildenhall. DreamFusion: Text-to-3D using 2D Diffusion. arXiv preprint arXiv:2209.14988, 2022. 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[35] Albert Parra Pozo, Michael Toksvig, Terry Filiba Schrager, Joyce Hsu, Uday Mathur, Alexander Sorkine-Hornung, Rick Szeliski, and Brian Cabral. An Integrated 6DoF Video Camera and System Design. TOG, 38(6), 2019. 1, 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[36] Konstantinos Rematas, Andrew Liu, Pratul P Srinivasan, Jonathan T Barron, Andrea Tagliasacchi, Thomas Funkhouser, and Vittorio Ferrari. Urban Radiance Fields. In CVPR, pages 12932–12942, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[37] Sara Sabour, Suhani Vora, Daniel Duckworth, Ivan Krasin, David J Fleet, and Andrea Tagliasacchi. RobustNeRF: Ignoring Distractors with Robust Losses. In CVPR, pages 20626– 20636, 2023. 1, 2, 3, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[38] Johannes Lutz Schonberger and Jan-Michael Frahm.¨ Structure-from-Motion Revisited. In CVPR, 2016. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[39] Jurgen Sturm, Nikolas Engelhard, Felix Endres, Wolfram¨ Burgard, and Daniel Cremers. A Benchmark for the Evaluation of RGB-D SLAM Systems. In IROS, pages 573–580. IEEE, 2012. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[40] Shinya Sumikura, Mikiya Shibuya, and Ken Sakurada. OpenVSLAM: A Versatile Visual SLAM Framework. In ACMMM, pages 2292–2295, 2019. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[41] Yule Sun, Ang Lu, and Lu Yu. Weighted-to-Spherically-Uniform Quality Evaluation for Omnidirectional Video. SPL, 24(9):1408–1412, 2017. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[42] Towaki Takikawa, Joey Litalien, Kangxue Yin, Karsten Kreis, Charles Loop, Derek Nowrouzezahrai, Alec Jacobson, Morgan McGuire, and Sanja Fidler. Neural Geometric Level of Detail: Real-Time Rendering with Implicit 3D Shapes. In CVPR, pages 11358–11367, 2021. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[43] Matthew Tancik, Vincent Casser, Xinchen Yan, Sabeek Pradhan, Ben Mildenhall, Pratul P Srinivasan, Jonathan T Barron, and Henrik Kretzschmar. Block-NeRF: Scalable Large Scene Neural View Synthesis. In CVPR, pages 8248–8258, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[44] Matthew Tancik, Ethan Weber, Evonne Ng, Ruilong Li, Brent Yi, Terrance Wang, Alexander Kristoffersen, Jake"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "Austin, Kamyar Salahi, Abhik Ahuja, et al. Nerfstudio: A Modular Framework for Neural Radiance Field Development. In ACM SIGGRAPH Conference Proceedings, pages 1–12, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[45] Zachary Teed and Jia Deng. RAFT: Recurrent All-Pairs Field Transforms for Optical Flow. In ECCV, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[46] Vadim Tschernezki, Diane Larlus, and Andrea Vedaldi. NeuralDiff: Segmenting 3D Objects that Move in Egocentric Videos. In 3DV, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[47] Haithem Turki, Deva Ramanan, and Mahadev Satyanarayanan. Mega-NeRF: Scalable Construction of Large-Scale NeRFs for Virtual Fly-Throughs. In CVPR, pages 12922–12931, 2022. 2, 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[48] Peng Wang, Yuan Liu, Zhaoxi Chen, Lingjie Liu, Ziwei Liu, Taku Komura, Christian Theobalt, and Wenping Wang. F2- NeRF: Fast Neural Radiance Field Training with Free Camera Trajectories. In CVPR, pages 4150–4159, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[49] Qianqian Wang, Zhicheng Wang, Kyle Genova, Pratul P Srinivasan, Howard Zhou, Jonathan T Barron, Ricardo Martin-Brualla, Noah Snavely, and Thomas Funkhouser. IBRNet: Learning Multi-View Image-Based Rendering. In CVPR, pages 4690–4699, 2021. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[50] Zhou Wang, Alan C Bovik, Hamid R Sheikh, and Eero P Simoncelli. Image Quality Assessment: From Error Visibility to Structural Similarity. TIP, 13(4):600–612, 2004. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[51] Zirui Wang, Shangzhe Wu, Weidi Xie, Min Chen, and Victor Adrian Prisacariu. NeRF–: Neural Radiance Fields without Known Camera Parameters. arXiv preprint arXiv:2102.07064, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[52] Silvan Weder, Guillermo Garcia-Hernando, Aron Monszpart, Marc Pollefeys, Gabriel J Brostow, Michael Firman, and Sara Vicente. Removing Objects from Neural Radiance Fields. In CVPR, pages 16528–16538, 2023. 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[53] Changhee Won, Jongbin Ryu, and Jongwoo Lim. SweepNet: Wide-baseline Omnidirectional Depth Estimation. In ICRA, pages 6073–6079. IEEE, 2019. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[54] Tianhao Wu, Fangcheng Zhong, Andrea Tagliasacchi, Forrester Cole, and Cengiz Oztireli. D2NeRF: Self-Supervised Decoupling of Dynamic and Static Objects from a Monocular Video. NIPS, 35:32653–32666, 2022. 2, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[55] Richard Zhang, Phillip Isola, Alexei A Efros, Eli Shechtman, and Oliver Wang. The Unreasonable Effectiveness of Deep Features as a Perceptual Metric. In CVPR, pages 586–595, 2018. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[56] Zichao Zhang and Davide Scaramuzza. A Tutorial on Quantitative Trajectory Evaluation for Visual (-Inertial) Odometry. In IROS, pages 7244–725. IEEE, 2018. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[57] Xiaowei Zhou, Can Yang, and Weichuan Yu. Moving Object Detection by Detecting Contiguous Outliers in the Low-Rank Representation. TPAMI, 35(3):597–610, 2012. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[58] Nikolaos Zioulis, Antonis Karakottas, Dimitrios Zarpalas, and Petros Daras. Omnidepth: Dense Depth Estimation for Indoors Spherical Panoramas. In ECCV, pages 448–465, 2018. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[59] Nikolaos Zioulis, Antonis Karakottas, Dimitrios Zarpalas, Federico Alvarez, and Petros Daras. Spherical View Synthesis for Self-Supervised 360° Depth Estimation. In 3DV, pages 690–699, 2019. 1"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                107,
+                93,
+                467,
+                121
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6880"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ]
+]
