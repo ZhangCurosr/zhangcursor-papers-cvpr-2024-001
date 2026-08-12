@@ -1,0 +1,4022 @@
+[
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "Text2HOI: Text-guided 3D Motion Generation for Hand-Object Interaction"
+                    }
+                ],
+                "level": 1
+            },
+            "bbox": [
+                120,
+                128,
+                848,
+                152
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Junuk Cha1Jihyeon Kim1,2† Jae Shin Yoon³* Seungryul Baek1* 1UNIST 2KETI 3Adobe Research"
+                    }
+                ]
+            },
+            "bbox": [
+                184,
+                179,
+                779,
+                220
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/874e6fea41c8063f1117225191311f00f3cf0446288315fe87ee143bf2c889f4.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                84,
+                238,
+                883,
+                354
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/eb6b543d5fcf55b49fac1f855900c9fb9ae85c11b331d48843c97ae0e9e359ae.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 1. Given a text and a canonical object mesh as prompts, we generate 3D motion for hand-object interaction without requiring object trajectory and initial hand pose. We represent the right hand with a light skin color and the left hand with a dark skin color. The articulation of a box in the first row is controlled by estimating an angle for the pre-defined axis of the box."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                88,
+                363,
+                875,
+                478
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "Abstract"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                235,
+                550,
+                313,
+                568
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "This paper introduces the first text-guided work for generating the sequence of hand-object interaction in 3D. The main challenge arises from the lack of labeled data where existing ground-truth datasets are nowhere near generalizable in interaction type and object category, which inhibits the modeling of diverse 3D hand-object interaction with the correct physical implication (e.g., contacts and semantics) from text prompts. To address this challenge, we propose to decompose the interaction generation task into two subtasks: hand-object contact generation; and hand-object motion generation. For contact generation, a VAE-based network takes as input a text and an object mesh, and generates the probability of contacts between the surfaces of hands and the object during the interaction. The network learns a variety of local geometry structure of diverse objects that is independent of the objects’ category, and thus, it is applicable to general objects. For motion generation, a Transformer-based diffusion model utilizes this 3D contact map as a strong prior for generating physically"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                585,
+                472,
+                861
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "plausible hand-object motion as a function of text prompts by learning from the augmented labeled dataset; where we annotate text labels from many existing 3D hand and object motion data. Finally, we further introduce a hand refiner module that minimizes the distance between the object surface and hand joints to improve the temporal stability of the objecthand contacts and to suppress the penetration artifacts. In the experiments, we demonstrate that our method can generate more realistic and diverse interactions compared to other baseline methods. We also show that our method is applicable to unseen objects. We will release our model and newly labeled data as a strong foundation for future research. Codes and data are available in: https://github.com/JunukCha/Text2HOI."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                537,
+                893,
+                736
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "1. Introduction"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                765,
+                625,
+                782
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Imagine handing over an apple on a table to your friends: you might first grab it and convey this to them. During a social interaction, the hand pose and motion are often defined as a function of object's pose, shape, and category. While existing works [3, 8, 9, 15, 21, 27, 30, 31] have been successful in modeling diverse and realistic 3D human body motions from a text prompt (where there exists no text-guided hand motion generation works), the context of object interaction has been often missing, which significantly limits the expressiveness in the semantics of the generated motion sequence. In this paper, we propose a first work that can generate realistic and assorted hand-object motions in 3D from a text prompt as shown in Fig. 1. Our work can be used for various applications such as generating surgical simulations, interactive control of a character for gaming, and future path planning between a robot hand and objects for robotics."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                795,
+                895,
+                902
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": [
+                    {
+                        "type": "text",
+                        "content": "CvF"
+                    }
+                ]
+            },
+            "bbox": [
+                104,
+                2,
+                181,
+                41
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": [
+                    {
+                        "type": "text",
+                        "content": "This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore."
+                    }
+                ]
+            },
+            "bbox": [
+                235,
+                0,
+                810,
+                46
+            ]
+        },
+        {
+            "type": "page_footnote",
+            "content": {
+                "page_footnote_content": [
+                    {
+                        "type": "text",
+                        "content": "This research was conducted when Jihyeon Kim was a graduate student (Master candidate) at UNIST†. Co-last authors*."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                875,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1577"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                92,
+                472,
+                213
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Learning to generate a sequence of 3D hand-object interaction from a text prompt is extremely challenging due to the scarcity of the dataset: the diversity of existing datasets for a sequence of 3D meshes and associated text labels is far behind the one of real-world distribution which is determined by a number of parameters such as hand type (e.g., left or right), object's category and structure, scale, contact regions, and so on. A generative model learned from such limited data will fail in the diverse modeling of physically and semantically plausible 3D hand-object interaction."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                215,
+                472,
+                367
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To overcome this challenge, we propose to decompose the interaction generation task into two subtasks, \"object contact map generation\" and “hand-object motion generation\", where the models dedicated to each task learn a general geometry representation from the augmented dataset, which leads to the significant improvement in the generalizability and physical plausibility of the combined pipeline."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                369,
+                472,
+                477
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "For contact map generation, we newly develop a contact map prediction network that encodes a local geometry surface of a 3D object mesh along with a target motion text; and generates a 3D contact map—3D probability map at the object's surface that describes the potential regions contacted by hand meshes during the interaction—along with the general geometric features. Since the local geometry representation is category-agnostic, the network is applicable to general objects. By adding condition of the scale information, our contact map generation module is, in nature, able to decode scale-variant probability, e.g., if the object's scale is smaller, the region of the predicted contact probability becomes wider, reflecting the natural tendency to grasp smaller objects over a wider area."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                479,
+                472,
+                676
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "For motion generation, a Transformer-based diffusion model utilizes the contact map and geometric features as strong guidance to generate the sequence of 3D hand and object movements from a text prompt. Unlike a conventional diffusion process [11], the model is designed to directly estimate the final sample at each step, which allows us to apply explicit geometric loss (e.g., relative distance or orientation) to improve the geometric correctness. Our diffusion model learns the augmented data where we perform extensive manual annotation of the text labels from external motion datasets [5, 16, 25]."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                679,
+                470,
+                830
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Using these two modules, we introduce the first text-guided hand-object interaction generation framework that generates the 3D interaction in a compositional way. Given a text prompt, canonical 3D object mesh, and object's scale, our VAE-based contact predictor generates a 3D contact map, and geometry features. Our Transformer-based diffusion model encodes the contact, text, and geometry information with frame-wise and agent-wise (i.e., object, and left and right hand) positional embedding to decode realistic 3D hand-object interaction. Finally, our new Transformer-based refiner module pushes the physical correctness of the 3D interaction in a single feed-forward manner by refining the contacts and suppressing the penetration artifacts."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                833,
+                472,
+                895
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                92,
+                895,
+                213
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In the experiments, we validate our model on three datasets (H2O [16], GRAB [25], and ARCTIC [5]) where our method outperforms other baseline methods in terms of accuracy, diversity, and physical realism by large margins. We also demonstrate that our compositional framework enables the application of our method to new objects that are not seen during training."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                215,
+                895,
+                308
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Our contributions can be summarized as follows:"
+                    }
+                ]
+            },
+            "bbox": [
+                522,
+                310,
+                833,
+                324
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• To the best of our knowledge, we propose the first approach that can generate a sequence of 3D hand-object interaction in various styles and lengths from a text prompt."
+                    }
+                ]
+            },
+            "bbox": [
+                500,
+                328,
+                893,
+                373
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• We propose a novel compositional framework that enables the modeling of high-quality hand-object interaction from limited data."
+                    }
+                ]
+            },
+            "bbox": [
+                500,
+                375,
+                893,
+                417
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• We introduce a new fast and efficient hand refinement module that improves physical realism (e.g., penetration-free interaction) without any test-time optimization."
+                    }
+                ]
+            },
+            "bbox": [
+                500,
+                419,
+                893,
+                464
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• We annotate text labels from existing hands and object motion datasets, which will be made public."
+                    }
+                ]
+            },
+            "bbox": [
+                500,
+                464,
+                892,
+                496
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2. Related Work"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                520,
+                635,
+                537
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Text to human motion generation. Thanks to the userfriendly nature of textual inputs, there has been substantial progress in the field of text-guided human motion generation [3, 8, 9, 12, 15, 17, 19, 21, 27, 30, 31, 33]. Guo et al. [8] proposed the text2length and text2motion modules to generate human motion in varying time length, while remaining realistic and faithful to the text. Tevet et al. [27] introduced a Motion Diffusion Model (MDM) for generating natural and expressive human motion, utilizing the geometric losses and Transformer-based approach that predicts the sample instead of noise in each diffusion step. Recently, Liang et al. [19] presented a method that can generate interactive motion between two people. But it cannot handle three or more multi-agents."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                550,
+                895,
+                747
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Hand and object motion generation. Existing approaches [1, 2, 4, 7, 10, 13, 14, 18, 20, 34] focus on grasping the stationary object. They are limited in their ability to manipulate the object and are therefore inadequate to generate a natural hand-object motion. Ghosh et al. [6] proposed a method for generating full-body motion in interaction with 3D objects, which is guided by action labels, while it requires an optimization stage for full performance. To generate hand and manipulated object motion, Zhang et al. [29] proposed a network that relies on the current hand pose, past and future trajectories of both hands and object, and diverse spatial representations. Zheng et al. [32] generate the hand-object motion covering both rigid and articulated objects, given an initial hand pose, object geometry, and sparse sequences of object poses. While plausible, these methods [29, 32] require the 3D object sequence as inputs, which is often not available from a user. In addition, they cannot utilize text modality."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                750,
+                895,
+                902
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1578"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/c718a1c124fb082a5ecdf864e9333dd4ac144ea3a653f07cfd165877c530fadd.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 2. Schematic diagram of the overall framework. Given a text prompt and a canonical object mesh prompt, our aim is to generate the 3D motion for hand-object interaction. We first generate a contact map from the canonical object mesh conditioned by the text prompt and object's scale. The hand-object motion generation module removes the noise from the inputs for the denoised outputs to align with the predicted contact map and the text prompt. The denoised outputs exhibit artifacts, including the penetration. To address these artifacts, the hand refinement module adjusts the generated (denoised) hand pose parameters to restrain the penetration and to improve contact interactions."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                88,
+                90,
+                883,
+                226
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                321,
+                472,
+                415
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3. Method"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                433,
+                165,
+                449
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Our goal is to generate hand-object interacting motions given a text prompt T and a canonical object mesh "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { M } _ { \\mathrm { o b j } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". To address them, we design our framework with three stages, as shown in Fig. 2. First, we use the canonical object mesh "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { M } _ { \\mathrm { { o b j } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "combined with the text feature "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { C L I P } } ( \\mathbf { T } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "via the CLIP text encoder "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { C L I P } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "[23] to estimate the contact map "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { m } } _ { \\mathrm { c o n t a c t } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "that provides a strong prior for relative 3D locations of hands and an object. Then, we use the Transformer-based diffusion model to denoise the noised input data "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\mathbf { x } _ { t } ^ { l } \\} _ { l = 1 } ^ { L }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "at the t-th diffusion timestep, where L is the overall sequence length. By conditioning the text features "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { C L I P } } ( \\mathbf { T } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", contact map "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { m } } _ { \\mathrm { c o n t a c t } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "object features "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { F } _ { \\mathrm { o b j } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and scale "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { \\mathrm { o b j } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "on the diffusion model, we estimate the denoised sample "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { x } } _ { 0 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "from the noised one "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { t } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "Lastly, hand refiner improves the initial generated hand-object motions considering penetration and contact between hands and an object."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                462,
+                472,
+                690
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.1. Contact map prediction"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                704,
+                297,
+                719
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To generate natural motions for hand-object interaction, it is crucial to understand contact points between hands and an object. For this, we design the contact prediction network "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { c o n t a c t } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "that encodes contact points on the surfaces of the object mesh "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { M } _ { \\mathrm { { o b j } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "along with a text prompt T and object's scale "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { \\mathrm { o b j } }"
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                731,
+                470,
+                808
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We first compute "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { \\mathrm { o b j } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "which represents the maximum distance from center of object mesh to its vertices. We then sample N-point cloud "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { P } \\in \\mathbb { R } ^ { N \\times 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "from the vertices of canonical object mesh using the farthest point sampling (FPS) algorithm [22]. Subsequently, we normalize P to "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { P } _ { \\mathrm { n o r m } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by dividing it with "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { \\mathrm { o b j } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "The contact prediction network "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { c o n t a c t } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "receives the normalized point cloud "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { P } _ { \\mathrm { n o r m } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "text features "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { C L I P } } ( \\mathbf { T } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", object's scale "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { \\mathrm { o b j } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "and Gaussian random noise vector "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } _ { \\mathrm { c o n t a c t } } \\in \\mathbb { R } ^ { 6 4 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and produces the contact map "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { m } } _ { \\mathrm { c o n t a c t } } \\in \\mathbb { R } ^ { N \\times 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". In the middle of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { c o n t a c t } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", we obtain the object features "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { F } _ { \\mathrm { o b j } } \\in \\mathbb { R } ^ { 1 , 0 2 4 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". To train "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { c o n t a c t } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", we use the combination of binary cross-entropy loss, dice loss and kullback-leibler (KL) divergence loss following [18]."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                809,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                498,
+                321,
+                893,
+                414
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.2. Text-to-3D hand-object motion generation"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                429,
+                859,
+                445
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Our text-to-3D hand-object interaction generator (Text2HOI) "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { T H O I } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", whose architecture is the Transformer encoder [28], is trained via the diffusion-based approach [11]."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                457,
+                893,
+                502
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.2.1 Preliminaries."
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                531,
+                645,
+                546
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The 3D hand-object motion is represented as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\begin{array} { r l } { \\mathbf { x } _ { 0 } } & { { } = } \\end{array}"
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\mathbf { x } _ { 0 , \\mathrm { l h a n d } } ^ { l } , \\mathbf { x } _ { 0 , \\mathrm { r h a n d } } ^ { l } , \\mathbf { x } _ { 0 , \\mathrm { o b j } } ^ { l } \\} _ { l = 1 } ^ { L _ { \\mathrm { m a x } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", where l denotes the frame index. This motion comprises "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "3 { \\cdot } L _ { \\mathrm { m a x } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "elements, which accounts for the maximum motion length "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { m a x } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "of three agents "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( i . e ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ", left and right hands and an object): For left and right hands, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { 0 , \\mathrm { l h a n d } } ^ { l } \\in \\bar { \\mathbb { R } } ^ { 9 9 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { 0 , \\mathrm { r h a n d } } ^ { l } \\in \\mathbb { R } ^ { 9 9 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are composed of 99-dimensional vectors by flattening and concatenating the 3D hand translation parameters "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf t _ { h } ^ { l } \\in \\mathbb { R } ^ { 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and MANO hand pose parameters "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\theta ^ { l } \\in \\mathbb { R } ^ { 1 6 \\times \\bar { 6 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in 6D representation [35]. For an object, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\mathrm { 0 , o b j } } ^ { l } \\in \\mathbb { R } ^ { 1 0 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is 10-dimensional vector that concatenates the 3D object translation "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { t } _ { o } ^ { l } \\in \\mathbb { R } ^ { 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", object rotation "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { r } ^ { l } \\in \\mathbb { R } ^ { 6 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "[35], and object articulation angle "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\alpha ^ { l } \\in \\mathbb { R } ^ { 1 }"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                560,
+                893,
+                732
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The 3D hand-object interaction "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\mathrm { 0 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is used to generate the mesh of hands, and to deform the mesh of objects: The left and right hand meshes are generated from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\bf x } _ { \\mathrm { 0 , l h a n d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\mathrm { 0 , r h a n d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by feeding them to the MANO layer [24] to output the hand vertices "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { \\bar { V } } _ { \\mathrm { l h a n d } } , \\mathbf { V } _ { \\mathrm { r h a n d } } \\in \\mathbb { R } ^ { L \\times V \\times \\mathbf { \\bar { 3 } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and hand joints Jlhand, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { J } _ { \\mathrm { { r h a n d } } } \\in \\mathbb { R } ^ { L \\times J \\times 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in 3D global space, where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "V = 7 7 8"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "J = 2 1"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". A deformed object's point cloud "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { P } _ { \\mathrm { d e f } } \\in \\mathbb { R } ^ { L \\times N \\times 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is generated in 3D global space by transforming the object's point clouds "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { P }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "with the translation, rotation and articulation angles in "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { 0 , \\mathrm { o b j } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "The notation^ and ~ indicate that these values are derived from the estimated "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { x } } _ { 0 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and refined "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\tilde { \\mathbf { x } } _ { 0 } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "respectively."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                734,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1579"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                514,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/8975b2bee71dd1f2f7417c4bfa73db43c7eec1636f78feb0b0882298d483d192.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 3. The details of the text-to-3D hand-object motion generation in our framework. In the forward process, we generate the noised motion "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\mathbf { x } _ { t } ^ { l } \\} _ { l = 1 } ^ { \\hat { L } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by adding the noise to the original (ground-truth) motion "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\mathbf { x } _ { 0 } ^ { l } \\} _ { l = 1 } ^ { \\hat { L } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". In the backward process, the Transformer encoder denoises the noised motion "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\mathbf { x } _ { t } ^ { l } \\} _ { l = 1 } ^ { \\hat { L } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ", using various conditions c including text features "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { C L I P } } ( \\mathbf { T } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", contact map "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { m } } _ { \\mathrm { c o n t a c t } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "object features "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { F } _ { \\mathrm { o b j } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "and object's scale "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { \\mathrm { o b j } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "The right panel illustrates a comparison between conventional positional encoding, which can only differentiate each patch, and our proposed encoding, which provides detailed differentiation of both frames and agents. A unique positional encoding value is assigned for each box, distinguished by different colors."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                84,
+                92,
+                880,
+                266
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.2.2 Forward process."
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                372,
+                245,
+                388
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Our forward process is formulated as:"
+                    }
+                ]
+            },
+            "bbox": [
+                99,
+                400,
+                339,
+                415
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbf { x } _ { t } = \\sqrt { \\bar { \\alpha } _ { t } } \\mathbf { x } _ { 0 } + \\sqrt { 1 - \\bar { \\alpha } _ { t } } \\epsilon _ { t }\\tag{1}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/03bce6af9ffa886538dc64db2fbf6ee1671a4ef720303d97ae1b1b3aca34d018.jpg"
+                }
+            },
+            "bbox": [
+                178,
+                425,
+                336,
+                443
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "following [11], where t is the diffusion time-step, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\mathrm { 0 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the original 3D hand-object motion, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the noised 3D hand-object motion at the t-th diffusion time-step, and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\alpha } _ { t } \\in ( 0 , 1 )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is a set of constant hyper-parameters. The noise "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is randomly sampled from the Gaussian distribution at each diffusion-time step t."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                453,
+                470,
+                530
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.2.3 Backward process."
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                551,
+                253,
+                566
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In the backward process, the text-to-3D hand-object interaction generator (Text2HOI) fTHoI denoises the noised motion "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to reconstruct the original (ground-truth) motion x0: "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { x } } _ { 0 } ="
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { T H O I } } ( \\mathbf { x } _ { t } , t , c )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", where c denotes the conditions, as described in [27]. Since we exploit the Transformer encoder as the architecture, the noised signal "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "needs to be first converted to the proper input embedding "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { X } _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Similarly, the output of Transformer architecture "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { X } } _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "also needs to be converted to the denoised signal "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { x } } _ { 0 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Furthermore, the text features "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { C L I P } } ( \\mathbf { T } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", object features "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { F } _ { \\mathrm { o b j } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "estimated contact map "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { m } } _ { \\mathrm { c o n t a c t } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and object's scale "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { \\mathrm { o b j } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are merged together to constitute the conditional signals "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { X } _ { \\mathrm { c o n d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", which will be detailed in the remainder of the section:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                577,
+                472,
+                758
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Transformer input generation. The forwarded signal "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { t } ^ { l } = \\{ \\mathbf { x } _ { t , \\mathrm { l h a n d } } ^ { l } , \\mathbf { x } _ { t , \\mathrm { r h a n d } } ^ { l } , \\mathbf { x } _ { t , \\mathrm { o b j } } ^ { l } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is passed through corresponding fully connected layers (i.e., fin,lhand, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { i n , r h a n d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { i n , o b j } } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "respectively to obtain the input to the Transformer encoder, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { X } _ { t } ^ { \\hat { l } ^ { ' } } = \\{ \\mathbf { X } _ { t , \\mathrm { l h a n d } } ^ { \\hat { l } } \\in \\mathbb { R } ^ { 5 1 2 } , \\mathbf { X } _ { t , \\mathrm { r h a n d } } ^ { \\hat { l } ^ { ' } } \\in \\mathbb { R } ^ { 5 1 2 } , \\mathbf { X } _ { t , \\mathrm { o b i } } ^ { l } \\in \\mathbb { R } ^ { 5 1 2 } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "respectively. Then, we apply two types of positional encoding: frame-wise and agent-wise. Frame-wise positional encoding adds an sinusoidal value to "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { X } _ { t } ^ { l }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "which varies according to the motion length index "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "l ;"
+                    },
+                    {
+                        "type": "text",
+                        "content": "while irrespective to the type of agents."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                762,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Agent-wise positional encoding adds distinct encoding values for each agent (left hand, right hand, and object), which are consistent across different frames, to "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { X } _ { t , \\mathrm { l h a n d } } , \\mathbf { X } _ { t , \\mathrm { r h a n d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { X } _ { t , \\mathrm { o b j } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". These are designed to help the Transformer encoder to better understand the input data. The detail pipeline of these positional encodings is shown in the right bottom panel of Fig. 3."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                373,
+                893,
+                465
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The Transformer encoder has a maximum input capacity of 451. The first input is reserved for the conditioning, while the remaining inputs accommodate the maximum motion length "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { m a x } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "of 150 frames, involving three distinct agents: left hand, right hand and object. We mask out all inputs except for the first "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "1 + 3 \\hat { L }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "inputs where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { L }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the estimated length of sequence and subsequently, we mask inputs which are not belonging to the estimated hand type H* (see Sec. 4.1 for details about how Î and H* are estimated)."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                467,
+                893,
+                603
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Conditional input generation. To generate denoised handobject motions conditioned on the text prompt T and canonical object mesh "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { M } _ { \\mathrm { o b j } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "we need to generate the conditional input for the t-th diffusion time-step. Conditional input "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { X } _ { t , \\mathrm { c o n d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is generated by:"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                606,
+                893,
+                683
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { r c l } { { \\bf X } _ { t , \\mathrm { c o n d } } } & { = } & { { \\bf X } _ { \\mathrm { c o n d } } + t _ { \\mathrm { e m b } } } \\end{array}\\tag{2}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/0a721f6e9fb0ce6ee4074764eb2d164ba19a57ae9044c149198e01c82388087c.jpg"
+                }
+            },
+            "bbox": [
+                611,
+                694,
+                781,
+                710
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where the diffusion time-step embedding "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "t _ { \\mathrm { e m b } } ~ = ~ f ^ { \\mathrm { t s } } ( t )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is obtained by applying the diffusion time-step t to the time-step embedding fully-connected layer "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { t s } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and the condition embedding "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { X } _ { \\mathrm { c o n d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is generated as follows:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                722,
+                893,
+                784
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { c c l } { \\mathbf { X } _ { \\mathrm { c o n d } } } & { = } & { \\mathbf { X } _ { \\mathrm { t e x t } } ^ { \\mathrm { c o n d } } \\mathbf { + } \\mathbf { X } _ { \\mathrm { o b j } } ^ { \\mathrm { c o n d } } } \\end{array}\\tag{3}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/8c63f224b672106b77e57592be0539f8385092a922d1050d8355a6a0ed0d168b.jpg"
+                }
+            },
+            "bbox": [
+                609,
+                792,
+                781,
+                813
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where the text condition "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { X } _ { \\mathrm { t e x t } } ^ { \\mathrm { c o n d } } { = } f ^ { \\mathrm { t e x t } } ( f ^ { \\mathrm { C L I P } } ( \\mathbf { T } ) )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is generated by applying the text feature "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { C L I P } } ( \\mathbf { T } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to the fc layer "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { t e x 1 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". The object condition "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { X } _ { \\mathrm { o b j } } ^ { \\mathrm { c o n d } } = f ^ { \\mathrm { o b j } } ( \\{ \\mathbf { F } _ { \\mathrm { o b j } } , \\hat { \\mathbf { m } } _ { \\mathrm { c o n t a c t } } , S _ { \\mathrm { o b j } } \\} )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is obtained by concatenating object feature "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { F } _ { \\mathrm { o b j } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": " contact map mcontact and object's scale "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { \\mathrm { o b j } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and feeding them to the fc layer "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { o b j } }"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                823,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1580"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Transformer output conversion. Masked inputs "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { X } _ { t } ~ = ~ \\{ \\mathbf { X } _ { t , \\mathrm { c o n d } } , \\mathbf { X } _ { t } ^ { 1 } , \\mathbf { X } _ { t } ^ { 2 } , \\dots , \\mathbf { X } _ { t } ^ { \\hat { L } } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are fed to the Transformer encoder to estimate the outputs "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { X } } _ { 0 } = \\{ \\hat { \\mathbf { X } } _ { 0 } ^ { l } \\} _ { l = 1 } ^ { \\hat { L } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { X } } _ { 0 } ^ { l } = \\{ \\hat { \\mathbf { X } } _ { 0 , \\mathrm { l h a n d } } ^ { l } , \\hat { \\mathbf { X } } _ { 0 , \\mathrm { r h a n d } } ^ { l } , \\hat { \\mathbf { X } } _ { 0 , \\mathrm { o b j } } ^ { l } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Each outputs—X0,hand, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { X } } _ { \\mathrm { 0 , r h a n d } } ^ { l } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { X } } _ { 0 , \\mathrm { o b j } } ^ { l } -"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are passed through its own dedicated fully connected layer, denoted as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { o u t , l h a n d } } , \\ f ^ { \\mathrm { o u t , r h a n d } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { o u t , o b j } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", respectively, to obtain the denoised signal "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { x } } _ { 0 } ^ { l } = \\{ \\hat { \\mathbf { x } } _ { 0 , \\mathrm { l h a n d } } ^ { l } , \\hat { \\mathbf { x } } _ { 0 , \\mathrm { r h a n d } } ^ { l } , \\hat { \\mathbf { x } } _ { 0 , \\mathrm { o b j } } ^ { l } \\}"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                90,
+                470,
+                226
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Training. Note that the losses related to left and right hands are activated by indicator functions "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbb { 1 } _ { \\mathrm { l e f t } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbb { 1 } _ { \\mathrm { i g h t } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "respectively, which are derived from the hand type H*. The "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\breve { f } ^ { \\mathrm { T H O I } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is trained with loss functions as follows:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                227,
+                470,
+                287
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "L _ { \\mathrm { T H O I } } ( f ^ { \\mathrm { T H O I } } ) { = } L _ { \\mathrm { d i f f } } ( f ^ { \\mathrm { T H O I } } ) { + } L _ { \\mathrm { d m } } ( f ^ { \\mathrm { T H O I } } ) { + } L _ { \\mathrm { r o } } ( f ^ { \\mathrm { T H O I } } )\\tag{4}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/88e2af74b122d919354254a4ad1793249ff72c4bc6a5f90beaa78263d10087fe.jpg"
+                }
+            },
+            "bbox": [
+                89,
+                294,
+                441,
+                313
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where"
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                321,
+                120,
+                335
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "L _ { \\mathrm { d i f f } } ( f ^ { \\mathrm { T H O I } } ) { = } E _ { { \\mathbf { x } } _ { t } \\sim q ( { \\mathbf { x } } _ { 0 } | c ) , t \\sim [ 1 , T ] } | | { \\mathbf { x } } _ { 0 } - f ^ { \\mathrm { T H O I } } ( { \\mathbf { x } } _ { t } , t , c ) | | _ { 2 } ^ { 2 }\\tag{5}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/23b9a31e715acd1303188fa0d1d93950d7e21050d052d5701ecf5846a2ab8345.jpg"
+                }
+            },
+            "bbox": [
+                80,
+                343,
+                431,
+                362
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "is the loss which is used to reconstruct "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\mathrm { 0 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "similar to [27]. We have two more losses "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( i . e . , L _ { \\mathrm { d m } } , L _ { \\mathrm { r o } } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to make the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { T H O I } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to generate more accurate hand-object motions. The distance map loss "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { d m } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "proposed in [19], is employed in our hand-object motion generation to align the estimated distance map with ground-truth distance map as follows:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                368,
+                470,
+                460
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { r l } { L _ { \\mathrm { d m } } \\big ( f ^ { \\mathrm { T H O I } } \\big ) = } & { \\displaystyle \\sum _ { i = 1 } ^ { \\hat { L } \\times J \\times N } \\bigg \\{ \\mathbb { 1 } _ { \\mathrm { l e f t } } \\cdot \\bigg ( \\big ( \\hat { \\mathbf { d } } _ { \\mathrm { l e f t } } ^ { i } - \\mathbf { d } _ { \\mathrm { l e f t } } ^ { i } \\big ) \\cdot I \\big ( \\mathbf { d } _ { \\mathrm { l e f t } } ^ { i } < \\tau \\big ) \\bigg ) ^ { 2 } } \\\\ & { + \\mathbb { 1 } _ { \\mathrm { r i g h t } } \\cdot \\bigg ( \\big ( \\hat { \\mathbf { d } } _ { \\mathrm { r i g h t } } ^ { i } - \\mathbf { d } _ { \\mathrm { r i g h t } } ^ { i } \\big ) \\cdot I \\big ( \\mathbf { d } _ { \\mathrm { r i g h t } } ^ { i } < \\tau \\big ) \\bigg ) ^ { 2 } \\bigg \\} } \\end{array}\\tag{6}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/cd0d62c1567807f7ef6ac438ce0a38f41b39b81afa9ab477fc260e3d040e03a3.jpg"
+                }
+            },
+            "bbox": [
+                76,
+                468,
+                475,
+                555
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { d } } _ { \\mathrm { l e f t } } ^ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { d } } _ { \\mathrm { { r i g h t } } } ^ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "denote the i-th element of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { d } } _ { \\mathrm { l e f t } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { d } } _ { \\mathrm { { r i g h t } } } \\in \\mathbb { R } ^ { \\hat { L } \\times J \\times N }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", respectively. These represent the estimated distance maps between the J hand joints (left "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { J } } _ { \\mathrm { l h a n d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and right "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { J } } _ { \\mathrm { r h a n d } } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and the N object points "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { P } } _ { \\mathrm { d e f } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "across a sequence of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { L }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "frames, derived from their 3D global positions. "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { d } _ { \\mathrm { l e f t } } ^ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { d } _ { \\mathrm { { r i g h t } } } ^ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "denote the i-th element of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { d } _ { \\mathrm { l e f t } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { d } _ { \\mathrm { r i g h t } } \\in \\mathbb { R } ^ { \\hat { L } \\times J \\times N }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "which are the ground-truth distance maps obtained for left and right hands, respectively. The indicator function "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I ( \\cdot )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "outputs 1 when the statement is true and 0, otherwise. It activates the loss only when the hand-object distance is below the distance threshold τ, where it is empirically set as 2cm."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                574,
+                470,
+                752
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In the relative orientation loss "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { r o } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "we consider the 3D relative rotation as follows, as hands and objects exhibit severe rotation changes:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                756,
+                470,
+                801
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { r l } & { L _ { \\mathrm { r o } } ( f ^ { \\mathrm { T H O I } } ) { = } \\mathbb { 1 } _ { \\mathrm { l e f t } } \\cdot \\| R ( \\hat { \\mathbf { x } } _ { 0 , \\mathrm { l h a n d } } , \\hat { \\mathbf { x } } _ { 0 , \\mathrm { o b j } } ) { - } R ( \\mathbf { x } _ { 0 , \\mathrm { l h a n d } } , \\mathbf { x } _ { 0 , \\mathrm { o b j } } ) \\| _ { 2 } ^ { 2 } } \\\\ & { \\quad \\quad \\quad + \\mathbb { 1 } _ { \\mathrm { i j g h t } } \\cdot \\| R ( \\hat { \\mathbf { x } } _ { 0 , \\mathrm { f h a n d } } , \\hat { \\mathbf { x } } _ { 0 , \\mathrm { o b j } } ) - R ( \\mathbf { x } _ { 0 , \\mathrm { f h a n d } } , \\mathbf { x } _ { 0 , \\mathrm { o b j } } ) \\| _ { 2 } ^ { 2 } , } \\end{array}\\tag{7}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/4de4af91691e6d24d0d493283b2daf4ade4ba28004aa45801214084df0b80168.jpg"
+                }
+            },
+            "bbox": [
+                84,
+                808,
+                460,
+                848
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "R ( \\cdot , \\cdot )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "indicates the 3D relative orientation between hand and object."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                869,
+                470,
+                900
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Sampling. At each time-step t, the model "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { T H O I } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "predicts a clean motion, denoted as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { x } } _ { 0 } { = } f ^ { \\mathrm { T H O I } } ( \\mathbf { x } _ { t } , t , c )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and then re-noise "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { x } } _ { 0 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { t - 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "[27]. This procedure is conducted repeatedly, starting from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "t = T"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "t = 1"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                90,
+                893,
+                151
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.3. Hand refinement network"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                161,
+                735,
+                178
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We propose a hand refinement network "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { r e f } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "that considers the contact and penetration between hands and an object generated from Text2HOI "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { T H O I } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in Sec.3.2. The architecture of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { r e f } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is similar to that of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { { \\hat { T H O I } } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ": 1) it employs a Transformer encoder architecture, and 2) it utilizes frame-wise and agent-wise position encoding. The main differences between "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { T H O I } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { r e f } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are that "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { r e f } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "does not involve the diffusion mechanism; it does not receive any conditions as input; and it refines only hand motions. Inputs and outputs. The hand refinement network receives several inputs: Text2HOI's hand output "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { X } } _ { \\mathrm { 0 , h a n d } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ", hand joints "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { J } } _ { \\mathrm { h a n d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", predicted contact map "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { m } } _ { \\mathrm { c o n t a c t } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "deformed object's point cloud "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { P } } _ { \\mathrm { d e f } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "and distance-based attention map "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { m } _ { \\mathrm { a t t } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "The attention map "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { m } _ { \\mathrm { a t t } } = \\exp ( - 5 0 \\times \\mathbf { D } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is defined as [26], where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { D } \\in \\mathbb { R } ^ { J \\times 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "represents the 3D displacement between J hand joints "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { J } } _ { \\mathrm { h a n d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and the nearest object points in "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { P } } _ { \\mathrm { d e f } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "These components, denoted as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { x } } _ { 0 , \\mathrm { h a n d } } , \\hat { \\mathbf { J } } _ { \\mathrm { h a n d } } , \\hat { \\mathbf { m } } _ { \\mathrm { c o n t a c t } } , \\hat { \\mathbf { P } } _ { \\mathrm { d e f } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { m } _ { \\mathrm { a t t } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "are flattened and concatenated to form the hand refiner input. As indicated in Sec. 3.2, these inputs are masked using H*. Then, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { r e f } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "outputs the refined hand motions "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\tilde { \\mathbf { X } } _ { \\mathrm { h a n d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". They are masked using H* for loss calculation and result visualization. Training. The hand refinement network is trained using the loss function "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { r e f i n e } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "as follows:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                188,
+                893,
+                529
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "L _ { \\mathrm { r e f i n e } } ( f ^ { \\mathrm { r e f } } ) { = } L _ { \\mathrm { s i m p l e } } ( f ^ { \\mathrm { r e f } } ) { + } L _ { \\mathrm { p e n e t } } ( f ^ { \\mathrm { r e f } } ) { + } \\lambda _ { 1 } L _ { \\mathrm { c o n t a c t } } ( f ^ { \\mathrm { r e f } } ) ,\\tag{8}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/5d0413b9ba337a9271a207347527b56bab467bb8801968fcb1e39fa0ffb7e149.jpg"
+                }
+            },
+            "bbox": [
+                508,
+                535,
+                864,
+                553
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\lambda _ { 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is set as 5. The simple L2 loss is expressed as follows:"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                558,
+                893,
+                574
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "L _ { \\mathrm { s i m p l e } } ( f ^ { \\mathrm { r e f } } ) { = } \\| \\tilde { \\mathbf { x } } _ { \\mathrm { h a n d } } { - } \\mathbf { x } _ { \\mathrm { h a n d } } \\| _ { 2 } ^ { 2 } ,\\tag{9}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/1471edcaa9dcf7b0d94ff141edc0342ad0ef8c75a3c3a25adf73a13adf873e59.jpg"
+                }
+            },
+            "bbox": [
+                596,
+                583,
+                795,
+                602
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { X } _ { \\mathrm { h a n d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "denotes the ground-truth hand motions. The penetration loss "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { p e n e t } } \\left[ 1 3 \\right]"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is applied only on hand vertices that penetrate the object surfaces as follows:"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                606,
+                892,
+                651
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "L _ { \\mathrm { p e n e t } } ( f ^ { \\mathrm { r e f } } ) { = } \\mathbb { 1 } _ { \\mathrm { l e f t } } { \\cdot } | | d ( \\tilde { v } _ { \\mathrm { l h a n d } } , \\hat { p } _ { \\mathrm { o b j } } ^ { \\mathrm { l e f t } } ) | | ^ { 2 } { + } \\mathbb { 1 } _ { \\mathrm { r i g h t } } { \\cdot } | | d ( \\tilde { v } _ { \\mathrm { r h a n d } } , \\hat { p } _ { \\mathrm { o b j } } ^ { \\mathrm { r i g h t } } ) | | ^ { 2 } ,\\tag{10}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/a9e2d370c2d89cc1e64033e44b349826e7c18b5bb3163f06d3147548c4ab9f53.jpg"
+                }
+            },
+            "bbox": [
+                501,
+                656,
+                887,
+                676
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "d ( \\cdot , \\cdot )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "denotes the Euclidean distance between two points, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\tilde { v } _ { \\mathrm { l h a n d } } \\in \\tilde { \\mathbf { V } } _ { \\mathrm { l h a n d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\tilde { v } _ { \\mathrm { r h a n d } } \\in \\tilde { \\mathbf { V } } _ { \\mathrm { r h a n d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are hand vertices that penetrate the object surface, and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { p } _ { \\mathrm { o b j } } ^ { \\mathrm { l e f t } } \\in \\hat { P } _ { \\mathrm { d e f } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { p } _ { \\mathrm { o b j } } ^ { \\mathrm { r i g h t } } \\in \\hat { P } _ { \\mathrm { d e f } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "denote the object points closest to "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\tilde { v } _ { \\mathrm { l h a n d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\tilde { v } _ { \\mathrm { r h a n d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", respectively. The contact loss "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { { c o n t a c t } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "[13] is applied to the joints that are sufficiently close to the object surface, as follows:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                698,
+                893,
+                789
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "L _ { \\mathrm { c o n t a c t } } ( f ^ { \\mathrm { r e f } } ) { = } \\mathbb { 1 } _ { \\mathrm { l e f t } } { \\cdot } | | d ( \\tilde { j } _ { \\mathrm { l h a n d } } , \\hat { c } _ { \\mathrm { o b j } } ^ { \\mathrm { l e f t } } ) | | ^ { 2 } + \\mathbb { 1 } _ { \\mathrm { r i g h t } } \\cdot | | d ( \\tilde { j } _ { \\mathrm { r h a n d } } , \\hat { c } _ { \\mathrm { o b j } } ^ { \\mathrm { r i g h t } } ) | | ^ { 2 } ,\\tag{11}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/0ba387ca878e922f89709ae01a53dd20c56531158e0c4ece94c75320923aaf44.jpg"
+                }
+            },
+            "bbox": [
+                500,
+                792,
+                890,
+                813
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\tilde { j } _ { \\mathrm { l h a n d } } \\in \\tilde { \\bf J } _ { \\mathrm { l h a n d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\tilde { j } _ { \\mathrm { r h a n d } } \\in \\tilde { \\mathbf { J } } _ { \\mathrm { r h a n d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "represent the hand joints that are within a distance threshold τ from the object surface, respectively. "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { c } _ { \\mathrm { o b j } } ^ { \\mathrm { l e f t } } \\in \\hat { P } _ { \\mathrm { d e f } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { c } _ { \\mathrm { o b j } } ^ { \\mathrm { r i g h t } } \\in \\hat { P } _ { \\mathrm { d e f } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "represent object points closest to "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\tilde { j } _ { \\mathrm { l h a n d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\tilde { j } _ { \\mathrm { r h a n d } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "respectively."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                834,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1581"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                514,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/65cff511d09789a35b7304e4b9de1e36e79cfa80fc211f221ea45951541a7f5a.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 1. Comparison on H2O, GRAB, and ARCTIC datasets. † denotes our produced results. → denotes that the higher value of the metric, the closer to the GT distribution. Best results are emphasized in bold."
+                    }
+                ],
+                "table_footnote": [
+                    {
+                        "type": "text",
+                        "content": "prompts for ARCTIC. The characteristics of three datasets and details of our annotation process are further illustrated in the supplemental material."
+                    }
+                ],
+                "html": "<table><tr><td colspan=\"6\">H2O</td></tr><tr><td>Method</td><td> $\\mathrm { A c c u r a c y } \\left( \\mathrm { t o p } { - } 3 \\right) \\uparrow$ </td><td> $\\mathrm { F I D \\downarrow }$ </td><td> $\\mathrm { D i v e r s i t y } $ </td><td> $\\mathrm { \\Delta M u l t i m o d a l i t y \\uparrow }$ </td><td> $\\mathrm { P h y s i c a l ~ r e a l i s m } \\uparrow$ </td></tr><tr><td>GT</td><td> $\\overline { { 0 . 9 9 2 0 \\pm 0 . 0 0 0 3 } }$ </td><td>–</td><td> $\\overline { { 0 . 6 0 5 7 \\pm 0 . 0 0 5 0 } }$ </td><td> $0 . 2 0 6 7 \\pm 0 . 0 0 2 4$ </td><td> $\\overline { { 0 . 4 7 9 0 \\pm 0 . 0 0 0 2 } }$ </td></tr><tr><td>T2M† [8]</td><td> $\\overline { { 0 . 6 4 6 3 \\pm 0 . 0 0 1 4 } }$ </td><td> $\\overline { { 0 . 3 4 3 9 \\pm 0 . 0 0 0 6 } }$ </td><td> $\\overline { { 0 . 3 4 7 5 \\pm 0 . 0 0 4 0 } }$ </td><td> $\\overline { { 0 . 0 6 3 4 \\pm 0 . 0 0 2 2 } }$ </td><td> $\\overline { { 0 . 3 8 9 0 \\pm 0 . 0 1 6 } }$ </td></tr><tr><td>MDM† [27]</td><td> $0 . 5 8 3 2 \\pm 0 . 0 0 1 1$ </td><td> $0 . 3 0 1 5 \\pm 0 . 0 0 1 1$ </td><td> $0 . 5 1 2 7 \\pm 0 . 0 0 5 4$ </td><td> $0 . 1 7 3 8 \\pm 0 . 0 0 4 9$ </td><td> $0 . 5 5 7 2 \\pm 0 . 0 0 1 3$ </td></tr><tr><td> $\\mathrm { I M O S } ^ { \\dagger } \\left[ 6 \\right]$ </td><td> $0 . 5 5 1 8 \\pm 0 . 0 0 2 6$ </td><td> $0 . 2 9 4 5 \\pm 0 . 0 0 1 1$ </td><td> $0 . 4 0 7 6 \\pm 0 . 0 0 5 6$ </td><td> $0 . 1 7 9 8 \\pm 0 . 0 1 1 5$ </td><td> $0 . 3 5 3 2 \\pm 0 . 0 0 2 6$ </td></tr><tr><td>Ours</td><td> $\\mathbf { 0 . 8 2 9 5 \\pm 0 . 0 0 1 5 }$ </td><td> $\\mathbf { 0 . 1 7 4 4 \\ : \\pm 0 . 0 0 1 3 }$ </td><td> $\\mathbf { 0 . 5 3 6 5 \\pm 0 . 0 0 7 3 }$ </td><td> ${ \\bf 0 . 2 4 6 9 \\pm 0 . 0 0 8 1 }$ </td><td> $\\mathbf { 0 . 7 5 7 4 } \\pm \\mathbf { 0 . 0 0 2 2 }$ </td></tr><tr><td colspan=\"6\"> $\\overline { { \\mathrm { ~ G R A B ~ } } }$ </td></tr><tr><td>GT</td><td> $\\overline { { 0 . 9 9 9 4 \\pm 0 . 0 0 0 1 } }$ </td><td></td><td> $\\overline { { 0 . 8 5 5 7 \\pm 0 . 0 0 5 4 } }$ </td><td> $\\overline { { 0 . 4 3 9 0 \\pm 0 . 0 0 4 5 } }$ </td><td> $\\overline { { 0 . 8 0 8 4 \\pm 0 . 0 0 0 2 } }$ </td></tr><tr><td> $\\overline { { { \\mathrm { ~ \\bf ~ T } 2 { \\bf M } ^ { \\dag } \\left[ 8 \\right] } } }$ </td><td> $\\overline { { 0 . 1 8 9 7 \\pm 0 . 0 0 0 7 } }$ </td><td> $0 . 7 8 8 6 \\pm 0 . 0 0 0 5$ </td><td> $0 . 5 7 1 2 \\pm 0 . 0 0 7 8$ </td><td> $0 . 0 9 6 4 \\pm 0 . 0 0 2 7$ </td><td> $0 . 5 8 4 4 \\pm 0 . 0 0 0 2$ </td></tr><tr><td>MDM† [27]</td><td> $0 . 5 1 2 7 \\pm 0 . 0 0 0 9$ </td><td> $0 . 6 0 2 3 \\pm 0 . 0 0 1 1$ </td><td> $0 . 8 0 1 2 \\pm 0 . 0 0 5 4$ </td><td> $0 . 5 1 9 4 \\pm 0 . 0 1 4 5$ </td><td> $0 . 7 3 8 2 \\pm 0 . 0 0 0 4$ </td></tr><tr><td> $\\mathrm { I M O S } ^ { \\dagger } \\left[ 6 \\right]$ </td><td> $0 . 4 0 9 7 \\pm 0 . 0 0 0 5$ </td><td> $0 . 6 1 4 7 \\pm 0 . 0 0 0 3$ </td><td> $0 . 6 8 6 1 \\pm 0 . 0 0 6 0$ </td><td> $0 . 2 8 4 5 \\pm 0 . 0 0 3 6$ </td><td> $0 . 6 4 1 8 \\pm 0 . 0 0 1 4$ </td></tr><tr><td>Ours</td><td> $\\mathbf { 0 . 9 2 1 8 \\pm 0 . 0 0 1 0 }$ </td><td> $\\mathbf { 0 . 3 0 1 7 \\pm 0 . 0 0 0 4 }$ </td><td> $\\mathbf { 0 . 8 3 5 1 \\pm 0 . 0 0 6 1 }$ </td><td> $\\mathbf { 0 . 5 2 1 6 \\pm 0 . 0 1 3 1 }$ </td><td> $\\mathbf { 0 . 8 8 3 9 \\pm 0 . 0 0 0 5 }$ </td></tr><tr><td colspan=\"6\"></td></tr><tr><td>GT</td><td> $\\overline { { 0 . 9 9 9 7 \\pm 0 . 0 0 0 1 } }$ </td><td></td><td> $\\overline { { \\mathrm { A R C T I C } } }$   $\\overline { { 0 . 5 9 1 6 \\pm 0 . 0 0 3 7 } }$ </td><td> $\\overline { { 0 . 3 2 7 9 \\pm 0 . 0 0 3 8 } }$ </td><td> $\\overline { { 0 . 9 5 7 3 \\pm 0 . 0 0 0 0 } }$ </td></tr><tr><td>T2M† [8]</td><td> $\\overline { { 0 . 5 2 3 4 \\pm 0 . 0 0 1 5 } }$ </td><td> $\\overline { { 0 . 3 5 9 9 \\pm 0 . 0 0 0 5 } }$ </td><td> $\\overline { { 0 . 3 3 0 1 \\pm 0 . 0 0 2 3 } }$ </td><td> $\\overline { { 0 . 0 8 4 9 \\pm 0 . 0 0 1 7 } }$ </td><td> $\\overline { { 0 . 0 1 4 3 \\pm 0 . 0 0 0 1 } }$ </td></tr><tr><td>MDM† [27]</td><td> $0 . 5 5 7 2 \\pm 0 . 0 0 1 2$ </td><td> $0 . 3 0 2 5 \\pm 0 . 0 0 0 6$ </td><td> $0 . 4 9 8 4 \\pm 0 . 0 0 3 9$ </td><td> $0 . 2 6 3 2 \\pm 0 . 0 0 6 5$ </td><td> $0 . 7 0 4 3 \\pm 0 . 0 0 0 9$ </td></tr><tr><td> $\\mathrm { I M O S } ^ { \\dagger } \\left[ 6 \\right]$ </td><td> $0 . 8 1 9 0 \\pm 0 . 0 0 3 9$ </td><td> $0 . 1 8 2 6 \\pm 0 . 0 0 0 5$ </td><td> $0 . 5 7 0 2 \\pm 0 . 0 0 3 9$ </td><td> $0 . 2 7 4 1 \\pm 0 . 0 0 4 9$ </td><td> $0 . 7 5 6 9 \\pm 0 . 0 0 2 3$ </td></tr><tr><td>Ours</td><td> $\\mathbf { 0 . 9 2 0 5 \\pm 0 . 0 0 1 2 }$ </td><td> $\\mathbf { 0 . 1 3 2 9 \\mathop { \\pm } 0 . 0 0 0 6 }$ </td><td> $\\mathbf { 0 . 5 7 5 8 \\pm 0 . 0 0 4 2 }$ </td><td> $\\mathbf { 0 . 3 1 7 0 \\pm 0 . 0 0 6 8 }$ </td><td> $\\mathbf { 0 . 8 7 6 0 \\mathop { \\pm } 0 . 0 0 0 9 }$ </td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                107,
+                118,
+                854,
+                426
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4. Experiments"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                75,
+                439,
+                205,
+                457
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.1. Implementation details"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                75,
+                467,
+                292,
+                483
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We use "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "T = 1 { , } 0 0 0"
+                    },
+                    {
+                        "type": "text",
+                        "content": "noising steps and a cosine noise schedule. We use sinusoidal positional encoding for frame-wise and agent-wise positional encodings. We set the maximum length of motion sequences, denoted as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { m a x } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to 150 frames. Further details about network architecture can be found in the supplemental material."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                494,
+                472,
+                585
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Hand-type selection. We use the CLIP text encoder [23] "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { C L I P } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to calculate cosine similarity between the input text prompt T and predefined prompt templates Γ(H)=“A photo of H\", where H ∈ {left hand, right hand, both hands}. The hand type H* with the highest cosine similarity to T is selected for masking in the Transformer's inputs, outputs, and losses (see Secs. 3.2, 3.3 and supplemental material.)."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                587,
+                470,
+                694
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Motion length prediction. To obtain proper motion length "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\begin{array} { r } { \\hat { L } \\le L _ { \\operatorname* { m a x } } . } \\end{array}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "we design a motion-length prediction network "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { L e n g t h } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "It receives the text feature vector "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { C L I P } } ( \\mathbf { T } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and Gaussian random noise "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { n } \\in \\mathbb { R } ^ { 6 4 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", to predict the appropriate motion length Î for the text prompt T. To train "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { f } ^ { \\mathrm { L e n g i h } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", we use the loss function "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { l e n g t h } } = \\lVert \\hat { L } - L \\rVert ^ { 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", where L is ground truth."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                696,
+                472,
+                790
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.2. Dataset"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                813,
+                174,
+                829
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We use H2O [16], GRAB [25], and ARCTIC [5] in our experiment, which collects hand-object mesh sequences. We automatically generate text prompts by exploiting action labels for H2O and GRAB datasets; while we manually label text"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                838,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.3. Evaluation metrics and baselines"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                498,
+                507,
+                789,
+                523
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Evaluation metrics. We use the metrics of accuracy, frechet inception distance (FID), diversity, and multi-modality, as used in IMOS [6]. The accuracy serves as an indicator of how well the model generates motions and is evaluated by the pre-trained action classifier. We train a standard RNN-based action classifier to extract motion features and classify the action from the motions, as in IMOS [6]. The FID quantifies feature-space distances between real and generated motions, capturing the dissimilarity. The diversity reflects the range of distinct motions and multi-modality measures the average variance of motions for an individual text prompt. To assess the physical realism of generated hand-object motions, we employ a physical model following the approach in ManipNet [29], assigning a realism score of 0 (unreal) or 1 (real) for measuring the realism of each frame. Experiments are conducted 20 times to establish the robustness, and we reported results within a 95% confidence interval."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                534,
+                895,
+                777
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Baselines. We compare our approach with three existing textto-human motion generation methods: T2M [8], MDM [27] and IMOS [6]. T2M [8] employs a temporal VAE-based architecture and MDM [27] utilizes a diffusion model. IMOS [6] is designed to first generate human body and arm motions conditioned on both action labels and past body motions. It then optimizes object rotation and translation based on their history to generate body and arm motion. Since they were approaches. The similarity of our distribution to the ground truth (GT) distribution in terms of Diversity, along with our highest scores in Multimodality and Accuracy, demonstrates our model's capability to generate motions that are both diverse and accurate, and are well-aligned with text prompts. We compare our qualitative results with other baselines in Fig. 4. It shows that our method, compared to others, outperforms in generating motions where hand and object interact realistically, and these motions align closely with text prompts \"Use a hammer with the right hand.\". The right hand well grabs the hammer and mimics the motion of driving something into a wall"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                779,
+                897,
+                902
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1582"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/90a4e9e136d38addcce3da248aa5de3bcd6da3d657b266866a2b2561c842fe8b.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 2. Ablation study on the positional encoding, losses, and conditions for Ours w/o "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { r e f } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and ablation study on losses for "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathrm {  ~ \\Omega ~ } ^ { \\circ } \\mathrm { \\mathrm { u r s } } ^ { \\mathrm { \\Theta } } ."
+                    }
+                ],
+                "table_footnote": [
+                    {
+                        "type": "text",
+                        "content": "\"Use a hammer with the right hand.\""
+                    }
+                ],
+                "html": "<table><tr><td rowspan=\"2\">Method</td><td rowspan=\"2\"> $f ^ { \\mathrm { r e f } }$ </td><td colspan=\"5\"> $\\overline { { \\mathrm { ~ G R A B ~ } } }$ </td></tr><tr><td> $\\mathrm { A c c u r a c y } \\left( \\mathrm { t o p } { - } 3 \\right) \\uparrow$ </td><td>FID↓</td><td> $\\mathrm { D i v e r s i t y } $ </td><td>Multimodality ↑ Physical realism ↑</td><td></td></tr><tr><td>GT</td><td></td><td> $\\overline { { 0 . 9 9 9 4 \\pm 0 . 0 0 0 1 } }$ </td><td></td><td> $\\overline { { 0 . 8 5 5 7 \\pm 0 . 0 0 5 4 } }$ </td><td> $\\overline { { 0 . 4 3 9 0 \\pm 0 . 0 0 4 5 } }$ </td><td> $\\overline { { 0 . 8 0 8 4 \\pm 0 . 0 0 0 2 } }$ </td></tr><tr><td>w/o frame-wise &amp; agent-wise PE</td><td>X</td><td> $\\overline { { 0 . 8 2 9 4 \\pm 0 . 0 0 1 6 } }$ </td><td> $\\overline { { 0 . 3 4 6 1 \\pm 0 . 0 0 1 8 } }$ </td><td> $\\overline { { 0 . 7 8 1 4 \\pm 0 . 0 6 3 } }$ </td><td> $\\overline { { 0 . 4 7 7 6 \\pm 0 . 0 1 9 4 } }$ </td><td> $\\overline { { 0 . 8 0 2 4 \\pm 0 . 0 0 0 7 } }$ </td></tr><tr><td>w/o agent-wise PE</td><td>x</td><td> $0 . 8 3 1 4 \\pm 0 . 0 0 1 2$ </td><td> $0 . 3 4 1 2 \\pm 0 . 0 0 0 6$ </td><td> $0 . 8 0 1 1 \\pm 0 . 0 6 7$ </td><td> $0 . 4 7 5 5 \\pm 0 . 0 1 2 2$ </td><td> $0 . 8 2 2 1 \\pm 0 . 0 0 0 9$ </td></tr><tr><td> $\\overline { { \\mathrm { \\Delta w } / \\mathrm { o } \\ L _ { \\mathrm { d m } } \\ \\& \\ L _ { \\mathrm { r o } } } }$ </td><td>x</td><td> $\\overline { { 0 . 8 2 8 9 \\pm 0 . 0 0 3 8 } }$ </td><td> $\\overline { { 0 . 3 4 1 6 \\pm 0 . 0 0 2 0 } }$ </td><td> $\\overline { { 0 . 7 8 8 7 \\pm 0 . 0 6 4 0 } }$ </td><td> $\\overline { { 0 . 4 6 5 4 \\pm 0 . 0 1 5 0 } }$ </td><td> $\\overline { { 0 . 7 4 9 0 \\pm 0 . 0 0 0 6 } }$ </td></tr><tr><td> $\\mathrm { w } / \\mathrm { o } \\ L _ { \\mathrm { r o } }$ </td><td>x</td><td> $0 . 8 2 7 2 \\pm 0 . 0 0 2 0$ </td><td> $0 . 3 4 0 7 \\pm 0 . 0 0 1 5$ </td><td> $0 . 7 9 9 7 \\pm 0 . 0 0 7 9$ </td><td> $0 . 4 6 2 7 \\pm 0 . 0 1 0 4$ </td><td> $0 . 8 2 4 7 \\pm 0 . 0 0 1 1$ </td></tr><tr><td>w/o  $L _ { \\mathrm { d m } }$ </td><td>x</td><td> $0 . 8 2 0 2 \\pm 0 . 0 0 1 7$ </td><td> $0 . 3 4 4 4 \\pm 0 . 0 0 0 7$ </td><td> $\\mathbf { 0 . 8 1 5 6 \\pm 0 . 0 0 7 0 }$ </td><td> $0 . 4 8 1 9 \\pm 0 . 0 1 2 5$ </td><td> $0 . 6 4 1 0 \\pm 0 . 0 0 1 0$ </td></tr><tr><td> $\\mathrm { w } / \\mathrm { o } \\hat { \\mathbf { m } } _ { \\mathrm { c o n t a c t } } \\& s _ { \\mathrm { o b j } }$ </td><td>X</td><td> $\\overline { { 0 . 8 1 9 7 \\pm 0 . 0 0 0 9 } }$ </td><td> $\\overline { { 0 . 3 4 2 8 \\pm 0 . 0 0 1 2 } }$ </td><td> $\\overline { { 0 . 7 9 9 4 \\pm 0 . 0 0 5 5 } }$ </td><td> $\\overline { { 0 . 4 3 0 5 \\pm 0 . 0 1 2 1 } }$ </td><td> $0 . 7 8 1 5 \\pm 0 . 0 0 0 6$ </td></tr><tr><td> $\\mathrm { w } / \\mathrm { o } \\ s _ { \\mathrm { o b j } }$ </td><td>x</td><td> $0 . 8 2 7 4 \\pm 0 . 0 0 1 3$ </td><td> $0 . 3 4 1 3 \\pm 0 . 0 0 1 0$ </td><td> $0 . 7 9 6 3 \\pm 0 . 0 0 5 4$ </td><td> $0 . 4 4 0 5 \\pm 0 . 0 1 3 9$ </td><td> $0 . 8 0 1 8 \\pm 0 . 0 0 0 5$ </td></tr><tr><td> $\\mathrm { w } / \\mathrm { o } \\hat { \\mathbf { m } } _ { \\mathrm { c o n t a c t } }$ </td><td>x</td><td> $0 . 8 2 7 7 \\pm 0 . 0 0 2 7$ </td><td> $0 . 3 4 1 1 \\pm 0 . 0 0 0 6$ </td><td> $0 . 8 0 1 2 \\pm 0 . 0 0 6 7$ </td><td> $0 . 4 4 5 5 \\pm 0 . 0 1 1 5$ </td><td> $0 . 7 8 9 2 \\pm 0 . 0 0 0 9$ </td></tr><tr><td> $\\overline { { \\mathrm { \\mathrm { ~ O u r s ~ w } } / \\mathrm { 0 ~ } f ^ { \\mathrm { r e f } } } }$ </td><td>x</td><td> $\\mathbf { 0 . 8 4 1 1 \\pm 0 . 0 0 0 9 }$ </td><td> $\\mathbf { \\overline { { 0 . 3 3 2 1 \\pm 0 . 0 0 0 6 } } }$ </td><td> $\\overline { { 0 . 8 1 4 3 \\pm 0 . 0 0 5 0 } }$ </td><td> $\\mathbf { \\overline { { 0 . 4 9 8 9 \\pm 0 . 0 1 5 4 } } }$ </td><td> $\\mathbf { \\overline { { 0 . 8 3 1 2 \\pm 0 . 0 0 0 5 } } }$ </td></tr><tr><td>w/o  $\\overline { { L _ { \\mathrm { p e n e t } } \\& L _ { \\mathrm { c o n t a c t } } } }$ </td><td>√</td><td> $\\overline { { 0 . 8 8 3 8 \\pm 0 . 0 0 1 4 } }$ </td><td> $\\overline { { 0 . 3 2 3 4 \\pm 0 . 0 0 0 7 } }$ </td><td> $\\overline { { 0 . 8 2 7 7 \\pm 0 . 0 0 6 8 } }$ </td><td> $\\overline { { 0 . 5 1 1 1 \\pm 0 . 0 1 4 } }$ </td><td> $\\overline { { 0 . 6 2 4 9 \\pm 0 . 0 0 0 8 } }$ </td></tr><tr><td>w/o  $L _ { \\mathrm { { c o n t a c t } } }$ </td><td>√</td><td> $0 . 8 8 2 7 \\pm 0 . 0 0 0 8$ </td><td> $0 . 3 1 1 4 \\pm 0 . 0 0 1 3$ </td><td> $0 . 8 3 0 1 \\pm 0 . 0 0 4 8$ </td><td> $0 . 4 8 0 8 \\pm 0 . 0 1 5 1$ </td><td> $0 . 1 4 6 7 \\pm 0 . 0 0 0 5$ </td></tr><tr><td>w/o  $L _ { \\mathrm { p e n e t } }$ </td><td>√</td><td> $0 . 8 9 4 1 \\pm 0 . 0 0 0 9$ </td><td> $0 . 3 0 2 4 \\pm 0 . 0 0 0 5$ </td><td> $0 . 8 2 6 7 \\pm 0 . 0 0 6 1$ </td><td> $0 . 5 1 8 2 \\pm 0 . 0 0 9 9$ </td><td> $0 . 8 7 8 2 \\pm 0 . 0 0 0 6$ </td></tr><tr><td>Ours</td><td>√</td><td> $\\mathbf { \\overline { { 0 . 9 2 1 8 \\pm 0 . 0 0 1 0 } } }$ </td><td> $\\mathbf { 0 . 3 0 1 7 \\pm 0 . 0 0 0 4 }$ </td><td> $\\mathbf { \\overline { { 0 . 8 3 5 1 } } } \\pm \\mathbf { 0 . 0 0 6 1 }$ </td><td> $\\overline { { { \\bf 0 . 5 2 1 6 \\pm 0 . 0 1 3 1 } } }$ </td><td> $\\mathbf { \\overline { { 0 . 8 8 3 9 \\pm 0 . 0 0 0 5 } } }$ </td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                81,
+                107,
+                893,
+                328
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/6063468d1003d04ce9e755f0c9a57da14a0a8d173d859ed749049cd23aa331a5.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 4. We compare our generated hand-object motions with other baselines' results. Each row show the results of Text2Motion [8], MDM [27], IMOS [6], and ours."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                86,
+                361,
+                457,
+                640
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                343,
+                893,
+                510
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Qualitative results are shown in Fig. 5. Our method generates realistic hand-object motions that are closely aligned with the input text prompts, effectively handling even unseen objects. Please refer to the supplemental material for more visualizations including video results, and text-guided and scale-variant contact maps."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                512,
+                895,
+                604
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "originally designed for generating individual human motions from text prompts, to ensure a fair comparison, we re-train the methods using hand-object motion data, allowing them to generate hand-object motions from text prompts."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                694,
+                470,
+                757
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.5. Ablation study"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                625,
+                651,
+                641
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We conduct several ablation studies on GRAB dataset, to validate the effectiveness of our modules. The results are demonstrated in Tab. 2."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                651,
+                893,
+                698
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.4. Experimental results"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                767,
+                274,
+                784
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Comparison to other methods. We compare our method with other state-of-the-art methods (i.e., T2M [8], MDM [27], and IMOS [6]), as shown in Tab. 1. For all datasets, our method outperforms other baselines in multiple measures. Particularly, our method demonstrates exceptional performance in generating physically realistic hand-object motions, as evidenced by achieving the highest score in Physical realism compared to other"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                794,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Position encoding. We introduce two types of positional encodings: frame-wise and agent-wise, which assists the Transformer to interpret inputs in a more distinct way. Seeing the results ‘w/o frame-wise & agent-wise PE’ and w/o agent-wise PE', we can conclude that by leveraging the specialized positional encoding, fTHol is capable of generating more realistic hand-object motions."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                700,
+                893,
+                808
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Losses. We remove the distance map loss "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { d m } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and relative orientation loss "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { r o } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in our approach, and see how the performance changes: Seeing w/o "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { d m } } \\& L _ { \\mathrm { r o } } ^ { \\phantom { \\dagger } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", 'w/o "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { d m } } \\ '"
+                    },
+                    {
+                        "type": "text",
+                        "content": "andw/o "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ L _ { \\mathrm { r o } } } ^ { \\mathrm { , } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", we can conclude that these losses induce better results by facilitating model's understanding of 3D relationship between hands and an object."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                809,
+                895,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1583"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/5704726693a5822707b2f70fb9187ededfce60435f87c0f54cc7a86a79d69d8a.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                736,
+                224,
+                857,
+                309
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "\"Fly an airplane with the right hand.\""
+                    }
+                ]
+            },
+            "bbox": [
+                102,
+                90,
+                369,
+                102
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/f414c382b5ed5ef9d5b082cc31fe716d62cb1646ecd0f742e0b3e448297d5677.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": [
+                    {
+                        "type": "text",
+                        "content": "\"Close a microwave with both hands.\""
+                    },
+                    {
+                        "type": "text",
+                        "content": "\"Pour milk in round bottle with the right hand.\" (Unseenobject)"
+                    }
+                ]
+            },
+            "bbox": [
+                89,
+                109,
+                843,
+                198
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/e48e853b5b8408081255be0641e02c6c5390c574138c686507813bd67843aff7.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": [
+                    {
+                        "type": "text",
+                        "content": "\"Grab a teddy bear with the left hand.\" (Unseenobject)"
+                    }
+                ]
+            },
+            "bbox": [
+                101,
+                329,
+                823,
+                405
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/d88f09e77cb5804a6fc5c96ad067dfb5968908502ccfb8833b92daf40b60adcd.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 5. We demonstrate the generated hand-object motions and the predicted contact map results. The first and second rows show the results with objects seen during training. The third and fourth rows show the results with objects unseen during training."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                96,
+                434,
+                852,
+                556
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Condition inputs. We remove the contact map "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { m } } _ { \\mathrm { c o n t a c t } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and scale of the object "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { \\mathrm { o b j } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "conditions from the original pipeline, and see how the performance changes. Seeing "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { \\hat { w } } / 0 \\hat { \\mathbf { m } } _ { \\mathrm { c o n t a c t } } \\& s _ { \\mathrm { o b j } } ^ { * }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "'w/o "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { \\mathrm { o b j } } \\rrangle"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathrm { { \\bf \\hat { w } } / o \\hat { \\ m } _ { c o n t a c t } } ;"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", we can observe that gradually including additional conditions aids in generating more appropriate hand poses to the object."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                603,
+                470,
+                693
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Refiner. Compared to the Ours w/o "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f ^ { \\mathrm { r e f i n e r } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "that does not involve the refiner, Ours' provides far better performance, especially in the physical realism of hand and object motions. Also, we demonstrate the effect of losses "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { p e n e t } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { { c o n t a c t } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by removing them in ‘w/o "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { p e n e t } } \\& L _ { \\mathrm { c o n t a c t } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", 'w/o "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { { c o n t a c t } } } { \\mathrm { , } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and 'w/o "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\scriptstyle L _ { \\mathrm { p e n e t } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", as shown in the same table. Involving more losses consistently improve the performance."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                695,
+                472,
+                804
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5. Conclusion"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                825,
+                191,
+                842
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In this paper, we propose a novel method for generating the sequence of 3D hand-object interaction from a text prompt and a canonical object mesh. This is achieved through the three-staged framework that 1) estimates the text-guided and scale-variant contact maps; 2) generates hand-object motions based on a Transformer-based diffusion mechanism; and 3) refines the interaction by considering the penetration and contacts between hands and an object. In experiments, we validate our effectiveness of hand-object interaction generation by comparing it to three baselines where our method outperforms previous methods with strong physical plausibility and accuracy."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                856,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                602,
+                895,
+                724
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Acknowledgements. This work was supported by IITP grants (No. 2020-0-01336 Artificial intelligence graduate school program (UNIST) 10%; No. 2021-0-02068 AI innovation hub 10%; No. 2022-0-00264 Comprehensive video understanding and generation with knowledge-based deep logic neural network 20%) and the NRF grant (No. RS-2023-00252630 20%), all funded by the Korean government (MSIT). This work was also supported by Korea Institute of Marine Science & Technology Promotion (KIMST) funded by Ministry of Oceans and Fisheries (RS-2022-KS221674) 20% and received support from AI Center, CJ Corporation (20%)."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                727,
+                895,
+                893
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1584"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "References"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                78,
+                89,
+                169,
+                106
+            ]
+        },
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[1] Samarth Brahmbhatt, Cusuh Ham, Charles C Kemp, and James Hays. Contactdb: Analyzing and predicting grasp contact via thermal imaging. In CVPR, 2019. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[2] Samarth Brahmbhatt, Ankur Handa, James Hays, and Dieter Fox. Contactgrasp: Functional multi-finger grasp synthesis from contact. In IROS, 2019. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[3] Xin Chen, Biao Jiang, Wen Liu, Zilong Huang, Bin Fu, Tao Chen, and Gang Yu. Executing your commands via motion diffusion in latent space. In CVPR, 2023. 1, 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[4] Enric Corona, Albert Pumarola, Guillem Alenya, Francesc Moreno-Noguer, and Grégory Rogez. Ganhand: Predicting human grasp affordances in multi-object scenes. In CVPR, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[5] Zicong Fan, Omid Taheri, Dimitrios Tzionas, Muhammed Kocabas, Manuel Kaufmann, Michael J Black, and Otmar Hilliges. Arctic: A dataset for dexterous bimanual hand-object manipulation. In CVPR, 2023. 2, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[6] Anindita Ghosh, Rishabh Dabral, Vladislav Golyanik, Christian Theobalt, and Philipp Slusallek. Imos: Intent-driven full-body motion synthesis for human-object interactions. In Computer Graphics Forum, 2023. 2, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[7] Patrick Grady, Chengcheng Tang, Christopher D Twigg, Minh Vo, Samarth Brahmbhatt, and Charles C Kemp. Contactopt: Optimizing contact to improve grasps. In CVPR, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[8] Chuan Guo, Shihao Zou, Xinxin Zuo, Sen Wang, Wei Ji, Xingyu Li, and Li Cheng. Generating diverse and natural 3d human motions from text. In CVPR, 2022. 1, 2, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[9] Chuan Guo, Xinxin Zuo, Sen Wang, and Li Cheng. Tm2t: Stochastic and tokenized modeling for the reciprocal generation of 3d human motions and texts. In ECCV, 2022. 1, 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[10] Shreyas Hampali, Mahdi Rad, Markus Oberweger, and Vincent Lepetit. Honnotate: A method for 3d annotation of hand and object poses. In CVPR, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[11] Jonathan Ho, Ajay Jain, and Pieter Abbeel. Denoising diffusion probabilistic models. NIPS, 2020. 2, 3, 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[12] Biao Jiang, Xin Chen, Wen Liu, Jingyi Yu, Gang Yu, and Tao Chen. Motiongpt: Human motion as a foreign language. arXiv preprint arXiv:2306.14795, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[13] Hanwen Jiang, Shaowei Liu, Jiashun Wang, and Xiaolong Wang. Hand-object contact consistency reasoning for human grasps generation. In ICCV, 2021. 2, 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[14] Korrawe Karunratanakul, Jinlong Yang, Yan Zhang, Michael J Black, Krikamol Muandet, and Siyu Tang. Grasping field: Learning implicit representations for human grasps. In 2020 International Conference on 3D Vision (3DV), 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[15] Jihoon Kim, Jiseob Kim, and Sungjoon Choi. Flame: Free-form language-based motion synthesis & editing. In AAAI, 2023. 1, 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[16] Taein Kwon, Bugra Tekin, Jan Stühmer, Federica Bogo, and Marc Pollefeys. H2o: Two hands manipulating objects for first person interaction recognition. In ICCV, 2021. 2, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[17] Taeryung Lee, Gyeongsik Moon, and Kyoung Mu Lee. Multiact: Long-term 3d human motion generation from multiple action labels. In AAAI, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[18] Haoming Li, Xinzhuo Lin, Yang Zhou, Xiang Li, Yuchi Huo, Jiming Chen, and Qi Ye. Contact2grasp: 3d grasp synthesis via hand-object contact constraint. arXiv preprint arXiv:2210.09245, 2022.2,3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[19] Han Liang, Wenqian Zhang, Wenxuan Li, Jingyi Yu, and Lan Xu. Intergen: Diffusion-based multi-human motion generation under complex interactions. arXiv preprint arXiv:2304.05684, 2023.2,5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[20] Arsalan Mousavian, Clemens Eppner, and Dieter Fox. 6-dof graspnet: Variational grasp generation for object manipulation. In ICCV, 2019. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[21] Mathis Petrovich, Michael J Black, and Gül Varol. Temos: Generating diverse human motions from textual descriptions. In ECCV, 2022. 1, 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[22] Charles R Qi, Hao Su, Kaichun Mo, and Leonidas J Guibas. Pointnet: Deep learning on point sets for 3d classification and segmentation. In CVPR, 2017. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[23] Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, et al. Learning transferable visual models from natural language supervision. In ICML, 2021. 3, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[24] Javier Romero, Dimitrios Tzionas, and Michael J Black. Embodied hands: modeling and capturing hands and bodies together. ACM Transactions on Graphics (TOG), 2017. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[25] Omid Taheri, Nima Ghorbani, Michael J Black, and Dimitrios Tzionas. Grab: A dataset of whole-body human grasping of objects. In ECCV, 2020. 2, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[26] Omid Taheri, Yi Zhou, Dimitrios Tzionas, Yang Zhou, Duygu Ceylan, Soren Pirk, and Michael J Black. Grip: Generating interaction poses using latent consistency and spatial cues. arXiv preprint arXiv:2308.11617, 2023.5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[27] Guy Tevet, Sigal Raab, Brian Gordon, Yoni Shafir, Daniel Cohen-or, and Amit Haim Bermano. Human motion diffusion model. In ICLR, 2023. 1, 2, 4, 5, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[28] Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N Gomez, Łukasz Kaiser, and Illia Polosukhin. Attention is all you need. NIPS, 2017. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[29] He Zhang, Yuting Ye, Takaaki Shiratori, and Taku Komura. Manipnet: neural manipulation synthesis with a hand-object spatial representation. ACM Transactions on Graphics (ToG), 2021.2,3,6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[30] Jianrong Zhang, Yangsong Zhang, Xiaodong Cun, Yong Zhang, Hongwei Zhao, Hongtao Lu, Xi Shen, and Ying Shan. Generating human motion from textual descriptions with discrete representations. In CVPR, 2023. 1, 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[31] Mingyuan Zhang, Zhongang Cai, Liang Pan, Fangzhou Hong, Xinying Guo, Lei Yang, and Ziwei Liu. Motiondiffuse: Text-driven human motion generation with diffusion model. arXiv preprint arXiv:2208.15001, 2022. 1,2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[32] Juntian Zheng, Qingyuan Zheng, Lixing Fang, Yun Liu, and Li Yi. Cams: Canonicalized manipulation spaces for category-level functional hand-object manipulation synthesis. In CVPR, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[33] Chongyang Zhong, Lei Hu, Zihao Zhang, and Shihong Xia. Attt2m: Text-driven human motion generation with multi-perspective attention mechanism. In ICCV, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[34] Keyang Zhou, Bharat Lal Bhatnagar, Jan Eric Lenssen, and Gerard Pons-Moll. Toch: Spatio-temporal object-to-hand correspondence for motion refinement. In ECCV, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[35] Yi Zhou, Connelly Barnes, Jingwan Lu, Jimei Yang, and Hao Li. On the continuity of rotation representations in neural networks. In CVPR, 2019. 3"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                84,
+                114,
+                468,
+                156
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1585"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ]
+]
