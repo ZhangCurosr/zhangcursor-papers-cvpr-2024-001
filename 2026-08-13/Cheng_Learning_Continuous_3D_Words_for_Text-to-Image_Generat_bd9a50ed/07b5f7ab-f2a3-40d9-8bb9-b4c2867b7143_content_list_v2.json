@@ -1,0 +1,2257 @@
+[
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "Learning Continuous 3D Words for Text-to-Image Generation"
+                    }
+                ],
+                "level": 1
+            },
+            "bbox": [
+                169,
+                130,
+                799,
+                152
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Ta-Ying Cheng<sup>1</sup>* Matheus Gadelha<sup>2</sup> Thibault Groueix<sup>2</sup> Matthew Fisher<sup>2</sup> Radom´ır Mech ˘ <sup>2</sup> Andrew Markham<sup>1</sup> Niki Trigoni<sup>1</sup>"
+                    }
+                ]
+            },
+            "bbox": [
+                186,
+                189,
+                784,
+                232
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "<sup>1</sup>University of Oxford <sup>2</sup>Adobe Research"
+                    }
+                ]
+            },
+            "bbox": [
+                318,
+                243,
+                648,
+                261
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/ae138b0376291aabc30c9b8bb106a6729f81592d627331cc92cc4aa4444ed41c.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 1. We introduce Continuous 3D Words – special tokens in text-to-image models that allow users to have fine-grained control over several attributes like illumination [ ] (a and c), non-rigid shape change [ ] (d), orientation [ ] (c and d), and camera parameters [ ] (b). Our approach can be trained using a single 3D mesh and a rendering engine while incurring into negligible runtime and memory costs."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                81,
+                305,
+                890,
+                628
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "Abstract"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                233,
+                702,
+                315,
+                718
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Current controls over diffusion models (e.g., through text or ControlNet) for image generation fall short in recognizing abstract, continuous attributes like illumination direction or non-rigid shape change. In this paper, we present an approach for allowing users of text-to-image models to have fine-grained control of several attributes in an image. We do this by engineering special sets of input tokens that can be transformed in a continuous manner – we call them Continuous 3D Words. These attributes can, for example, be represented as sliders and applied jointly with text promptsforfine-grained control over image"
+                    }
+                ]
+            },
+            "bbox": [
+                73,
+                733,
+                472,
+                902
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "generation. Given only a single mesh and a rendering engine, we show that our approach can be adopted to provide continuous user control over several 3D-aware attributes, including time-of-day illumination, bird wing orientation, dollyzoom effect, and object poses. Our method is capable of conditioning image creation with multiple Continuous 3D Words and text descriptions simultaneously while adding no overhead to the generative process. Project Page: https://ttchengab.github.io/continuous 3d words"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                704,
+                897,
+                840
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": []
+            },
+            "bbox": [
+                104,
+                2,
+                181,
+                41
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": [
+                    {
+                        "type": "text",
+                        "content": "This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore."
+                    }
+                ]
+            },
+            "bbox": [
+                235,
+                1,
+                810,
+                46
+            ]
+        },
+        {
+            "type": "page_footnote",
+            "content": {
+                "page_footnote_content": [
+                    {
+                        "type": "text",
+                        "content": "Work was done during internship at Adobe Research."
+                    }
+                ]
+            },
+            "bbox": [
+                522,
+                886,
+                813,
+                900
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6753"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "1. Introduction"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                90,
+                209,
+                106
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Photography is fascinating because it enables very detailed control over the composition and aesthetics of the final image. On the one hand, this is simply the result of application of physical laws to achieve image acquisition. On the other, the slightest changes in the moment captured, illumination, object orientation, or camera parameters bring a completely different feeling to the viewer. While the giant leap of modern text-to-image diffusion can bring generated 2-D images to close proximity with real photos, text prompts are inherently limited to high-level descriptions, far removed from the detailed controls one has over actual photography. This is mainly due to the scarcity of such descriptions in the training dataset — very few would describe a photo based on exact object movements and camera parameters like the wing pose of a bird or the rotation of a person’s head in degrees. On the other hand, 3D rendering engines allow us to mimic many of these 3D controls that photographers enjoy. We can render images of objects with predefined camera, illumination and pose changes at a very fine-grained scale. However, creating detailed 3D worlds is incredibly laborious, which limits the diversity of the scenes that can be generated by non-specialized practitioners. In that regard, using text-toimage diffusion to create images is a much more accessible technology, whereas precise 3D scene control remains firmly in the domain of experts."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                114,
+                472,
+                493
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In this work, we aim to bring together the best of two worlds by expanding the vocabulary of text-to-image diffu sion models with very few samples generated from rendering engines. Specifically, we render meshes based on the attribute we aim to control, creating images with color and other useful information to generate a small set of data samples. The goal is to disentangle these abstract attributes from the original object and encode them into the textual space in a controllable manner – we term these attributes Continuous 3D Words. They allow users to create custom sliders that enable fine-grained control during image generation and can be seamlessly used along text prompts."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                492,
+                472,
+                674
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "At the heart of our approach is an algorithm to learn a continuous vocabulary. The benefits of continuity are twofold: i) the association between different values of the same attribute makes it much easier to learn, rather than having to learn hundreds of discrete tokens as an approximation and ii) we learn an MLP that would allow interpolation during inference to generate an actual continuous control. On top of this, we also propose two training strategies to prevent degenerate solutions and enable generalization on new objects beyond the training category. First, we apply a two-stage training strategy: we first apply the Dreambooth [25] approach to learn the object identity of the underlying mesh used for rendering, then sequentially learn the various attribute val ues disentangled from the object identity. This prevents the model from falling into a degenerate solution of encoding each value of an attribute as a new object, which would prevent us from generalizing the attribute to new objects. Second, we apply ControlNet [30] with various conditioned images to generate a set of additional images with varying backgrounds and object textures. This prevents the model from overfitting to the artificial backgrounds of rendered images. The entire training was done in a light-weight Lower Rank Adaptation (LoRA) [14] manner, making it fast and accessible with single GPUs."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                674,
+                472,
+                902
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                92,
+                895,
+                227
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We implement our continuous vocabulary and training method, across various sets of single (e.g., dollyzoom extracted from chairs) and multiple (e.g., object pose and illumination extracted from a dog mesh) attributes, and show through quantitative user studies and qualitative comparisons that our method can properly reflect various attributes while maintaining the aesthetics of the image — significantly outperforming competitive baselines."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                227,
+                895,
+                348
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In summary, we present 1) Continuous 3D Words, a new method of gaining 3D-aware, continuous attribute controls over text-to-image generation that can be easily tailored to a plethora of new conditions, 2) a series of training strategies to disentangle the attributes from object identity to enhance the improvements in image generation and 3) extensive qualitative and quantitative studies to showcase our approach in various interesting applications."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                348,
+                895,
+                470
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2. Related Work"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                482,
+                642,
+                498
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Conditional Diffusion Models. Ever since diffusion models [13, 27] pushed the quality and generalizability of image generation beyond GANs [10], the vision community has introduced a diverse range of modalities that can be used as conditions to control the image generation process. The most common condition is currently text. Works such as DALLE [2, 22, 23] and Imagen [26] used large scale textimage datasets and strong language understandings from pretrained LLMs [4, 8, 21] to guide the generation process. Stable Diffusion further popularized this class of methods by employing memory efficient models through latent-space diffusion [24]. Other works built on top of these models by adding other forms of conditioning [19, 30]. Highly relevant to our work is ControlNet [30], which proposes a general pipeline with zero-convolutions for conditioning on text and image data (e.g., depth maps, canny maps, sketches). Despite their impressive image quality, it is not clear how to use these models to control other attributes of images like illumination or object orientation."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                507,
+                895,
+                795
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Other set of works explored how to perform image edits using textual instructions. Given a text-generated image, they demonstrate how the user can edit the image by amending the prompt, yet still preserve some aspects of the original image [3, 12, 20]. While convenient, these approaches do not allow fine-grained control over image elements since they are ultimately restricted by the user’s ability to describe visual content through text – e.g., it would be very difficult to change the illumination direction by a precise angle such as 11\u0000."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                795,
+                895,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6754"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/53d50d09e4725f499a34c698915dfce1f9ed521eaab61dbf6cb179b20090b296.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 2. Method Overview. Finetuning: Our finetuning is divided into two stages. In the first stage, we render a series of images using different attribute values (e.g., illumination and pose). We feed them into the text-to-image diffusion model to learn token embedding [Obj] representing the single mesh used for training. In the second stage, we add the tokens representing individual attributes into the prompt embedding. The two stage training allows us to better disentangle the individual attributes against [Obj]. Inference: Attributes can be applied to different objects for text-to-image generation."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                81,
+                90,
+                887,
+                388
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/5f4efaa73679f15acec5ff3ef60e721827980dcf2d60ecc18487e419ab4906fd.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 3. ControlNet Augmentations. Depth ControlNet is used for attributes creating direct shape changes. Lineart ControlNet is applied for more subtle changes that cannot be reflected by depths (e.g., illumination)."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                81,
+                497,
+                465,
+                648
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                748,
+                470,
+                792
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Recently, as the amount of 3D data available significantly increased, Liu et al. [16] introduced Zero-1-to-3, a diffu sion model trained on various viewpoints of 3D rendering that enables viewpoint editing given an image of a single object. Similarly, works like DreamSparse [29] also employ diffusion models to synthesize novel views on open-set categories. Differently from our approach, these techniques are focused only on object orientation and rely on vast 3D shape datasets. On the other hand, we investigate how to learn several continuous concepts (e.g. illumination [ ] , wing pose [ ] , dolly zoom [ ] ) that can be directly used in text-to-image scenarios; i.e. we don’t generate an image to then change the orientation or illumination later, but instead we use Continuous Words directly on text prompts."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                795,
+                472,
+                902
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                498,
+                501,
+                893,
+                609
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Learning new concepts on diffusion models. With diffusion models being trained on unforeseen quantities in images and texts, a stream of work focused on adding specific concepts with very few data samples. For example, given a small set of images representing one particular object instance, textual inversion learns a new word embedding to describe the object, such that the word can be applied with new text prompts for image generation [9]. NETI [1] extended the word embedding to a time-space conditioned neural mapper for better generation while preserving quality. Similarly, Dreambooth [25] aims to achieve the same goal, but by using a repurposed token rarely used in text and finetuning the entire diffusion model with an additional constraint to prevent generative loss. There are numerous subsequent works showing improvements on finetuning different layers/weights and by improving the training strategy [11, 15, 17]."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                627,
+                897,
+                886
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Despite the advances in adding new personalized entities to existing models, few works focus on learning general concepts that can be applied to a variety of scenarios. A concurrent work, ViewNETI [5], is the first to learn viewpoints as a concept, but we hypothesise that the 3D awareness of large text-to-image diffusion models goes far beyond merely viewpoints, allowing us to associate and even create interactions with multiple 3D-aware concepts like illumination, pose and camera parameters at the same time. Our method, despite being trained only using a single mesh, shows superior generalization properties – while trained to learn illumination and orientation from renderings of a single dog, we are capable of employing the learned concepts to generate cars, horses (Figure 4), polar bears (Figure 8), lions (Figure 1) and so on."
+                    }
+                ]
+            },
+            "bbox": [
+                517,
+                885,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6755"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                92,
+                472,
+                290
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3. Method"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                304,
+                168,
+                320
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.1. Preliminaries"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                329,
+                217,
+                345
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We define an image I that captures object O from category C as a function of several attributes "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I = f ( a _ { 1 } , a _ { 2 } , a _ { 3 } , . . . , a _ { n } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "a _ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "belongs to a vast set of image attributes : shape, material reflectivity, rotation/translation, camera parameters, shape deformations, etc. Some of these components can be translated to other categories while others cannot, so for simplicity we assume they only work for a single category. In the experimental section of this study, we will demonstrate that the definition of category for some attributes is rather loose and the user is capable of generating images with continuous words depicting objects very different from the ones seen during training. Notice that images annotated with the attributes we are interested are very rare, so the models do not have a very precise knowledge of them, except for what is already described in text-image pairs."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                354,
+                472,
+                582
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Given an image set "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I ^ { O }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "with images capturing an object O, previous methods like Dreambooth [25], Custom Diffusion [15], or Textual-Inversion [9] aim to minimize the following objective:"
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                582,
+                472,
+                643
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbb { E } _ { \\hat { I } _ { \\epsilon , i } , T _ { O } , I _ { i } \\in I ^ { O } } \\left[ \\left. S _ { \\theta } ( \\hat { I } _ { \\epsilon , i } , P ( T _ { O } ) ) - I _ { i } \\right. _ { 2 } ^ { 2 } \\right] ,\\tag{1}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/b76c45c52d66a7c05e46a9e93560aaf44be0e4b44248561fe0f1f49cd1d58028.jpg"
+                }
+            },
+            "bbox": [
+                127,
+                655,
+                416,
+                689
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "S _ { \\theta }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is a Text-to-Image diffusion model [24], "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { I } _ { \\epsilon , i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is a noised image "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\alpha _ { t } I _ { i } + \\sigma _ { t } \\epsilon"
+                    },
+                    {
+                        "type": "text",
+                        "content": "with noise ✏ and noise schedulers "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\alpha _ { t } , \\sigma _ { t } . ~ P ( T _ { O } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the prompt condition which contains a token embedding "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "T _ { O }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "used as an identifier of object O. In practise "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "P ( \\cdot )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the text encoder from CLIP. The finetuned network "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "S _ { \\theta }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "can then generate new images containing O when given a new prompt condition "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "P ^ { \\prime } ( T _ { O } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and some Gaussian noise. Unlike previous methods, our goal is not to add concepts representing specific objects, but rather have them describe some attributes "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "a _ { i } \\in { \\mathcal { A } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ", by learning to disentangle them using as few objects as possible within C – most of the time just one object suffices. Our model can also be easily extended to controlling multiple attributes at the same time."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                703,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.2. Continuous Control"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                90,
+                691,
+                106
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "A naive way to control an attribute a is to use some realistic rendering engine to generate images of the available objects that have the same value "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "a \\ = \\ x ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and then apply similar approaches to previous works by assigning a token "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "T _ { x }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to identify images with this particular value. This is not ideal, however, since a is often continuous and have infinitely many values – we would require an unfeasible number of tokens to gain fine-grained control over these attributes."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                113,
+                893,
+                234
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Therefore, we propose to instead learn a continuous function "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "g _ { \\phi } ( \\mathbf { a } ) : \\mathcal { D }  \\mathcal { T }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "that maps a set of attributes from some continuous domain  to the token embedding domain  . We use positional encoding to first cast each attribute "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "a \\in { \\mathbf { a } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to a higher frequency space before feeding into the function, which is represented by a very simple 2-layer MLP. The output of this network is named Continuous 3D Word and will allow users to easily control continuous attributes from text prompts augmented by these tokens. Finally, our training objective can then be formulated as:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                234,
+                895,
+                386
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\arg \\operatorname* { m i n } _ { \\theta , \\phi } \\mathbb { E } _ { \\hat { I } _ { \\epsilon , \\mathbf { a } } , \\mathbf { a } } \\bigg [ \\left\\| S _ { \\theta } \\big ( \\hat { I } _ { \\epsilon , \\mathbf { a } } , P ( g _ { \\phi } ( \\mathbf { a } ) ) \\big ) - I _ { \\mathbf { a } } \\right\\| _ { 2 } ^ { 2 } \\bigg ] .\\tag{2}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/7216af539ee0bef6065adac58ce6b6844ef346b3dbc9e08a0924ffb08f77f9dd.jpg"
+                }
+            },
+            "bbox": [
+                534,
+                393,
+                856,
+                429
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.3. Disentangling Object Identity and Attributes"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                438,
+                880,
+                454
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In practice, when we only utilize a single object to learn attributes, a degenerate solution occurs when directly opti mizing (2), where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "S _ { \\theta }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "treats the same object with different values for a as different objects. This hinders the generalization capability of changing the attribute when given an image of a new object. To this end, we propose two strategies, one during training and one during inference, to disentangle the object identity and individual attributes."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                460,
+                893,
+                582
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Training: Learning identity and attributes. We provide a simple regularization by explicitly forcing the model to use the same identifier for images representing the same object. The objective can thus be formulated as:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                585,
+                893,
+                647
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\arg \\operatorname* { m i n } _ { \\theta , \\phi } \\mathbb { E } _ { \\hat { I } _ { \\epsilon , \\mathbf { a } } , \\mathbf { a } } \\bigg [ \\left\\| S _ { \\theta } \\big ( \\hat { I } _ { \\epsilon , \\mathbf { a } } , P ( T _ { O } , g _ { \\phi } ( \\mathbf { a } ) ) \\big ) - I _ { \\mathbf { a } } \\right\\| _ { 2 } ^ { 2 } \\bigg ] .\\tag{3}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/0000d7cfc43d54f31d631365d6441cb27704428e34395cbc7581e5b46f35c3f5.jpg"
+                }
+            },
+            "bbox": [
+                511,
+                656,
+                857,
+                689
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Optimizing both "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "T _ { O }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "g _ { \\phi } ( \\mathbf { a } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "concurrently proved to be difficult from our experiments (see Section 5). We propose a two-stage training strategy as depicted in Figure 2. For every available image in "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { I } ^ { \\bar { O } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "with varying a, we first use the same prompt condition "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "P ( T _ { O } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to associate them to the same object, then learn the diffusion model parameters ✓ and our Continuous 3D Words MLP "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "g _ { \\phi }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by using the prompt condition "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "P ( T _ { O } , g _ { \\phi } ( \\mathbf { a } ) )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                699,
+                893,
+                821
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Inference: Negatively prompting object identifier. To further the disentanglement of attributes against object iden tities. We propose a simple trick during inference by adding the object identity as a negative prompt. Specifically, for each sampling step, we swap the null-text embedding used"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                824,
+                895,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6756"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "7UDLQLQJ\u00035HQGHULQJV"
+                    }
+                ]
+            },
+            "bbox": [
+                119,
+                89,
+                250,
+                103
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/cfdb7786e9617c1435433b40f39073c18bbcbec36aa43f5d5a1a6f2b4ab74ee4.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 4. Qualitative Comparisons. We compare our Continuous 3D Words trained under three settings against ControlNet of various strengths. Note that the dollyzoom setup was trained with trained with multiple chair meshes, so we give additional ControlNet by manuall picking the chair rendering that best follows the prompt (i.e., “comfortable” and in “the office”)."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                78,
+                93,
+                893,
+                568
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/e7f004d12a11b61dd147f1084f70fe03c022c22710e9395e14d4462b65b256ab.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                93,
+                643,
+                269,
+                786
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/0df1f49c950b839ffebe62e64eeb20d9d7392488c9a1b088749cff03c22171ad.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 5. Disentangling Multiple Attributes. We show four examples of controlling multiple Continuous 3D words in addition to text descriptions. Left: trained with a single golden retriever mesh. Right: trained with a single animated dove."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                281,
+                646,
+                457,
+                782
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "by classifier-free guidance with "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "T _ { O }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Intuitively, since our training happened mostly using O, we want to disincentivize the model to generate images containing such object."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                854,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.4. ControlNet Augmentation"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                646,
+                736,
+                662
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To prevent the fine-tuning process from overfitting to a simple white backgrounds and pre-defined object textures, we augment the backgrounds and textures in the rendering process. However, directly doing this in simulation engines is time consuming specially if one is targetting realistic scenes. Thus, we propose an automated solution by utilizing pretrained ControlNets."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                671,
+                895,
+                779
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Figure 3 shows two types of ControlNet augmentations we used in our framework. For attributes that can be directly reflected on shape changes (e.g., wing pose), we directly render the ground-truth depth maps to use as the condition for ControlNet. On the other hand, for attributes that cannot be reflected directly from depths (e.g., illumination), we first render the images without textures, then use a lineart extractor to obtain a “sketch” of the image. This captures subtle changes such as shades and shadows in the pixel space, which can then be used as the condition for Lineart ControlNet."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                780,
+                895,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6757"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                92,
+                470,
+                136
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We add additional prompts describing the object appearance and background during the ControlNet generation. It is important to note that prompts deviating away too much from the original mesh category would lead to degenerate images, so our prompts are in general very simple and straightforward (details in supplemental material). We include the ControlNet generated images as a small set of data augmentation, and we use the same prompt which we use to guide ControlNet generation to guide our Stage 2 fine-tuning."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                136,
+                473,
+                275
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4. Experiments"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                285,
+                210,
+                301
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We use off-the-shelf Stable Diffusion v2.1 [24] as the backbone of our method. We resort to the recent Low-Rank Adaptation (LoRA) [14] for the fine-tuning of the denoising U-Net and text encoder, allowing us to train on a single A10 GPU occupying roughly 16GB of memory. Thanks to the low-rank optimization, our models have a very small size (approximately 6MB). Training time varies by the complexity of the single/multiple attributes to learn, but falls within 15k to 20k steps, which generally takes around 3-4 hours in a single GPU. For ControlNet augmentation, we use the official implementation of ControlNet v1.1 [30]."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                309,
+                472,
+                477
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We implement our Continuous 3D words under five different attribute settings. For single attributes we implement 1) illumination "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "[ \\hat { \\square } ]"
+                    },
+                    {
+                        "type": "text",
+                        "content": "using a single dog mesh, 2) wing pose [ ] using a single animated dove mesh, and 3) Dolly zoom [ ] with five Pix3D chairs [28]. For multi-concepts, we train 4) illumination and object orientation "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "[ \\mathcal { G } ] + [ \\dot { \\mathcal { L } } ]"
+                    },
+                    {
+                        "type": "text",
+                        "content": "using a single dog mesh and 5) wing pose and orientation "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "[ x ] + [ \\lambda ^ { \\cdot }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "] using a single animated dove mesh. Settings 1) and 4) use lineart images [6] while the others use depth map to compute the ControlNet background augmentation (see Section 3.4)."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                476,
+                472,
+                643
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.1. Comparison with Baselines"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                650,
+                323,
+                666
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Baseline Design. We design a very competive baseline that enables fine-grained attribute control in image generation by combining the mesh training data we used in our experiments, a rendering engine and ControlNet [30]. Specifically, we take a novel text prompt for a training object, and grab a corresponding condition map in the training set rendered with the intended attributes. For example, if the prompt is a [ ] eagle flying in a forest, we select the frame of the dove mesh that corresponds to the userprescribed wing pose [ ] , render its depth map using a rendering engine and pass it through ControlNet with the same prompt but removing the continuous 3D word. The strength of the ControlNet guidance is a critical hyperparameter — increase in strength could increase the accuracy of reflecting the attribute but decrease the robustness to generalize to the text-prompt intended object. Therefore, we present the ControlNet baseline with both full and half strength in terms of guidance. We also explored an interpolation of null-text embedding [18] baseline, but the results failed to capture even the simplest attributes, so they were omitted from our analysis."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                674,
+                473,
+                902
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/6fb4eb3b81c16d23954a0c3c6d3f5d711bc6244ad6cee2bfb78205c341185f64.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 1. User study results. We asked users to rank three images according to their preference and how well they followed the given conditions – text prompt and one or two continuous controls. The controls were described by representative images (i.e. arrows for orientation, shaded sphere for illumination, etc.). See supplemental material for more details. We evaluate four different control types: wing pose [ ] , illumination "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "[ \\stackrel { \\triangledown } { \\lrcorner } ]"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", wing pose [ ] + orientation [ ] , and illumination [ ] + orientation [ ] . Cells colored as red and yellow represent the best and second best method, respectively. Our method was selected as the favorite for the majority of users in all evaluated setups."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td rowspan=\"2\">Method</td><td colspan=\"5\">User Preference (%)↑</td></tr><tr><td>[]</td><td></td><td> $[ { \\bf { \\sigma } } _ { \\bf { v } } ] / [ { \\bf { \\sigma } } _ { \\bf { \\sigma } } ^ { \\bf { \\prime } } ]$ </td><td>][]</td><td>Avg.</td></tr><tr><td>ControlNet (1.0)</td><td>28.3%</td><td>16.2%</td><td>35.0%</td><td>15.0%</td><td>23.6%</td></tr><tr><td>ControlNet (0.5)</td><td>10.0%</td><td>28.8%</td><td>12.5%</td><td>32.5%</td><td>21.0%</td></tr><tr><td>Ours</td><td>61.7%</td><td>55.0%</td><td>52.5%</td><td>52.5%</td><td>55.4%</td></tr><tr><td></td><td colspan=\"5\">Average User Ranking ↑</td></tr><tr><td>Method</td><td>[]</td><td>1</td><td> $[              \\Vert   \\ast ]$ </td><td> $[ \\mathcal { G } ] / [ \\mathfrak { L } _ { \\star } ]$ </td><td>Avg.</td></tr><tr><td>ControlNet (1.0)</td><td> $2 . 0 7 \\pm 0 . 7 0$  一</td><td> $1 . 4 9 \\pm 0 . 7 6$ </td><td> $2 . 2 0 \\pm 0 . 6 8$  1</td><td> $1 . 6 0 \\pm 0 . 7 4$ </td><td>_  $1 . 8 4 \\pm 0 . 7 2$ </td></tr><tr><td>ControlNet (0.5)</td><td> $1 . 3 8 \\pm 0 . 6 6$ </td><td> $2 . 1 1 \\pm 0 . 6 7$ </td><td> $1 . 3 8 \\pm 0 . 7 0$ </td><td> $2 . 0 6 \\pm 0 . 7 6$ </td><td> $1 . 7 3 \\pm 0 . 7 0$ </td></tr><tr><td>Ours</td><td> $2 . 5 5 \\pm 0 . 6 2$ </td><td> $2 . 4 0 \\pm 0 . 7 3$ </td><td> $2 . 4 3 \\pm 0 . 6 7$ </td><td> $2 . 3 3 \\pm 0 . 7 7$ </td><td> $2 . 4 3 \\pm 0 . 7 0$ </td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                503,
+                89,
+                888,
+                234
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                420,
+                893,
+                511
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Quantitative Results. Due to the complexity and abstract nature of the attributes we are analyzing, automatically measuring whether a generated image reflects a set of values is a considerable challenge. Thus, following previous papers [12, 25, 30], we create a user study to evaluate the quality of the generated images while controlling several attributes. For each setting 1, 2, 4, and 5, we randomly sample a set of 3D conditions and prompts, generating over 60 questions per setting. Similarly to the user studies above, we then invite 20 participants, showing them all the given constraints we want the image to pertain (prompts and attributes), and ask them to rank each image from best to worst."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                518,
+                895,
+                702
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Table 1 shows the results in both the percentage of user preference (image chose as the best one) and the overall ranking. Best results are highlighted as red. Our Continuous 3D Words won the majority of votes (over 50%) in all analyzed scenarios. Interestingly, the second best (as highlighted in yellow) alternates between the two guidance strengths of ControlNet. For wing-pose based controls, having a weaker control diminishes the strong prior offered by the depth map, resulting in inaccurate poses. Conversely, strong guidance for illumination forces ControlNet to generate objects around the shadow outline (further shown in Figure 4). Differently from the baselines, our training strategy is one-size-fits-all without any hyperparameter required."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                704,
+                897,
+                902
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6758"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Qualitative Analyses We present a detailed comparison ofReal World Image Continuous 3D Words Continuous 3D Words against ControlNet of different guidance strengths in Figure 4. We show results under three training settings : a) wing pose and orientation, b) illumination and orientation, and c) dollyzoom. We observe that the dollyzoom setup was a harder concept to train and had to be done using five chairs. We also manually “helped” the ControlNet baseline by manually picking the chair that best followed our text prompt as the condition image. More importantly, the ControlNet baselines significantly deteriorate when the prompt contains elements that were not present in the training data. For example, even when trained on a single dog mesh, our method can learn illumination and orientation attributes that can be used to generate horses and taxis (row b), Figure 4)."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                92,
+                472,
+                319
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.2. Multi-Concept Control"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                337,
+                290,
+                353
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Just like sentences where we can encompass multiple words, but each disentangled from one another when controlling the image generation, our Continuous 3D Words can do the same. We show four examples in Figure 5, two from [ ] and [ ] , and two [ ] and [ ] , where we can keep one attribute fixed but change the other without sabotaging the quality of image generations. They can be jointly used with complex prompts describing the background and object texture. Moreover, while all these words are learned from a single mesh, we can easily transfer the attribute to objects with fairly close semantics (e.g., a labrador mesh to a polar bear, or a dove mesh to a parrot)."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                363,
+                472,
+                546
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.3. Real World Image Editing"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                564,
+                316,
+                580
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Our Continuous 3D Words can be directly applied to real world images to perform editing. To do so, we simply have to encode a real world image to a rare token via Dreambooth [25]. Then, we only have to use that token in conjunction with our Continuous 3D Words to generate the edited image. We show 4 examples in Figure 6, changing [ ] , [ ] , [ ] . As we can see, the Dreambooth token preserves most of the image appearance, while our Continuous Words understands and brings edits to the main subject."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                590,
+                470,
+                728
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Comparing with Zero-1-to-3 While our approach is focused on enhancing text-to-image, given the capabilities of real-world image editing, we can use the same setup to provide a comparison with only with object orientation changes (Figure 6). Notice that Zero1-to-3 [16] operates in foreground-only images so we also had to segment the object [7], inpaint the background [24], and place the novel orientation back to to the image. Each step contain errors that, when compounded, hurt the quality of the final result. More importantly, our method allows controls beyond orientation changes without relying on massive 3D datasets."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                734,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/b5ab05abf45e7e67ee9450d8c0516a39e5cf797575bd4c8ab92775acbbc2634e.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 6. Real World results & Comparison w/ Zero1-to-3. We learn tokens representing single images and use along with Continuous 3D Words for image editing. The learned image token encodes most of the image appearance, while the Continuous 3D Word modifies its relevant aspects. Zero123, on the other hand, tends to yield images where the modified object is deformed or not properly harmonized."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                516,
+                93,
+                877,
+                383
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/9a98d4daf2a665d13e401236cef432f1cd945fd2232b6ce7048438a26c441cfb.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 7. Interpolating continuous 3D words. We present two results of interpolation, one with discrete tokens and one with our Continuous 3D Words. Our method preserves the attributes better and enables interpolation between two values."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                501,
+                518,
+                890,
+                641
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5. Discussion and Limitations"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                737,
+                751,
+                753
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Why Not Discrete Tokens? The benefits of fitting a single MLP instead of multiple tokens on an attribute with different values are twofold. First, the MLP learns a continuous function, allowing us to interpolate between two training data samples whereas fitting multiple tokens leads to two datapoints as two discrete mappings. Second, finetuning a model to learn multiple custom tokens simultaneously is very hard. These benefits are illustrated in Figure 7. We show a comparison of learning a single Continuous 3D Word [ ] and 18 discrete tokens for different values of a wing pose. Both were learned with the same training method (2-stage with ControlNet augmentation). We present the generated results of three attribute values that are present in the training set, as well as the results when you interpolate the value in between. Interpolation is straightforward for our case where we just input the intermediate value into our Continuous 3D Words MLP. For discrete tokens, we interpolate between two nearest discrete bins. Notice that the discrete tokens have difficulty not only in interpolating results but also in learning the concept simultaneously. The eagle wings in the second row of Figure 7 do not follow the training data and sometimes generate a completely different pose (third column, second row). On the other hand, our images closely follow the pose prescribed by the user (top row) while yielding appealing images even when the values were not seen during training (columns 2, 4 and 6; second row)."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                763,
+                895,
+                902
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6759"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/89d66de2a40cac913308f6522af987b700368fa50054adebe511393d5e7c42d1.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 8. Ablation Study. We present our ablations for: w/o twostage training, w/o ControlNet augmentation, w/o [obj] as negative prompt, and our full pipeline. Notice that, when the prompt deviates a lot from the training data (truck in prompt, mesh of a dog for training), the ablated version fails to follow the prompt. Without two-stage training, it ignores the prompt and creates a dog; without the other parts it yields deformed shadows and dog-shaped trucks."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                80,
+                88,
+                467,
+                247
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                371,
+                472,
+                628
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Ablation study. Figure 8 shows an ablation of our training strategy. We remove each component of our training strategy (w/o two-stage training, w/o ControlNet augmentation, w/o [obj] as negative prompt) and compare it with our full pipeline. Two examples are presented: one where the prompt is similar to the training and another one where it is significantly different. Without the two-stage training, the model fails to disentangle object identity with our attributes, hindering the generalization capability to new objects. This is particularly noticeable for the bottom row when the text prompt is a truck but a dog similar to the training mesh is generated when the two-stage training is removed. Without ControlNet, the finetuning process often overfits to the background training renderings, resulting in an inability to generate realistic backgrounds. Finally, adding [obj] as the negative prompt serves as a minor improvement in further disentangling both the backgrounds and object shape seen during training, resulting in a more aesthetic image."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                628,
+                472,
+                902
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/6dfbde7b76bfd31481ae46c62f39123277a5b96a5733fd7de7124e37ab7d8b24.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "D"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                501,
+                84,
+                694,
+                189
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/acc5054b77ec09a147c28d17f592ec7b208086afb19838f018285e811d40e3fe.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "E"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Figure 9. Condition v.s. Accuracy in User Study. a) shows two images generated by the prompt “a [ ] photo of a white bird on sand”. b) shows two images generated by the prompt “a [ ] photo of a colorful bird”. Left is ours, right is ControlNet (1.0). Users preferred right over left for both."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                699,
+                88,
+                890,
+                188
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/ec4318e97156989c9a526e3b469e225101e09d03fc3e66a9f3e3b67344c6c21c.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "D"
+                    },
+                    {
+                        "type": "text",
+                        "content": "E"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                501,
+                287,
+                694,
+                392
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/2b36f037c8cab56a8710b25451c1322040df50510021112eb8ec8a2e421c5efe.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 10. Failure cases. a) shows images generated with prompt "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\ddot { \\textbf { \\textit { a } } } [ \\mathcal { Q } ] \\ [ \\mathcal { L } ]"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Monet Painting "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathrm { o f \\ldots }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". b) shows images generated with "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\ \" { \\bf { a } } [ \\mathcal { Q } ] [ \\mathbb { L } ]"
+                    },
+                    {
+                        "type": "text",
+                        "content": "photo of a "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\operatorname { T - R e x } ^ { \\prime \\prime }"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                699,
+                290,
+                890,
+                392
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Condition v.s. Generated Accuracy in User Study. During our user study, we realize that occasionally users select the image which more strictly follows the exact conditions over the more physically probable image. For example, in Figure 9 a) and b), the head of the bird is generated poorly, but users preferred them as they are “whiter” and “more colorful”."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                453,
+                893,
+                544
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Failure Cases. We present in Figure 10 two examples of typical failure cases in our results. First, our model currently fails on more difficult scenarios where the style is given by the text prompt. In a), the image cannot fully reflect the “Monet painting” style imposed by our prompt. Second, the generated object may sometimes still overfit to the training set. In b), the T-Rex had four feet on the ground instead of standing with two claws in air – an attribute that is similar to the training dog mesh used to learn illumination."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                544,
+                893,
+                681
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "6. Conclusion"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                694,
+                619,
+                710
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We presented Continuous 3D Words, a framework that allows us to learn 3D-aware attributes reflected in renderings of meshes as special words, which can then be injected into the text prompts for fine-grained text-to-image generation. Extensive study on learning both single and multiple continuous words shows that we can control challenging attributes. With the lightweight design and promising results, we hope that this work opens up interesting applications in the vision community to create their own 3D words with a single mesh and an accessible rendering engine."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                719,
+                895,
+                871
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Acknowledgements. This work is supported in part by the EPSRC ACE-OPS grant EP/S030832/1."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                871,
+                893,
+                900
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6760"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "References"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                78,
+                89,
+                176,
+                106
+            ]
+        },
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[1] Yuval Alaluf, Elad Richardson, Gal Metzer, and Daniel Cohen-Or. A neural space-time representation for text-toimage personalization. arXiv preprint arXiv:2305.15391, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[2] James Betker, Gabriel Goh, Li Jing, † TimBrooks, Jianfeng Wang, Linjie Li, † LongOuyang, † JuntangZhuang, † JoyceLee, † YufeiGuo, † WesamManassra, † PrafullaDhariwal, † CaseyChu, † YunxinJiao, and Aditya Ramesh. Improving image generation with better captions, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[3] Tim Brooks, Aleksander Holynski, and Alexei A. Efros. Instructpix2pix: Learning to follow image editing instructions. In CVPR, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[4] Tom Brown, Benjamin Mann, Nick Ryder, Melanie Subbiah, Jared D Kaplan, Prafulla Dhariwal, Arvind Neelakantan, Pranav Shyam, Girish Sastry, Amanda Askell, et al. Language models are few-shot learners. Advances in neural information processing systems, 33:1877–1901, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[5] James Burgess, Kuan-Chieh Wang, and Serena Yeung. Viewpoint textual inversion: Unleashing novel view synthesis with pretrained 2d diffusion models. arXiv preprint arXiv:2309.07986, 2023. 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[6] Caroline Chan, Fredo Durand, and Phillip Isola. Learning to generate line drawings that convey geometry and semantics. In CVPR, 2022. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[7] Danielgatis. Danielgatis/rembg: Rembg is a tool to remove images background. 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[8] Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova. Bert: Pre-training of deep bidirectional transformers for language understanding. arXiv preprint arXiv:1810.04805, 2018. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[9] Rinon Gal, Yuval Alaluf, Yuval Atzmon, Or Patashnik, Amit Haim Bermano, Gal Chechik, and Daniel Cohen-or. An image is worth one word: Personalizing text-to-image generation using textual inversion. In The Eleventh International Conference on Learning Representations, 2022. 3, 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[10] Ian Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David Warde-Farley, Sherjil Ozair, Aaron Courville, and Yoshua Bengio. Generative adversarial nets. Advances in neural information processing systems, 27, 2014. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[11] Ligong Han, Yinxiao Li, Han Zhang, Peyman Milanfar, Dimitris Metaxas, and Feng Yang. Svdiff: Compact parameter space for diffusion fine-tuning. ICCV, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[12] Amir Hertz, Ron Mokady, Jay Tenenbaum, Kfir Aberman, Yael Pritch, and Daniel Cohen-Or. Prompt-to-prompt image editing with cross attention control. In arXiv preprint arXiv:2208.01626, 2022. 2, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[13] Jonathan Ho, Ajay Jain, and Pieter Abbeel. Denoising diffusion probabilistic models. Advances in neural information processing systems, 33:6840–6851, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[14] Edward J Hu, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, Lu Wang, Weizhu Chen, et al. Lora: Lowrank adaptation of large language models. In International Conference on Learning Representations, 2021. 2, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[15] Nupur Kumari, Bingliang Zhang, Richard Zhang, Eli Shechtman, and Jun-Yan Zhu. Multi-concept customization of text-"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "to-image diffusion. In Proceedings ofthe IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2023. 3, 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[16] Ruoshi Liu, Rundi Wu, Basile Van Hoorick, Pavel Tokmakov, Sergey Zakharov, and Carl Vondrick. Zero-1-to-3: Zero-shot one image to 3d object, 2023. 3, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[17] Zhiheng Liu, Yifei Zhang, Yujun Shen, Kecheng Zheng, Kai Zhu, Ruili Feng, Yu Liu, Deli Zhao, Jingren Zhou, and Yang Cao. Cones 2: Customizable image synthesis with multiple subjects. arXiv preprint arXiv:2305.19327, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[18] Ron Mokady, Amir Hertz, Kfir Aberman, Yael Pritch, and Daniel Cohen-Or. Null-text inversion for editing real images using guided diffusion models. arXiv preprint arXiv:2211.09794, 2022. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[19] Chong Mou, Xintao Wang, Liangbin Xie, Jian Zhang, Zhongang Qi, Ying Shan, and Xiaohu Qie. T2i-adapter: Learning adapters to dig out more controllable ability for text-to-image diffusion models. arXiv preprint arXiv:2302.08453, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[20] Gaurav Parmar, Krishna Kumar Singh, Richard Zhang, Yijun Li, Jingwan Lu, and Jun-Yan Zhu. Zero-shot image-to-image translation. In ACM SIGGRAPH 2023 Conference Proceedings, pages 1–11, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[21] Colin Raffel, Noam Shazeer, Adam Roberts, Katherine Lee, Sharan Narang, Michael Matena, Yanqi Zhou, Wei Li, and Peter J Liu. Exploring the limits of transfer learning with a unified text-to-text transformer. The Journal of Machine Learning Research, 21(1):5485–5551, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[22] Aditya Ramesh, Mikhail Pavlov, Gabriel Goh, Scott Gray, Chelsea Voss, Alec Radford, Mark Chen, and Ilya Sutskever. Zero-shot text-to-image generation. In International Conference on Machine Learning, pages 8821–8831. PMLR, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[23] Aditya Ramesh, Prafulla Dhariwal, Alex Nichol, Casey Chu, and Mark Chen. Hierarchical text-conditional image generation with clip latents. In arXiv preprint arXiv:2204.06125, page 3, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[24] Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, and Bjorn Ommer. High-resolution image¨ synthesis with latent diffusion models, 2021. 2, 4, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[25] Nataniel Ruiz, Yuanzhen Li, Varun Jampani, Yael Pritch, Michael Rubinstein, and Kfir Aberman. Dreambooth: Fine tuning text-to-image diffusion models for subject-driven generation. In Proceedings ofthe IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 22500–22510, 2023. 2, 3, 4, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[26] Chitwan Saharia, William Chan, Saurabh Saxena, Lala Li, Jay Whang, Emily L Denton, Kamyar Ghasemipour, Raphael Gontijo Lopes, Burcu Karagol Ayan, Tim Salimans, et al. Photorealistic text-to-image diffusion models with deep language understanding. Advances in Neural Information Processing Systems, 35:36479–36494, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[27] Jiaming Song, Chenlin Meng, and Stefano Ermon. Denoising diffusion implicit models. In International Conference on Learning Representations, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[28] Xingyuan Sun, Jiajun Wu, Xiuming Zhang, Zhoutong Zhang, Chengkai Zhang, Tianfan Xue, Joshua B Tenenbaum, and William T Freeman. Pix3d: Dataset and methods for single-"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                84,
+                114,
+                470,
+                169
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6761"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                514,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "image 3d shape modeling. In Proceedings ofthe IEEE conference on computer vision and pattern recognition, pages 2974–2983, 2018. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[29] Paul Yoo, Jiaxian Guo, Yutaka Matsuo, and Shixiang Shane Gu. Dreamsparse: Escaping from plato’s cave with 2d diffusion model given sparse views. arXiv preprint arXiv:2306.03414, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[30] Lvmin Zhang, Anyi Rao, and Maneesh Agrawala. Adding conditional control to text-to-image diffusion models. In IEEE International Conference on Computer Vision (ICCV), 2023. 2, 6"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                109,
+                93,
+                470,
+                132
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6762"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ]
+]

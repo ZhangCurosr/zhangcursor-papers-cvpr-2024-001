@@ -1,0 +1,1611 @@
+[
+    {
+        "type": "text",
+        "text": "Z<sup>∗</sup>: Zero-shot Style Transfer via Attention Reweighting",
+        "text_level": 1,
+        "bbox": [
+            204,
+            130,
+            766,
+            152
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Yingying Deng<sup>◦,1</sup>, Xiangyu He<sup>◦,1</sup>,Fan Tang<sup>\u0000,2</sup>, Weiming Dong<sup>1</sup> <sup>1</sup> MAIS, Institute of Automation, Chinese Academy of Sciences <sup>2</sup> Institute of Computing Technology, Chinese Academy of Sciences",
+        "bbox": [
+            215,
+            180,
+            754,
+            234
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "dyy15@outlook.com, xiangyu.he@nlpr.ia.ac.cn, tfan.108@gmail.com, weiming.dong@ia.ac.cn",
+        "bbox": [
+            99,
+            237,
+            864,
+            251
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/8da88ddab796f245c97c10475ec4dbc86870bbf1cf857c2f406e1a090ef07614.jpg",
+        "image_caption": [
+            "Figure 1. Image style transfer results by the proposed Z . Top: The stylized results by style/content references of different types. Our method can well balance the contents and styles in the results. Bottom: Comparisons with state-of-the-art methods, including diffusion-based models (VCT [9] and InST [51]), transformer-based model (StyTr<sup>2</sup> [13]), flow-based model (ArtFlow [2]), and CNN-based model (CAST [50]). Our method excels in generating stylized images with vivid style patterns and accurate content details."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            96,
+            266,
+            870,
+            492
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Abstract",
+        "text_level": 2,
+        "bbox": [
+            233,
+            577,
+            315,
+            592
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Despite the remarkable progress in image style transfer, formulating style in the context ofart is inherently subjective and challenging. In contrast to existing methods, this study shows that vanilla diffusion models can directly extract style information and seamlessly integrate the generative prior into the content image without retraining. Specifically, we adopt dual denoising paths to represent content/style references in latent space and then guide the content image denoising process with style latent codes. We further reveal that the cross-attention mechanism in latent diffusion models tends to blend the content and style images, resulting in stylized outputs that deviate from the original content image. To overcome this limitation, we introduce a crossattention reweighting strategy. Through theoretical analysis and experiments, we demonstrate the effectiveness and superiority of the diffusion-based zero-shot style transfer via attention reweighting, Z-STAR.",
+        "bbox": [
+            75,
+            592,
+            472,
+            849
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "1. Introduction",
+        "text_level": 2,
+        "bbox": [
+            501,
+            577,
+            632,
+            593
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "The task of image style transfer has received significant attention in the research community, with numerous machine learning techniques utilized, such as convolutional neural networks (CNN) [11, 15, 18, 21, 32, 38], flow-based net works [2], visual transformers (ViT) [13, 46], and diffusion models [9, 51]. After completing the training process, the output stylized image is generated based on a content and style image, as shown in Figure 1. The generated image retains the content layout from the input content while adopting a similar style to that of the input style. In essence, the networks are trained by ensuring that the generated image and the content/style image exhibit content/style similarity.",
+        "bbox": [
+            496,
+            608,
+            895,
+            791
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "While certain methods, such as [2, 13, 18], employ the Gram matrix [15] to measure global style similarity and achieve promising style transfer outcomes, the secondorder statistics contained in the Gram matrix are limited in their ability to capture intricate style patterns and fail to transfer corresponding local features from the content image to the style image (e.g., hair and eyes in StyTr<sup>2</sup> [13],",
+        "bbox": [
+            496,
+            795,
+            895,
+            902
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "",
+        "bbox": [
+            104,
+            2,
+            181,
+            41
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore.",
+        "bbox": [
+            235,
+            1,
+            810,
+            46
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "page_footnote",
+        "text": "<sup>◦</sup>These authors contributed equally to this work.",
+        "bbox": [
+            99,
+            875,
+            357,
+            887
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "page_footnote",
+        "text": "<sup>\u0000</sup>Corresponding author: Fan Tang.",
+        "bbox": [
+            99,
+            887,
+            292,
+            901
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "page_number",
+        "text": "6934",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "ArtFlow [2], AdaIN [18] in Figure 1). To address this issue, CAST [50] proposes a contrastive loss that leverages the relationships between positive and negative examples to encourage the result to conform to the distribution of styles. However, CAST also faces the obstacle of generating stylized outcomes with vivid, fine-grained style details. In reality, the contours and forms of a painting should be subject to the adaptable preferences ofthe artist’s painting techniques, rather than being rigidly determined by the content and style images. In light of this, we rethink the role of training in style transfer and reveal that the generative model used to describe the distribution of images has already learned the art of transfer.",
+        "bbox": [
+            75,
+            90,
+            472,
+            289
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "With the advent of diffusion models, text-controlled image editing and translation have gained unprecedented attention. When given an image as input, the diffusion model can generate an artistic image incorporating a stylerelated prompt. However, the textual prompt is often too coarse to effectively express the desired style details. While prior approaches such as InST [51] and VCT [9] endeavor to employ an image-controlled diffusion model for image style transfer and translation, they necessitate training a style embedding for each input style, leading to challenges in distilling precise style representations and resulting in deviations from the input style while failing to preserve content (see InST and VCT results in Figure 1). In contrast to [9, 51], where control information is encoded as text embedding, we propose that the vanilla diffusion model is capable of extracting style information directly from the desired style image and fusing it into the content image without requiring re-training or tuning.",
+        "bbox": [
+            75,
+            292,
+            472,
+            565
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "In this paper, we leverage the prior knowledge from latent diffusion [36] and propose a zero-shot (i.e., trainingfree) style transfer method via attention reweighting, namely Z-STAR (Z<sup>∗</sup>), to addresses the issues above. To obtain generative image priors, we employ dual diffusing paths to invert the style and content images. The features obtained from diffusion models naturally represent content and style information and could be fused by the attention mechanism. However, without a training process, it is challenging to strike a balance between content and image influence. That is to say, the naive cross-attention operations are not optimal for directly integrating content and style latent status in the denoising process. Content structure may be compromised due to inaccurate cross-attention values (see Sec. 4.2 for more details). Therefore, we propose a multi-cross attention reweighted strategy that manipulates content and style information from images and seamlessly fuses them in the diffusion latent space. By leveraging a tailored attention mechanism, the diffusion model can naturally address the constraints of content and style without necessitating additional supervision. Experimental results demonstrate that our method generates satisfactory results with well-preserved content and vivid styles adapted to content structures. In summary, our main contributions are as follows:",
+        "bbox": [
+            75,
+            569,
+            472,
+            902
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            92,
+            893,
+            136
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• A zero-shot image style transfer method leveraging the generative prior knowledge to conduct image stylization without retraining/tuning.",
+        "bbox": [
+            500,
+            136,
+            893,
+            181
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• A reweighted attention mechanism to disentangle and fuse content/style information in the diffusion latent space.",
+        "bbox": [
+            498,
+            181,
+            893,
+            212
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• Various experiments demonstrate that our method can generate outstanding style transfer results, naturally fusing and balancing content and style from two input images.",
+        "bbox": [
+            500,
+            212,
+            893,
+            258
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "2. Related Work",
+        "text_level": 2,
+        "bbox": [
+            500,
+            268,
+            643,
+            285
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Image style transfer. Since Gatys et al. [15] discovered that perceptual features can effectively represent content and Gram matrices may express style in CNNs, various frameworks for style transfer trained by content and style loss have been proposed [1, 11, 12, 18, 20, 23, 27, 34, 38, 42]. CNN-based methods [11, 12, 23, 38] achieved success by exploring the fusion of content and style representation. Some works [13, 39, 43, 44, 46, 49] utilize the long-range feature represention ability of Transformer [47] and enhance stylization effects. However, the Gram matrix measures second-order statistics of the entire image, which may not be sufficient for style representation. Recent works [7, 48, 50] use contrastive loss to replace style loss based on the Gram matrix, which is effective in processing fine-detail style patterns. Despite the continuous progress of existing methods, precise style representation remains challenging, and inaccurate style expression may lead to unsatisfactory stylized results. In light of this challenge, we aim to develop a zero-shot style transfer method that does not rely on explicit style constraints.",
+        "bbox": [
+            496,
+            294,
+            895,
+            598
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Diffusion for image generation. Diffusion models have demonstrated impressive results in text-to-image generation [29, 33, 36, 37] and image editing [3, 5, 6, 10, 16, 22, 28, 30, 40, 45, 52]. However, certain methods like Imagic [22] require fine-tuning the entire diffusion model for each instruction, which can be time-consuming and memory-intensive. To address this, Prompt-to-prompt [16] introduces cross-attention maps during the diffusion process by replacing or reweighting the attention map between text prompts and edited images. Additionally, NTI [28] proposes null-text optimization based on Prompt-to-prompt to enable real image editing. In order to reduce reliance on text prompts, StyleDiffuison [24] incorporates a mapping network to invert the input image to a context embedding, which is then utilized as a key in the cross-attention layers. However, manipulating the cross-attention solely between text and image can be challenging for achieving precise control. To address this, Plug-and-Play [40] and MasaCtrl [6] focus on spatial features using self-attention in the U-Net of the latent diffusion model. While these methods can accomplish text-guided style transfer by inputting a text prompt like “a pencil drawing”, simple words may not be sufficient to describe fine-detail style patterns. To address this limitation, InST [51] and VCT [9] employ an inversionbased image style transfer/translation scheme that can train a style image into a style embedding to guide the generated results. In this paper, we demonstrate that style images alone (i.e., without pseudo-text guidance) are adequate for latent diffusion models to achieve image-guided style transfer, without requiring additional training.",
+        "bbox": [
+            496,
+            613,
+            897,
+            902
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "page_number",
+        "text": "6935",
+        "bbox": [
+            482,
+            945,
+            516,
+            957
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            90,
+            472,
+            258
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "3. Preliminary",
+        "text_level": 2,
+        "bbox": [
+            76,
+            268,
+            204,
+            286
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Attention Mechanism [4] was introduced as a powerful tool in neural network architectures for aggregating information and later adopted by Vaswani et al. [41] as a fundamental building block for machine translation:",
+        "bbox": [
+            75,
+            295,
+            470,
+            356
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "equation",
+        "img_path": "images/f87c0e606749ea0d2053785b5214702dd042a4a989eefe8ec9656ca0642723e5.jpg",
+        "text": "$$\n\\mathrm { A t t e n t i o n } ( Q , K , V ) = \\mathrm { S o f t m a x } ( \\frac { Q K ^ { T } } { \\sqrt { d } } ) V .\\tag{1}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            132,
+            363,
+            415,
+            397
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Attention-based vision transformers [14, 26] have demonstrated remarkable empirical results on mainstream benchmarks, solidifying attention mechanisms as a crucial component in modern deep neural networks. Moreover, by incorporating additional information, along with the utilization of Key and Value vectors, cross-attention has proved effective in latent diffusion models for applying conditions to the denoising process.",
+        "bbox": [
+            75,
+            404,
+            472,
+            525
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Diffusion Model, as described in the literature, belongs to a class of generative models that employ Gaussian noise to generate desired data samples. This is accomplished through an iterative process of noise removal, where a forward process is defined to add noise to an initial data sample $x _ { 0 }$ , resulting in a noisy sample $x _ { t }$ at time-step t, according to a predetermined noise-adding schedule $\\alpha _ { t }$ :",
+        "bbox": [
+            75,
+            525,
+            470,
+            631
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "equation",
+        "img_path": "images/937dd6c41b0b1ecdc48cd6e6ca4e96ce8f3a78f3f3a29a5dba6ff1abdafc2e4d.jpg",
+        "text": "$$\nx _ { t } = \\sqrt { \\alpha _ { t } } \\cdot x _ { 0 } + \\sqrt { 1 - \\alpha _ { t } } \\cdot z , \\ z \\sim \\mathcal { N } ( 0 , \\mathbf { I } ) .\\tag{2}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            124,
+            638,
+            419,
+            656
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Additionally, a corresponding reverse process is also defined:",
+        "bbox": [
+            76,
+            664,
+            470,
+            679
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "equation",
+        "img_path": "images/b648c2fc047f1650cc180aaffbbb02ff2eafc1845445fcd02ec604556655c0b4.jpg",
+        "text": "$$\nx _ { t - 1 } = \\frac { 1 } { \\sqrt { \\alpha _ { t } } } \\Big ( { \\bf x } _ { t } - \\frac { 1 - \\alpha _ { t } } { \\sqrt { 1 - \\bar { \\alpha } _ { t } } } \\epsilon _ { \\theta } ( { \\bf x } _ { t } , t ) \\Big ) + \\sigma _ { t } z .\\tag{3}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            114,
+            689,
+            429,
+            722
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "The backward process aims to gradually denoise $x _ { T } \\sim$ $\\mathcal { N } ( 0 , \\bf { I } )$ , where a cleaner image $x _ { t - 1 }$ is obtained at each step. This is accomplished by a neural network $\\epsilon _ { \\theta } ( x _ { t } , t )$ that predicts the added noise z.",
+        "bbox": [
+            75,
+            726,
+            470,
+            785
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Utilizing a U-Net integrated with an attention mechanism as $\\epsilon _ { \\theta } ( x _ { t } , t )$ is a common approach. This configuration allows for self-attention to capture long-range interactions among image features, while cross-attention receives a guiding signal from the given text prompt. The attention mechanisms are formulated as:",
+        "bbox": [
+            75,
+            785,
+            470,
+            876
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "equation",
+        "img_path": "images/430dcb4a93807b5ab18aa2a5dfb9c7a51d1e5e11ff660dc22a34ac5bed84ec2e.jpg",
+        "text": "$$\nf _ { t } ^ { l } = \\mathrm { A t t e n t i o n } ( Q _ { t } ^ { l } , K _ { t } ^ { l } , V _ { t } ^ { l } ) .\\tag{4}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            176,
+            882,
+            367,
+            902
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Even as Key and V alue at l-th layer may vary from image spatial or text features, they still adhere to the standard format.",
+        "bbox": [
+            496,
+            90,
+            893,
+            136
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "4. Method",
+        "text_level": 2,
+        "bbox": [
+            500,
+            150,
+            591,
+            166
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Our research is based on the observation that the attention module within the stable diffusion can effectively align features K and V with the query Q. Previous studies, such as [6, 40], have leveraged the self-attention layer to extract information from key and value features, which represent spatial attributes in the DDIM inversion process, for image editing applications. However, in style transfer tasks, the simultaneous preservation of both style and content is crucial. Consequently, we need to address two important questions to practically apply this observation:",
+        "bbox": [
+            496,
+            176,
+            893,
+            328
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "• How can appropriate style features K and V be obtained for the stable diffusion model without necessitating retraining? It is crucial to emphasize that our objective is to directly extract style information from images rather than depending on a proxy prompt like text embedding, which may lack the necessary level of detail.",
+        "bbox": [
+            500,
+            327,
+            893,
+            417
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "• Mere utilization of style attention [31] results in poor content preservation under diffusion models without retraining. We aim to recreate the content image in a way that resembles the style image in terms of its contours, forms, and overall visual appearance.",
+        "bbox": [
+            498,
+            417,
+            895,
+            493
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "To address these challenges, our approach adopts a twofold strategy. Firstly, dual-path networks are designed to generate suitable K and V features during the reverse process. Secondly, we incorporate attention reweighting techniques to better align content features with style features.",
+        "bbox": [
+            496,
+            493,
+            895,
+            570
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "4.1. Dual-path Networks",
+        "text_level": 2,
+        "bbox": [
+            500,
+            579,
+            694,
+            595
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "In our proposed approach, we address a key limitation in the conventional stable diffusion model, where the text embedding remains unchanged throughout the reverse process, from timestamp $t \\in [ 0 , T ]$ , despite the desirable need for the style feature to adapt to the denoising stylized image. This adaptation is crucial as the initial denoising process involves the reconstruction of the image’s shape and color, followed by the refinement of details such as contours and brushstrokes towards the end.",
+        "bbox": [
+            496,
+            602,
+            893,
+            738
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "To address this limitation, we introduce a novel dual-path scheme that simultaneously generates the denoised style image and the stylized content image at the same timestamp T. This is achieved through the following equations:",
+        "bbox": [
+            496,
+            738,
+            893,
+            800
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "equation",
+        "img_path": "images/56a59130fab935810ff286d189b06429ddd16e72bccfd2f8f54a31e534f5e403.jpg",
+        "text": "$$\nI _ { s } = \\mathcal { G } _ { \\boldsymbol { \\theta } } ( \\epsilon _ { I _ { s } } , \\{ f _ { s } \\} , T ) , \\quad I _ { c } = \\mathcal { G } _ { \\boldsymbol { \\theta } } ( \\epsilon _ { I _ { c } } , \\{ f _ { c } \\} , T ) .\\tag{5}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            535,
+            811,
+            852,
+            829
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "This ensures that the features in both networks are naturally aligned in the time dimension. Specifically, given a content image $I _ { c }$ and a style image $I _ { s } ,$ our objective is to obtain a stylized result $\\hat { I } _ { c }$ that retains the content of $I _ { c }$ while incorporating stylistic patterns from $I _ { s }$ . This is achieved through the following equation:",
+        "bbox": [
+            496,
+            839,
+            893,
+            901
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "page_number",
+        "text": "6936",
+        "bbox": [
+            482,
+            945,
+            516,
+            957
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "image",
+        "img_path": "images/764b22eadf3c0ccfa9cc8b5f488374921654f3676a723a80190694e8e471ef58.jpg",
+        "image_caption": [
+            "Figure 2. Overall pipeline of our style transfer framework. The stylization process operates in the latent space. We perform DDIM inversion separately for the content and style images. During the denoising process, our Cross-attention Reweighting is employed to integrate style patterns into the content structure. By iteratively performing 50 denoising steps, we are able to achieve the final stylized output."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            88,
+            101,
+            879,
+            300
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            76,
+            367,
+            470,
+            398
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/d1a9f8cde11f8587d91a433e2825e947264362f5fb8464a1df19b131e44c0a39.jpg",
+        "text": "$$\n\\hat { I _ { c } } = \\mathcal { G } _ { \\boldsymbol { \\theta } } ( \\epsilon _ { I _ { c } } , \\{ f _ { s } , f _ { c } \\} , T ) ,\\tag{6}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            186,
+            409,
+            359,
+            428
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "where $\\mathcal { G } _ { \\theta } ( \\cdot , \\cdot , T )$ represents the application of denoising for $T$ steps in the diffusion model, using fixed pre-trained weights θ. The term $\\epsilon _ { I _ { * } }$ denotes the noisy $x _ { T }$ generated in the forward process by progressively adding Gaussian noise to $I _ { c }$ or $I _ { s } ,$ as described in Eq. (2). The notation $\\{ f _ { s } , f _ { c } \\}$ refers to the spatial U-Net features in the diffusion models from the style and content images, respectively, which are utilized in cross-attention.",
+        "bbox": [
+            76,
+            438,
+            470,
+            559
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "As shown in Figure 2, we utilize DDIM inversion to invert the style image and content image, obtaining the diffusion trajectories $\\boldsymbol { x } _ { [ 0 : T ] } ^ { c }$ and $\\boldsymbol { x } _ { [ 0 : T ] } ^ { s }$ . Subsequently, we introduce a novel cross-attention arrangement to disentangle and fuse content and style information (i.e., $f _ { c }$ and $f _ { s } ,$ denoted as Query, Key and Value), within the diffusion latent space using U-Net at timestamp t. Through $T$ denoising steps, we convert the stylized latent features $\\hat { f } _ { c } ,$ generated by the reweighted attention, into the style transfer result $\\hat { I } _ { c }$",
+        "bbox": [
+            75,
+            560,
+            470,
+            698
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "4.2. Attention Reweighting",
+        "text_level": 2,
+        "bbox": [
+            76,
+            705,
+            287,
+            722
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "As demonstrated in Eq. (6), our attention mechanism incorporates two types of attention calculation between $f _ { s }$ and $f _ { c } \\mathrm { : }$ style-cross attention for merging content and style features, and content self-attention for preserving structure. Since we use the standard self-attention, we mainly discuss the proposed style-cross attention in this section.",
+        "bbox": [
+            75,
+            729,
+            470,
+            821
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Naive Setting It is intuitive to represent content information, such as image structure, using the Query, and represent style information, such as color, texture, and object shape, using the Key and Value features. The style-cross attention then uses the content features to query the information from style images that best suit the input patch. Formally, the inputs of style-cross attention are features from the content latent space c and style latent space s where",
+        "bbox": [
+            75,
+            839,
+            472,
+            901
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "image",
+        "img_path": "images/53651ada9be00211710d446e8aa0c9a35894a5a20503592b46c5039d24eda34c.jpg",
+        "image_caption": [
+            "Figure 3. The outcome of the “Naive Setting” exhibits a bias towards emphasizing the style patterns while neglecting the original content structures. The distorted area corresponds to the low similarity portion between self-attention and cross-attention results, suggesting that the $V _ { s }$ fails to adequately reconstruct the target region, resulting in a loss of content. “Simple Addition” preserves an excessive number of content features, whereas the re-arranged attention achieves a more favorable trade-off."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            501,
+            366,
+            887,
+            511
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            650,
+            893,
+            712
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/6b9954cc0463f0659d8f7544cf1628a568d05a311c19e2132bfef6b3fe969f43.jpg",
+        "text": "$$\n\\hat { f } _ { c } = \\mathrm { A t t n } ( Q _ { c } , K _ { s } , V _ { s } ) = \\mathrm { S o f t m a x } ( \\frac { Q _ { c } K _ { s } ^ { T } } { \\sqrt { d } } ) V _ { s } .\\tag{7}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            537,
+            728,
+            852,
+            762
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Despite the simplicity, we observe that the naive fusion setting in Eq. (7) tends to prioritize the style patterns at the expense of the original content structures. Figure 3 displays the heatmap representing the cosine similarity between the results of cross-attention Atten $( Q _ { c } , K _ { s } , V _ { s } )$ and self-attention $\\mathsf { A t t e n } ( Q _ { c } , K _ { c } , V _ { c } )$ . It is observed that regions with low similarity scores correspond to pixels that have experienced a loss of content information.",
+        "bbox": [
+            496,
+            780,
+            893,
+            901
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "page_number",
+        "text": "6937",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "chart",
+        "img_path": "images/7ca7f4c3344c1bc82f800b530d3898ad03aaf8451e2664d60a404b92af0ccf9e.jpg",
+        "content": "",
+        "chart_caption": [],
+        "chart_footnote": [],
+        "bbox": [
+            80,
+            97,
+            202,
+            167
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "chart",
+        "img_path": "images/e396770f10295f81bc40f0ba9e73d96799f65b5bd81f1bf419437cbae8062102.jpg",
+        "content": "",
+        "chart_caption": [
+            "(a) $\\vec { q _ { c } } K _ { s }$"
+        ],
+        "chart_footnote": [],
+        "bbox": [
+            205,
+            97,
+            331,
+            167
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "chart",
+        "img_path": "images/fb2a7c83548d0e3aa5853d59136178ea7ebd787c7838361a5a181caa1201f086.jpg",
+        "content": "",
+        "chart_caption": [
+            "(b) Softmax( ⃗q<sub>c</sub>K<sub>s</sub>)",
+            "(c) Ours",
+            "Figure 4. Visualization of the distribution of $\\vec { q _ { c } } K _ { s }$ for two content feature points (represented by blue and red bars) before and after the Softmax in (a) and (b). In (c), we display the distribution of $\\vec { q _ { c } } K _ { s }$ normalized by Eq.(11). It is observed that Softmax operation tends to overly amplify smaller values of $\\vec { q _ { c } } K _ { s }$ <sub>s</sub> (e.g., blue bars being shifted further to the right compared to the red bars in (b), even though the original $\\vec { q _ { c } } K _ { s }$ values are mostly less than 0). In contrast, the negatively correlated values are limited to small magnitudes before and after normalization in (c)."
+        ],
+        "chart_footnote": [],
+        "bbox": [
+            333,
+            97,
+            455,
+            169
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Simple Addition To tackle the aforementioned issue, we propose a simple solution by enhancing the content information in $\\hat { f } _ { c }$ through the reintroduction of content selfattention. The equation is formulated as follows:",
+        "bbox": [
+            75,
+            347,
+            472,
+            409
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "img_path": "images/bc1680cd22be9aca96a6af850e9511bb36700a0479833cf6a8d30427886ff153.jpg",
+        "text": "$$\n\\hat { f } _ { c } = \\lambda \\cdot \\mathrm { A t t n } ( Q _ { c } , K _ { s } , V _ { s } ) + ( 1 - \\lambda ) \\cdot \\mathrm { A t t n } ( Q _ { c } , K _ { c } , V _ { c } ) ,\\tag{8}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            84,
+            420,
+            441,
+            438
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "where $\\lambda \\in [ 0 , 1$ ]. However, we found the selection of λ can be delicate. For instance, certain content pixels exhibit a weak correlation with style, as indicated by small values of $\\vec { q _ { c } } K _ { s } ^ { T }$ (represented by blue bars in Figure 4(a), where $\\vec { q _ { c } } K _ { s } ^ { T }$ is less than 0). It is desirable to assign smaller attention weights to these pixels in order to minimize their negative impact. Conversely, in other scenarios where $\\vec { q _ { c } } K _ { s } ^ { T }$ yields meaningful values (represented by red bars in Figure 4(a)), we aim to assign larger attention weights to these pixels. Unfortunately, due to the inherent nature of the Softmax function, which disregards the absolute magnitudes and solely amplifies the differences between $\\vec { q _ { c } } \\bar { K _ { s } ^ { T } }$ values, we observe counter-intuitive results as depicted in Figure 4(b), where smaller $\\vec { q _ { c } } K _ { s } ^ { T }$ values result in larger attention weights after Softmax normalization. In such cases, we need to introduce an additional variable, denoted as $\\lambda ,$ to compensate for this deficiency. However, it is worth noting that a predefined λ value cannot cater to the requirements of every content/style image pair.",
+        "bbox": [
+            75,
+            449,
+            472,
+            738
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Cross-attention Reweighting Though a handcraft λ outside of $\\mathrm { A t t e n } ( \\cdot , \\cdot , \\cdot )$ can not adapt to input images, we find that it can be achieved with a λ inside Softmax(·). By expressing Eq. (8) in matrix form through an equivalent reformulation, we obtain:",
+        "bbox": [
+            75,
+            757,
+            472,
+            833
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "img_path": "images/3331ed88d10a2ecb3a451f8e6a9e8288b5522d79c2e41038257a0785a1b28099.jpg",
+        "text": "$$\n\\begin{array} { r } { \\hat { f } _ { c } = \\left[ \\lambda \\cdot \\sigma \\big ( \\frac { Q _ { c } K _ { s } ^ { T } } { \\sqrt { d } } \\big ) , \\quad ( 1 - \\lambda ) \\cdot \\sigma \\big ( \\frac { Q _ { c } K _ { c } ^ { T } } { \\sqrt { d } } \\big ) \\right] * \\left[ V _ { c } \\right] } \\end{array}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            94,
+            843,
+            431,
+            876
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "img_path": "images/e462e9c5a95048f8836f27d856ee126a70f834b1f21817e976ee3b3827234f86.jpg",
+        "text": "$$\n= A * V ^ { \\prime T } .\\tag{9}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            116,
+            878,
+            196,
+            895
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "(10)",
+        "bbox": [
+            439,
+            881,
+            468,
+            895
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Here, $\\sigma ( \\cdot )$ represents the Softmax function, and each row in $A \\in \\overset { \\cdot \\mathrm { ~ \\wedge ~ } } { \\mathbb { R } } ^ { N \\times \\overset { \\cdot } { 2 } N }$ , denoted as $\\vec { a } \\in \\mathbb R ^ { 2 N }$ , is normalized, i.e., $\\vec { a } \\cdot \\vec { \\bf 1 } ^ { T } = 1$ . This normalization inspires us to re-construct the matrix A in the form of applying Softmax to rows, i.e.,",
+        "bbox": [
+            498,
+            90,
+            893,
+            152
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "img_path": "images/72b2a1e63b3e62aa99c3edc80f992dc8c117e977b35782f64b4fa7c1b50ecd04.jpg",
+        "text": "$$\n\\begin{array} { r } { A ^ { \\prime } = \\sigma ( \\left[ \\lambda \\cdot \\frac { Q _ { c } K _ { s } ^ { T } } { \\sqrt { d } } , \\quad \\frac { Q _ { c } K _ { c } ^ { T } } { \\sqrt { d } } \\right] ) } \\end{array}\\tag{11}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            508,
+            174,
+            715,
+            200
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "img_path": "images/3d1371069d00f4a311e3f30f9d9e38d788cf898202d43d7decf0c0658d92c61c.jpg",
+        "text": "$$\n\\begin{array} { r } { \\hat { f } _ { c } ^ { \\prime } = A ^ { \\prime } * V ^ { \\prime T } = \\sigma ( \\left[ \\lambda \\cdot \\frac { Q _ { c } K _ { s } ^ { T } } { \\sqrt { d } } , \\quad \\frac { Q _ { c } K _ { c } ^ { T } } { \\sqrt { d } } , \\right] ) * \\left[ V _ { s } \\right] . } \\end{array}\\tag{12}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            509,
+            202,
+            852,
+            234
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Specifically, Eq. (11) integrates λ within Softmax, which inherently normalizes the output to the [0, 1] range, eliminating the requirement for $1 \\ : - \\ : \\lambda$ In contrast to the previous attention formulation presented in Eq. (9), the newly proposed reweighted attention matrix $A ^ { \\prime } \\in \\mathbb { R } ^ { N \\times 2 N }$ takes into account both the intra-content feature differences and the inter-content and style feature differences simultaneously during the application of the Softmax(·) function for output normalization. The reweighted attention matrix effectively enhances significant values of both $\\vec { q _ { c } } K _ { s } ^ { T }$ and $\\vec { q _ { c } } K _ { s } ^ { T }$ at each pixel, while automatically suppressing the small values of $\\vec { q _ { c } } K _ { s } ^ { T }$ when the content pixel corresponding to $\\vec { q _ { c } }$ is irrelevant to all style pixels.",
+        "bbox": [
+            496,
+            246,
+            893,
+            443
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Superiority of Cross-attention Reweighting The Crossattention Reweighting can be considered as a more versatile formulation. Its properties can be demonstrated as follows: (i) In cases where the correlation between the style and content images is weak, i.e., when each element $\\vec { q _ { c } } \\vec { k _ { s } } ^ { T }$ in $Q _ { c } K _ { s } ^ { T }$ approaches $- \\infty .$ , the modified attention $\\dot { f } _ { c } ^ { \\prime } = $ $A ^ { \\prime } * V ^ { \\prime T }$ reduces to the standard self-attention of content images, denoted as Attention $( Q _ { c } , K _ { c } , V _ { c } )$ . (ii) When the correlation between the style and content images is strong, if the maximum value of $\\vec { q _ { c } } \\vec { k _ { s } } ^ { T }$ is approximately equal to the maximum value of $\\vec { q _ { c } } \\vec { k _ { c } } ^ { ^ T }$ , and the Softmax operation generates an approximate one-hot probability distribution, then $\\hat { f } _ { c } ^ { \\prime } = A ^ { \\prime } * \\bar { V } ^ { \\prime T }$ is equivalent to Eq. (8). (iii) Last but not least, Eq. (8) can be rewritten using $A ^ { \\prime }$ as follows:",
+        "bbox": [
+            496,
+            460,
+            895,
+            685
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "img_path": "images/f5bafa2aeac35649d176db677f7eb4795515c6c40b9a7b2b150882ff8628970c.jpg",
+        "text": "$$\n\\hat { f } _ { c } = \\frac { 1 } { 2 } \\cdot \\mathrm { A t t n } ( Q _ { c } , K _ { s } , V _ { s } ) + \\frac { 1 } { 2 } \\cdot \\mathrm { A t t n } ( Q _ { c } , K _ { c } , V _ { c } ) ,\\tag{13}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            513,
+            694,
+            851,
+            724
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "img_path": "images/a8e751218fb5f03162aba8e5d200970f852b3c50a188875164d217e4b06701c5.jpg",
+        "text": "$$\n\\begin{array} { r l r } & { } & { = \\sigma \\big ( \\left[ \\frac { Q _ { c } K _ { s } ^ { T } } { \\sqrt { d } } + C , \\frac { Q _ { c } K _ { c } ^ { T } } { \\sqrt { d } } \\right] \\big ) * \\left[ { V _ { s } } \\right] , } \\end{array}\\tag{14}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            531,
+            726,
+            784,
+            760
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "where",
+        "bbox": [
+            500,
+            770,
+            545,
+            784
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "img_path": "images/5b04598363defc2a61bc64b093d057d7afa0f51799183a17883087242daf56bd.jpg",
+        "text": "$$\nC = \\ln { \\frac { \\sum _ { j } \\exp { \\left( [ Q _ { c } K _ { c } ^ { T } ] \\cdot , _ { j } \\right) } } { \\sum _ { j } \\exp { \\left( [ Q _ { c } K _ { s } ^ { T } ] \\cdot , _ { j } \\right) } } } .\\tag{15}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            593,
+            780,
+            797,
+            819
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "In Eq. (14), the simple addition of self-attention to crossattention introduces an additional term C. This variable serves to magnify all elements within $Q _ { c } K _ { s } ^ { T }$ , including small values that represent weak correlations between style and content features, which are deemed inconsequential and should be disregarded. Consequently, the incorporation of $C$ may introduce an increased level of noise into the Softmax function, thereby resulting in sub-optimal outcomes.",
+        "bbox": [
+            498,
+            825,
+            893,
+            901
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "page_number",
+        "text": "6938",
+        "bbox": [
+            482,
+            945,
+            516,
+            957
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "image",
+        "img_path": "images/e24987f60f3997fb7e30cde7588b4f37ec8d48181fc930ba1c15660b3426a521.jpg",
+        "image_caption": [
+            "Figure 5. The illustrations of regional control. The control map is represented by the binary mask located at the bottom right of the content reference. Black pixels mark the areas designated for style transfer."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            84,
+            93,
+            459,
+            232
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            315,
+            470,
+            363
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Conditional Control The simplicity of Eq. (11) allows for easy extension of the attention reweighting technique to more complex downstream applications. To illustrate this, we introduce an additional mapping function $\\phi ( \\cdot )$ on $\\frac { Q _ { c } K _ { c } ^ { T } } { \\sqrt { d } }$ which provides enhanced control over a specific region Ω for image style transfer. The modified equation is given by:",
+        "bbox": [
+            75,
+            388,
+            470,
+            487
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "equation",
+        "img_path": "images/aa4e2d3ab4c5e3a0578dba6a99a6f60db7a87051a202898a29a9ddf5079a18db.jpg",
+        "text": "$$\n\\begin{array} { r } { A ^ { \\prime } = \\sigma \\big ( \\Big [ \\phi \\big ( \\frac { Q _ { c } K _ { s } ^ { T } } { \\sqrt { d } } \\big ) , \\quad \\frac { Q _ { c } K _ { c } ^ { T } } { \\sqrt { d } } \\Big ] \\big ) . } \\end{array}\\tag{16}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            166,
+            500,
+            377,
+            526
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Here, $\\phi ( x _ { i , j } )$ is defined as:",
+        "bbox": [
+            76,
+            539,
+            259,
+            556
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "equation",
+        "img_path": "images/6b749ab65b8240cee566aa3307559a998a6b80cfdc781ad50bb23a27f8d9582d.jpg",
+        "text": "$$\n\\phi ( x _ { i , j } ) = \\left\\{ \\begin{array} { l l } { - \\infty } & { \\{ i , j \\} \\notin \\Omega } \\\\ { x _ { i , j } } & { \\mathrm { o t h e r w i s e } } \\end{array} \\right. .\\tag{17}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            160,
+            570,
+            382,
+            604
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "It is important to note that directly setting the values to −∞ may lead to discontinuous style switching, resulting in an artificial sharp boundary. To achieve a more natural gradient effect, we utilize a linear gradient for $\\phi ( x _ { i , j } )$ , transitioning from −∞ to $x _ { i , j }$ . We visually demonstrate the effect of conditional control in Figure 5, where Ω region corresponds to the white pixels in the binary mask.",
+        "bbox": [
+            75,
+            617,
+            470,
+            723
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Furthermore, the extension of style transfer from a oneto-one content-style image pair to a one-to-many setting can be easily achieved using Eq. (11). In the case where we aim to transfer the style of N style images to a single content image, the equation is modified as follows:",
+        "bbox": [
+            75,
+            724,
+            472,
+            801
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "equation",
+        "img_path": "images/d2cf82f8a490ac90b94e6cc1b96776aaae82efd07ca08eda90eb9344c3f5a357.jpg",
+        "text": "$$\n\\begin{array} { r } { A ^ { \\prime } = \\sigma ( \\left[ \\frac { Q _ { c } K _ { s _ { 1 } } ^ { T } } { \\sqrt { d } } , \\quad . . . , \\quad \\frac { Q _ { c } K _ { s _ { N } } ^ { T } } { \\sqrt { d } } , \\quad \\frac { Q _ { c } K _ { c } ^ { T } } { \\sqrt { d } } , \\right] ) . } \\end{array}\\tag{18}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            109,
+            814,
+            410,
+            843
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Owing to the limited memory footprint, we consider this aspect as a potential area for future research and leave it for further investigation.",
+        "bbox": [
+            75,
+            854,
+            470,
+            901
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "5. Experiments",
+        "text_level": 2,
+        "bbox": [
+            500,
+            89,
+            633,
+            107
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "5.1. Implementation Details",
+        "text_level": 2,
+        "bbox": [
+            500,
+            113,
+            718,
+            131
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Our research builds upon the concept of Stable Diffusion [35] and utilizes the v1.5 checkpoint. In our experimental setup, the text prompts are configured as null character strings. The denoising process consists of a total of 30 steps. We introduce our cross-attention reweighting module between layers 10-15 during the $5 ^ { t h } \\ – 3 0 ^ { t h }$ denoising steps.",
+        "bbox": [
+            496,
+            137,
+            895,
+            231
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "5.2. Evaluation",
+        "text_level": 2,
+        "bbox": [
+            500,
+            237,
+            622,
+            253
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "We conduct a comparative analysis of our proposed method against state-of-the-art style transfer approaches, including ArtFlow [2], AdaAttN [25], IEST [8], StyTr<sup>2</sup> [13], CAST [50], QuanArt [17], InST [51] and VCT [9].",
+        "bbox": [
+            496,
+            261,
+            893,
+            321
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Qualitative evaluation. The qualitative comparisons presented in Figure 6 provide a visual assessment of the outcomes achieved by different style transfer methods. Art-Flow [2] exhibits limitations regarding style representation and the smoothness of stylization results. AdaAttN [25] and IEST [8] exhibit inconsistencies in the generated output style compared to the input style reference. The results of QuanArt [17] suffer from a weakening of the style performance due to the prominence of the content appearance. CAST [50] and $\\mathrm { S t y T r ^ { 2 } }$ [13] still fall short in terms of faithfully reproducing the artistic qualities, as “not real compared with artworks” due to unfaithful style loss constraints.",
+        "bbox": [
+            496,
+            323,
+            895,
+            518
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Diffusion-based approaches, InST [51] and VCT [9], encounter challenges in converging towards the optimal style embedding, leading to failure in generating a similar style and content as the input (as evident from the content deviation in Figure 1 and style deviation in Figure 6). VCT [9] demonstrates better style performance, however, still suffers from the issue of content bias, as evidenced by the complete alteration of the girl’s facial identity while not precisely matching the desired input style. Additionally, it is worth noting that InST [51] and VCT [9] require a training time of approximately 20 minutes per style image, whereas our proposed method does not require any training/tuning.",
+        "bbox": [
+            496,
+            518,
+            895,
+            702
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "In contrast, our proposed approach does not rely on a style loss to enforce conformity of the original image to a different distribution. Unlike CNN-based methods, our model does not include a fixed pre-trained encoder, thereby reducing the loss of content and style information. As demonstrated in Figure $^ { 6 , }$ our method achieves captivating stylized results by effectively transferring style patterns, such as painting strokes and lines, onto input content images. These style patterns are skillfully adapted to the content semantics, as exemplified in the $1 ^ { \\mathrm { s t } } , 3 ^ { \\mathrm { r d } }$ , and $7 ^ { \\mathrm { t h } }$ rows of Figure 6.",
+        "bbox": [
+            496,
+            702,
+            893,
+            853
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "User study. To quantitatively evaluate the impact of different stylization methods, we conducted a user study to gather public preferences. A total of 55 participants were randomly selected for the study. We provided them with 10 content images and 10 style images and generated 100 stylized results using both our method and comparison methods. Each participant was shown 32 groups of questions, where they were presented with a random content/style image and its corresponding stylized result from both our method and a random comparison method. The participants were then asked to answer three questions: 1) which stylization result better preserves the content, 2) which stylization result exhibits better style patterns and 3) which stylization result has a better overall effect. In total, we collected 1, 760 votes. The vote counts are summarized in Table 1. We can observe that Z<sup>∗</sup> beats all contrast methods on average in terms of content preservation. Only CAST and StyTr<sup>2</sup> outperform Z<sup>∗</sup> regarding style representation, while the difference is insignificant. In terms of the overall effect, Z<sup>∗</sup> clearly outperforms the comparative methods; showing that Z<sup>∗</sup> achieves a balance between style and content, leading to satisfactory results.",
+        "bbox": [
+            498,
+            869,
+            895,
+            901
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "page_number",
+        "text": "6939",
+        "bbox": [
+            482,
+            945,
+            516,
+            957
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "image",
+        "img_path": "images/694e0c5226fd118cfc0ce8dd256b7a305892dda9b9bd33afc8b44dd376c6d9b6.jpg",
+        "image_caption": [],
+        "image_footnote": [
+            "Content",
+            "Style",
+            "Ours",
+            "VCT",
+            "InST",
+            "QuanArt",
+            "CAST",
+            "StyTr²",
+            "IEST",
+            "AdaAttN",
+            "ArtFlow"
+        ],
+        "bbox": [
+            83,
+            89,
+            887,
+            549
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "table",
+        "img_path": "images/32f94e6562adba8cf7ac2d967fac205ddbcac8889bf224f668d2842e5ba5cfa5.jpg",
+        "table_caption": [
+            "Figure 6. Compared with other style transfer methods. The content images are presented in first column, the style images are presented in second column, and the stylized results generated by different methods are presented in the rest.",
+            "Table 1. User study results. Each number represents the percentage of votes that the corresponding method is preferred to ours, using the criteria of overall quality, preservation of content and style, respectively."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td></td><td>VCT [9]</td><td>StyleDiff [19]</td><td>InST [51]</td><td>QuanArt [17]</td><td>CAST [50]</td><td>StyTr² [13]</td><td>IEST [8]</td><td>AdaAttN [25]</td><td>ArtFlow [2]</td></tr><tr><td>content</td><td>20.6%</td><td>16.4%</td><td>18.6%</td><td>35.5%</td><td>23.6%</td><td>45.0%</td><td>45.9%</td><td>32.3%</td><td>37.7%</td></tr><tr><td>style</td><td>30.7%</td><td>25.9%</td><td>32.3%</td><td>28.6%</td><td>56.4%</td><td>51.4%</td><td>40.9%</td><td>40.5%</td><td>23.6%</td></tr><tr><td>overall</td><td>29.5%</td><td>16.4%</td><td>15.9%</td><td>35.9%</td><td>29.5%</td><td>35.5%</td><td>36.4%</td><td>35.0%</td><td>22.7%</td></tr></table>",
+        "bbox": [
+            81,
+            654,
+            890,
+            731
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            747,
+            472,
+            900
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            747,
+            893,
+            900
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "page_number",
+        "text": "6940",
+        "bbox": [
+            482,
+            945,
+            516,
+            957
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "chart",
+        "img_path": "images/e5507a11df9b423809e6216d19e1db105b90e71fab2a6bb3dc0608e67079d08e.jpg",
+        "content": "",
+        "chart_caption": [
+            "Figure 7. Injecting attention module in different denoising steps."
+        ],
+        "chart_footnote": [],
+        "bbox": [
+            78,
+            89,
+            468,
+            145
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "image",
+        "img_path": "images/71e9c8ed45859f0c30246a4a42de64404bb06980345067d3c0c43708cf8cad90.jpg",
+        "image_caption": [
+            "Figure 8. Injecting attention module in different U-Net layers."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            78,
+            179,
+            468,
+            239
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "image",
+        "img_path": "images/816d2766cf316beff3d8baea2abdb35274f847ac3714600afd179d33eddc3185.jpg",
+        "image_caption": [
+            "Figure 9. Results of using different attention arrangement."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            78,
+            273,
+            467,
+            395
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "5.3. Ablation Study",
+        "text_level": 2,
+        "bbox": [
+            76,
+            435,
+            230,
+            452
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Influence of the attention injection step and layers. The impact of the attention injection step and layers on stylization outcomes is analyzed. As depicted in Figure 7, initiating the denoising step too early results in the loss of content structure information, whereas increasing the start denoising step enhances content preservation but sacrifices style patterns (as observed in the first three columns of results). On the other hand, increasing the overall denoising steps makes style patterns more prominent without compromising content structure (as evident in the comparison between the second and fourth columns of results). Consequently, the denoising process is initiated at the 5<sup>th</sup> step and concluded at the 30<sup>th</sup> step to achieve the most optimal stylized results.",
+        "bbox": [
+            75,
+            458,
+            470,
+            655
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "In Figure 8, the stylized results obtained by injecting the attention module at different layers of the U-Net architecture are presented. Utilizing all layers in U-Net adversely affects content structure in the results. The low-resolution layers in U-Net effectively preserve content structure but transfer fewer style patterns (layers 5-10). Conversely, the highresolution layers in U-Net can extract style features (layers 0-5 and layers 10-15), but encoder layers (layers 0-5) damage content structure. Hence, the attention module is injected into the high-resolution layers of the decoder.",
+        "bbox": [
+            75,
+            655,
+            472,
+            808
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Influence of the cross-attention reweighting. To evaluate the efficacy of the cross-attention reweighting, we provide a visual representation of the stylized outcome in Figure 9. We conduct a comparative analysis by considering two ablation scenarios: 1) the complete removal of content, as described in Eq. (7), and 2) the utilization of only the summation operation, denoted by Eq. (8). The coefficient λ in Eq. (8) is assigned a value of 0.5. As illustrated in Figure 9, eliminating the content component leads to compromised preservation of content structures within the stylized outputs. Similarly, incorporating solely the Query feature of the content image results in the loss of content details and insufficient style patterns. In contrast, the crossattention reweighting demonstrates a superior ability to strike a balance between content and style in the stylized results.",
+        "bbox": [
+            75,
+            824,
+            472,
+            901
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "image",
+        "img_path": "images/88633acc01184291379b88085992344b9dd3b29590bf82ded47a20b52a3f54f0.jpg",
+        "image_caption": [
+            "Figure 10. The effect of λ in Eq. (12) ."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            504,
+            90,
+            888,
+            203
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            239,
+            893,
+            392
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Influence of the style scaling factor. We present a visualization of the impact of various values of λ in Eq. (12). The results, depicted in Figure 10, demonstrate the robustness of our method to different choices of λ. Specifically, our approach exhibits satisfactory performance when λ is set to values greater than or equal to 1.2. Based on these findings, we adopt a fixed value of λ = 1.2 for all experiments conducted in this study.",
+        "bbox": [
+            496,
+            411,
+            895,
+            534
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "6. Conclusion",
+        "text_level": 2,
+        "bbox": [
+            500,
+            546,
+            620,
+            564
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "This paper introduces a novel zero-shot style transfer approach that leverages ample prior knowledge within a pre-trained diffusion model. By incorporating a Key and Value features attention layer, we modify the self-attention mechanism in the diffusion model, enabling the use of Query features to retrieve style-related information from the Key and Value features. To enhance the preservation of content structures in stylized outputs, we propose a crossattention reweighting technique that incorporates additional content information and achieves a more favorable balance between content preservation and style rendering. Extensive experimental evaluations demonstrate the superiority of our proposed method in terms of stylization results, outperforming existing state-of-the-art approaches.",
+        "bbox": [
+            496,
+            573,
+            895,
+            786
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Acknowledgements",
+        "text_level": 2,
+        "bbox": [
+            500,
+            799,
+            668,
+            816
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "This work was supported in part by the National Natural Science Foundation of China under nos. 62102162, and U20B2070, in part by the Beijing Science and Technology Plan Project under no. Z231100005923033, and in part by Beijing Natural Science Foundation under no. L221013.",
+        "bbox": [
+            496,
+            824,
+            893,
+            901
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "page_number",
+        "text": "6941",
+        "bbox": [
+            482,
+            945,
+            514,
+            958
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "References",
+        "text_level": 2,
+        "bbox": [
+            78,
+            89,
+            176,
+            106
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "list",
+        "sub_type": "ref_text",
+        "list_items": [
+            "[1] Jie An, Haoyi Xiong, Jun Huan, and Jiebo Luo. Ultrafast photorealistic style transfer via neural architecture search. In AAAI Conference on Artificial Intelligence (AAAI), pages 10443–10450, 2020. 2",
+            "[2] Jie An, Siyu Huang, Yibing Song, Dejing Dou, Wei Liu, and Jiebo Luo. ArtFlow: Unbiased image style transfer via reversible neural flows. In IEEE/CVF Conferences on Computer Vision and Pattern Recognition (CVPR), pages 862–871, 2021. 1, 2, 6, 7",
+            "[3] Omri Avrahami, Dani Lischinski, and Ohad Fried. Blended diffusion for text-driven editing of natural images. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 18208–18218, 2022. 2",
+            "[4] Dzmitry Bahdanau, Kyunghyun Cho, and Yoshua Bengio. Neural machine translation by jointly learning to align and translate. In 3rd International Conference on Learning Representations, ICLR 2015, San Diego, CA, USA, May 7-9, 2015, Conference Track Proceedings, 2015. 3",
+            "[5] Tim Brooks, Aleksander Holynski, and Alexei A Efros. Instructpix2pix: Learning to follow image editing instructions. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 18392–18402, 2023. 2",
+            "[6] Mingdeng Cao, Xintao Wang, Zhongang Qi, Ying Shan, Xiaohu Qie, and Yinqiang Zheng. Masactrl: Tuning-free mutual self-attention control for consistent image synthesis and editing. CoRR, abs/2304.08465, 2023. 2, 3",
+            "[7] Haibo Chen, Zhizhong Wang, Huiming Zhang, Zhiwen Zuo, Ailin Li, Wei Xing, Dongming Lu, et al. Artistic style transfer with internal-external learning and contrastive learning. Advances in Neural Information Processing Systems, 34:26561–26573, 2021. 2",
+            "[8] Haibo Chen, Zhizhong Wang, Huiming Zhang, Zhiwen Zuo, Ailin Li, Wei Xing, Dongming Lu, et al. Artistic style transfer with internal-external learning and contrastive learning. In Advances in Neural Information Processing Systems (NeurIPS), 2021. 6, 7",
+            "[9] Bin Cheng, Zuhao Liu, Yunbo Peng, and Yue Lin. General image-to-image translation with one-shot image guidance. In Proceedings of the IEEE/CVF International Conference on Computer Vision, pages 22736–22746, 2023. 1, 2, 3, 6, 7",
+            "[10] Guillaume Couairon, Jakob Verbeek, Holger Schwenk, and Matthieu Cord. Diffedit: Diffusion-based semantic image editing with mask guidance. arXiv preprint arXiv:2210.11427, 2022. 2",
+            "[11] Yingying Deng, Fan Tang, Weiming Dong, Wen Sun, Feiyue Huang, and Changsheng Xu. Arbitrary style transfer via multi-adaptation network. In ACM International Conference on Multimedia, pages 2719–2727, 2020. 1, 2",
+            "[12] Yingying Deng, Fan Tang, Weiming Dong, Haibin Huang, Chongyang Ma, and Changsheng Xu. Arbitrary video style transfer via multi-channel correlation. In AAAI Conference on Artificial Intelligence (AAAI), pages 1210–1217, 2021. 2",
+            "[13] Yingying Deng, Fan Tang, Weiming Dong, Chongyang Ma, Xingjia Pan, Lei Wang, and Changsheng Xu. Stytr2: Image style transfer with transformers. In Proceedings of",
+            "the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), pages 11326–11336, 2022. 1, 2, 6, 7",
+            "[14] Alexey Dosovitskiy, Lucas Beyer, Alexander Kolesnikov, Dirk Weissenborn, Xiaohua Zhai, Thomas Unterthiner, Mostafa Dehghani, Matthias Minderer, Georg Heigold, Sylvain Gelly, et al. An image is worth 16x16 words: Transformers for image recognition at scale. In International Conference on Learning Representations (ICLR), 2021. 3",
+            "[15] Leon A Gatys, Alexander S Ecker, and Matthias Bethge. Image style transfer using convolutional neural networks. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), pages 2414–2423, 2016. 1, 2",
+            "[16] Amir Hertz, Ron Mokady, Jay Tenenbaum, Kfir Aberman, Yael Pritch, and Daniel Cohen-Or. Prompt-to-prompt image editing with cross-attention control. In The Eleventh International Conference on Learning Representations, ICLR 2023, Kigali, Rwanda, May 1-5, 2023. OpenReview.net, 2023. 2",
+            "[17] Siyu Huang, Jie An, Donglai Wei, Jiebo Luo, and Hanspeter Pfister. Quantart: Quantizing image style transfer towards high visual fidelity. In Proceedings ofthe IEEE Conference on Computer Vision and Pattern Recognition, 2023. 6, 7",
+            "[18] Xun Huang and Belongie Serge. Arbitrary style transfer in real-time with adaptive instance normalization. In IEEE International Conference on Computer Vision (ICCV), pages 1501–1510, 2017. 1, 2",
+            "[19] Jaeseok Jeong, Mingi Kwon, and Youngjung Uh. Trainingfree style transfer emerges from h-space in diffusion models. arXiv preprint arXiv:2303.15403, 2023. 7",
+            "[20] Yongcheng Jing, Yining Mao, Yiding Yang, Yibing Zhan, Mingli Song, Xinchao Wang, and Dacheng Tao. Learning graph neural networks for image style transfer. In European Conference on Computer Vision, 2022. 2",
+            "[21] Justin Johnson, Alexandre Alahi, and Li Fei-Fei. Perceptual losses for real-time style transfer and super-resolution. In European Conference on Computer Vision (ECCV), pages 694–711. Springer, 2016. 1",
+            "[22] Bahjat Kawar, Shiran Zada, Oran Lang, Omer Tov, Huiwen Chang, Tali Dekel, Inbar Mosseri, and Michal Irani. Imagic: Text-based real image editing with diffusion models. CoRR, abs/2210.09276, 2022. 2",
+            "[23] Chuan Li and Michael Wand. Precomputed real-time texture synthesis with markovian generative adversarial networks. In European Conference on Computer Vision (ECCV), pages 702–716, 2016. 2",
+            "[24] Senmao Li, Joost van de Weijer, Taihang Hu, Fahad Shahbaz Khan, Qibin Hou, Yaxing Wang, and Jian Yang. Stylediffusion: Prompt-embedding inversion for text-based editing. arXiv preprint arXiv:2303.15649, 2023. 2",
+            "[25] Songhua Liu, Tianwei Lin, Dongliang He, Fu Li, Meiling Wang, Xin Li, Zhengxing Sun, Qian Li, and Errui Ding. Adaattn: Revisit attention mechanism in arbitrary neural style transfer. In Proceedings ofthe IEEE International Conference on Computer Vision (ICCV), pages 6649–6658, 2021. 6, 7",
+            "[26] Ze Liu, Yutong Lin, Yue Cao, Han Hu, Yixuan Wei, Zheng Zhang, Stephen Lin, and Baining Guo. Swin transformer: Hierarchical vision transformer using shifted windows. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2021. 3"
+        ],
+        "bbox": [
+            84,
+            114,
+            470,
+            169
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "page_number",
+        "text": "6942",
+        "bbox": [
+            482,
+            945,
+            516,
+            957
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "list",
+        "sub_type": "ref_text",
+        "list_items": [
+            "[27] Ming Lu, Hao Zhao, Anbang Yao, Yurong Chen, Feng Xu, and Li Zhang. A closed-form solution to universal style transfer. In IEEE/CVF International Conference on Computer Vision (ICCV), pages 5952–5961, 2019. 2",
+            "[28] Ron Mokady, Amir Hertz, Kfir Aberman, Yael Pritch, and Daniel Cohen-Or. Null-text inversion for editing real images using guided diffusion models. CoRR, abs/2211.09794, 2022. 2",
+            "[29] Alex Nichol, Prafulla Dhariwal, Aditya Ramesh, Pranav Shyam, Pamela Mishkin, Bob McGrew, Ilya Sutskever, and Mark Chen. Glide: Towards photorealistic image generation and editing with text-guided diffusion models. arXiv preprint arXiv:2112.10741, 2021. 2",
+            "[30] Zhihong Pan, Riccardo Gherardi, Xiufeng Xie, and Stephen Huang. Effective real image editing with accelerated iterative diffusion inversion. In Proceedings of the IEEE/CVF International Conference on Computer Vision, pages 15912– 15921, 2023. 2",
+            "[31] Dae Young Park and Kwang Hee Lee. Arbitrary style transfer with style-attentional networks. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), pages 5880–5888, 2019. 3",
+            "[32] Dae Young Park and Kwang Hee Lee. Arbitrary style transfer with style-attentional networks. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), pages 5880–5888, 2019. 1",
+            "[33] Aditya Ramesh, Prafulla Dhariwal, Alex Nichol, Casey Chu, and Mark Chen. Hierarchical text-conditional image generation with CLIP latents. CoRR, abs/2204.06125, 2022. 2",
+            "[34] Eric Risser, Pierre Wilmot, and Connelly Barnes. Stable and controllable neural texture synthesis and style transfer using histogram losses. arXiv preprint arXiv:1701.08893, 2017. 2",
+            "[35] Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, and Björn Ommer. High-resolution image synthesis with latent diffusion models. In IEEE/CVF Conference on Computer Vision and Pattern Recognition, CVPR 2022, New Orleans, LA, USA, June 18-24, 2022, pages 10674–10685. IEEE, 2022. 6",
+            "[36] Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, and Björn Ommer. High-resolution image synthesis with latent diffusion models. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 10684–10695, 2022. 2",
+            "[37] Chitwan Saharia, William Chan, Saurabh Saxena, Lala Li, Jay Whang, Emily L. Denton, Seyed Kamyar Seyed Ghasemipour, Raphael Gontijo Lopes, Burcu Karagol Ayan, Tim Salimans, Jonathan Ho, David J. Fleet, and Mohammad Norouzi. Photorealistic text-to-image diffusion models with deep language understanding. In NeurIPS, 2022. 2",
+            "[38] Lu Sheng, Ziyi Lin, Jing Shao, and Xiaogang Wang. Avatarnet: Multi-scale zero-shot style transfer by feature decoration. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), pages 8242–8250. IEEE, 2018. 1, 2",
+            "[39] Hao Tang, Songhua Liu, Tianwei Lin, Shaoli Huang, Fu Li, Dongliang He, and Xinchao Wang. Master: Meta style transformer for controllable zero-shot and few-shot artistic",
+            "style transfer. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), pages 18329–18338, 2023. 2",
+            "[40] Narek Tumanyan, Michal Geyer, Shai Bagon, and Tali Dekel. Plug-and-play diffusion features for text-driven image-toimage translation. CoRR, abs/2211.12572, 2022. 2, 3",
+            "[41] Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Lukasz Kaiser, and Illia Polosukhin. Attention is all you need. In Advances in Neural Information Processing Systems 30: Annual Conference on Neural Information Processing Systems 2017, December 4-9, 2017, Long Beach, CA, USA, pages 5998–6008, 2017. 3",
+            "[42] Huan Wang, Yijun Li, Yuehai Wang, Haoji Hu, and Ming-Hsuan Yang. Collaborative distillation for ultra-resolution universal style transfer. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), pages 1860–1869, 2020. 2",
+            "[43] Jianbo Wang, Huan Yang, Jianlong Fu, Toshihiko Yamasaki, and Baining Guo. Fine-grained image style transfer with visual transformers. In Proceedings of the Asian Conference on Computer Vision, pages 841–857, 2022. 2",
+            "[44] Hua-Peng Wei, Ying-Ying Deng, Fan Tang, Xing-Jia Pan, and Wei-Ming Dong. A comparative study of cnn-and transformerbased visual style transfer. Journal of Computer Science and Technology, 37(3):601–614, 2022. 2",
+            "[45] Chen Henry Wu and Fernando De la Torre. A latent space of stochastic diffusion models for zero-shot image editing and guidance. In Proceedings ofthe IEEE/CVF International Conference on Computer Vision, pages 7378–7387, 2023. 2",
+            "[46] Xiaolei Wu, Zhihao Hu, Lu Sheng, and Dong Xu. Styleformer: Real-time arbitrary style transfer via parametric style composition. In Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV), pages 14618–14627, 2021. 1, 2",
+            "[47] Yifan Xu, Huapeng Wei, Minxuan Lin, Yingying Deng, Kekai Sheng, Mengdan Zhang, Fan Tang, Weiming Dong, Feiyue Huang, and Changsheng Xu. Transformers in computational visual media: A survey. Computational Visual Media, 8(1): 33–62, 2022. 2",
+            "[48] Serin Yang, Hyunmin Hwang, and Jong Chul Ye. Zero-shot contrastive loss for text-guided diffusion image style transfer. arXiv preprint arXiv:2303.08622, 2023. 2",
+            "[49] Chiyu Zhang, Jun Yang, Lei Wang, and Zaiyan Dai. S2wat: Image style transfer via hierarchical vision transformer using strips window attention. arXiv preprint arXiv:2210.12381, 2022. 2",
+            "[50] Yuxin Zhang, Fan Tang, Weiming Dong, Haibin Huang, Chongyang Ma, Tong-Yee Lee, and Changsheng Xu. Domain enhanced arbitrary image style transfer via contrastive learning. In ACM SIGGRAPH 2022 Conference Proceedings, pages 1–8, 2022. 1, 2, 6, 7",
+            "[51] Yuxin Zhang, Nisha Huang, Fan Tang, Haibin Huang, Chongyang Ma, Weiming Dong, and Changsheng Xu. Inversion-based style transfer with diffusion models. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 10146–10156, 2023. 1, 2, 3, 6, 7"
+        ],
+        "bbox": [
+            78,
+            93,
+            470,
+            147
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "page_number",
+        "text": "6943",
+        "bbox": [
+            482,
+            945,
+            516,
+            957
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "list",
+        "sub_type": "ref_text",
+        "list_items": [
+            "[52] Zhixing Zhang, Ligong Han, Arnab Ghosh, Dimitris N Metaxas, and Jian Ren. Sine: Single image editing with textto-image diffusion models. In Proceedings ofthe IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 6027–6037, 2023. 2"
+        ],
+        "bbox": [
+            78,
+            93,
+            470,
+            160
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "page_number",
+        "text": "6944",
+        "bbox": [
+            482,
+            945,
+            514,
+            957
+        ],
+        "page_idx": 10
+    }
+]
