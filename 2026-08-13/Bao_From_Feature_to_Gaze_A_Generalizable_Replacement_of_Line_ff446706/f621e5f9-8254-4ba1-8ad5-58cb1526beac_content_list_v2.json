@@ -1,0 +1,3278 @@
+[
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "From Feature to Gaze: A Generalizable Replacement of Linear Layer for Gaze Estimation"
+                    }
+                ],
+                "level": 1
+            },
+            "bbox": [
+                215,
+                130,
+                754,
+                174
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Yiwei Bao Feng Lu"
+                    }
+                ]
+            },
+            "bbox": [
+                392,
+                204,
+                584,
+                220
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "State Key Laboratory of VR Technology and Systems, School of CSE, Beihang University {baoyiwei, lufeng}@buaa.edu.cn"
+                    }
+                ]
+            },
+            "bbox": [
+                127,
+                222,
+                841,
+                257
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "Abstract"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                233,
+                290,
+                315,
+                308
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Deep-learning-based gaze estimation approaches often sufferfrom notable performance degradation in unseen target domains. One of the primary reasons is that the Fully Connected layer is highly prone to overfitting when mapping the high-dimensional imagefeature to 3D gaze. In this paper, we propose Analytical Gaze Generalization framework (AGG) to improve the generalization ability of gaze estimation models without touching target domain data. The AGG consists of two modules, the Geodesic Projection Module (GPM) and the Sphere-Oriented Training (SOT). GPM is a generalizable replacement of FC layer, which projects high-dimensional imagefeatures to 3D space analytically to extract the principle components of gaze. Then, we propose Sphere-Oriented Training (SOT) to incorporate the GPM into the training process andfurther improve cross-domain performances. Experimental results demonstrate that the AGG effectively alleviate the overfitting problem and consistently improves the cross-domain gaze estimation accuracy in 12 cross-domain settings, without requiring any target domain data. The insight from the Analytical Gaze Generalization framework has the potential to benefit other regression tasks with physical meanings."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                321,
+                470,
+                656
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "1. Introduction"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                657,
+                210,
+                674
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Eye gaze reveals where human attention lands, which has been widely applied in a variety of territories, such as VR/AR systems [3, 15, 26], medical analysis [4, 13, 14] and human-computer interaction[17, 27, 34]. Gaze estimation methods can be classified into two categories: model-based approaches and appearance-based approaches. Both approaches have their own strengths and weaknesses. Modelbased approaches estimate gaze by modeling the anatomical structure of the eyeball. These methods achieve remarkable accuracy in controlled environment. But they typically require dedicated hardware such as infrared cameras and light sources. Appearance-based approaches use cost-effective web cameras. They typically train Convolutional Neural Networks (CNNs) in an end-to-end way, enabling them to predict gaze direction from user face/eye images directly. In recent years, appearance-based approaches have garnered great interest due to their simplified hardware requirements and the potential for widespread applications."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                683,
+                470,
+                866
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/c1dd8d341102fe4962a7ad6581d80f38dc666099c0d3610aaa677c513daf695b.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 1. Overview of the proposed AGG framework for generalizing gaze estimation models to unseen target domains."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                503,
+                291,
+                887,
+                426
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                486,
+                893,
+                578
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "However, appearance-based methods suffer from severe performance degradation in cross-domain settings. To improve the cross-domain performance, various domain adaptation approaches have been proposed, i.e., adversarial learning [12, 32], contrastive learning [33] and collaborative learning [20]. However, these approaches require a number of target domain samples for adaptation, which is not always attainable in real-world scenarios. More recently, Cheng et al. proposed to generalize gaze estimation model by purifying gaze feature during source domain training [8]. The gaze generalization task is more practical yet more challenging, because it does not have access to any target domain data."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                580,
+                893,
+                776
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "One of the significant reasons for the poor cross-domain performances is the overfitting problem. Gaze estimation CNNs are trained to extract high-dimensional image features (e.g. 512D) from input face images and map these features to gaze (3D unit vector) by a Fully Connected layer with thousands of parameters. The numerous parameters of the FC layer easily overfit to gaze irrelevant factors within the high-dimensional image features during the end-to-end training process. One possible solution is to extract gaze-related information from the image features, i.e. the Principle Component of Gaze (PCG), while excluding other irrelevant information."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                780,
+                895,
+                902
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": []
+            },
+            "bbox": [
+                104,
+                2,
+                181,
+                41
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": [
+                    {
+                        "type": "text",
+                        "content": "This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore."
+                    }
+                ]
+            },
+            "bbox": [
+                235,
+                1,
+                810,
+                46
+            ]
+        },
+        {
+            "type": "page_footnote",
+            "content": {
+                "page_footnote_content": [
+                    {
+                        "type": "text",
+                        "content": "*Corresponding Author. This work was supported by the National Natural Science Foundation of China (NSFC) under Grant 62372019."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                875,
+                468,
+                900
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1409"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                92,
+                470,
+                151
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In this paper, we introduce the Analytical Gaze Generalization framework(AGG), a novel gaze generalization approach that connects the high-dimensional image features to gaze analytically. The AGG consists of two modules, the Geodesic Projection Module (GPM) and the Sphere-Oriented Training (SOT) module. Given a pretrained gaze estimation model, the GPM serves as a replacement of the last FC layer, alleviating the overfitting issue by analytical projection and alignment. Based on the observation that the geodesic distance between the image features is proportional to the angular gaze difference between samples, the GPM projects the high-dimensional image features to 3D space by the geodesic distance to extract the Principle Component of Gaze. Then, we estimate gaze from the projected features by the proposed Sphere Alignment algorithm using physical rotation and scaling with only 10 learnable parameters. Next, we propose the Sphere-Oriented Training to incorporate the GPM into the training process to improve the generalization ability of the whole network. Given source domain labels, the Sphere-Oriented Training optimizes the gaze estimation network based on the reverse process of the GPM."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                152,
+                472,
+                484
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Experiments show that, by only replacing the last FC layer of the baseline model with GPM, both the accuracy and the stability in cross-domain testing have been improved. After optimizing the model using the Sphere-Oriented Training in the source domain, the performance is further improved and outperforms SOTA gaze estimation methods in multiple different cross-domain settings. The primary contributions of this work are as follow:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                484,
+                470,
+                607
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• We propose the Geodesic Projection Module (GPM), a novel method that predicts gaze from the geodesic distance between the image features analytically. As a novel and explainable approach for gaze estimation, the insight GPM presents may also inspire other regression tasks like pose estimation."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                609,
+                470,
+                700
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• We propose the AGG framework for generalizable gaze estimation. The AGG framework utilizes the Sphere-Oriented Training module to optimize the gaze estimation model based on the reverse process of the GPM for better generalization ability."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                700,
+                470,
+                776
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• Experimental results illustrate that the proposed AGG achieves consistent improvements in 12 different cross-dataset settings. The AGG improves the generalization ability of the baseline model up to 35.79% without touching target domain data."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                776,
+                470,
+                852
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The subsequent sections are organized as follow: in Sec. 3, we present the motivation and design principles of the AGG through several validation experiments. In Sec. 4, we provide a detailed introduction to the AGG framework. In Sec. 5, we assess the proposed method both quantitatively and qualitatively."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                856,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                92,
+                893,
+                137
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2. Related Work"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                151,
+                643,
+                167
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2.1. Gaze Estimation"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                176,
+                665,
+                193
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "There are two mainstream gaze estimation approaches, the model-based approaches and the appearance-based approaches. Model-based approaches estimate gaze by reconstructing the anatomy structure of the eyeball [11]. These methods achieve remarkable accuracy but also require personal calibration and dedicated devices such as depth sensors [28, 35], infrared cameras [10, 29] and lights [10, 19]."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                202,
+                893,
+                308
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Appearance-based approaches usually estimate gaze from user images captured by a single web camera. Early methods estimate gaze from eye images by traditional machine learning algorithms like manifold embedding [25] and adaptive linear regression [21]. Lu et al. propose to estimate eye rotation by measuring the geodesic distance between eye images [22]. Wang et al. propose to combine the eye appearance with eye geometry by a Hierarchical Generative Model []. More recently, a number of gaze estimation datasets have been collected [9, 12, 16, 38, 39]. These datasets provide hundreds of thousands of user images with gaze labels, which makes deep-learning-based gaze estimation possible. Representative studies include gaze estimation using convolutional neural networks (CNNs) [37] with eye images [7, 37] or face images [1, 5, 6, 16, 38]. Some previous studies also represent gaze features as low dimensional manifolds for personalization [23] and unsupervised learning [36]. But these methods still construct manifolds by data-driven learning approach with supervision like gaze redirection. Our method analytically connects the highdimensional image feature to gaze."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                308,
+                895,
+                626
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2.2. Cross-domain Gaze Estimation"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                635,
+                776,
+                651
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "One of the major problem of the deep-learning-based approaches is that the performance degrades severely when testing on a different domain. To improve the cross-domain performance, a number of unsupervised domain adaptation methods have been proposed. Liu et al. propose to adapt the model to target domain with the guidance of outliers by collaborative learning [20]. Wang et al. utilize contrastive learning to pull features with close gaze labels together [33]. Bao et al. propose to improve the cross-dataset accuracy by the rotation consistency of gaze [2]. Nevertheless, above methods require target domain images to train domain specific models, which is infeasible in real world settings, as target domain data is often inaccessible. Recently, Cheng et al. propose to improve the generalization ability of gaze estimation model by purifying gaze feature in source domain[8]. The gaze generalization problem without access to target domain data is more challenging and yet to be solved."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                659,
+                895,
+                902
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1410"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "chart",
+            "content": {
+                "image_source": {
+                    "path": "images/0aabd0a5d95fd9f4bfe15d790e38989970591fd05f3d4ca24af0cf97f9abea9a.jpg"
+                },
+                "content": "",
+                "chart_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 2. Observation: The gaze differences between samples can be linearly represented by the geodesic distances between extracted features. Such characteristic of the feature space is consistent with the physics of gaze: the distance along the spherical surface is proportional to the gaze differences."
+                    }
+                ],
+                "chart_footnote": []
+            },
+            "bbox": [
+                86,
+                93,
+                465,
+                237
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                342,
+                470,
+                372
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3. Analytical Gaze Estimation from Features"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                386,
+                455,
+                404
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The aim of this paper is to design a replacement of the last regression FC layer to alleviate the overfitting problem. In this section, we try to answer the following key questions by a series of validation experiments:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                412,
+                470,
+                473
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Question 1: How many dimensions does the Principle Components of Gaze (PCG) in the high-dimensional image features have?"
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                473,
+                470,
+                517
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Question 2: How to extract the PCG from the highdimensional image features for generalizable gaze estimation?"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                518,
+                470,
+                564
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.1. The Overfitting Problem"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                574,
+                303,
+                590
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To explore above questions, we initially pretrain a commonly used baseline model, i.e. ResNet-18 in the source domain (ETH-XGaze [39]) for analysis."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                598,
+                470,
+                643
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Given the source domain "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { s } = \\{ \\pmb { x } _ { i } , \\pmb { y } _ { i } | _ { i = 1 } ^ { N } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { \\Delta } _ { \\mathbf { \\mathcal { X } } _ { i } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the face image and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\bf y } _ { i } = ( x _ { i } , y _ { i } , z _ { i } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the ground truth unit gaze direction vector, we pretrain the gaze estimation model by "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "loss function:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                643,
+                470,
+                704
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { c } { f _ { i } = F _ { \\pmb { \\theta } _ { 1 } } ( \\pmb { x } _ { i } ) , } \\\\ { \\arg \\operatorname* { m i n } ( \\mathcal { L } _ { 1 } ( \\pmb { y } _ { i } , L _ { \\pmb { \\theta } _ { 2 } } ( \\pmb { f } _ { i } ) ) | _ { i = 1 } ^ { N } ) . } \\end{array}\\tag{1}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/8a5a920cb5cad967d26182395e6e536ee10c775044d2bc52188ff79a3c0cd126.jpg"
+                }
+            },
+            "bbox": [
+                168,
+                710,
+                377,
+                757
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "F _ { \\pmb { \\theta } _ { 1 } } ( \\cdot )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the feature extractor CNN, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f _ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the 512D high-dimensional image feature and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\ L _ { \\theta _ { 2 } } ( \\cdot )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the last Fully Connected layer which estimates gaze from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f _ { i }"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                763,
+                470,
+                810
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Previous study [8] has proven that the feature extracted by the pretraind baseline model "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f _ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "encompasses not only gaze information, but also other visual contents, including appearance, illumination and head pose. Thus, the dimension of the PCG should be less than the dimension of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f _ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "itself. Combined with the fact that gaze direction is a 3D unit vector with 2 degrees of freedom, for the answer of Question 1, we hypothesis that the theoretical minimum dimension of the PCG should be 2D, identical to the gaze ground truth. The regression FC layer "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\theta _ { 2 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is at a high risk of overffiting since the number of parameters in "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\pmb { \\theta } _ { 2 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and the dimension of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f _ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are way beyond the minimum required quantity."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                810,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/5d02f4bf1afc6ccecd488b20a9fe88e7f0b41e0d42302857108b4e1ea1a2cfee.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                516,
+                95,
+                879,
+                295
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/18df1580b2a29ad356059dbab0107052a8e02ddc987b3cfd94dd667c691e79a0.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 3. Following the observation in Fig. 2, we construct PGF by projecting high-dimensional features to the 3D space using geodesic distance. The PGF shares the same spherical distribution pattern as the gaze label. Data points are colored by gaze yaw and pitch angles respectively."
+                    },
+                    {
+                        "type": "text",
+                        "content": "Figure 4. Projecting features extracted by the pretrain gaze estimation model into 3D space by varies distance metrics. Projections by geodesic distance (Isomap) show identical spherical distribution pattern as the gaze label. Colored by gaze yaw angles."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                519,
+                383,
+                867,
+                559
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                652,
+                893,
+                758
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.2. Gaze on the 3D Sphere"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                770,
+                712,
+                786
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To answer Question 2, we examine the distribution of the gaze ground truth. In the physical space, gaze distributes across the surface of the 3D unit sphere. The distance alone the data manifold "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "i . e ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ". the spherical surface is proportional to the angular differences between gaze directions."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                794,
+                893,
+                869
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To verify if similar relationship also exists in the feature space, we visualize the distance alone the data manifold in the feature space, i.e. the geodesic distance between "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f _ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in Fig. 2. The result reveals an important observation:"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                871,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1411"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                514,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                90,
+                468,
+                122
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Observation: the geodesic distance between "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f _ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is in a strong direct proportion to the angular gaze differences between samples."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                122,
+                470,
+                169
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "This observation leads to a possible answer of Question 2: The PCG within the high-dimensional image features can be extracted by the geodesic distance. In the following step, we leverage the geodesic distance to extract the Principle Gaze Feature (PGF) from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f _ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "for generalizable gaze estimation."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                170,
+                470,
+                262
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.3. Mapping Features to 3D Space Analytically"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                276,
+                447,
+                292
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "According to above observations, we utilize the geodesic distance to extract the PGF from the high-dimensional image features. Specifically, we project the high-dimensional image features to the 3D space using geodesic distance, i.e. Isometric Mapping (Isomap) [30]. Results in Fig. 3 demonstrate that the image features after projection (the PGF) share similar distribution pattern as gaze: the PGF distributes across the surface of a 3D sphere approximately. To better demonstrate the distribution pattern, we color the PGFs within certain gaze range with pitch and yaw angles respectively. It is obvious that gaze pitch and yaw angle change monotonically alone the longitudinal and latitudinal direction of the PGF Sphere. The Principle Gaze Feature preserves gaze information while excluding unnecessary factors from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f _ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to alleviate the overffiting problem. Generalizable gaze estimations could be made by simply aligning the PGF Sphere with the unit sphere of gaze distribution using the gaze label. This alignment process consists of simple physical operation including rotation and scaling with only 10 parameters, which is less unlikely to overfit. We further utilize this idea to optimize the feature extractor CNN "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "F _ { \\pmb { \\theta } _ { 1 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "for better generalization ability. The detailed implementation will be introduced in Sec. 4."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                301,
+                472,
+                650
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.4. Choice of Distance Metrics"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                664,
+                320,
+                679
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In this section, we validate some other possible answers of Question 2. Specifically, we project the image features "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f _ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "into the 3D space using two other dimension reduction methods: the Local Linear Embedding (LLE) [24] and the T-distributed Stochastic Neighbor Embedding (t-SNE) [31]. It is obvious in Fig. 4 that only the results of Isomap exhibit similar distribution pattern to the gaze label. Although the distributions of other dimension reduction methods also exhibit some directional characteristics, their overall distributions do not show a clear geometric pattern like Isomap. Above results prove that geodesic distance is the key to extract the Principle Components of Gaze from the highdimensional image feature. In the next section, we explain the specific implementation of the AGG framework"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                688,
+                472,
+                902
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4. Method"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                89,
+                591,
+                106
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We propose the Analytical Gaze Generalization framework, a domain generalization method for gaze estimation. The AGG framework comprises two key modules: the Geodesic Projection Module (GPM) module and the Sphere-Oriented Training (SOT) module. The Geodesic Projection Module predicts gaze analytically from the pretrained image feature by constructing the Principle Gaze Feature using geodesic distance. Next, the Sphere-Oriented Training module optimizes the pretrained gaze estimation network according to the reverse process of the GPM for better generalization ability. The overview of the Analytical Gaze Generalization framework is presented in Fig. 5."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                114,
+                893,
+                297
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.1. Geodesic Projection Module"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                305,
+                754,
+                321
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The Geodesic Projection Module mainly consists of two steps. First, we project the image features extracted by the pretrained gaze estimation model into 3D space using geodesic distance, i.e. Isomap. The projected feature (named the Principle Gaze Feature) distributes alone the surface of a sphere (named the PGF Sphere) approximately. Then, we align the PGF Sphere with the unit sphere represents the gaze label distribution to predict gaze directions analytically."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                328,
+                893,
+                464
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "First, we pretrain a gaze estimation model consists of a feature extractor CNN "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "F _ { \\pmb { \\theta } _ { 1 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and a Fully Connected layer "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\pmb { \\theta } _ { 2 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "for gaze regression in the source domain "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { s } = \\{ \\pmb { x } _ { i } , \\pmb { y } _ { i } | _ { i = 1 } ^ { N } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "using "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "loss function according to Eq. (1). Then, we freeze the gaze estimation model and extract the highdimensional image features (512D in our experiments) by "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ f _ { i } = F _ { \\pmb \\theta _ { 1 } } ( \\pmb x _ { i } ) | _ { i = 1 } ^ { \\check { N } ^ { \\prime } } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". The Principle Gaze Feature "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "e _ { i } \\in \\mathbb { R } ^ { 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is constructed by projecting the image features "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f _ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "into the 3D space using Isomap algorithm:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                465,
+                893,
+                602
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\{ e _ { i } | _ { i = 1 } ^ { N ^ { \\prime } } \\} = I s o m a p ( \\{ f _ { i } | _ { i = 1 } ^ { N ^ { \\prime } } \\} ) .\\tag{2}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/85e5f2911e564bc982b0f25bcf390dcd850c93d9850a668893f3796b322ad68c.jpg"
+                }
+            },
+            "bbox": [
+                589,
+                606,
+                802,
+                626
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Since the Principle Gaze Feature distributes across the surface of a 3D sphere approximately, the next step is to predict gaze directions by aligning this PGF Sphere with the unit gaze label sphere. First, we locate the center of the PGF Sphere "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "O _ { c }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and rotate it to align the orientation with the unit gaze label sphere:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                631,
+                893,
+                722
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "e _ { i } ^ { \\prime } = R ( e _ { i } - O _ { c } ) = ( x _ { i } ^ { e ^ { \\prime } } , y _ { i } ^ { e ^ { \\prime } } , z _ { i } ^ { e ^ { \\prime } } ) ^ { T } ,\\tag{3}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/b2ea4f1c000a30169ce1279c178ce16e2dce2091591826e340d0115b496b7544.jpg"
+                }
+            },
+            "bbox": [
+                571,
+                726,
+                820,
+                746
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where R is the rotation matrix. Then, we calculate the Euler angles of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "e _ { i } ^ { \\prime }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and predict gaze directions "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\pmb { y } _ { i } = ( \\theta ^ { \\prime } , \\psi ^ { \\prime } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by simple linear fittings:"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                751,
+                892,
+                797
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\left\\{ \\begin{array} { l l } { \\ \\theta _ { i } ^ { \\prime } = k _ { 1 } a r c t a n ( \\frac { x _ { i } ^ { e ^ { \\prime } } } { z _ { i } ^ { e ^ { \\prime } } } ) + b _ { 1 } , } \\\\ { \\ \\psi _ { i } ^ { \\prime } = k _ { 2 } a r c s i n ( y _ { i } ^ { e ^ { \\prime } } ) + b _ { 2 } . } \\end{array} \\right.\\tag{4}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/f08647a2bcb7853307c60238cb65fdf95974aefafc45dfbabf540bd89190b22c.jpg"
+                }
+            },
+            "bbox": [
+                593,
+                801,
+                799,
+                849
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The final gaze prediction "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\begin{array} { c c l } { { { \\bf { y } } _ { i } ^ { \\prime } } } & { { = } } & { { \\left( x _ { i } ^ { \\prime } , y _ { i } ^ { \\prime } , z _ { i } ^ { \\prime } \\right) } } \\end{array}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is obtained through converting the Euler angle predictions "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( \\theta _ { i } ^ { \\prime } , \\psi _ { i } ^ { \\prime } , 0 )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to unit direction vectors. We formalize the process from the Principle Gaze Feature "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "e _ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to gaze prediction y<sup>′</sup> as the Sphere Alignment algorithm: "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\begin{array} { r c l } { { { \\pmb y } _ { i } ^ { \\prime } } } & { { = } } & { { S A _ { { \\pmb \\theta } _ { s } } ( { \\pmb e } _ { i } ) } } \\end{array}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\theta _ { s }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the set of 10 learnable parameters "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\begin{array} { r l } { \\theta _ { s } } & { { } = } \\end{array}"
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ O _ { c } , R , k _ { 1 } , k _ { 2 } , b _ { 1 } , b _ { 2 } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". These parameters are obtained by minimizing the angular difference between gaze prediction "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { \\Delta } _ { \\mathbf { \\mathcal { Y } } _ { i } ^ { \\prime } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and the source domian gaze label "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { \\nabla } _ { \\mathbf { \\psi } _ { 3 } } \\psi _ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ":"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                854,
+                892,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1412"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/b96e993e3b4ceee77696fcdcb72716eba7a6e7c8f5215a8bd99a18f9a8827a6b.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 5. Overview of the proposed AGG framework. We propose two modules, the Geodesic Projection Module (GPM) and the Sphere Oriented Training module. We replace the last Linear layer of the pretrained baseline model with GPM to estimate gaze from the high-dimensional image feature analytically. The Sphere-Oriented Training optimizes the gaze estimation model according to the revers process of the GPM for better generalization ability."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                99,
+                89,
+                869,
+                402
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                76,
+                489,
+                468,
+                582
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\underset { \\pmb { \\theta } _ { s } } { \\arg \\operatorname* { m i n } } ( \\mathrm { A n g u l a r } ( \\pmb { y } _ { i } , S A _ { \\pmb { \\theta } _ { s } } ( \\pmb { e } _ { i } ) ) | _ { i = 1 } ^ { N } ) .\\tag{5}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/732f04fe31c3347182adcafcefb11162cc378d14e1762eb647f01803b74b8f3a.jpg"
+                }
+            },
+            "bbox": [
+                143,
+                583,
+                398,
+                609
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Since the GPM only contains 10 learnable parameters, we only randomly choose 2000 source domain samples to optimize "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\theta _ { s }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in our experiments. In the test time, features of target domain samples are concatenated to the geodesic distance map built in the source domain for Isometric Mapping. The parameters of the SA algorithm remain fixed in the Sphere-Oriented Training and test time."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                612,
+                470,
+                718
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.2. Sphere-Oriented Training"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                726,
+                315,
+                742
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The Geodesic Projection Module predicts gaze from the image feature analytically, thus the performance will be affected by the quality of the image feature. To extract generalizable image features, we propose Sphere-Oriented Training to optimize the pretrained feature extractor CNN "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "F _ { \\pmb { \\theta } _ { 1 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "with the reverse process of the GPM in the source domain."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                750,
+                468,
+                840
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Given a source domain sample "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ x _ { i } , y _ { i } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", we could reversely calculate the ideal position of the corresponding Principle Gaze Feature since the Sphere Alignment algorithm is totally analytical: "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { e } _ { i } = { S A ^ { - 1 } ( y _ { i } ) }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Theoretically, the pretrained CNN could be optimized by minimizing the distance between the ideal position and actual position of the Principle Gaze Feature on the PGF Sphere:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                840,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                489,
+                893,
+                535
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\underset { \\pmb { \\theta _ { 1 } } } { \\arg \\operatorname* { m i n } } ( \\mathcal { L } _ { 1 } ( \\hat { e } _ { i } , I s o m a p ( F _ { \\pmb { \\theta _ { 1 } } } ( \\pmb { x } _ { i } ) ) ) | _ { i = 1 } ^ { N } ) .\\tag{6}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/d087c71938f8851ac086f0c3defa0c9bc60f1a53ff52849e26ea0839fce6d745.jpg"
+                }
+            },
+            "bbox": [
+                557,
+                540,
+                833,
+                566
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Unfortunately, it is difficult to integrate the Isomap into the back propagation process because it is both time and space consuming. The time complexity of Isomap is "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "O ( N ^ { 2 } l o g _ { N } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and the space demand is "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "O ( N ^ { 2 } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", where N is the number of samples. To solve this issue, we propose the Isometric Propagator "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I P _ { \\theta _ { 3 } } ( \\cdot )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to parameterize the Isomap algorithm. Isometric Propagator is a three layer MLP trained to simulate the Isomap function at the beginning of Sphere-Oriented Training. We freeze the parameter of the pretrained CNN "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "F _ { \\pmb { \\theta } _ { \\mp } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and train the Isometric Propagator as follow:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                571,
+                893,
+                738
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\underset { \\pmb { \\theta _ { 3 } } } { \\arg \\operatorname* { m i n } } ( \\mathcal { L } _ { 1 } ( I s o m a p ( \\pmb { f _ { i } } ) , I P \\pmb { \\theta _ { 3 } } ( \\pmb { f _ { i } } ) ) | _ { i = 1 } ^ { N } ) .\\tag{7}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/a24fc572fccf9d39f375265718fe8ca90acbb3b853d02fd0c6b60ef627d6da1d.jpg"
+                }
+            },
+            "bbox": [
+                552,
+                742,
+                836,
+                768
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "After the training of the Isometric Propagator, we freeze its parameters and replace the Isomap with it to train the feature extractor CNN. The actual Sphere-Oriented Training is formalized as:"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                773,
+                892,
+                833
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\underset { \\pmb { \\theta } _ { 1 } } { \\arg \\operatorname* { m i n } } ( \\mathcal { L } _ { 1 } ( \\hat { \\pmb { e } } _ { i } , I P _ { \\pmb { \\theta } _ { 3 } } ( F _ { \\pmb { \\theta } _ { 1 } } ( \\pmb { x } _ { i } ) ) ) | _ { i = 1 } ^ { N } ) .\\tag{8}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/b48c1367dca167570eeac8ddaad53e3bcbffc4e84e6f7805ebc891df2fa7940f.jpg"
+                }
+            },
+            "bbox": [
+                568,
+                838,
+                823,
+                866
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Note that the Isometric Propagator is only used during the source domain training. At test time, we predict gaze by the proposed GPM with Isomap for better generalization ability. Parameters of the GPM are determined before the Sphere-Oriented Training and remain fixed."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                871,
+                892,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1413"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                90,
+                470,
+                137
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Owing to the advantage that the GPM suffers less from the overfitting problem than the FC layer, the purpose of the SOT is to utilize this advantage to optimize the gaze estimation model for better generalization performance by incorporating the GPM into the training process."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                137,
+                472,
+                214
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.3. Implementation Details"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                223,
+                295,
+                239
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We employ the AGG by PyTorch. For the training of the pretrain model, IP and Sphere-Oriented Training, we use the Adam optimizer with a learning rate of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "1 0 ^ { - 4 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". The model is pretrained for 10 epochs. We choose the last epoch as the baseline model. The Sphere-Oriented Training is also 10 epochs, while the IP is trained for 100 epochs on 2000 randomly selected samples. Batch sizes are set to 512. For Isomap, we use the implementation of Scikit-learn and the number of neighbor is set to 300. Pixel values are normalized to [0, 1], and no data augmentation is employed."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                247,
+                472,
+                400
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5. Experiments"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                414,
+                210,
+                431
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.1. Data Preparation"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                438,
+                248,
+                455
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We conduct experiments on four commonly used gaze estimation datasets: ETH-XGaze "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( \\mathcal { D } _ { E } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "[39], Gaze360 "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( \\mathcal { D } _ { G } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "[12], MPIIFaceGaze "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( \\mathcal { D } _ { M } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "[38] and EyeDiap "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( \\mathcal { D } _ { D } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "[9]. We normalize the data following the techniques in [38]. ETH-XGaze: 756k images captured by high resolution cameras in laboratory environment with large gaze range. We divide the last 5 subjects as test set. Gaze360: 101k images captured by a "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "3 6 0 ^ { \\circ }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "camera on streets with large gaze range. We only use images with frontal faces in our experiments. MPIIFaceGaze: 45k images (standard test set) captured by web camera during daily usage of laptop computers. The gaze range of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { M }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is less than half the range of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { E }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { G }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Thus, we only use "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { M }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "as target domain. EyeDiap: 16k images captured under laboratory environment with screen and floating targets. As the number of images is significantly less than other datasets, we only use "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { D }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "as target domain."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                463,
+                470,
+                719
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In addition, the cross-domain error between "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { E }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { G }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is extremely large (around 20<sup>◦</sup>). Thus, we exclude the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { E } {  } \\mathcal { D } _ { G }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { G } \\to \\mathcal { D } _ { E }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "settings in our experiments, which is also excluded in previous studies [2, 8, 20, 33]."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                719,
+                470,
+                781
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.2. Quantitative Evaluation"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                791,
+                299,
+                808
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.2.1 Evaluation of the GPM"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                814,
+                295,
+                830
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We first evaluate the proposed GPM by replacing the last FC layer with the GPM without changing other parameters of the baseline model. The mean and the standard deviation (std) of the estimation error from the last 5 epochs are shown in Tab. 1. The proposed GPM achieves better performance in 7 out of 8 cross-domain experiments. In addition, the GPM also performs more stably across different epochs. These results demonstrate the advantage of the proposed GPM over the traditional FC layer. The withindataset estimation errors of the GPM are slightly higher. It is reasonable since GPM is designed for generalizing to unseen domains. The higher within-dataset accuracy of the FC layer is highly likely achieved by overfitting since it performs worse in cross-domain tests."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                839,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/cc92d742b76fdeda74a394541f2dabd9ce52eb58ac43bc303d6bf32c3d665ab7.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 1. Results of simply replacing the last FC layer with the proposed GPM in inference. Results are the mean and std for the final 5 epochs. Note that the modest reduction in within-dataset accuracy is reasonable, since GPM is designed for generalization."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td>一</td><td> $\\mathcal { D } _ { E } \\to \\mathcal { D } _ { M }$ </td><td> $\\mathcal { D } _ { E }  \\mathcal { D } _ { D }$ </td><td>within  $\\mathcal { D } _ { E }$ </td></tr><tr><td>ResNet-18  $\\mathrm { R e s N e t - } 1 8 + \\mathrm { G P M }$ </td><td> $8 . 6 6 { \\pm } 0 . 5 3 $   ${ \\bf 7 . 8 7 \\pm 0 . 2 3 }$ </td><td> $7 . 7 6 { \\pm } 0 . 2 9$   $7 . 7 2 { \\scriptstyle \\pm 0 . 3 3 }$ </td><td> ${ \\pm } 0 . 3 7 { \\pm } 0 . 2 4$   $5 . 7 4 { \\scriptstyle \\pm 0 . 0 8 }$ </td></tr><tr><td>ResNet-50  $\\mathrm { R e s N e t - } 5 0 + \\mathrm { G P M }$ </td><td> $6 . 9 2 { \\scriptstyle \\pm 0 . 8 6 }$   ${ \\bf 6 . 5 6 { \\pm } 0 . 4 1 }$ </td><td> $8 . 6 1 { \\pm } 0 . 8 8$   $\\mathbf { 8 . 1 0 { \\scriptstyle \\pm 0 . 5 7 } }$ </td><td> ${ \\pm } 0 . 2 7 { \\pm } 0 . 5 6$   $5 . 2 9 { \\scriptstyle \\pm 0 . 0 7 }$ </td></tr><tr><td></td><td>一  $\\mathcal { D } _ { G } \\to \\mathcal { D } _ { M }$ </td><td> $\\mathcal { D } _ { G } \\to \\mathcal { D } _ { D }$ </td><td>within  $\\mathcal { D } _ { G }$ </td></tr><tr><td>ResNet-18  $\\mathrm { R e s N e t - } 1 8 + \\mathrm { G P M }$ </td><td> $8 . 5 9 { \\scriptstyle \\pm 0 . 5 7 }$   $\\mathbf { 8 . 5 7 \\pm 0 . 4 1 }$ </td><td> ${ \\bf 1 0 . 8 7 \\pm 1 . 5 2 }$   $1 0 . 9 4 { \\scriptstyle \\pm 0 . 8 5 }$ </td><td> ${ \\bf 1 } 2 . 5 9 { \\scriptstyle \\pm 0 . 1 4 }$   $1 2 . 6 4 { \\pm } 0 . 1 0$ </td></tr><tr><td>ResNet-50  $\\mathrm { R e s N e t - } 5 0 + \\mathrm { G P M }$ </td><td> $8 . 4 8 { \\pm } 1 . 0 1$   $\\mathbf { 8 . 1 4 \\pm 0 . 4 7 }$ </td><td> $1 0 . 7 6 { \\scriptstyle \\pm 0 . 7 8 }$ </td><td> ${ \\bf 1 1 . 9 7 { \\scriptstyle \\pm 0 . 3 0 } }$   $1 2 . 0 7 { \\pm } 0 . 1 8$ </td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                501,
+                150,
+                888,
+                337
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                353,
+                893,
+                506
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.2.2 Evaluation of the AGG Framework"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                498,
+                516,
+                802,
+                531
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In this section, we evaluate the effectiveness of the AGG framework, which optimizes the gaze estimation model to further improve generalization ability. We conduct experiments in 4 cross domain settings with 3 baseline models, as shown in Tab. 2. The performances of baseline models is quite different, due to their architectures and the different characteristics of each domain. Nevertheless, the proposed AGG framework achieves stable improvements in all 12 cross-domain settings, proves that the AGG framework is robust to different baseline models and source domains. The AGG framework achieves improvements as large as 35.79% without target domain data. We also report the within dataset performance after generalization for reference. As expected, the within dataset performance decreases mildly since the model is optimized for domain generalization. Above results demonstrate the effectiveness of the proposed Sphere-Oriented Training, which improves the generalization performance of varies baseline models significantly."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                540,
+                895,
+                829
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.2.3 Comparison with SOTA Methods"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                498,
+                845,
+                789,
+                861
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In Tab. 3, we compare the AGG framework with SOTA gaze estimation methods [6, 12, 38] and gaze generalization methods [8, 18]. Results demonstrate that the AGG outperforms other SOTA methods. The AGG with ResNet-18 baseline achieves the best overall performances, it outperforms SOTA methods in "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { E } \\to \\mathcal { D } _ { D } , \\mathcal { D } _ { G } \\to \\mathcal { D } _ { M }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { G } \\to \\mathcal { D } _ { D }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "settings, while achieving performance comparable to the PureGaze in the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { E } \\to \\mathcal { D } _ { M }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "setting. The AGG with ResNet-50 baseline also surpasses SOTA methods in 3 out of 4 cross-domain settings. It performs exceptionally well when trained in the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { E }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "domain. Overall, above experiments prove that the AGG achieves better generalization ability than SOTA gaze estimation methods."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                869,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1414"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/51114e89c342b3a55f9d70ab947975abd353fa947a020c0ae9ea754ce2792a27.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 2. Performance of the proposed AGG framework. Results are gaze estimation error in degrees. The proposed AGG achieves stable improvements up to 35.79% in all 12 cross-domain settings without using any target domain data. The symbol <sup>∗</sup> indicates within-dataset experiments for reference. Note that the modest reduction in within-dataset accuracy is to be expected for domain generalization methods."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td>Method</td><td> $\\mathcal { D } _ { E } \\to \\mathcal { D } _ { M }$ </td><td> $\\mathcal { D } _ { E }  \\mathcal { D } _ { D }$ </td><td> $\\mathcal { D } _ { G } \\to \\mathcal { D } _ { M }$ </td><td> $\\mathcal { D } _ { G } \\to \\mathcal { D } _ { D }$ </td><td>within  $\\boldsymbol { \\mathcal { D } } _ { E } { ^ \\ast }$ </td><td>within  $\\mathcal { D } _ { G } { ^ \\ast }$ </td></tr><tr><td>ResNet-18 ResNet-18+AGG</td><td>8.64 7.10 ▼17.82%</td><td>7.83  $7 . 0 7 \\ : \\forall \\ : 9 . 7 1 \\%$ </td><td>8.68  $7 . 8 7 \\ : \\Psi \\ : 9 . 3 3 \\%$ </td><td>12.35  $7 . 9 3 \\ : \\forall \\ : 3 5 . 7 9 \\%$ </td><td>5.08 5.56▲9.45%</td><td>12.73 13.03 ▲ 2.36%</td></tr><tr><td>ResNet-50 ResNet-50+AGG</td><td>6.04 5.91▼2.15%</td><td>7.47 6.75▼9.64%</td><td>10.14 9.2 ▼9.27%</td><td>11.76 11.36▼3.40%</td><td>5.35 6.29▲ 17.57%</td><td>12.37 15.63▲ 26.35%</td></tr><tr><td>VGG16 VGG16+AGG</td><td>9.5 9.13▼3.89%</td><td>19.14 17.2▼10.14%</td><td>14.61 11.322.66%</td><td>19.94 13.97▼29.94%</td><td>5.12 5.78▲ 12.89%</td><td>12.15 13.13▲ 8.07%</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                80,
+                136,
+                887,
+                265
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/892530170a2c069dc3fd7bd655e8dd1a8b8e8f651cc149b1a441b2433a10c9f7.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 3. Cross domain gaze estimation error in degrees. ∗ indicates methods with ResNet-50 backbone. Overall, the proposed AGG achieves better generalization ability than SOTA gaze estimation methods."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td>Method</td><td> $\\mathcal { D } _ { E } \\to \\mathcal { D } _ { M }$ </td><td> $\\mathcal { D } _ { E }  \\mathcal { D } _ { D }$ </td><td> $\\mathcal { D } _ { G } \\to \\mathcal { D } _ { M }$ </td><td> $\\mathcal { D } _ { G } \\to \\mathcal { D } _ { D }$ </td></tr><tr><td>Full-Face[38]</td><td>12.35</td><td>30.15</td><td>11.13</td><td>14.42</td></tr><tr><td>ADL[12]</td><td>7.23</td><td>8.02</td><td>11.36</td><td>11.86</td></tr><tr><td>CA-Net[6]</td><td></td><td></td><td>27.13</td><td>31.41</td></tr><tr><td>LatentGaze[18]</td><td>7.98</td><td>9.81</td><td></td><td></td></tr><tr><td>PureGaze[8]</td><td>7.08*</td><td>7.48*</td><td>9.28</td><td>9.32</td></tr><tr><td>ResNet18+AGG</td><td>7.10</td><td>7.07</td><td>7.87</td><td>7.93</td></tr><tr><td>ResNet50+AGG</td><td>5.91*</td><td>6.75*</td><td>9.20*</td><td>11.36*</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                80,
+                345,
+                465,
+                464
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                481,
+                470,
+                648
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.3. Verification of the AGG"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                657,
+                295,
+                672
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.3.1 Verification of the Core Idea"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                680,
+                330,
+                695
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The proposed Analytical Gaze Generalization framework is designed based on the observation that the geodesic distance between image features is proportional to the angular gaze differences between input samples. To explore whether this observation holds true in different domains, we verify it in "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { E } , \\mathcal { D } _ { G } , \\mathcal { D } _ { M }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { D }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "respectively. We train a baseline ResNet-18 model according to Eq. (1) in each domain respectively to extract the image feature, and visualize the L2 and Geodesic distance with respect to the angular gaze differences. As shown in Fig. 6, the linear relationship holds true for all sample pairs in "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { E }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", thanks to the high image quality and controlled laboratory environment. For "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { G } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "the pattern is evident at the beginning but becomes random when gaze differences surpass "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "1 4 0 ^ { \\circ } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ". We randomly visualize 4 samples from the random section at the top of the figure. Since the original "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { G }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "dataset includes subjects facing away from the camera, the quality of samples appears to deteriorate when the head pose approaches "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\pm 9 0 ^ { \\circ }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". For "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { M }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { D }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", the geodesic distance is also exhibits a more direct proportionality to gaze differences. However, the disparity between geodesic distance and L2 distance is less obvious compared to what was observed in the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { E }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { G }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". It is reasonable since the gaze ranges in "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { M }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { D }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are significantly smaller. The geodesic distance converges toward the L2 distance when the features are in close proximity."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                703,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "chart",
+            "content": {
+                "image_source": {
+                    "path": "images/a4b7a7dece25ab82a227c6cde0e5b7566e7975dffb2a5ec9c344790e8913f0d8.jpg"
+                },
+                "content": "",
+                "chart_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 6. The L2 and Geodesic distances between image features with respect to the angular differences between samples."
+                    }
+                ],
+                "chart_footnote": []
+            },
+            "bbox": [
+                501,
+                281,
+                890,
+                392
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                455,
+                893,
+                637
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We further visualize the Principle Gaze Feature from these four datasets in Fig. 7 for a more intuitive understanding. The Principle Gaze Feature from all 4 datasets consistently demonstrate identical distribution pattern with the gaze label. Above results confirm that the the proportional relationship between the geodesic distance and the gaze differences remains consistent across different domains, even though the image quality, gaze range, and head pose range exhibit significant variations among these domains. Hence, the proportional relationship can be employed for domain generalization, given that it is domain-independent."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                637,
+                893,
+                806
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.3.2 Verification of the Sphere-Oriented Training"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                498,
+                829,
+                866,
+                845
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In this section, we assess the efficacy of the Sphere-Oriented Training, i.e. whether Sphere-Oriented Training optimizes the model to extract features that better conform to the proportional relationship. To do so, we measure the Sphere Error, defined as the ratio of distance between "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "e _ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and the sphere surface to the radius of the sphere. The quantitative results presented in Fig. 8 demonstrate that the Sphere Error after the Sphere-Oriented Training reduces in both withindomain and cross-domain settings. Fig. 9 provides a more intuitive view. The Sphere Error is significantly reduced in the central region after the Sphere-Oriented Training and the distribution of the PGF becomes more spherical. Above results validates the effectiveness of the propsoed Sphere-Oriented Training."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                854,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1415"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/fccd4787613edcd0297b16831bf343a82409f1ee740f2623b64e626474fb1b6a.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 7. Visualization of the Principle Gaze Feature (PGF) and gaze label from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { E } , \\mathcal { D } _ { G } , \\mathcal { D } _ { M }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { D }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". PGF from all 4 datasets share the same distribution pattern with gaze label."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                81,
+                92,
+                465,
+                191
+            ]
+        },
+        {
+            "type": "chart",
+            "content": {
+                "image_source": {
+                    "path": "images/d354fae53dcbd28bd5d721f270c2a8d960f11ff4dd9312eb9ae13addc8c5166a.jpg"
+                },
+                "content": "",
+                "chart_caption": [],
+                "chart_footnote": []
+            },
+            "bbox": [
+                81,
+                267,
+                267,
+                363
+            ]
+        },
+        {
+            "type": "chart",
+            "content": {
+                "image_source": {
+                    "path": "images/93463b307d9ba18a7a80171bc8a48891f689bd15e7361fb7352fe04953d682e6.jpg"
+                },
+                "content": "",
+                "chart_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 8. The Sphere Error of the PGF before (ResNet-18) and after Sphere-Oriented Training (Ours). Smaller sphere error indicates that the geodesic distance between extracted features are more proportional to the gaze differences."
+                    }
+                ],
+                "chart_footnote": []
+            },
+            "bbox": [
+                276,
+                266,
+                464,
+                363
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                454,
+                472,
+                621
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "6. Limitations and Discussions"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                633,
+                338,
+                650
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Q1: Does the observation in Fig. 2 apply to features extracted by different gaze estimation models? We have proven that the observation holds true for different model architectures in Tabs. 1 and 2 and different datasets Fig. 7. Here we further investigate the influence of two loss functions: "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { 1 } , \\mathcal { L } _ { 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "loss, and two gaze representations: 3D unit vector "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( x , y , z )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", 2D Euler angle (yaw, pitch). In Fig. 10, we train ResNet-18 models under above conditions and project the extracted features to 3D space using geodesic distance. Results show that the AGG is robust to different loss functions. When gaze is represented by 2D Euler angles, the projected features no longer distributes across the sphere surface, they approximately distribute on the surface of a 2D plane, similar to the gaze label. The Sphere Alignment algorithm needs to be altered to adapt different gaze representations, which we have left for future work."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                659,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/b7610610afd8a0358ee2584fb2c8f2d97d77c9a846ee4e7976a3556728474142.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 9. Visualization of the Sphere Error before and after Sphere-Oriented Training in "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { E }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". In the side view, the bottom area of the PGF of AGG is more spherical."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                503,
+                92,
+                890,
+                188
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/e6cd01b2445b8def095e473ed500fd59f54106ffacff4c36307dcd631ffd0c11.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 10. Projecting features extracted by ResNet-18 trained with different strategy in "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { D } _ { E }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "into 3D space by geodesic distance."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                509,
+                260,
+                885,
+                390
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Q2: Does the Isometric Propagator (IP) suffer from the same overfitting issue as the last FC layer since it is implemented by MLP? Although we completely replace the last FC layer with the GPM in the test time, the MLP based IP is still used in source domain training. The use of IP is an unavoidable compromise, because in the current deep-learning community, there has not been a perfect solution for integrating Isomap into the back-propagation process. But the IP differs from the original regression FC layer, since IP is only used in the training time, as a tool for back-propagation with fixed parameters. Still, the implementation of IP is a limitation to our method. The performance of the AGG might be further improved if there is a better way to integrate Isomap into the training process."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                454,
+                893,
+                667
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "7. Conclusion"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                680,
+                620,
+                696
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In this paper we propose the Analytical Gaze Generalization framework for generalizing gaze estimation models to unseen domains. Based on the observation that the geodesic distance between extracted image features is proportional to the angular gaze differences, we propose the Geodesic Projection Module that estimates gaze from the image feature analytically and incorporate it into the source domain training by the proposed Sphere-Oriented Training. Extensive experiments show that the GPM achieves better generalization ability than the conventional FC layer, and the AGG improves the cross-domain accuracy significantly, outperforming SOTA methods. The concept of the AGG may inspire method designs in other physical regression tasks, e.g. pose estimation."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                705,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1416"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "References"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                78,
+                89,
+                176,
+                106
+            ]
+        },
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[1] Yiwei Bao, Yihua Cheng, Yunfei Liu, and Feng Lu. Adaptive feature fusion network for gaze tracking in mobile tablets. In 2020 25th International Conference on Pattern Recognition (ICPR), pages 9936–9943. IEEE, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[2] Yiwei Bao, Yunfei Liu, Haofei Wang, and Feng Lu. Generalizing gaze estimation with rotation consistency. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 4207–4216, 2022. 2, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[3] Alisa Burova, John Makel¨ a, Jaakko Hakulinen, Tuuli Keski-¨ nen, Hanna Heinonen, Sanni Siltanen, and Markku Turunen. Utilizing vr and gaze tracking to develop ar solutions for industrial maintenance. In Proceedings of the 2020 CHI Conference on Human Factors in Computing Systems, pages 1– 13, 2020. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[4] Nora Castner, Thomas C Kuebler, Katharina Scheiter, Juliane Richter, Ther´ ese Eder, Fabian H ´ uttig, Constanze Keu-¨ tel, and Enkelejda Kasneci. Deep semantic gaze embedding and scanpath comparison for expertise classification during opt viewing. In ACM Symposium on Eye Tracking Research and Applications, pages 1–10, 2020. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[5] Zhaokang Chen and Bertram E Shi. Appearance-based gaze estimation using dilated-convolutions. In Asian Conference on Computer Vision, pages 309–324. Springer, 2018. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[6] Yihua Cheng, Shiyao Huang, Fei Wang, Chen Qian, and Feng Lu. A coarse-to-fine adaptive network for appearancebased gaze estimation. In Proceedings of the AAAI Conference on Artificial Intelligence, pages 10623–10630, 2020. 2, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[7] Yihua Cheng, Xucong Zhang, Feng Lu, and Yoichi Sato. Gaze estimation by exploring two-eye asymmetry. IEEE Transactions on Image Processing, 29:5259–5272, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[8] Yihua Cheng, Yiwei Bao, and Feng Lu. Puregaze: Purifying gaze feature for generalizable gaze estimation. In Proceedings ofthe AAAI Conference on Artificial Intelligence, pages 436–443, 2022. 1, 2, 3, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[9] Kenneth Alberto Funes Mora, Florent Monay, and Jean-Marc Odobez. Eyediap: A database for the development and evaluation of gaze estimation algorithms from rgb and rgb-d cameras. In Proceedings of the Symposium on Eye Tracking Research and Applications, pages 255–258, 2014. 2, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[10] Elias Daniel Guestrin and Moshe Eizenman. General theory of remote gaze estimation using the pupil center and corneal reflections. IEEE Transactions on biomedical engineering, 53(6):1124–1133, 2006. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[11] Dan Witzner Hansen and Qiang Ji. In the eye of the beholder: A survey of models for eyes and gaze. IEEE transactions on pattern analysis and machine intelligence, 32(3):478–500, 2009. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[12] Petr Kellnhofer, Adria Recasens, Simon Stent, Wojciech Matusik, and Antonio Torralba. Gaze360: Physically unconstrained gaze estimation in the wild. In Proceedings of the IEEE/CVF International Conference on Computer Vision, pages 6912–6921, 2019. 1, 2, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[13] Jess Kerr-Gaffney, Amy Harrison, and Kate Tchanturia. Eyetracking research in eating disorders: A systematic review."
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "International Journal ofEating Disorders, 52(1):3–27, 2019. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[14] Andrew J King, Gregory F Cooper, Gilles Clermont, Harry Hochheiser, Milos Hauskrecht, Dean F Sittig, and Shyam Visweswaran. Leveraging eye tracking to prioritize relevant medical record data: comparative machine learning study. Journal ofmedical Internet research, 22(4):e15876, 2020. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[15] Robert Konrad, Anastasios Angelopoulos, and Gordon Wetzstein. Gaze-contingent ocular parallax rendering for virtual reality. ACM Transactions on Graphics (TOG), 39(2):1–12, 2020. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[16] Kyle Krafka, Aditya Khosla, Petr Kellnhofer, Harini Kannan, Suchendra Bhandarkar, Wojciech Matusik, and Antonio Torralba. Eye tracking for everyone. In Proceedings of the IEEE conference on computer vision and pattern recognition, pages 2176–2184, 2016. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[17] Mikko Kyto, Barrett Ens, Thammathip Piumsomboon,¨ Gun A Lee, and Mark Billinghurst. Pinpointing: Precise head-and eye-based target selection for augmented reality. In Proceedings ofthe 2018 CHI Conference on Human Factors in Computing Systems, pages 1–14, 2018. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[18] Isack Lee, Jun-Seok Yun, Hee Hyeon Kim, Youngju Na, and Seok Bong Yoo. Latentgaze: Cross-domain gaze estimation through gaze-aware analytic latent code manipulation. In Proceedings of the Asian Conference on Computer Vision, pages 3379–3395, 2022. 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[19] Jiahui Liu, Jiannan Chi, and Shuo Fan. A method for accurate 3d gaze estimation with a single camera and two collinear light sources. IEEE Transactions on Instrumentation and Measurement, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[20] Yunfei Liu, Ruicong Liu, Haofei Wang, and Feng Lu. Generalizing gaze estimation with outlier-guided collaborative adaptation. In Proceedings of the IEEE/CVF International Conference on Computer Vision, pages 3835–3844, 2021. 1, 2, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[21] Feng Lu, Yusuke Sugano, Takahiro Okabe, and Yoichi Sato. Adaptive linear regression for appearance-based gaze estimation. IEEE transactions on pattern analysis and machine intelligence, 36(10):2033–2046, 2014. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[22] Feng Lu, Xiaowu Chen, and Yoichi Sato. Appearance-based gaze estimation via uncalibrated gaze pattern recovery. IEEE Transactions on Image Processing, 26(4):1543–1553, 2017. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[23] Seonwook Park, Shalini De Mello, Pavlo Molchanov, Umar Iqbal, Otmar Hilliges, and Jan Kautz. Few-shot adaptive gaze estimation. In Proceedings of the IEEE/CVF international conference on computer vision, pages 9368–9377, 2019. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[24] Sam T Roweis and Lawrence K Saul. Nonlinear dimensionality reduction by locally linear embedding. science, 290 (5500):2323–2326, 2000. 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[25] Timo Schneider, Boris Schauerte, and Rainer Stiefelhagen. Manifold alignment for person independent appearancebased gaze estimation. In 2014 22nd international conference on pattern recognition, pages 1167–1172. IEEE, 2014. 2"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                84,
+                114,
+                468,
+                170
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1417"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[26] Vincent Sitzmann, Ana Serrano, Amy Pavel, Maneesh Agrawala, Diego Gutierrez, Belen Masia, and Gordon Wetzstein. Saliency in vr: How do people explore virtual environments? IEEE transactions on visualization and computer graphics, 24(4):1633–1642, 2018. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[27] Sophie Stellmach, Sebastian Stober, Andreas Nurnberger,¨ and Raimund Dachselt. Designing gaze-supported multimodal interactions for the exploration of large image collections. In Proceedings of the 1st Conference on Novel Gaze-Controlled Applications, New York, NY, USA, 2011. Association for Computing Machinery. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[28] Li Sun, Zicheng Liu, and Ming-Ting Sun. Real time gaze estimation with a consumer depth camera. Information Sciences, 320:346–360, 2015. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[29] Kentaro Takemura and Kenta Yamagishi. A hybrid eyetracking method using a multispectral camera. In 2017 IEEE International Conference on Systems, Man, and Cybernetics (SMC), pages 1529–1534. IEEE, 2017. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[30] Joshua B Tenenbaum, Vin de Silva, and John C Langford. A global geometric framework for nonlinear dimensionality reduction. science, 290(5500):2319–2323, 2000. 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[31] Laurens Van der Maaten and Geoffrey Hinton. Visualizing data using t-sne. Journal of machine learning research, 9 (11), 2008. 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[32] Kang Wang, Rui Zhao, Hui Su, and Qiang Ji. Generalizing eye tracking with bayesian adversarial learning. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 11907–11916, 2019. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[33] Yaoming Wang, Yangzhou Jiang, Jin Li, Bingbing Ni, Wenrui Dai, Chenglin Li, Hongkai Xiong, and Teng Li. Contrastive regression for domain adaptation on gaze estimation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 19376–19385, 2022. 1, 2, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[34] Zhimin Wang, Huangyue Yu, Haofei Wang, Zongji Wang, and Feng Lu. Comparing single-modal and multimodal interaction in an augmented reality system. In 2020 IEEE International Symposium on Mixed and Augmented Reality Adjunct, ISMAR 2020 Adjunct, Recife, Brazil, November 9-13, 2020, pages 165–166. IEEE, 2020. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[35] Xuehan Xiong, Zicheng Liu, Qin Cai, and Zhengyou Zhang. Eye gaze tracking using an rgbd camera: A comparison with a rgb solution. In Proceedings of the 2014 ACM International Joint Conference on Pervasive and Ubiquitous Computing: Adjunct Publication, pages 1113–1121, 2014. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[36] Yu Yu and Jean-Marc Odobez. Unsupervised representation learning for gaze estimation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 7314–7324, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[37] Xucong Zhang, Yusuke Sugano, Mario Fritz, and Andreas Bulling. Appearance-based gaze estimation in the wild. In Proceedings ofthe IEEE conference on computer vision and pattern recognition, pages 4511–4520, 2015. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[38] Xucong Zhang, Yusuke Sugano, Mario Fritz, and Andreas Bulling. It’s written all over your face: Full-face appearancebased gaze estimation. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition Workshops, pages 51–60, 2017. 2, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[39] Xucong Zhang, Seonwook Park, Thabo Beeler, Derek Bradley, Siyu Tang, and Otmar Hilliges. Eth-xgaze: A large scale dataset for gaze estimation under extreme head pose and gaze variation. In European Conference on Computer Vision, pages 365–381. Springer, 2020. 2, 3, 6"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                78,
+                93,
+                470,
+                161
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1418"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ]
+]
