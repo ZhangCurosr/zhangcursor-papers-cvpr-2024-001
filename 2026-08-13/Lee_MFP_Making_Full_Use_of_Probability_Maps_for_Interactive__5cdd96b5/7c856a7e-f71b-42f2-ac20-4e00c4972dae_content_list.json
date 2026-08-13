@@ -1,0 +1,1423 @@
+[
+    {
+        "type": "text",
+        "text": "MFP: Making Full Use of Probability Maps for Interactive Image Segmentation",
+        "text_level": 1,
+        "bbox": [
+            93,
+            140,
+            875,
+            161
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Chaewon Lee Korea University chaewonlee@mcl.korea.ac.kr",
+        "bbox": [
+            125,
+            190,
+            352,
+            241
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Seon-Ho Lee Korea University seonholee@mcl.korea.ac.kr",
+        "bbox": [
+            390,
+            190,
+            609,
+            241
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Chang-Su Kim\\* Korea University changsukim@korea.ac.kr",
+        "bbox": [
+            647,
+            190,
+            839,
+            241
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Abstract",
+        "text_level": 2,
+        "bbox": [
+            240,
+            273,
+            320,
+            291
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "In recent interactive segmentation algorithms, previous probability maps are used as network input to help predictions in the current segmentation round. However, despite the utilization of previous masks, useful information contained in the probability maps is not well propagated to the current predictions. In this paper, to overcome this limitation, we propose a novel and effective algorithm for clickbased interactive image segmentation, called MFP, which attempts to make full use of probability maps. We irst modulate previous probability maps to enhance their representations of user-specified objects. Then, we feed the modulated probability maps as additional input to the segmentation network. We implement the proposed MFP algorithm based on the ResNet-34, HRNet-18, and ViT-B backbones and assess the performance extensively on various datasets. It is demonstrated that MFP meaningfully outperforms the existing algorithms using identical backbones. The source codes are available at https://github.com/cwlee00/MFP.",
+        "bbox": [
+            86,
+            306,
+            470,
+            573
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "1. Introduction",
+        "text_level": 2,
+        "bbox": [
+            88,
+            602,
+            215,
+            617
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Interactive image segmentation is a task that aims to segment objects of interest given guidance through user annotations. It enables users to select objects and delineate them easily, so it is useful in many applications such as image editing and medical image analysis. With the rapid development of deep-learning-based algorithms for dense prediction tasks, demands for annotated data have increased significantly. However, obtaining pixel-level annotations is costly due to its laborious and time-consuming traits. With the employment of interactive segmentation techniques, these labeling costs could be reduced. It is hence essential to develop an effective interactive segmentation algorithm.",
+        "bbox": [
+            86,
+            627,
+            472,
+            819
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Various forms of user annotations have been adopted in interactive image segmentation, including bounding boxes [15, 25], scribbles [1, 10], and clicks [3, 7, 14, 17, 19–",
+        "bbox": [
+            88,
+            819,
+            472,
+            864
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/249afb6ce4e1fd22505649a5bfbc4715af3929f3c28d18e35e374ebbe8a404a2.jpg",
+        "image_caption": [
+            "Figure 1. Utilization of previous probability information in the current segmentation round: The conventional click-based interactive segmentation algorithm SimpleClick [21] fails to capture the details contained in the previous probability maps. On the other hand, the proposed algorithm exploits the shape details in the previous probability maps to yield a better segmentation result in the current round."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            503,
+            271,
+            877,
+            483
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "21, 26, 27, 29]. However, click-based interactions have become the mainstream methods due to their simplicity and well-established studies. In click-based methods, a user successively places foreground or background clicks to obtain a segmentation mask. Every time the user places a click, the segmentation mask is updated. Then, based on the segmentation mask, the user provides a new click on the mislabeled areas. This is repeatedly performed until a desired result is obtained. In this work, we attempt to develop a novel and more effective framework for click-based interactive image segmentation.",
+        "bbox": [
+            496,
+            621,
+            882,
+            784
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Recently, deep-learning-based techniques have shown promising results for interactive image segmentation. While early deep methods feed only an input image and click maps to the segmentation networks, Sofiiuk et al. [27] tried to exploit previous segmentation masks by taking them as additional input to their segmentation network. They demonstrated that making the network model aware of previous masks improves the stability of the model. Since then, taking previous masks (or previous probability maps) as the network input has become a standard pipeline for clickbased interactive segmentation. However, even though several algorithms use previous probability maps to generate current predictions, we observe that the information in the previous probability maps is not well propagated to the current predictions. Examples of these observations are presented in Figure 1.",
+        "bbox": [
+            496,
+            786,
+            883,
+            891
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "CvF",
+        "bbox": [
+            104,
+            2,
+            181,
+            41
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore.",
+        "bbox": [
+            236,
+            1,
+            810,
+            46
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "page_footnote",
+        "text": "\\*Corresponding author",
+        "bbox": [
+            106,
+            876,
+            228,
+            890
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "page_number",
+        "text": "4051",
+        "bbox": [
+            482,
+            939,
+            514,
+            953
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            86,
+            103,
+            470,
+            234
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "To overcome these limitations, we propose a novel interactive segmentation framework, called Making Full use of Probability maps (MFP), to make better use of previous probabilities. Previous probabilities predicted by a segmentation network provide information such as the shape of a target object, while user clicks give accurate information for discerning foreground regions from background ones. In this paper, we first introduce the notion of probability map modulation to combine these two types of information and yield a better representation of the target object. We propose taking a modulated probability map as additional input to the network. Thus, we extend the existing interactive segmentation framework as shown in Figure 2. Experiments on four benchmark datasets demonstrate that the proposed MFP framework achieves excellent results when implemented on three different backbone networks.",
+        "bbox": [
+            86,
+            236,
+            472,
+            470
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "The major contributions of this work can be summarized as follows.",
+        "bbox": [
+            88,
+            472,
+            470,
+            500
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• We propose the first modulation scheme for previous probability maps that enhances the representation of userspecified objects.",
+        "bbox": [
+            88,
+            501,
+            470,
+            545
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• We develop the novel MFP framework for click-based interactive segmentation, which propagates click information to unclicked locations effectively by making full use of previous probability maps.",
+        "bbox": [
+            88,
+            545,
+            470,
+            604
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• We implement the proposed MFP algorithm based on three backbone networks of ResNet-34 [13], HRNet-18 [28], and ViT-B [6] and assess the performance on various benchmark datasets. MFP meaningfully outperforms the existing algorithms using identical backbones.",
+        "bbox": [
+            88,
+            604,
+            470,
+            679
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "2. Related Work",
+        "text_level": 2,
+        "bbox": [
+            88,
+            694,
+            228,
+            709
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "2.1. Interactive Image Segmentation",
+        "text_level": 2,
+        "bbox": [
+            88,
+            718,
+            362,
+            734
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Extensive research has been carried out to solve the problem of interactive image segmentation. For instance, Rother et al. [25] proposed an early method, which takes interactive segmentation as a graph-based optimization problem. Such traditional methods rely on handcrafted features, thus they suffer from relatively low performance. With the emergence of deep learning, Xu et al. [29] first employed a convolutional neural network to perform interactive segmentation. They encoded user clicks into click maps via the distance transform, and used them with an RGB image as the network input. Since then, their idea of taking click maps as network input has become a de facto standard in deep-learning-based methods [3, 14, 26, 29]. Although click maps clearly represent the annotated labels in userclicked locations, the output of the segmentation network is not guaranteed to have correct labels in those locations. To overcome this limitation, Jang and Kim [14] introduced the backpropagating refinement scheme (BRS), which is an inference-time optimization procedure that corrects the mislabeled clicks. Inspired by this work, Sofiiuk et al. [26] developed the f-BRS algorithm, which refines features instead of click maps. However, these BRS methods need to run backward gradient passes during the inference, demanding higher computational costs in general.",
+        "bbox": [
+            86,
+            742,
+            472,
+            890
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "image",
+        "img_path": "images/281d225c9b1bbd96998a95fa3705f87e283a69a36c2595643d99b00ffad4f2b3.jpg",
+        "image_caption": [
+            "(a) Existing Algorithms"
+        ],
+        "image_footnote": [],
+        "bbox": [
+            504,
+            102,
+            875,
+            156
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "image",
+        "img_path": "images/05dbff3fc9f263181a4f207d11f63bf0384f4ceccd6da2d72f931a9c77e51cb1.jpg",
+        "image_caption": [
+            "(b) Proposed Algorithm",
+            "Figure 2. (a) Existing algorithms take an input image I, click map $C ^ { \\check { t } }$ , and previous probability map $P ^ { t - 1 }$ as input to the segmentation network. From these input signals, they extract feature $\\mathcal { F } _ { B } ^ { t }$ and directly feed it into the segmentation head to obtain the current probability map $P ^ { t } .$ Then, $P ^ { t }$ is thresholded to the final object mask $Y ^ { t }$ . (b) In contrast, the proposed MFP algorithm modulates $P ^ { t - 1 }$ into $\\tilde { P } ^ { t - 1 }$ and takes it as additional input to the network. Furthermore, MFP late-fuses probability-related feature $\\mathcal { F } _ { P } ^ { t }$ with backbone feature $\\mathcal { F } _ { B } ^ { t }$ before the segmentation head."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            506,
+            176,
+            875,
+            268
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            445,
+            883,
+            651
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "2.2. Utilization of Previous Masks",
+        "text_level": 2,
+        "bbox": [
+            500,
+            660,
+            756,
+            676
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Forte et al. [8] and Sofiiuk et al. [27] started adding previous segmentation masks as network input in the current segmentation round. In particular, Sofiiuk et al. [27] demonstrated that even without additional optimization schemes, a simple feed-forward model using previous masks could achieve promising results. After their work, recent interactive segmentation methods in [4, 7, 19, 21, 31] all use the segmentation masks in previous segmentation rounds as network input. To further improve the segmentation performance, Chen et al. [4] and Lin et al. [19] proposed to refine segmentation results within a local window. After obtaining a global prediction, their methods also predict local results on cropped image regions around clicks and use the local predictions to refine the global prediction. Zhou et al.",
+        "bbox": [
+            496,
+            684,
+            883,
+            891
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "page_number",
+        "text": "4052",
+        "bbox": [
+            482,
+            939,
+            516,
+            952
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "image",
+        "img_path": "images/be089f9fe6f33b04c42d47521ef956966aa2cb6351f2abfef36fe217c5c50c2f.jpg",
+        "image_caption": [
+            "Figure 3. Overview of the proposed MFP algorithm. In the click map, foreground and background clicks are depicted in green and red, respectively."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            93,
+            99,
+            875,
+            272
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "[31] formulated the problem of interactive segmentation as Gaussian process classification, and Du et al. [7] proposed to use self-attention and correlation modules for propagating click information to unclicked locations. Liu et al. [21] focused on developing a more effective backbone network, and leveraged a plain ViT backbone that could benefit from pretrained weights. Although all these methods use previous masks (or previous probability maps) in the current segmentation round, none of them attempt to explicitly extract beneficial information from the probability maps. Thus, they do not use the previous probability maps to their full potential.",
+        "bbox": [
+            86,
+            339,
+            472,
+            517
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "3. Proposed Algorithm",
+        "text_level": 2,
+        "bbox": [
+            88,
+            531,
+            279,
+            547
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Figure 3 is an overview of the proposed MFP algorithm. In each interactive segmentation round, we first modulate the probability map, predicted from the previous clicks, to make it closer to the actual segmentation result the user desires, as illustrated in Figure 3(a). Then, we feed the modulated map as additional input to the segmentation network in Figure 3(b). We train the segmentation network using a recursive training scheme.",
+        "bbox": [
+            86,
+            556,
+            470,
+            674
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "3.1. Probability Map Modulation",
+        "text_level": 2,
+        "bbox": [
+            88,
+            684,
+            339,
+            700
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "To fully exploit the useful information in the previous prediction, we enhance the shape details of a target object in the probability map $P ^ { t - 1 }$ from the previous round $t - 1$ For regions that are likely to correspond to the target object, we enhance the probability values to make them closer to the foreground label of 1. On the contrary, for background regions, we lower the probabilities to make them closer to the background label of 0. To this end, we use the method of gamma correction [9].",
+        "bbox": [
+            86,
+            707,
+            472,
+            840
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Gamma correction: In round t, we use the probability map $P ^ { t - 1 }$ that the segmentation head yielded in the last round $t - 1$ . We first modulate $P ^ { t - 1 } \\operatorname { i n t o } ^ { \\cdot } \\tilde { P } ^ { t - 1 }$ via gamma correction. We modify only the region that seems to need further refinement. More specifically, we apply gamma correction only to the pixels within a modulation window M, as shown in Figure 3(a). Typically, pixels nearer to the current click u are more likely to require further refinement. Hence, we define the modulation window as",
+        "bbox": [
+            88,
+            844,
+            470,
+            890
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "chart",
+        "img_path": "images/48d5374ef3fb569d6c9076d2d02c1435651e035c6fff60dc4169bb33b917bc25.jpg",
+        "content": "",
+        "chart_caption": [],
+        "chart_footnote": [],
+        "bbox": [
+            503,
+            337,
+            669,
+            460
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "chart",
+        "img_path": "images/29836fbfc5d3f68927f003b5e7fd56502726e520d60446aae2a30d16a4a748fc.jpg",
+        "content": "",
+        "chart_caption": [
+            "Figure 4. Illustration of the gamma correction for the probability modulation: (a) probabilities near a foreground click are increased with power $\\textstyle { \\frac { 1 } { \\gamma } }$ smaller than 1, and (b) those near a background click are decreased with power γ bigger than 1."
+        ],
+        "chart_footnote": [],
+        "bbox": [
+            704,
+            338,
+            875,
+            459
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            547,
+            882,
+            636
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "equation",
+        "img_path": "images/413ee3e6151137319a55cd7a09914796c9ee42f87df9f3d15b5c84dd7148c6b4.jpg",
+        "text": "$$\nM = \\{ x : \\| x - u \\| \\leq R \\}\\tag{1}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            606,
+            645,
+            772,
+            662
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "where R is the radius of the window, representing the attention scope of the current click u.",
+        "bbox": [
+            498,
+            671,
+            880,
+            700
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Suppose that pixel x belongs to the modulation window, $i . e . \\ x \\ \\in \\ M$ . Also, let $P _ { x }$ denote the probability of x in a probability map $P .$ Then, $P _ { x } ^ { t - 1 }$ is modulated to $\\tilde { P } _ { x } ^ { t - 1 }$ by gamma correction. Let $l ( u )$ be the label that the user provides at the current click $u .$ Note that user clicks are provided on mislabeled areas. Therefore, if a foreground click is given with $l ( u ) = 1$ , it indicates that a background label was assigned to u in the last round and $P _ { u } ^ { t - 1 } < 0 . 5$ Since the user intends to assign a foreground label to u, we increase the probabilities of pixels in M. Therefore, when $l ( u ) = 1$ , we perform the increasing modulation",
+        "bbox": [
+            496,
+            700,
+            882,
+            863
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "equation",
+        "img_path": "images/afcca25f6ea66e9b2313d17006e2b8746ee7bda9bbd663b9b2d636ce8cef4277.jpg",
+        "text": "$$\n\\tilde { P } _ { x } ^ { t - 1 } = ( P _ { x } ^ { t - 1 } ) ^ { \\frac { 1 } { \\gamma } }\\tag{2}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            630,
+            871,
+            746,
+            891
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "page_number",
+        "text": "4053",
+        "bbox": [
+            482,
+            939,
+            516,
+            952
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "table",
+        "img_path": "images/1c9a1bbf5208fef6f3098e78a91b782301a5c869c68a702f07b0f9effe217c9b.jpg",
+        "table_caption": [
+            "Table 1. Two gamma assignment schemes."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Method</td><td>Distance metric</td><td>Gamma assignment scheme</td></tr><tr><td>Euclidean distance</td><td> $d = \\lVert x - u \\rVert$ </td><td> $\\begin{array} { r } { \\gamma = \\Gamma \\cdot ( 1 - \\frac { d } { R } ) + \\frac { d } { R } } \\end{array}$ </td></tr><tr><td>Probability distance</td><td></td><td> $\\begin{array} { r l } { d = ( P _ { x } ^ { t - 1 } - P _ { u } ^ { t - 1 } ) ^ { 2 } } & { { } \\gamma = ( \\Gamma - 1 ) \\cdot \\operatorname* { m a x } \\left\\{ \\frac { ( \\bar { d } - d ) ^ { 3 } } { \\bar { d } ^ { 3 } } , 0 \\right\\} + 1 } \\end{array}$ </td></tr></table>",
+        "bbox": [
+            91,
+            119,
+            468,
+            199
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "for each $x \\in M$ , where $1 \\leq \\gamma \\leq \\Gamma$ Figure 4(a) shows a gamma correction curve for the increasing modulation. The exact opposite processing is done for a background click. When $l ( u ) = 0 ,$ , we perform the decreasing modulation",
+        "bbox": [
+            86,
+            219,
+            470,
+            280
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/d17b206451eba4c91d607a19f58854cd26a5ae3c8e352e16bb10fb2171ac01fb.jpg",
+        "text": "$$\n\\tilde { P } _ { x } ^ { t - 1 } = ( P _ { x } ^ { t - 1 } ) ^ { \\gamma }\\tag{3}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            222,
+            287,
+            336,
+            308
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "for each $x \\in M$ , as shown in Figure 4(b).",
+        "bbox": [
+            88,
+            318,
+            356,
+            332
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Assignment of $\\gamma \\colon$ We assign different values of gamma for modulating each pixel x in M. The assignment is done according to how far x is from the given click u. For the click itself, the desired value $\\tilde { P } _ { u } ^ { t - 1 }$ is clear; it is desired that $\\tilde { P } _ { u } ^ { t - 1 } \\approx 1 \\mathrm { i f } l ( u ) = 1$ , and $\\tilde { P } _ { u } ^ { t - 1 } \\approx 0$ if $l ( u ) = 0$ It is hence natural to assign the biggest gamma Γ to the current click u. We set Γ so that $\\tilde { P } _ { u } ^ { t - 1 } = 0 . 9 9$ for a foreground click and $\\tilde { P } _ { u } ^ { t - 1 } = 0 . 0 1$ for a background click. On the other hand, pixels far away from u are less likely to belong to the same object as u, so we assign smaller gamma values for those pixels. For measuring how far a pixel is from the click, we propose two distance metrics: Euclidean distance and probability distance. We also develop different gamma assignment schemes for the two distance metrics. Table 1 summarizes these two schemes.",
+        "bbox": [
+            86,
+            337,
+            470,
+            558
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "First, we measure how far pixel x is from click u by the Euclidean distance $d = \\| x - u \\|$ . In this case, γ is determined by",
+        "bbox": [
+            88,
+            558,
+            470,
+            602
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/b3389639081fc065aced86e0d00cc67c022ad1a49da9aba33717b4d372f2ba03.jpg",
+        "text": "$$\n\\gamma = \\Gamma \\cdot ( 1 - \\frac { d } { R } ) + \\frac { d } { R } .\\tag{4}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            200,
+            599,
+            354,
+            628
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Thus, γ linearly decreases from $\\Gamma$ to $0 ,$ as pixel x moves away from click u to the boundary of the modulation window M in (1).",
+        "bbox": [
+            88,
+            632,
+            470,
+            676
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Second, assuming that similar pixels in the same region would be assigned similar probabilities by the segmentation network, we define the probability distance $d =$ $( P _ { x } ^ { t - 1 } - P _ { u } ^ { t - 1 } ) ^ { 2 }$ between x and u. In other words, pixel x is considered farther from click u when its probability $P _ { x } ^ { t - 1 }$ differs more from $P _ { u } ^ { t - 1 }$ . In this case, the maximum distance cannot be bounded by the radius R of the modulation window M. Instead, we measure the probability distances of all pixels in M from click u. Let $\\bar { d }$ denote the median of these distances. Then, we determine γ by",
+        "bbox": [
+            86,
+            676,
+            472,
+            824
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/cf979e105b7f5cc2c1318eb5c957d51f1ea61aae519dc529c3b964ab5556e02d.jpg",
+        "text": "$$\n\\gamma = ( \\Gamma - 1 ) \\cdot \\frac { ( \\bar { d } - d ) ^ { 3 } } { \\bar { d } ^ { 3 } } + 1\\tag{5}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            186,
+            833,
+            370,
+            864
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "when $d \\leq { \\bar { d } } .$ Therefore, $\\gamma = \\Gamma$ at click $u ,$ and $\\gamma = 1$ when $d = { \\bar { d } } .$ When $d > \\bar { d } ,$ we assume that x and u are unlikely to belong to the same region and set $\\gamma = 1$",
+        "bbox": [
+            88,
+            875,
+            470,
+            890
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "image",
+        "img_path": "images/62957fc7c9cae0921f501bd2ff7cc90ccea2138cfbe3a0fc74f3442f50e566e0.jpg",
+        "image_caption": [
+            "Figure 5. Examples of the probability map modulation via (5). From top to bottom: previous probability maps $P ^ { t - 1 }$ before modulation with current clicks, modulated probability maps $\\tilde { P } ^ { t - 1 }$ , and ground-truth masks of target objects."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            508,
+            99,
+            880,
+            297
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            498,
+            386,
+            880,
+            417
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "We adopt the probability-distance-based scheme in (5) for early clicks up to the Nth click and the Euclideandistance-based scheme in (4) for later clicks. This is because, in early rounds, rough and large-scale object shapes tend to remain in $P ^ { t - 1 }$ . On the other hand, in late rounds, the distinction between the target object and the background becomes clearer, and fine-scale information is required for better segmentation. However, $P ^ { t - 1 }$ does not contain such fine-scale information in general. Thus, the Euclidean distance is used instead in late rounds. Figure 5 shows examples of the probability map modulation via the gamma assignment scheme in (5).",
+        "bbox": [
+            496,
+            417,
+            882,
+            594
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Assignment of R: We set the radius R of M to be $R _ { \\mathrm { m a x } } .$ However, when there are previous clicks of the opposite type, we set R to be half the minimum distance of the current click u to an opposite click. Thus, we set",
+        "bbox": [
+            496,
+            598,
+            882,
+            659
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/0c88f1074257de99a9d1ad39a0bb591468aae6e4db1894a9a9bc19a4d64f11e2.jpg",
+        "text": "$$\nR = \\operatorname* { m i n } \\left\\{ { \\frac { 1 } { 2 } } \\cdot \\operatorname* { m i n } _ { c \\in O } \\| u - c \\| , R _ { \\operatorname* { m a x } } \\right\\}\\tag{6}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            568,
+            667,
+            810,
+            700
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "where O is the set of previous clicks of the opposite type.",
+        "bbox": [
+            498,
+            709,
+            867,
+            726
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "3.2. Network Architecture",
+        "text_level": 2,
+        "bbox": [
+            500,
+            734,
+            700,
+            750
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "After obtaining the modulated probability map $\\tilde { P } ^ { t - 1 }$ , we feed it together with the input image I, click map $C ^ { t }$ , and original probability map $\\bar { P } ^ { t - 1 }$ into the segmentation network, as depicted in Figure 3(b). For the interactive segmentation task, we adopt a common semantic segmentation network as the backbone for feature extraction. However, the semantic segmentation network takes only an RGB image as input. To handle the additional input $\\dot { C } ^ { t } , P ^ { t - 1 }$ , and $\\tilde { P } ^ { t - 1 }$ , we concatenate them, and embed the concatenation and the input image I, respectively, into tensors of the same size, as done in [21, 27]. Then, we element-wise add these tensors and convey the sum to the feature extraction network. As the feature extraction backbone, we test ResNet-34 [13], HRNet-18 [28], and ViT-B [6] of different complexities, which are widely used for interactive image segmentation. The feature extractor yields a feature map ${ \\mathcal { F } } _ { B } ^ { t } .$",
+        "bbox": [
+            496,
+            756,
+            882,
+            890
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "page_number",
+        "text": "4054",
+        "bbox": [
+            482,
+            939,
+            516,
+            952
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "table",
+        "img_path": "images/6e6dc98aa9d6ac201b3fabfb134a7b8b24d8078166abc46a3377b1e6e2267a43.jpg",
+        "table_caption": [
+            "Table 2. The NoC scores of the proposed MFP algorithm and existing algorithms, which are trained on the SBD dataset [12]."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td></td><td></td><td colspan=\"3\">GrabCut</td><td colspan=\"3\">Berkeley</td><td colspan=\"3\">DAVIS</td><td colspan=\"3\">SBD</td></tr><tr><td>Algorithm</td><td>Backbone</td><td>NoC85</td><td>NoC90</td><td>NoC95</td><td>NoC85</td><td>NoC90</td><td>NoC95</td><td>NoC85</td><td>NoC90</td><td>NoC95</td><td>NoC85</td><td>NoC90</td><td>NoC95</td></tr><tr><td>BRS [14]</td><td>DenseNet</td><td>2.60</td><td>3.60</td><td></td><td></td><td>5.08</td><td>–</td><td>5.58</td><td>8.24</td><td>-</td><td>6.59</td><td>9.78</td><td>-</td></tr><tr><td>f-BRS [26]</td><td>ResNet-101</td><td>2.30</td><td>2.72</td><td></td><td></td><td>4.57</td><td>–</td><td>5.04</td><td>7.41</td><td>1</td><td>4.81</td><td>7.73</td><td></td></tr><tr><td>RITM [27]</td><td>HRNet-18</td><td>1.76</td><td>2.04</td><td>3.66</td><td>1.87</td><td>3.22</td><td>8.35</td><td>4.94</td><td>6.71</td><td>13.87</td><td>3.39</td><td>5.43</td><td>11.65</td></tr><tr><td>CDNet [3]</td><td>ResNet-34</td><td>1.86</td><td>2.18</td><td>3.68</td><td>1.95</td><td>3.27</td><td>8.29</td><td>5.00</td><td>6.89</td><td>14.24</td><td>5.18</td><td>7.89</td><td>14.27</td></tr><tr><td>PsuedoClick [20]</td><td>HRNet-18</td><td>1.68</td><td>2.04</td><td></td><td>1.85</td><td>3.23</td><td></td><td>4.81</td><td>6.57</td><td></td><td>3.38</td><td>5.40</td><td></td></tr><tr><td>FocalClick [4]</td><td>SegF-B0</td><td>1.66</td><td>1.90</td><td></td><td>1</td><td>3.14</td><td></td><td>5.02</td><td>7.06</td><td>I</td><td>4.34</td><td>6.51</td><td></td></tr><tr><td>FocusCut [19]</td><td>ResNet-101</td><td>1.46</td><td>1.64</td><td>1</td><td>1.81</td><td>3.01</td><td></td><td>4.85</td><td>6.22</td><td>I</td><td>3.40</td><td>5.31</td><td>–</td></tr><tr><td>EMC-Click [7]</td><td>HRNet-18</td><td>1.74</td><td>1.84</td><td></td><td></td><td>3.03</td><td></td><td>5.05</td><td>6.71</td><td>1</td><td>3.38</td><td>5.51</td><td></td></tr><tr><td>GPCIS [31]</td><td>ResNet-50</td><td>1.64</td><td>1.82</td><td>2.62</td><td>1.60</td><td>2.60</td><td>6.77</td><td>4.37</td><td>5.89</td><td>12.42</td><td>3.80</td><td>5.71</td><td>11.06</td></tr><tr><td>iCMFormer [16]</td><td>ViT-B</td><td>1.36</td><td>1.42</td><td></td><td>1.42</td><td>2.52</td><td></td><td>4.05</td><td>5.58</td><td></td><td>3.33</td><td>5.31</td><td></td></tr><tr><td>SimpleClick [21]</td><td>ViT-B</td><td>1.40</td><td>1.54</td><td>2.16</td><td>1.44</td><td>2.46</td><td>6.70</td><td>4.10</td><td>5.48</td><td>12.24</td><td>3.28</td><td>5.24</td><td>11.24</td></tr><tr><td>MFP (Proposed)</td><td>ViT-B</td><td>1.38</td><td>1.48</td><td>1.92</td><td>1.39</td><td>2.17</td><td>6.18</td><td>3.92</td><td>5.32</td><td>11.27</td><td>3.21</td><td>5.24</td><td>11.20</td></tr></table>",
+        "bbox": [
+            93,
+            112,
+            879,
+            309
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            86,
+            329,
+            470,
+            433
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Existing interactive segmentation algorithms directly input the backbone feature $\\mathcal { F } _ { B } ^ { t }$ into a segmentation head to obtain a segmentation result. In contrast, we propose fusing the probability maps $P ^ { t - 1 }$ and $\\tilde { P } ^ { t - 1 }$ with $\\mathcal { F } _ { B } ^ { t }$ . This late fusion strengthens the influence of the probability information on the final segmentation result. Specifically, we first concatenate $I , P ^ { t - 1 } , \\tilde { P } ^ { t - 1 }$ and adjust their spatial resolutions and channel sizes using two convolution blocks. We then use two Xception conv blocks [5] to extract the probabilityrelated feature $\\mathcal { F } _ { P } ^ { t }$ . Then, we concatenate $\\mathcal { F } _ { P } ^ { t }$ with $\\mathcal { F } _ { B } ^ { t }$ and fuse them through four Xception conv blocks. The segmentation head processes this fused feature to generate the probability map $\\bar { \\boldsymbol { P } } ^ { t }$ in the current round t. Thresholding this map yields the final segmentation mask $Y ^ { t }$",
+        "bbox": [
+            86,
+            433,
+            472,
+            640
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "3.3. Recursive Training",
+        "text_level": 2,
+        "bbox": [
+            88,
+            646,
+            267,
+            662
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "As the proposed MFP algorithm uses $P ^ { t - 1 }$ to predict $P ^ { t } .$ its training requires an ordered series of clicks and the corresponding probability maps. Sofiuk et al. [27], one of the first methods to use previous probability maps in interactive segmentation, adopt an iterative sampling strategy. They first sample user clicks randomly, as done in [29]. After the random clicks, they add $0 \\sim 3$ clicks iteratively based on the errors in the network prediction results. Although they partly train the model by mimicking user interactions, they still resort to random sampling initially. Thus, for initial clicks, there are no previous probability maps, and the probability modulation cannot be performed. Therefore, in this work, we develop a fully recursive training strategy to exploit the information in the ordered series of interactive clicks. More specifically, we start the training of an image by sampling the first click near the center of a target object. Then, by comparing the result of the segmentation network with the ground truth, we select the next click near the center of the biggest error region. This recursive selection and training is performed up to 24 clicks for an image.",
+        "bbox": [
+            86,
+            667,
+            472,
+            891
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            329,
+            882,
+            405
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "4. Experiments",
+        "text_level": 2,
+        "bbox": [
+            500,
+            417,
+            629,
+            434
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "4.1. Experimental Settings",
+        "text_level": 2,
+        "bbox": [
+            500,
+            443,
+            702,
+            458
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Datasets: We use four widely used datasets GrabCut [25], Berkeley [22], DAVIS [23], and SBD [12] to assess the proposed MFP algorithm. SBD and a combination of datasets COCO [18] and LVIS[11] are used for training.",
+        "bbox": [
+            496,
+            465,
+            882,
+            525
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "• GrabCut: It consists of 50 images. For each image, a single object mask is provided.",
+        "bbox": [
+            500,
+            531,
+            882,
+            560
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "• Berkeley: It contains 96 images with 100 object masks.",
+        "bbox": [
+            500,
+            564,
+            870,
+            579
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "• DAVIS: Although constructed for video object segmentation, it can be also used for interactive image segmentation by sampling frames from the videos. We use the same 345 frames, sampled from 50 videos, as in [14].",
+        "bbox": [
+            500,
+            582,
+            882,
+            641
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "• SBD: It is divided into training and validation sets. The training set has 8,498 images with 20,172 instance masks, and the validation set has 2,857 images with $^ { 6 , 6 7 1 }$ masks.",
+        "bbox": [
+            500,
+            643,
+            882,
+            689
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "• COCO + LVIS: COCO consists of 99K images with 1.2M instance masks, and LVIS has 100K images with 1.2M masks. As in [27], we combine these two datasets and use 104K images with 1.6M instance masks for training.",
+        "bbox": [
+            500,
+            690,
+            882,
+            751
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Evaluation Metrics: To evaluate the proposed algorithm, we use two performance measures. First, we report the NoC score, which is the average number of clicks required to achieve a certain intersection-over-union (IoU) ratio. Previous studies usually set the target IoU ratio as 90% and report NoC@85 and NoC@90 for assessment. However, recent methods yield high-quality segmentation results. Therefore, we set the target IoU score as 95% and report NoC@95 additionally. Second, we plot the mean intersection-overunion (mIoU) score according to the number of clicks and report the area under the curve (AUC).",
+        "bbox": [
+            496,
+            757,
+            883,
+            891
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "page_number",
+        "text": "4055",
+        "bbox": [
+            482,
+            939,
+            516,
+            952
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "image",
+        "img_path": "images/d381ded8d9a09f9c31301161f2ca55c3f06e96b6448987acd21382ea3e8bac39.jpg",
+        "image_caption": [
+            "Figure 6. Qualitative comparison of algorithms trained on the COCO+LVIS dataset. We compare the proposed MFP with conventional algorithms that employ previous masks as input: FocalClick [4], EMC-Click [7], and SimpleClick [21]. Rows (a) show input images with clicks and prediction masks overlayed. Rows (b) and (c) show previous probability maps and current prediction masks, respectively. Note that the algorithms are compared fairly using the same automatic clicking strategy. Since the algorithms produce different segmentation results, click locations may differ accordingly."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            89,
+            99,
+            880,
+            438
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            86,
+            530,
+            470,
+            559
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Implementation Details: The proposed MFP can be implemented upon various backbone networks. In this work, we implement three versions based on the ViT-B [6], HRNet-18 + OCR [28, 30], and ResNet-34 + DeepLabv3+ [2, 13] backbones. Also, we use the SBD [12] and COCO + LVIS [11, 18] datasets for training. We apply random resizing, cropping, flipping, rotation, and brightness control for data augmentation. We minimize the normalized focal loss [27] using the Adam optimizer with $\\beta _ { 1 } = 0 . 9$ and $\\beta _ { 2 } = 0 . 9 9 9$ We fix the hyperparameters in the probability map modulation to $N = 7$ and $R _ { \\mathrm { m a x } } = 1 0 0$ in all experiments. For evaluation, results can be greatly affected by how a user places clicks. Thus, for reliable assessment, we adopt the automatic clicking strategy used in [4, 14, 29].",
+        "bbox": [
+            86,
+            563,
+            472,
+            770
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "4.2. Comparative Assessment",
+        "text_level": 2,
+        "bbox": [
+            88,
+            779,
+            312,
+            794
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Comparison with state-of-the-art methods: We first compare the proposed MFP (ViT-B) with conventional interactive segmentation algorithms using the NoC metrics. Some methods employ large transformers including ViT-B, ViT-L and ViT-H. The best performances by the recent methods are obtained using the ViT-H backbone. However, ViT-H suffers from high computational costs due to its large number of parameters. For this reason, we compare the proposed algorithm with the state-of-the-art methods by employing ViT-B. Early algorithms were trained on the SBD dataset only, while recent methods are trained on SBD and COCO + LVIS, respectively. We report the results of MFP under both training settings following the recent methods.",
+        "bbox": [
+            86,
+            801,
+            472,
+            890
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            530,
+            882,
+            633
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Table 2 compares the results using the SBD training data. For the methods [4, 7, 19, 20, 27] that presented multiple versions of their algorithms, we report their best NoC scores. Looking at the table results, we see that MFP outperforms the existing algorithms significantly. Note that MFP is the only algorithm that achieves a mean IoU of 85% with less than four clicks for all the datasets. Also, MFP yields the best results in 9 out of 12 tests, and the second-best results in the remaining three tests.",
+        "bbox": [
+            496,
+            636,
+            882,
+            768
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Figure 6 compares qualitative segmentation results of the proposed MFP with those of FocalClick [4], EMC-Click [7], and SimpleClick [21]. We can see that at the same number of clicks, MFP provides more accurate segmentation results. We also visualize previous probability maps $\\tilde { P } ^ { t - 1 }$ in rows (b) of Figure 6. Unlike the existing algorithms, whose segmentation masks are inaccurate in regions far from the clicks (e.g. the bicycle wheels), MFP manages to make correct predictions in those regions. Specifically, the previous probability maps of both SimpleClick and MFP contain information about the wheel shapes, but only MFP can segment out the wheels. From this observation, we believe that the proposed MFP algorithm makes better use of the information in previous masks.",
+        "bbox": [
+            496,
+            771,
+            883,
+            890
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "page_number",
+        "text": "4056",
+        "bbox": [
+            482,
+            940,
+            516,
+            952
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "table",
+        "img_path": "images/9c915eec07b6a14a6d577e8acdf312ce0582312ef54e985a5cee59f3fceaf38e.jpg",
+        "table_caption": [
+            "Table 3. The NoC scores of the proposed MFP algorithm and existing algorithms, which are trained on the COCO + LVIS datasets [11, 18]."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td></td><td></td><td colspan=\"3\">GrabCut</td><td colspan=\"3\">Berkeley</td><td colspan=\"3\">DAVIS</td><td colspan=\"3\">SBD</td></tr><tr><td>Algorithm</td><td>Backbone</td><td>NoC85</td><td>NoC90</td><td>NoC95</td><td>NoC85</td><td>NoC90</td><td>NoC95</td><td>NoC85</td><td>NoC90</td><td>NoC95</td><td>NoC85</td><td>NoC90</td><td>NoC95</td></tr><tr><td>RITM [27]</td><td>HRNet-32</td><td>1.46</td><td>1.56</td><td>2.48</td><td>1.43</td><td>2.10</td><td>5.41</td><td>4.11</td><td>5.34</td><td>11.51</td><td>3.59</td><td>5.71</td><td>12.00</td></tr><tr><td>CDNet [3]</td><td>ResNet-34</td><td>1.40</td><td>1.52</td><td>1.84</td><td>1.47</td><td>2.06</td><td>5.42</td><td>4.27</td><td>5.56</td><td>11.90</td><td>4.30</td><td>7.04</td><td>14.17</td></tr><tr><td>PseudoClick [20]</td><td>HRNet-32</td><td>1.36</td><td>1.50</td><td>–</td><td>1.40</td><td>2.08</td><td>–</td><td>3.79</td><td>5.11</td><td>–</td><td>3.46</td><td>5.54</td><td></td></tr><tr><td>FocalClick [4]</td><td>SegF-B3</td><td>1.44</td><td>1.50</td><td>1.82</td><td>1.55</td><td>1.92</td><td>4.63</td><td>3.61</td><td>4.90</td><td>10.58</td><td>3.43</td><td>5.62</td><td>11.55</td></tr><tr><td>EMC-Click [7]</td><td>HRNet-32</td><td>1.30</td><td>1.42</td><td>1.84</td><td>1.48</td><td>2.35</td><td>6.95</td><td>4.29</td><td>5.33</td><td>11.82</td><td>3.55</td><td>5.65</td><td>12.26</td></tr><tr><td>DynaMITe [24]</td><td>Swin-L</td><td>1.62</td><td>1.72</td><td>-</td><td>1.39</td><td>1.90</td><td></td><td>3.80</td><td>5.09</td><td>1</td><td>3.32</td><td>5.64</td><td></td></tr><tr><td>iCMFormer [16]</td><td>ViT-B</td><td>1.42</td><td>1.52</td><td>–</td><td>1.40</td><td>1.86</td><td></td><td>3.40</td><td>5.06</td><td>1</td><td>3.29</td><td>5.30</td><td></td></tr><tr><td>SimpleClick [21]</td><td>ViT-B</td><td>1.38</td><td>1.48</td><td>1.80</td><td>1.36</td><td>1.97</td><td>5.05</td><td>3.66</td><td>5.06</td><td>10.04</td><td>3.43</td><td>5.62</td><td>11.92</td></tr><tr><td>MFP (Proposed)</td><td>ViT-B</td><td>1.34</td><td>1.42</td><td>1.70</td><td>1.35</td><td>1.90</td><td>4.68</td><td>3.37</td><td>4.81</td><td>9.23</td><td>3.26</td><td>5.34</td><td>11.65</td></tr></table>",
+        "bbox": [
+            93,
+            119,
+            879,
+            279
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "table",
+        "img_path": "images/885243ab1db614d0f9210c15f28f5d6a1f419fcd125a1c4603f43d638fcbc0c0.jpg",
+        "table_caption": [
+            "Table 4. Comparison of the proposed MFP algorithm with conventional algorithms using identical backbones. The algorithms are grouped according to the backbone networks employed. All algorithms are trained on the SBD dataset [12]."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td></td><td></td><td colspan=\"3\">GrabCut</td><td colspan=\"3\">Berkeley</td><td colspan=\"3\">DAVIS</td><td colspan=\"3\">SBD</td></tr><tr><td>Algorithm</td><td>Backbone</td><td>NoC85</td><td>NoC90</td><td>NoC95</td><td>NoC85</td><td>NoC90</td><td>NoC95</td><td>NoC85</td><td>NoC90</td><td>NoC95</td><td>NoC85</td><td>NoC90</td><td>NoC95</td></tr><tr><td>CDNet [3]</td><td>ResNet-34</td><td>1.86</td><td>2.18</td><td>3.68</td><td>1.95</td><td>3.27</td><td>8.29</td><td>5.00</td><td>6.89</td><td>14.24</td><td>5.18</td><td>7.89</td><td>14.27</td></tr><tr><td>MFP (Proposed)</td><td>ResNet-34</td><td>1.70</td><td>1.92</td><td>3.00</td><td>1.71</td><td>3.37</td><td>7.94</td><td>4.97</td><td>7.78</td><td>14.93</td><td>3.92</td><td>6.21</td><td>12.47</td></tr><tr><td>RITM [27]</td><td>HRNet-18</td><td>1.76</td><td>2.04</td><td>3.66</td><td>1.87</td><td>3.22</td><td>8.35</td><td>4.94</td><td>6.71</td><td>13.87</td><td>3.39</td><td>5.43</td><td>11.65</td></tr><tr><td>PsuedoClick [20]</td><td>HRNet-18</td><td>1.68</td><td>2.04</td><td>=</td><td>1.85</td><td>3.23</td><td></td><td>4.81</td><td>6.57</td><td></td><td>3.38</td><td>5.40</td><td>-</td></tr><tr><td>EMC-Click [7]</td><td>HRNet-18</td><td>1.74</td><td>1.84</td><td></td><td></td><td>3.03</td><td>–</td><td>5.05</td><td>6.71</td><td>1</td><td>3.38</td><td>5.51</td><td></td></tr><tr><td>MFP (Proposed)</td><td>HRNet-18</td><td>1.52</td><td>1.60</td><td>2.90</td><td>1.68</td><td>3.04</td><td>7.94</td><td>4.77</td><td>6.36</td><td>13.45</td><td>3.43</td><td>5.45</td><td>11.58</td></tr><tr><td>iCMFormer [16]</td><td>ViT-B</td><td>1.36</td><td>1.42</td><td></td><td>1.42</td><td>2.52</td><td></td><td>4.05</td><td>5.58</td><td></td><td>3.33</td><td>5.31</td><td></td></tr><tr><td>SimpleClick [21]</td><td>ViT-B</td><td>1.40</td><td>1.54</td><td>2.16</td><td>1.44</td><td>2.46</td><td>6.70</td><td>4.10</td><td>5.48</td><td>12.24</td><td>3.28</td><td>5.24</td><td>11.24</td></tr><tr><td>MFP (Proposed)</td><td>ViT-B</td><td>1.38</td><td>1.48</td><td>1.92</td><td>1.39</td><td>2.17</td><td>6.18</td><td>3.92</td><td>5.32</td><td>11.27</td><td>3.21</td><td>5.24</td><td>11.20</td></tr></table>",
+        "bbox": [
+            93,
+            328,
+            879,
+            491
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            88,
+            512,
+            470,
+            599
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Table 3 compares the results using the COCO + LVIS training data. Out of 12 NoC scores compared, MFP outperforms the existing algorithms in seven tests and ranks second in the remaining five tests. This demonstrates that the proposed MFP algorithm exceeds or shows comparable results to the state-of-the-art methods.",
+        "bbox": [
+            86,
+            599,
+            472,
+            689
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Comparison of IoU & AUC: Figure 7 compares the proposed MFP in terms of mean IoU ratios with four comparable algorithms trained on the SBD dataset: CDNet [3], RITM [27], GPCIS [31], SimpleClick [21]. We see that MFP generally achieves higher mean IoU ratios with the same number of clicks than the conventional algorithms. To numerically prove the superiority of MFP, we also report the AUC scores. MFP shows the highest AUC scores on all four datasets.",
+        "bbox": [
+            86,
+            693,
+            472,
+            825
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Comparison using identical backbones: Using stronger backbones greatly impacts the performance of interactive segmentation algorithms. Thus, to make fair comparisons with existing methods, we test the proposed MFP algorithm using three different backbones: ResNet-34 [13], HRNet-18 [28], and ViT-B [6]. We choose ViT-B as the main backbone following the state-of-the-art methods in [16, 21]. As ViT-B is a heavy network, we also choose relatively lighter backbones ResNet-34 and HRNet-18, which are employed by many other interactive segmentation methods. In Table 4, we compare the three versions of MFP with conventional algorithms that use the same backbone networks. Out of total 36 settings compared, MFP shows superiour results in 28 settings. Even for the cases where MFP does not achieve the highest scores, MFP yields comparable performance to the best results with margins less than 0.1. This demonstrates the effectiveness and generality of the proposed MFP framework.",
+        "bbox": [
+            86,
+            830,
+            472,
+            891
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            511,
+            883,
+            718
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "4.3. Ablation Study",
+        "text_level": 2,
+        "bbox": [
+            498,
+            732,
+            650,
+            747
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "We conduct ablation studies to verify the efficacy of each component of the proposed algorithm, using the SBD training data. For evaluation, we choose the DAVIS dataset [23]. DAVIS has high-quality annotations and covers many different scenarios, thus we found the DAVIS results more convincing as compared with other datasets. The results are presented in Table 5. We first implement a baseline model (Method I) based on ViT-B. Method I does not take modulated probability maps as additional input and follows the same network architecture and training scheme as the previous algorithm [21]. In method II, we explore the effect of the late fusion strategy, by excluding the fusion layer. For method III, we follow the training procedure in [27], instead of the recursive training. When random sampling simulates clicks, since there is no order in the clicks, we randomly take any click and consider it as the current click to perform the probability map modulation. Method IV employs all components proposed in this work, so it is the same as the proposed algorithm.",
+        "bbox": [
+            496,
+            757,
+            883,
+            891
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "page_number",
+        "text": "4057",
+        "bbox": [
+            482,
+            939,
+            516,
+            952
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "chart",
+        "img_path": "images/a86397301f3744c76be11736a659f1cff99d3e442253d027069a0234e361a393.jpg",
+        "content": "",
+        "chart_caption": [],
+        "chart_footnote": [],
+        "bbox": [
+            91,
+            94,
+            457,
+            272
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "chart",
+        "img_path": "images/d2488df2e19d5d4423a1ae590dd0dd678ec336eabc040dbdec8766f5dce2df15.jpg",
+        "content": "",
+        "chart_caption": [],
+        "chart_footnote": [],
+        "bbox": [
+            514,
+            94,
+            880,
+            272
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "chart",
+        "img_path": "images/ae6b28a002ac38682e1a10a9ffa6cf24f59ee54f564fb91273416a8fb023a872.jpg",
+        "content": "",
+        "chart_caption": [],
+        "chart_footnote": [],
+        "bbox": [
+            89,
+            279,
+            457,
+            454
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "chart",
+        "img_path": "images/0a6feed51140db1b58dc4eb3c1d618a005591645ebc848e5c2299a7532374dfc.jpg",
+        "content": "",
+        "chart_caption": [
+            "Figure 7. Comparison of the mean IoU scores according to the number of clicks on the GrabCut[25], Berkeley[22], DAVIS[23], and SBD[12] datasets. The models are trained on the SBD datasets. The legend of the graph contains the AuC score for each algorithm."
+        ],
+        "chart_footnote": [],
+        "bbox": [
+            513,
+            280,
+            880,
+            454
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "table",
+        "img_path": "images/9c9082944ec521eaa1cb80d6c9f776ecd576c1b030d2f4743300a53d4192c096.jpg",
+        "table_caption": [
+            "Table 5. Ablation studies of the proposed MFP algorithm conducted on the DAVIS dataset [23]."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td></td><td>pt-1</td><td>Late fusion</td><td>Recursive training</td><td></td><td>NoC@85 NoC@90 NoC@95</td><td></td></tr><tr><td>I.</td><td></td><td></td><td></td><td>4.10</td><td>5.60</td><td>11.58</td></tr><tr><td>ⅡI.</td><td>√</td><td></td><td>1</td><td>4.05</td><td>5.30</td><td>11.54</td></tr><tr><td>III.</td><td>√</td><td>√</td><td></td><td>3.98</td><td>5.35</td><td>11.79</td></tr><tr><td>IV.</td><td>√</td><td>√</td><td>V</td><td>3.92</td><td>5.32</td><td>11.27</td></tr></table>",
+        "bbox": [
+            91,
+            541,
+            467,
+            640
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            86,
+            654,
+            472,
+            800
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Looking into the results in Table 5, we can see that method IV, which employs all components, yields the best performance. This indicates that all components contribute to performance improvements. Comparing the results between pairs of methods, we find that the performance gain from method II to IV is conspicuous for NoC@85, while that from method III to IV stands out for NoC@95. From this observation, we deduce that fusing probability information in a late layer has great impact for quickly obtaining coarse predictions, while the recursive training scheme aids in fine-level tuning for higher accuracy.",
+        "bbox": [
+            86,
+            801,
+            472,
+            890
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            508,
+            882,
+            584
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "5. Conclusions",
+        "text_level": 2,
+        "bbox": [
+            500,
+            601,
+            624,
+            617
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "A novel click-based interactive segmentation framework, called MFP, which fully exploits previous probability maps was proposed in this paper. First, MFP modulates previous probability maps based on click information to obtain better representations of user-specified objects. Then, it propagates the additional information to the segmentation network, which was designed by extending the existing interactive segmentation framework. Experimental results demonstrated that MFP outperforms conventional algorithms when identical backbones are employed.",
+        "bbox": [
+            496,
+            627,
+            883,
+            776
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Acknowledgements",
+        "text_level": 2,
+        "bbox": [
+            500,
+            789,
+            663,
+            806
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "This work was supported by the NRF grants funded by the Korea government (MSIT) (No. NRF-2021R1A4A1031864 and No. NRF-2022R1A2B5B03002310), and by the IITP grant funded by the Korea government (MSIT) (No. 2021- 0-02068, Artificial Intelligence Innovation Hub).",
+        "bbox": [
+            496,
+            815,
+            883,
+            890
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "page_number",
+        "text": "4058",
+        "bbox": [
+            482,
+            939,
+            516,
+            952
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "References",
+        "text_level": 2,
+        "bbox": [
+            89,
+            101,
+            184,
+            117
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "list",
+        "sub_type": "ref_text",
+        "list_items": [
+            "[1] Junjie Bai and Xiaodong Wu. Error-tolerant scribbles based interactive image segmentation. In CVPR, pages 392–399, 2014.1",
+            "[2] Liang-Chieh Chen, Yukun Zhu, George Papandreou, Florian Schroff, and Hartwig Adam. Encoder-decoder with atrous separable convolution for semantic image segmentation. In ECCV, pages 801–818, 2018. 6",
+            "[3] Xi Chen, Zhiyan Zhao, Feiwu Yu, Yilei Zhang, and Manni Duan. Conditional diffusion for interactive segmentation. In ICCV, pages 7345–7354, 2021. 1, 2, 5, 7",
+            "[4] Xi Chen, Zhiyan Zhao, Yilei Zhang, Manni Duan, Donglian Qi, and Hengshuang Zhao. FocalClick: towards practical interactive image segmentation. In CVPR, pages 1300–1309, 2022. 2, 5, 6, 7",
+            "[5] François Chollet. Xception: Deep learning with depthwise separable convolutions. In CVPR, pages 1251–1258, 2017. 5",
+            "[6] Alexey Dosovitskiy, Lucas Beyer, Alexander Kolesnikov, Dirk Weissenborn, Xiaohua Zhai, Thomas Unterthiner, Mostafa Dehghani, Matthias Minderer, Georg Heigold, Sylvain Gelly, Jakob Uszkoreit, and Neil Houlsby. An image is worth 16x16 words: Transformers for image recognition at scale. In ICLR, 2021. 2, 5, 6, 7",
+            "[7] Fei Du, Jianlong Yuan, Zhibin Wang, and Fan Wang. Efficient mask correction for click-based interactive image segmentation. In CVPR, pages 22773–22782, 2023. 1, 2, 3, 5, 6,7",
+            "[8] Marco Forte, Brian Price, Scott Cohen, Ning Xu, and François Pitié. Getting to 99% accuracy in interactive segmentation. arXiv preprint arXiv:2003.07932, 2020. 2",
+            "[9] Rafael C. Gonzalez and Richard E. Woods. Digital Image Processing. Prentice Hall, 2008. 3",
+            "[10] Leo Grady. Random walks for image segmentation. IEEE TPAMI, 28(11):1768–1783, 2006. 1",
+            "[11] Agrim Gupta, Piotr Dollar, and Ross Girshick. LVIS: a dataset for large vocabulary instance segmentation. In CVPR, pages 5356–5364, 2019. 5, 6, 7",
+            "[12] Bharath Hariharan, Pablo Arbeláez, Lubomir Bourdev, Subhransu Maji, and Jitendra Malik. Semantic contours from inverse detectors. In ICCV, pages 991–998, 2011. 5, 6, 7, 8",
+            "[13] Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition. In CVPR, pages 770–778, 2016. 2, 5, 6, 7",
+            "[14] Won-Dong Jang and Chang-Su Kim. Interactive image segmentation via backpropagating refinement scheme. In CVPR, pages 5297–5306, 2019. 1, 2, 5, 6",
+            "[15] Victor Lempitsky, Pushmeet Kohli, Carsten Rother, and Toby Sharp. Image segmentation with a bounding box prior. In ICCV, pages 277–284, 2009. 1",
+            "[16] Kun Li, George Vosselman, and Michael Ying Yang. Interactive image segmentation with cross-modality vision transformers. In ICCV, pages 762–772, 2023. 5, 7",
+            "[17] Zhuwen Li, Qifeng Chen, and Vladlen Koltun. Interactive image segmentation with latent diversity. In CVPR, pages 577–585, 2018. 1",
+            "[18] Tsung-Yi Lin, Michael Maire, Serge Belongie, James Hays Pietro Perona, Deva Ramanan, Piotr Dollár, and C. Lawrence Zitnick. Microsoft COCO: common objects in context. In ECCV, pages 740–755, 2014. 5, 6, 7",
+            "[19] Zheng Lin, Zheng-Peng Duan, Zhao Zhang, Chun-Le Guo, and Ming-Ming Cheng. FocusCut: diving into a focus view in interactive segmentation. In CVPR, pages 2637–2646, 2022. 1, 2, 5, 6",
+            "[20] Qin Liu, Meng Zheng, Benjamin Planche, Srikrishna Karanam, Terrence Chen, Marc Niethammer, and Ziyan Wu. PseudoClick: interactive image segmentation with click imitation. In ECCV, pages 728–745, 2022. 5, 6, 7",
+            "[21] Qin Liu, Zhenlin Xu, Gedas Bertasius, and Marc Niethammer. SimpleClick: interactive image segmentation with simple vision transformers. In ICCV, pages 22290–22300, 2023. 1, 2, 3, 5, 6, 7, 8",
+            "[22] Kevin McGuinness and Noel E O'connor. A comparative evaluation of interactive segmentation algorithms. Pattern Recognition, 43(2):434–444, 2010. 5, 8",
+            "[23] Federico Perazzi, Jordi Pont-Tuset, Brian McWilliams, Luc Van Gool, Markus Gross, and Alexander Sorkine-Hornung. A benchmark dataset and evaluation methodology for video object segmentation. In CVPR, pages 724–732, 2016. 5, 7, 8",
+            "[24] Amit Kumar Rana, Sabarinath Mahadevan, Alexander Hermans, and Bastian Leibe. Dynamite: Dynamic query bootstrapping for multi-object interactive segmentation transformer. arXiv preprint arXiv:2304.06668, 2023.7",
+            "[25] Carsten Rother, Vladimir Kolmogorov, and Andrew Blake. GrabCut: interactive foreground extraction using iterated graph cuts. ACM transactions on graphics (TOG), 23(3): 309–314, 2004. 1, 2, 5, 8",
+            "[26] Konstantin Sofiiuk, Ilia Petrov, Olga Barinova, and Anton Konushin. f-BRS: Rethinking backpropagating refinement for interactive segmentation. In CVPR, pages 8623-8632, 2020.1,2, 5",
+            "[27] Konstantin Sofiiuk, Ilya A Petrov, and Anton Konushin. Reviving iterative training with mask guidance for interactive segmentation. In ICIP, pages 3141–3145, 2022. 1, 2, 5, 6, 7, 8",
+            "[28] Jingdong Wang, Ke Sun, Tianheng Cheng, Borui Jiang, Chaorui Deng, Yang Zhao, Dong Liu, Yadong Mu, Mingkui Tan, Xinggang Wang, et al. Deep high-resolution representation learning for visual recognition. IEEE transactions on pattern analysis and machine intelligence, 43(10):3349– 3364, 2020. 2, 5, 6, 7",
+            "[29] Ning Xu, Brian Price, Scott Cohen, Jimei Yang, and Thomas S Huang. Deep interactive object selection. In CVPR, pages 373–381, 2016. 1, 2, 5, 6",
+            "[30] Yuhui Yuan, Xilin Chen, and Jingdong Wang. Objectcontextual representations for semantic segmentation. In ECCV, pages 173–190, 2020. 6",
+            "[31] Minghao Zhou, Hong Wang, Qian Zhao, Yuexiang Li, Yawen Huang, Deyu Meng, and Yefeng Zheng. Interactive segmentation as gaussion process classification. In CVPR, pages 19488–19497, 2023. 2, 3, 5, 7"
+        ],
+        "bbox": [
+            96,
+            126,
+            468,
+            165
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "page_number",
+        "text": "4059",
+        "bbox": [
+            482,
+            940,
+            516,
+            952
+        ],
+        "page_idx": 8
+    }
+]

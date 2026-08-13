@@ -1,0 +1,308 @@
+# Learning to Control Camera Exposure via Reinforcement Learning
+
+Kyunghyun Lee\* LG AI Research kyunghyun.lee@lgresearch.ai
+
+Ukcheol Shin\* CMU ushin@andrew.cmu.edu
+
+Byeong-Uk LeeKRAFTONbyeonguk.lee@krafton.com
+
+Deep Reinforcement Learning based Automatic Exposure Control (ours)  
+![](images/88e409fa106a71ceb7e9da4bc0307ebc63c278cf8baa668de127c098ff912ed7.jpg)  
+(a) Automatic exposure control for sudden lighting changes
+
+![](images/38607c200569df76c538ae23e9fbc2c8811f01cf5eb82d20292fbde6b70dbcc1.jpg)  
+(1) Well-exposed image acquisition
+
+![](images/9a2df6a25fde9fb3656b5c181a7f059abc50bbc4a8f3f01013aae0522c281c77.jpg)  
+(2) Object detection
+
+![](images/de909c03df45dc86c9caec150bd72c13a1d42ebe18ccd5b994d6023d427b4e27.jpg)
+
+![](images/619fe252093f456773c94d8879022b287b886db329a74a39f1164d7835ac105b.jpg)  
+(3) Feature extraction  
+(b) Effectiveness on various vision applications (left: ours, right: built-in AE)
+
+Figure 1. Automatic camera exposure control via deep reinforcement learning. Our proposed method, named DRL-AE, trains an agent to control camera exposure parameters (i.e., exposure time and gain) to acquire well-exposed images with rapid convergence and real-time processing (1ms on a CPU device). The trained agent instantly converges within five frames under dramatic lighting change scenario (a) and affects the performance of various vision applications (b), compared to the camera built-in AE controller [14, 18]
+
+## Abstract
+
+Adjusting camera exposure in arbitrary lighting conditions is the first step to ensure the functionality of computer vision applications. Poorly adjusted camera exposure often leads to critical failure and performance degradation. Traditional camera exposure control methods require multiple convergence steps and time-consuming processes, making them unsuitable for dynamic lighting conditions. In this paper, we propose a new camera exposure control framework that rapidly controls camera exposure while performing real-time processing by exploiting deep reinforcement learning. The proposed framework consists offour contributions: 1) a simplified training ground to simulate real-world’s diverse and dynamic lighting changes, 2) flickering and image attribute-aware reward design, along with lightweight state design for real-time processing, 3) a static-to-dynamic lighting curriculum to gradually improve the agent’s exposure-adjusting capability, and 4) domain randomization techniques to alleviate the limitation of the training ground and achieve seamless generalization in the wild. As a result, our proposed method rapidly reaches a desired exposure level within five steps with real-time processing (1ms). Also, the acquired images are well-exposed and show superiority in various computer vision tasks, such asfeature extraction and object detection.
+
+## 1. Introduction
+
+Camera exposure control is the task of adjusting exposure level by controlling exposure time, gain, and aperture to achieve a desired level of brightness and image quality for a given scene. Poorly adjusted exposure parameters result in over-exposed, under-exposed, blurry, or noisy images, which can cause performance degradation in image-based applications and, in the worst cases, even life-threatening accidents. Therefore, finding proper camera exposure is the first primary step to ensure the functionality of computer vision applications, such as object detection [5, 16], semantic segmentation [9, 17], depth estimation [10, 26], and visual odometry [1, 13].
+
+There are several essential requirements in camera exposure control. The rapid convergence must be guaranteed to maintain an appropriate exposure level under dynamic light-changing scenarios. Also, the exposure control loop is one of the lowest loops in the camera system. Therefore, lightweight algorithm design must be considered for on-board level operation. Finally, the quality of a converged image should not be sacrificed to meet the requirements.
+
+Further, the number of simultaneously controlled parameters is also important because it affects the converge time and final quality of the converged image. One-by-one control methods [14, 18, 20] control exposure parameters in a one-by-one manner to achieve a desired exposure level, rather than joint controlling exposure parameters. However, the converged parameters are often not optimal, such as [long exposure time, low gain] and [short exposure time, high gain] pairs. As a result, the values result in undesirable image artifacts, such as motion blur due to long exposure time or severe noise due to high gain.
+
+Joint exposure parameter control [7, 8, 21, 23, 24] often needs multiple searching steps in a wide range of searching space to find an optimal combination. As a result, they cause a flickering effect and slow convergence speed. Also, the recent methods require high-level computational complexity due to its optimization algorithm [7, 8], image assessment metric [7, 8, 20, 21], and GPU inference [23].
+
+In this paper, we propose a new joint exposure parameter control method that exploits reinforcement learning to achieve instant convergence and real-time processing. The proposed framework consists of four contributions:
+
+• A simplified training ground to simulate real-world’s diverse and dynamic lighting changes.
+
+• Flickering and image attribute-aware reward design, along with lightweight and intuitive state design for realtime processing.
+
+• A static-to-dynamic lighting curriculum learning to gradually improve agent’s exposure adjusting capability.
+
+• Domain randomization techniques to alleviate the limitation of the training ground and achieve seamless generalization in the wild without additional training.
+
+The proposed method is thoroughly validated in three different environments: light-controlled darkroom, exposure control dataset [21], and real-world environments. We demonstrate that our proposed method rapidly adjusts camera exposure within five steps with real-time processing of 1 ms. Also, the images acquired from our method are wellexposed and show superiority in numerous computer vision tasks, such as feature extraction and object detection.
+
+## 2. Related Work
+
+## 2.1. Optimization-based Exposure Control
+
+One branch to control camera exposure parameters is exploiting white-box and black-box optimizations to find optimal parameters for the desired exposure level. Camera builtin Auto-Exposure (AE) control methods [14, 18] adjust exposure parameters (i.e., exposure time and gain) based on differentiable optimization by using the equation between Exposure Value (EV) and exposure parameters [15]. They control exposure parameters one-by-one to achieve predefined image brightness. These built-in AE methods provide real-time processing ability but result in non-optimum solutions (e.g., long exposure time and low gain) and limited scalability. The former limitation causes motion blur and severe image noise due to long exposure time and high gain. The latter limitation indicates the methods cannot be extendable to maximize other image attributes, such as image gradient or entropy.
+
+Recent AE algorithms are designed to maximize desirable image attributes for computer vision applications, such as image gradient [20, 22, 25], entropy [7, 8], noise level [21], and optical flow [4]. However, these algorithms mainly focused on image metrics for better quality, not the control method. Therefore, they adopt heuristic control algorithm [20] or black-box optimization methods, such as Bayesian optimization [7, 8] and Nelder-Mead optimization [21]. These black-box optimizations and attribute assessment metrics often require multiple explorations that cause a flickering effect, multiple steps to converge, or heavy computation time. Differing from the previous method, the proposed method provides rapid convergence, real-time processing, and potential scalability by exploiting Deep Reinforcement Learning (DRL).
+
+## 2.2. Data-driven Exposure Control
+
+Another emerging branch of AE is utilizing a neural network to predict appropriate exposure parameters. Tomasi et al. [23] proposed an exposure parameter estimation network that predicts optimal exposure time and gain for each given image. The neural network, consisting of a few convolution and linear layers, is trained with Ground Truth (GT) exposure parameters in a supervised manner. However, the GT label generation needs a time-consuming and complicated process that collects multiple images with varying exposure parameters for every scene. Also, a heavy computation caused by the use of convolution layers is another drawback. Differing from the method, our method trains a neural network by maximizing a reward function without relying on specific GT data or generation processes.
+
+![](images/81f795b63d6d0507d447313f106b301af44cb8f8a930be84c5c617936aa300c4.jpg)  
+Figure 2. Training framework overview. Our DRL agent is trained with the SAC algorithm in the light-controlled dark room environment. For each episode, a lighting condition is assigned by the current curriculum level. The lighting condition can be fixed at random brightness or dynamically changed within each episode, depending on the level. Given the lighting condition, the agent takes a vectorized intensity history for a randomly selected RoI patch as a state. Afterward, the agent estimates exposure time and gain differences that maximize a reward function. With this framework, the trained agent successfully generalized into a real environment without additional training.
+
+## 3. DRL for Automatic Exposure Control
+
+Applying DRL to Automatic Exposure (AE) control task while achieving rapid convergence speed and real-time processing presents several challenges. Our proposed method provides effective solutions for the following questions.
+
+1. Environment: what is the most effective form of training environment to learn camera exposure control?
+
+2. Reward: what aspects does the agent need to maximize?
+
+3. State: where is the bottleneck for real-time processing?
+
+4. Generalization: how to achieve seamless generalization in the wild lighting condition?
+
+## 3.1. Training Environment
+
+DRL requires a large number of samples and interaction with the environment to train the agent. Also, the environment needs to provide a diverse and wide range of problems for the agent to solve. The optimal form of exposure control is to instantly adjust exposure parameters for a variety of lighting conditions, from static lighting conditions to dramatic lighting changes. To this end, the training environment for camera exposure control must provide diverse lighting change scenarios to the agent.
+
+Numerous options exist, such as a simulation, a realworld environment with natural sunlight, and a controlled real-world environment. The simulation can provide various images and lighting conditions but has the limitations of an imperfect exposure parameter implementation and a simto-real domain gap. On the other hand, the real-world environment with natural sunlight has no domain gap, but the lighting conditions change very slowly. Therefore, we construct a controlled real-world environment in a darkroom with controllable LEDs to adjust lighting conditions.
+
+The constructed light-controlled darkroom is shown in Fig. 2. The environment has one machine vision camera, a random target object, a light controller, and an LED bar. The environment provides a random lighting scenario from dark to bright light conditions, and the agent adjusts exposure parameters to capture a high-quality image of the target object in the suggested scenario. The detailed sensor specification can be found in the supplementary material.
+
+## 3.2. State, Action, and Reward Design
+
+## 3.2.1 State Design: Vectorized Intensity History
+
+The widely adopted state design in related fields is utilizing a feature map from a pre-trained network [22, 23]. However, we found the CNN feature is not effective in the exposure control task due to its disadvantages: 1) unclear relation between CNN feature and exposure level, 2) generalization problem of CNN feature, and 3) heavy computation for on-board devices due to multiple convolution layers.
+
+Therefore, instead of using the CNN feature or other complicated features as a state, we utilize vectorized image intensity as a straightforward and lightweight state representation for the exposure control task. As shown in $\mathrm { F i g . } 2 ,$ we first vectorize image intensity map from a Region-of-Interest (RoI) patch of gray-scale image $\mathbb { R } ^ { H _ { R o I } \times W _ { R o I } }$ to the intensity vector $\mathbb { R } ^ { S }$ . The RoI patch can be an entire image area or specific regions decided by a domain randomization process. After that, we stack consecutive frame’s intensity vectors to embed previous state history, as follows:
+
+$$
+\begin{array} { r l } & { v _ { t } = f ( I _ { t } ^ { R o I } ) , \quad v _ { t } \in \mathbb { R } ^ { S } , } \\ & { s _ { t } = \mathrm { c o n c a t } ( v _ { t - n } , . . . , v _ { t - 1 } , v _ { t } ) , } \end{array}
+$$
+
+where $I _ { t }$ is a normalized image at time step $t , f ( \cdot )$ is an averaging process through the x-axis of a gray-scale image, defined as $\begin{array} { r } { \frac { 1 } { H _ { R o I } } \sum _ { x } \mathrm { g r a y } ( I _ { t } ^ { R o I } ) } \end{array}$ $v _ { t }$ represents the vectorized intensity that has a dimension of $S ,$ and $s _ { t }$ is a state vector. To ensure a fixed and reasonable state length, we resize the given RoI patch to have $S = 1 2 8$ and stack previous states with $n = 3 .$ . The proposed state design is effective, straightforward, and computationally efficient compared to the CNN feature, as described in Sec. 4.1.
+
+## 3.2.2 Action Design: Relative and Continuous Action
+
+Obviously, we have two controllable parameters, exposure time and gain, to adjust camera exposure. However, there are numerous options for its action design, such as 1) discrete vs. continuous action space, and 2) absolute vs. relative action range. A discrete action space discretizes the action range into a few action values. It has the advantage that the training process is simplified, but there is an approximation gap to the optimal values. The absolute and relative action range is about the change of camera parameters. In the absolute action range, an action value is directly matched to the specific value of camera parameters. On the other hand, in the relative action range, an action value indicates the amount of change in camera parameters.
+
+Among the options, we select continuous-relative action space. This is because our goal is rapid convergence with minimum exploration step, but discrete action space needs multiple steps and often does not converge, depending on its quantization level. Also, we empirically found that the absolute action range often induces a flickering effect and unstable convergence, as described in Sec. 4.1.
+
+## 3.2.3 Reward Design: Flickering and Image Attribute
+
+The desirable behavior of exposure control is maximizing image attributes, such as sharp edge, moderate brightness, and low-level noise, and maintaining image attributes during exposure parameter transition. Therefore, we designed the reward function from three perspectives: 1) a moderate brightness level to provide clear visibility and edge information, 2) a smoothed exposure transition to ensure stable convergence and prevent flickering, and 3) a low-level noise to provide clear image and avoid too-high gain value. The designed reward functions are as follows:
+
+$$
+\begin{array} { r l } & { \mathcal { R } _ { m e a n } = \frac { 1 } { P } \sum _ { x y } | I _ { t } ^ { R o I } - M | ^ { p _ { m } } , } \\ & { \quad \mathcal { R } _ { f l k } = \frac { 1 } { P } \sum _ { x y } | | I _ { t } ^ { R o I } - I _ { t - 1 } ^ { R o I } | | , } \\ & { \mathcal { R } _ { n o i s e } = \frac { 1 } { P } \sum _ { x y } s o b e l ( I _ { t } ^ { R o I } ) , } \\ & { \quad \mathcal { R } _ { t o t a l } = w _ { m } \mathcal { R } _ { m e a n } + w _ { f } \mathcal { R } _ { f l k } + w _ { n } \mathcal { R } _ { n o i s e } , } \end{array}
+$$
+
+where $P$ is the number of pixels, $M = 0 . 5$ indicates midtone brightness, $p _ { m } = 0 . 5$ is a parameter for non-linearity and sobel is a gradient operator. Also, we set $w _ { m } = 1 . 5 ,$ $w _ { f } = - 1 . 0 , w _ { n } = - 0 . 1$ in practice. The proposed reward design might be a primitive and basic form for camera exposure control, however, it can be easily extendable by incorporating modern image assessment metrics [4, 8, 21].
+
+## 3.3. Static-to-dynamic Lighting Curriculum
+
+In the wild, the agent must be able to control exposure parameters for a variety of lighting change scenarios. However, training every scenario simultaneously results in an unstable training process and poor generalization. Therefore, we propose static-to-dynamic curriculum strategy that starts with a simple control task and gradually experiences dynamic and dramatic lighting change scenarios. In the end, the trained models possess a comprehensive exposure control capability for diverse lighting conditions.
+
+We divide the difficulty of lighting conditions into three levels: easy, normal, and hard. The easy level has static lighting conditions with moderate brightness. The normal level also has a fixed brightness but with a darker or brighter than easy level. Lastly, in the hard level, the LED brightness dynamically changes from dark to bright or the opposite way during each scenario. The probability of each level is gradually updated according to the proceeded training episode $t _ { e }$ . The probability set $[ p _ { e } , p _ { n } , p _ { h } ]$ starts from $[ 1 , 0 , 0 ]$ , through [0, 1, 0], and ends with $[ p _ { e } ^ { f } , p _ { n } ^ { f } , p _ { h } ^ { f } ] =$ [0.1, 0.4, 0.5]. In summary, the probability for each difficulty level is updated as follows:
+
+$$
+p _ { e } = \left\{ \begin{array} { l l } { 1 , } & { t _ { e } < T _ { e } } \\ { \frac { ( t _ { e } - T _ { e } ) } { ( T _ { n } - T _ { e } ) } , } & { T _ { e } \leq t _ { e } < T _ { n } } \\ { p _ { e } ^ { f } , } & { T _ { n } \leq t _ { e } } \end{array} \right.
+$$
+
+$$
+p _ { n } = \left\{ { \begin{array} { l l } { 0 , } & { t _ { e } < T _ { e } } \\ { 1 - { \frac { \left( t _ { e } - T _ { e } \right) } { ( T _ { n } - T _ { e } ) } } , } & { T _ { e } \leq t _ { e } < T _ { n } } \\ { p _ { n } ^ { f } , } & { T _ { n } \leq t _ { e } } \end{array} } \right.
+$$
+
+$$
+p _ { h } = { \left\{ \begin{array} { l l } { 0 , } & { t _ { e } < T _ { n } } \\ { p _ { h } ^ { f } , } & { T _ { n } \leq t _ { e } } \end{array} \right. }
+$$
+
+We use $T _ { e } = 2 5 , 0 0 0 , T _ { n } = 4 5 , 0 0 0$ in practice.
+
+## 3.4. Spatial Domain Randomization
+
+In the wild, the agent encounters various surrounding environments and object contexts, such as office, road, tunnel, and mountain. Although the light-controlled darkroom can provide various lighting scenarios, it is difficult to contain diverse environments and contexts because it only has a few target objects with a fixed background. Therefore, without proper randomization techniques, the agent may overfit to perform exposure control for only a few target objects, resulting in generalization failure in the wild.
+
+The main idea is to provide as much diverse image structure and context information as possible by augmenting the image from the darkroom environment. Specifically, we spatially augment the images with random flipping, cropping, rotating, and resizing but do not change color and brightness information. Each augmentation and its parameter is randomly selected at the beginning of each training episode and fixed during the episode. With the proposed domain randomization technique, the trained agent can be generalized in the real world without any fine-tuning.
+
+## 3.5. Policy Optimization
+
+As our action space is continuous, we use the SAC [3] algorithm. We excluded on-policy algorithms like PPO [19] because they are widely known to be less sample efficient than the off-policy algorithms like SAC, TD3, and DDPG. We tested TD3 [2] and DDPG [11] as well, but SAC showed the best result.
+
+SAC algorithm is a kind of actor-critic algorithm, which has critic $Q ( \theta )$ and actor $\pi ( \phi )$ . The objective functions to update the critic are as follows:
+
+$$
+\begin{array} { r l } & { J _ { Q } ( \theta ) = \mathbb { E } _ { ( s _ { t } , a _ { t } ) \sim \mathcal { D } } \left[ \frac { 1 } { 2 } \left( Q _ { \theta } ( s _ { t } , a _ { t } ) - \hat { Q } ( s _ { t } , a _ { t } ) \right) ^ { 2 } \right] , } \\ & { \hat { Q } ( s _ { t } , a _ { t } ) = r ( s _ { t } , a _ { t } ) + \gamma \mathbb { E } _ { s _ { t + 1 } \sim p } [ V _ { \bar { \theta } } ( s _ { t + 1 } ) ] , } \end{array}
+$$
+
+where D is a replay buffer, $r ( s _ { t } , a _ { t } )$ is a reward function and γ is a discount factor. The objective functions for updating the actor is as follows:
+
+$$
+J _ { \pi } ( \phi ) = \mathbb { E } _ { s _ { t } \sim \mathcal { D } } [ \mathbb { E } _ { a _ { t } \sim \pi _ { \phi } } [ \alpha \mathrm { l o g } ( \pi _ { \phi } ( a _ { t } | s _ { t } ) ) - Q _ { \theta } ( s _ { t } , a _ { t } ) ] ] ,
+$$
+
+with α defined as a temperature parameter.
+
+## 4. Experiments
+
+In this section, we validate our proposed method in three different environments: light-controlled darkroom, exposure control dataset [21], and real-world environments. Throughout the experiments, we provide the validation result of DRL design components, ablation study of reward and training strategy, convergent step comparison, comparison with built-in AE for object detection and feature extraction, and computational time analysis.
+
+Table 1. Self-evaluation of DRL-AE framework in the lightcontrolled darkroom. DR and CL indicate domain randomization and curriculum learning. ”-” indicates the agent doesn’t converge. The best performance in each block is highlighted in bold.
+<table><tr><td>Framework Component</td><td>Methods</td><td>Reward per Frame</td><td>Frames to Converge</td></tr><tr><td rowspan="3">RL Algorithm</td><td>DDPG [11]</td><td>1.11</td><td></td></tr><tr><td>TD3 [2]</td><td>1.03</td><td></td></tr><tr><td>SAC [3]</td><td>1.61</td><td>5</td></tr><tr><td rowspan="2">State</td><td>CNN</td><td>0.85</td><td>-</td></tr><tr><td>Vector</td><td>1.61</td><td>5</td></tr><tr><td rowspan="2">Action</td><td>Absolute</td><td>0.65</td><td>-</td></tr><tr><td>Relative</td><td>1.61</td><td>5</td></tr><tr><td rowspan="4">Reward</td><td> $R _ { f l k }$   $R _ { n o i s e }$ </td><td></td><td></td></tr><tr><td rowspan="3">√ √</td><td>1.41</td><td></td></tr><tr><td>1.44</td><td>16</td></tr><tr><td>1.35</td><td>9</td></tr><tr><td rowspan="4">Training Strategy</td><td>√ √ DR CL</td><td>1.61</td><td>5</td></tr><tr><td>√</td><td></td><td></td></tr><tr><td>√</td><td>1.64</td><td>15</td></tr><tr><td>」 √</td><td>1.61</td><td>5</td></tr></table>
+
+## 4.1. Self-evaluation in Light-controlled Darkroom
+
+We first validate our DRL design components and their variants in the light-controlled darkroom. We utilize reward per frame and the averaged number of frames to converge as evaluation metrics to measure image quality and convergence speed, respectively. Here, when the difference between current and previous images is less than a certain threshold, we regard it as the convergence. The testing scenarios include various lighting conditions, such as fixed lighting, progressive light changes, and dynamic light changes. The results are shown in Tab. 1.
+
+We found SAC method [3] shows the best result among the off-policy RL methods. Other algorithms can reach up to 1.0 reward per frame, but they usually do not converge well by showing oscillation. For the state design, the CNN feature is not desirable for the exposure control task due to its intensity-agnostic property. Also, absolute action space seems to make the overall learning process difficult because it needs to estimate the optimum values directly.
+
+The reward function and the training strategies play an important role in the stable and rapid convergence process and image attribute preservation. $R _ { n o i s e }$ suppress high noise level and regularize gain parameter control, leading to better convergence. Also, $R _ { f l k }$ makes the agent preserve the image attribute during the exposure transition. CL makes the agent encompass the comprehensive exposure control capability for the test set’s various lighting conditions. Additionally, DR allows the agent to quickly converge for arbitrary context by increasing generalization ability.
+
+![](images/c34fadd937e7554c9508857154d9cd79982a51c183c8e4aecc16479c61863095.jpg)  
+(a) Acquired image comparison for each convergent step
+
+![](images/b1c7730d198823c7d735b0feb577d7a228849f0114301ff9d9f93169d7d8885c.jpg)
+
+![](images/00e3ef7c788782e48dc207345fa6952785c32cc041ba061b81fd60c4e171ff75.jpg)  
+(b) Convergence trajectory of exposure parameter optimization  
+Figure 3. Convergent step comparison in exposure control dataset [21]. Within three frames, our method already reaches a well-exposed image (a) with minimum exploration (b). On the other hand, Shin et al. [21] search local areas with multiple steps (about 30 frames) to converge.
+
+## 4.2. Convergent Step Comparison
+
+Exposure Control Dataset [21]. The dataset provides multiple images with many different pairs of exposure and gain values, which are captured from the real world. The dataset consists of several locations, including indoor and outdoor places, with a wide range of exposure and gain values. Outdoor images can have the exposure time from 100µs to 7450µs, at intervals of 150µs, and the gain from 0dB to 20dB with 2dB interval. Similarly, indoor images have exposure time from 4ms to 67ms with 3ms intervals and gain from 0dB to 24dB with 2dB intervals.
+
+We evaluate our method with Shin et al. [21]. The final converged points are slightly different because of the difference between the proposed reward function and the assessment metric of [21]. Both algorithms converge to a comparable point, as shown in Fig. 3. It only takes three frames to converge with our method. However, the Nelder-Mead optimization method in [21] takes at least 30 timesteps to converge completely. Therefore, it is hard to use it in real scenarios, although they may find a more optimal point.
+
+![](images/f5c7dfdd99daaf3d0b93ec6a03583fa33ca88291da9940c8935b07de90b5602d.jpg)  
+Figure 4. Real-world generalization. We compare our method with the camera’s built-in exposure control algorithm in real-world scenarios. Camera lenses are occluded at the initial and suddenly removed in the first frame. Our agent converges to a well-exposed image within 3-5 frames. Yet, the built-in AE algorithm is still in the middle of adjusting the exposure parameters and is far from the well-exposed image, especially in the indoor case. Note that our agent is only trained in the light-controlled darkroom, and this is the zero-shot inference result in the wild.
+
+Real-world Indoor and Outdoor Environment. We evaluate our method with the camera’s built-in AE control algorithm in real-world scenarios. The purposes of this experiment are twofold: 1) comparing convergence speed with the built-in AE algorithm, and 2) testing zero-shot generalization performance in the wild.
+
+Before starting, we cover the camera lens with enough time to converge in the dark, then quickly remove it to test the convergence speed for a sudden lighting change. Fig. 4 shows the captured initial five images during each optimization. Our method converges to a well-exposed image within 3-5 frames in both indoor and outdoor scenes. However, the built-in AE algorithm takes much longer to converge: 30 frames for indoors and 10 frames for outdoors.
+
+Also, we found that our agent shows satisfactory zeroshot generalization performance, even though it is only trained in the light-controlled darkroom with limited object context. We believe our state design (i.e., vectorized intensity history) and spatial domain randomization bring this result by removing the potential domain gap issue of the CNN feature and augmenting object context as much as possible.
+
+# Features: 1377  
+![](images/98b8b85a11b74d8074996a1b72b3a866fffec4b8c6f5a51f6bd5c97cd9f47b8d.jpg)  
+(a) Feature extraction from DRL-AE (Ours)
+
+![](images/d8eb7740ecd223a366af6663422d43e41b4b6b15a4f2659b307e1a52617fc952.jpg)  
+(b) Feature extraction from built-in AE  
+Figure 5. SIFT [12] feature extraction result. Captured images from the proposed algorithm and built-in AE are processed to detect SIFT features. The images were simultaneously captured in real-time from two separate cameras equipped on a driving vehicle. Our method can provide plenty of SIFT features over the image plane. On average, our method detects 38% more features across a total of 5355 images.
+
+## 4.3. Real-time Driving Env: Feature Extraction
+
+In this experiment, two cameras are attached to the top of a moving car, and images are captured simultaneously. One camera is used for our algorithm, and the other camera is for the built-in AE algorithm. We tested the algorithms on real-world driving scenarios, including campus and urban roads. Our algorithm runs on a laptop equipped with an i7- 7700HQ@2.80GHz CPU unit. Given an image, the agent predicts exposure time and gain commands in real-time. The estimated actions are transmitted to the attached camera. After driving sequences acquisition, we extract SIFT [12] features from each captured image. Please note that the images of DRL-AE and built-in AE have slightly different views due to the difference in the installed position.
+
+Fig. 5 shows the comparison of feature extraction results. From the total of 5355 image pairs, our method produces 1,306 SIFT features on average with a 1,157 median value. On the other hand, the built-in AE method only results in 946 features on average, with a 711 median value. Therefore, 38% more features are detected on average, and the difference is up to 62% for the median value. The number of detected features and feature repeatability during exposure transition are critical for Visual Odometry (VO) and SLAM tasks. So, we believe our method can be valuable for VO, SLAM, and visual tracking tasks as well.
+
+![](images/3aca529f3118880b7e2127a3c22a58347c2da6438e90dce65125aba58e173770.jpg)
+
+(a) Object detection from DRL-AE (Ours)  
+![](images/b487e39b0e125cb787544a5f973bd5ad773c3c7262d03a7c19b09e0fbf19b8ef.jpg)  
+(b) Object detection from built-in AE  
+Figure 6. Object detection result. Captured images from the proposed algorithm and built-in AE are processed to detect target objects. The experiment used the same image sequence as the SIFT experiment. We utilize Yolo-v5 [6] for car and pedestrian detection. On average, our method detects 5% more objects compared to the built-in AE algorithm.
+
+## 4.4. Real-time Driving Env: Object Detection
+
+Similar to the feature extraction experiment, the captured images are processed with YOLO-v5 [6]. The images are taken from campus and urban road scenes, so we only take into account cars and pedestrians. Fig. 6 shows the comparison of object detection results from DRL-AE and built-in AE methods. Recent detection models, including YOLOv5, adopt modern augmentation methods to make the model robust the image brightness changes. Therefore, YOLO-v5 tends to detect objects well in even poorly exposed images. However, our algorithm detects 5% more objects in terms of the total number of detected objects. Furthermore, the objects in our image are detected much earlier than the built-in AE method. This is highly critical for autonomous vehicles that are driving at high speed. Earlier detected objects can prevent human injury and potential accidents.
+
+## 4.5. Real-world Env: RoI-aware Exposure Control
+
+Our DRL-AE framework can also take arbitrary input sizes because the framework resizes the image before the vectorized intensity processing. Also, our domain randomization strategy produces a random size of the Region of Interest (RoI) patch by using crop, flip, resize, and rotation in the training stage. Therefore, our agent is able to control camera exposure for a specific RoI or entire image. Fig. 7 shows the RoI-aware exposure control results.
+
+![](images/a6b6b220f8fa0455bc2451094c3bf5d9f0cefbae9ff22e0ac08c5f065e18b034.jpg)  
+Figure 7. RoI-aware camera exposure control. Our agent is able to control camera exposure for a specific RoI or entire image. Given a RoI box, the agent adjusts the camera parameters to maximize the image attribute for a specific RoI area. It allows the camera to capture the detailed context for the regions of interest.
+
+The agent adjusts the camera parameters to maximize the image attribute for a specific RoI area. It allows the camera to capture the detailed context for the regions of interest. We expect that DRL-AE can be combined with object detection, object tracking, and human gaze and attention. As a result, the combination can lead to adaptive exposure control schemes, such as attention-aware or detection-aware exposure control.
+
+## 4.6. Computation Time Analysis
+
+Our agent has a simple Multi-Layer Perceptron (MLP) architecture with two hidden layers of 256 units. Also, our method does not require complex matrix computation like convolutions. Therefore, our agent can be run on a CPU device in real-time. We measure the inference time of the agent on the Ryzen 5950x CPU. Tab. 2 shows the computation time results, compared with shin et al. [21]. The network’s inference time takes 1 ms regardless of image resolution because the input image is resized to a fixed resolution. Also, even including other operations, such as image resizing and RoI cropping, it takes a maximum 6 ms, which is still in the real-time range. Therefore, it can run at 170- 1000 Hz on a CPU device.
+
+## 5. Conclusion & Future Work
+
+Conclusion. In this paper, we proposed a novel joint exposure parameter control framework that exploits Deep Reinforcement Learning (DRL) to achieve instant exposure convergence and real-time processing. The proposed framework, named DRL-AE, effectively solves the challenges when applying DRL to the exposure control task, such as
+
+Table 2. Processing time analysis. Our algorithm does not use any complex metric or computation; the agent consists of two MLP layers with 256 hidden units, and the vectorized intensity history does not need complex operations. Therefore, our agent can be run on a CPU device in real-time. Here, we measure the processing time on the Ryzen 5950x CPU.
+<table><tr><td>Method</td><td>Image Size</td><td>Processing Time (ms)</td></tr><tr><td rowspan="2">Shin et al. [21]</td><td>1600 x 1200</td><td>108.7</td></tr><tr><td>800 x 600</td><td>18.2</td></tr><tr><td rowspan="2">Ours</td><td>1600 x 1200</td><td>1.0</td></tr><tr><td>800 x 600</td><td>1.0</td></tr></table>
+
+1) training environment to provide diverse lighting change scenarios, 2) flickering and image attribute-aware reward design, 3) lightweight state design by using vectorized intensity history, and 4) domain generalization via spatial domain randomization strategy.
+
+The proposed method is thoroughly validated in three different environments: light-controlled dark room, exposure control dataset [21], and real-world environments. We demonstrate that our proposed method instantly adjusts camera exposure within five steps with real-time processing of 1 ms on a CPU device. Also, our method shows satisfactory generalization performance in the wild. The images acquired from our method are well-exposed and show superiority in numerous computer vision tasks, such as feature extraction and object detection<sup>1</sup>. To the best of our knowledge, our approach is the first solution that applies DRL to control camera exposure. We hope our paper encourages active research of advanced camera exposure control algorithms to achieve robust visual perception ability.
+
+Future Work. This paper shows that DRL can be used in the field of camera exposure control. There are lots of open research topics, such as motion-aware AE control, advanced reward function, aperture control, hardware generalization over various cameras, and further domain generalization in the real world. In the future, we plan to extend the current darkroom environment to generate object or camera motion, allowing the agent to consider motion blur for exposure parameter control. Controlling camera aperture by using a mechanical aperture control module is another research direction.
+
+## Acknowledgment
+
+This research was supported by a grant (P0026022) from R&D Program funded by Ministry of Trade, Industry and Energy of Korean government.
+
+## References
+
+[1] Christian Forster, Matia Pizzoli, and Davide Scaramuzza. Svo: Fast semi-direct monocular visual odometry. In 2014 IEEE international conference on robotics and automation (ICRA), pages 15–22. IEEE, 2014. 2
+
+[2] Scott Fujimoto, Herke Hoof, and David Meger. Addressing function approximation error in actor-critic methods. In International conference on machine learning, pages 1587– 1596. PMLR, 2018. 5
+
+[3] Tuomas Haarnoja, Aurick Zhou, Pieter Abbeel, and Sergey Levine. Soft actor-critic: Off-policy maximum entropy deep reinforcement learning with a stochastic actor. In International conference on machine learning, pages 1861–1870. PMLR, 2018. 5
+
+[4] Bin Han, Yicheng Lin, Yan Dong, Hao Wang, Tao Zhang, and Chengyuan Liang. Camera attributes control for visual odometry with motion blur awareness. IEEE/ASME Transactions on Mechatronics, 2023. 2, 4
+
+[5] Kaiming He, Georgia Gkioxari, Piotr Dollar, and Ross Gir-´ shick. Mask r-cnn. In CVPR, pages 2980–2988. IEEE, 2017. 2
+
+[6] Glenn Jocher, Ayush Chaurasia, Alex Stoken, Jirka Borovec, NanoCode012, Yonghye Kwon, Kalen Michael, TaoXie, Jiacong Fang, imyhxy, Lorna, 曾逸夫(Zeng Yifu), Colin Wong, Abhiram V, Diego Montes, Zhiqiang Wang, Cristi Fati, Jebastin Nadar, Laughing, UnglvKitDe, Victor Sonck, tkianai, yxNONG, Piotr Skalski, Adam Hogan, Dhruv Nair, Max Strobel, and Mrinal Jain. ultralytics/yolov5: v7.0 - YOLOv5 SOTA Realtime Instance Segmentation, 2022. 7
+
+[7] Joowan Kim, Younggun Cho, and Ayoung Kim. Exposure control using bayesian optimization based on entropy weighted image gradient. In 2018 IEEE International conference on robotics and automation (ICRA), pages 857–864. IEEE, 2018. 2
+
+[8] Joowan Kim, Younggun Cho, and Ayoung Kim. Proactive camera attribute control using bayesian optimization for illumination-resilient visual navigation. IEEE Transactions on Robotics, 36(4):1256–1271, 2020. 2, 4
+
+[9] Alexander Kirillov, Kaiming He, Ross Girshick, Carsten Rother, and Piotr Dollar. Panoptic segmentation. ´ arXiv preprint arXiv:1801.00868, 2018. 2
+
+[10] Byeong-Uk Lee, Kyunghyun Lee, and In So Kweon. Depth completion using plane-residual representation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 13916–13925, 2021. 2
+
+[11] Timothy P Lillicrap, Jonathan J Hunt, Alexander Pritzel, Nicolas Heess, Tom Erez, Yuval Tassa, David Silver, and Daan Wierstra. Continuous control with deep reinforcement learning. arXiv preprint arXiv:1509.02971, 2015. 5
+
+[12] David G Lowe. Object recognition from local scale-invariant features. In Proceedings of the seventh IEEE international conference on computer vision, pages 1150–1157. Ieee, 1999. 7
+
+[13] Raul Mur-Artal and Juan D Tardos. Orb-slam2: An open-´ source slam system for monocular, stereo, and rgb-d cameras. 33(5):1255–1262, 2017. 2
+
+[14] Masaru Muramatsu. Photometry device for a camera, 1997. US Patent 5,592,256. 1, 2
+
+[15] Sidney F Ray, Wally Axford, and Geoffrey G Attridge. The Manual of Photography: Photographic and Digital Imaging. Elsevier Science & Technology, 2000. 2
+
+[16] Joseph Redmon and Ali Farhadi. Yolo9000: Better, faster, stronger. In CVPR, pages 6517–6525. IEEE, 2017. 2
+
+[17] Olaf Ronneberger, Philipp Fischer, and Thomas Brox. Unet: Convolutional networks for biomedical image segmentation. In Medical Image Computing and Computer-Assisted Intervention–MICCAI 2015: 18th International Conference, Munich, Germany, October 5-9, 2015, Proceedings, Part III 18, pages 234–241. Springer, 2015. 2
+
+[18] Nitin Sampat, Shyam Venkataraman, Thomas Yeh, and Robert L Kremens. System implications of implementing auto-exposure on consumer digital cameras. In Sensors, Cameras, and Applications for Digital Photography, pages 100–108. International Society for Optics and Photonics, 1999. 1, 2
+
+[19] John Schulman, Filip Wolski, Prafulla Dhariwal, Alec Radford, and Oleg Klimov. Proximal policy optimization algorithms. arXiv preprint arXiv:1707.06347, 2017. 5
+
+[20] Inwook Shim, Tae-Hyun Oh, Joon-Young Lee, Jinwook Choi, Dong-Geol Choi, and In So Kweon. Gradient-based camera exposure control for outdoor mobile platforms. IEEE Transactions on Circuits and Systems for Video Technology, 29(6):1569–1583, 2018. 2
+
+[21] Ukcheol Shin, Jinsun Park, Gyumin Shim, Francois Rameau, and In So Kweon. Camera exposure control for robust robot vision with noise-aware image quality assessment. In 2019 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), pages 1165–1172. IEEE, 2019. 2, 4, 5, 6, 8
+
+[22] Ukcheol Shin, Kyunghyun Lee, and In So Kweon. Drl-isp: Multi-objective camera isp with deep reinforcement learning. In 2022 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), pages 7044–7051. IEEE, 2022. 2, 3
+
+[23] Justin Tomasi, Brandon Wagstaff, Steven L Waslander, and Jonathan Kelly. Learned camera gain and exposure control for improved visual feature detection and matching. IEEE Robotics and Automation Letters, 6(2):2028–2035, 2021. 2, 3
+
+[24] Yu Wang, Haoyao Chen, Shiwu Zhang, and Wencan Lu. Automated camera-exposure control for robust localization in varying illumination environments. Autonomous Robots, 46 (4):515–534, 2022. 2
+
+[25] Zichao Zhang, Christian Forster, and Davide Scaramuzza. Active exposure control for robust visual odometry in hdr environments. In 2017 IEEE international conference on robotics and automation (ICRA), pages 3894–3901. IEEE, 2017. 2
+
+[26] Chaoqiang Zhao, Qiyu Sun, Chongzhen Zhang, Yang Tang, and Feng Qian. Monocular depth estimation based on deep learning: An overview. Science China Technological Sciences, 63(9):1612–1627, 2020. 2

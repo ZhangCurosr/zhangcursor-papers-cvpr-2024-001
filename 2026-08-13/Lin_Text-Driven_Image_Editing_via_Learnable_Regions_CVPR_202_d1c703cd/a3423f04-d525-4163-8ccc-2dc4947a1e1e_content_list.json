@@ -1,0 +1,1490 @@
+[
+    {
+        "type": "image",
+        "img_path": "images/42840db02211ff70fa3468340c2d9cdae813940eac66850c94d54a0590104d5e.jpg",
+        "image_caption": [],
+        "image_footnote": [
+            "Input Image"
+        ],
+        "bbox": [
+            624,
+            397,
+            892,
+            501
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Text-Driven Image Editing via Learnable Regions",
+        "text_level": 1,
+        "bbox": [
+            233,
+            130,
+            736,
+            152
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Yuanze Lin<sup>♠</sup> Yi-Wen Chen<sup>♣</sup> Yi-Hsuan Tsai<sup>⋆</sup> Lu Jiang<sup>⋆</sup> Ming-Hsuan Yang<sup>♣⋆</sup> <sup>♠</sup> University of Oxford <sup>♣</sup> UC Merced <sup>⋆</sup> Google",
+        "bbox": [
+            142,
+            179,
+            820,
+            220
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/1278e2ff95e3f826039762ce69438a256f16e1864f8e36b25316f5c824145679.jpg",
+        "image_caption": [],
+        "image_footnote": [
+            "Edited Image"
+        ],
+        "bbox": [
+            80,
+            271,
+            212,
+            372
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/d308819ebce4b102517b9a3c5211f57d4ae08300d1a5bf1156a8707cc0a7f50f.jpg",
+        "image_caption": [],
+        "image_footnote": [
+            "donuts with ice cream",
+            "Input Image"
+        ],
+        "bbox": [
+            214,
+            270,
+            348,
+            373
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/22abee24f285d500bf84ca5220866bacb77a94df46c2f490ae3fe0b5e34188f7.jpg",
+        "image_caption": [],
+        "image_footnote": [
+            "Edited Image"
+        ],
+        "bbox": [
+            351,
+            271,
+            483,
+            373
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/ca3957083516cdfb1c36dea89eb33d1306638aa1b7c581184924ae873bd9987e.jpg",
+        "image_caption": [],
+        "image_footnote": [
+            "Input Image"
+        ],
+        "bbox": [
+            486,
+            271,
+            619,
+            373
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/1a5e8024dda0fb254acf2e609df26c1d9abafb9612372b512875479017a296de.jpg",
+        "image_caption": [],
+        "image_footnote": [
+            "Edited Image"
+        ],
+        "bbox": [
+            622,
+            272,
+            754,
+            375
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/a0d82cac5e54a062f0e01d418d7355d5997176b8e05e658309dcc43cec11d1bd.jpg",
+        "image_caption": [],
+        "image_footnote": [
+            "a flowering cherry tree",
+            "a cute sloth holds a box"
+        ],
+        "bbox": [
+            758,
+            271,
+            892,
+            372
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/1ac1fdc21ca949d1890ba580fcd4606fcb8dc929ea73bd710404e341c3188325.jpg",
+        "image_caption": [],
+        "image_footnote": [
+            "a bloomingflower and dessert"
+        ],
+        "bbox": [
+            78,
+            395,
+            348,
+            501
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/cab3db7c9830bc5cf655c6ff907e8168884b55dd0d575700ee4b0d6402b3aa72.jpg",
+        "image_caption": [],
+        "image_footnote": [
+            "several lotusflowers growing in the water",
+            "a cup of coffee next to the bread"
+        ],
+        "bbox": [
+            349,
+            397,
+            619,
+            502
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Figure 1. Overview. Given an input image and a language description for editing, our method can generate realistic and relevant images without the need for user-specified regions for editing. It performs local image editing while preserving the image context.",
+        "bbox": [
+            75,
+            535,
+            892,
+            564
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Abstract",
+        "text_level": 2,
+        "bbox": [
+            233,
+            585,
+            313,
+            602
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Language has emerged as a natural interface for image editing. In this paper, we introduce a method for regionbased image editing driven by textual prompts, without the need for user-provided masks or sketches. Specifically, our approach leverages an existing pre-trained text-to-image model and introduces a bounding box generator to identify the editing regions that are aligned with the textual prompts. We show that this simple approach enables flexible editing that is compatible with current image generation models, and is able to handle complex prompts featuring multiple objects, complex sentences, or lengthy paragraphs. We conduct an extensive user study to compare our method against state-of-the-art methods. The experiments demonstrate the competitive performance of our method in manipulating images with high fidelity and realism that correspond to the provided language descriptions. Our project webpage can be found at: https://yuanzelin.me/LearnableRegions\\_page.",
+        "bbox": [
+            75,
+            611,
+            472,
+            886
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "1. Introduction",
+        "text_level": 2,
+        "bbox": [
+            501,
+            585,
+            632,
+            602
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "With the availability of a massive amount of text-image paired data and large-scale vision-language models, recent text-driven image synthesis models [8, 32–34, 39, 42, 43, 53, 57, 62] have enabled people to create and manipulate specific visual contents of realistic images using natural language descriptions in an interactive fashion.",
+        "bbox": [
+            496,
+            612,
+            893,
+            703
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Recent text-driven image editing methods [1, 2, 21, 30, 38, 39, 54] have shown impressive capabilities in editing realistic images based on natural descriptions, with approaches typically falling into two paradigms: mask-based or mask-free methods. Mask-based editing approaches [1, 39] are perceived intuitively for local image editing because they allow users to specify precisely which areas of an image to modify. However, these methods can be laborious, as they demand users to manually create masks that are sometimes unnecessary, limiting their user experience in many applications.",
+        "bbox": [
+            496,
+            704,
+            893,
+            871
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "In contrast, mask-free editing approaches [6, 9, 21, 38, 54] do not require masks and can directly modify the appearance or texture of the input image. These methods are trained to create fine-grained pixel masks, which can be applied to either the RGB space or the latent embedding space within the latent diffusion model framework. While there has been significant advancement in mask-free editing, the precision of editing in current methods relies heavily on the accuracy of detailed masks at the pixel level. Current methods encounter difficulties with local modifications, particularly when dealing with less accurate masks.",
+        "bbox": [
+            498,
+            869,
+            893,
+            901
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "CVF",
+        "bbox": [
+            104,
+            2,
+            181,
+            41
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore.",
+        "bbox": [
+            235,
+            1,
+            810,
+            46
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "page_number",
+        "text": "7059",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/c6568e5e30eb1d31ec97779c30da383b9316a12d935cb3051108aec73625129d.jpg",
+        "image_caption": [
+            "Figure 2. Effects of variations in editing regions on generated image quality. Region 1 and Region 2 are two prior regions drawn from the self-attention map of DINO [7]. Region (ours), shown in the second-to-last column, represents the regions produced by our model which have the best overall quality."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            78,
+            87,
+            887,
+            314
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            391,
+            470,
+            529
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Current mask-free image editing approaches have predominantly concentrated on pixel masks [6, 10]. The use of bounding boxes as an intermediate representation for editing images has not been thoroughly explored. Bounding boxes can provide an intuitive and user-friendly input for image editing. They facilitate a smoother interactive editing process by being quicker and easier for users to adjust the box, unlike pixel masks that typically require more time and precision to draw pixels accurately. Moreover, some generative transformer models such as Muse [9] may support only box-like masks as opposed to pixel-level masking for image editing.",
+        "bbox": [
+            75,
+            532,
+            472,
+            715
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "This paper explores the feasibility of employing bounding boxes as an intermediate representation within a maskfree editing framework. Our objective is not to propose a new image editing model, but to introduce a component that enables an existing pretrained mask-based editing model to perform mask-free editing via the learnable regions. To this end, we propose a region-based editing network that is trained to generate editing regions utilizing a text-driven editing loss with CLIP guidance [42]. Our method can be integrated with different image editing models. To demonstrate its versatility, we apply it to two distinct image synthesis models: non-autoregressive transformers as used in",
+        "bbox": [
+            75,
+            719,
+            472,
+            901
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "MaskGIT [8] and Muse [9], as well as Stable Diffusion [45]. It is worth highlighting that the latent spaces in transformer models (MaskGIT and Muse) are only compatible with boxlike masks and lack the precision for pixel-level masks in image editing.",
+        "bbox": [
+            496,
+            390,
+            893,
+            467
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Our experimental results demonstrate that the proposed method can generate realistic images that match the context of the provided language descriptions. Furthermore, we conduct a user study to validate that our method outperforms five state-of-the-art baseline methods. The results indicate that our method edits images with greater fidelity and realism, following the changes specified in the language descriptions. The contributions of this work are as follows:",
+        "bbox": [
+            496,
+            467,
+            893,
+            588
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• Our approach enables mask-based text-to-image models to perform local image editing without needing masks or other user-provided guidance. It can be integrated with existing text-guided editing models to improve their quality and relevance.",
+        "bbox": [
+            517,
+            588,
+            893,
+            664
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• We introduce a novel region generator model that employs a new CLIP-guidance loss to learn to find regions for image editing. We demonstrate its applicability by integrating it with two popular and distinct text-guided editing models, MaskGIT [8] and Stable Diffusion [45].",
+        "bbox": [
+            517,
+            664,
+            893,
+            753
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• Experiments show the high quality and realism of our generated results. The user study further validates that our method outperforms state-of-the-art image editing baselines in producing favorable editing results.",
+        "bbox": [
+            517,
+            753,
+            893,
+            815
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "2. Related Work",
+        "text_level": 2,
+        "bbox": [
+            500,
+            829,
+            643,
+            845
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Text-to-Image Synthesis. In recent years, significant progress has been made in text-to-image synthesis. While early contributions are mainly based on Generative Adversarial Network (GAN) approaches [31, 56, 59, 60], the latest models are mostly built on diffusion models [20, 22, 40, 44, 45, 48, 52, 61] or transformer models [14, 16, 43, 58]. For example, DALL·E 2 [44] and Imagen [23] propose to condition textual prompts to diffusion models, while Muse [9] leverages masked generative transformers to generate images from texts. Other approaches [11, 12, 44] leverage pretrained CLIP models [42] to guide image generation based on textual descriptions.",
+        "bbox": [
+            496,
+            854,
+            893,
+            901
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "page_number",
+        "text": "7060",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "image",
+        "img_path": "images/0adfd780643e305c74a9ceb3c811f10a91a5633bd52fb78cef4a7e17ff4ae84b.jpg",
+        "image_caption": [
+            "Figure 3. Framework of the proposed method. We first feed the input image into the self-supervised learning (SSL) model, e.g., DINO [7], to obtain the attention map and feature, which are used for anchor initialization. The region generation model initializes several region proposals (e.g., 3 proposals in this figure) around each anchor point, and learns to select the most suitable ones among them with the region generation network (RGN). The predicted region and the text descriptions are then fed into a pre-trained text-to-image mode for image editing. We utilize the CLIP model for learning the score to measure the similarity between the given text description and th edited result, forming a training signal to learn our region generation model."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            83,
+            92,
+            887,
+            292
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            412,
+            470,
+            549
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "More recently, Stable Diffusion [45], trained on large image-text pairs [49], has been made publicly available and has served as the foundation for numerous image generation and manipulation works. ControlNet [61] proposes to control Stable Diffusion with spatially localized conditions for image synthesis. Different from these works, we aim to introduce a component that can enable pre-trained text-toimage models for mask-free local image editing.",
+        "bbox": [
+            75,
+            549,
+            470,
+            671
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Text-driven Image Manipulation. Several recent works have utilized pre-trained generator models and CLIP [42] for text-driven image manipulation [2, 3, 17, 30, 35, 41]. StyleCLIP [41] combines the generative ability of Style-GAN [25] with CLIP to control latent codes, enabling a wide range of image manipulations. VQGAN-CLIP [12] uses CLIP [42] to guide VQ-GAN [16] for high-quality image generation and editing.",
+        "bbox": [
+            75,
+            672,
+            470,
+            794
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "There are several approaches [1, 18, 26, 27, 36, 37, 39, 47, 53] that use diffusion models for text-driven image manipulation. Imagic [26] can generate textual embeddings aligning with the input images and editing prompts, and fine-tune the diffusion model to perform edits. Instruct-Pix2Pix [4] combines GPT-3 [5] and Stable Diffusion [45] to edit images with human instructions. Our work is related to the state-of-the-art methods DiffEdit [10] and MasaCtrl [6]. DiffEdit [10] leverages DDIM inversion [13, 52] with the automatically produced masks for local image editing. MasaCtrl [6] proposes mutual self-attention and learns the editing masks from the cross-attention maps of the diffusion models. Motivated by the aforementioned works, we also utilize diffusion models and CLIP guidance for text-driven image manipulation. In contrast to DiffEdit [10] and MasaCtrl [6], whose editing is much more sensitive to the generated mask regions, our proposed method focuses on learning bounding boxes for local editing, which can be more flexible in accommodating diverse text prompts.",
+        "bbox": [
+            75,
+            795,
+            470,
+            901
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            412,
+            893,
+            595
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "3. Proposed Method",
+        "text_level": 2,
+        "bbox": [
+            500,
+            609,
+            674,
+            627
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Text-driven image editing manipulates the visual content of input images to align with the contexts or modifications specified in the text. Our goal is to enable text-to-image models to perform mask-free local image editing. To this end, we propose a region generation network that can produce promising regions for image editing.",
+        "bbox": [
+            496,
+            636,
+            893,
+            728
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Figure 3 shows the overall pipeline of our proposed method for text-driven image editing.",
+        "bbox": [
+            498,
+            728,
+            893,
+            758
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "3.1. Edit-Region Generation",
+        "text_level": 2,
+        "bbox": [
+            500,
+            770,
+            722,
+            786
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Given the input image as $X \\in \\mathbb { R } ^ { 3 \\times H \\times W }$ and text with p words as $T \\in \\mathbb { Z } ^ { p }$ , we first use a pre-trained visual transformer model, ViT-B/16 [15], for feature extraction. This model is pre-trained using the DINO self-supervised learning objective [7]. The feature $F \\in \\mathbb { R } ^ { d \\times h \\times w }$ from the last layer has been shown to contain semantic segmentation of objects [7, 51], which can serve as a prior in our problem.",
+        "bbox": [
+            496,
+            794,
+            895,
+            902
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "page_number",
+        "text": "7061",
+        "bbox": [
+            482,
+            944,
+            514,
+            958
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Then we initialize K anchor points $\\{ C _ { i } \\} _ { i = 1 } ^ { K }$ located at the top-K scoring patches of the self-attention map from the [CLS] token query of the DINO pre-trained transformer as shown in [7], where the [CLS] token carries guidance to locate the semantically informative parts of the objects.",
+        "bbox": [
+            75,
+            89,
+            470,
+            166
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Following this, we define a set of bounding box proposals $\\mathcal { B } _ { i } = \\{ \\breve { B _ { j } } \\} _ { j = 1 } ^ { M }$ for each anchor point $C _ { i }$ , where each bounding box is centered at their corresponding anchor point. For simplicity, we parameterize the bounding box with a single parameter such that each $B _ { j }$ is a square box with shape $j \\times j$",
+        "bbox": [
+            75,
+            167,
+            470,
+            257
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Subsequently, we train a region generation network to explicitly consider all unique bounding boxes derived from the same anchor point. For a given anchor point $C _ { i }$ , we then have:",
+        "bbox": [
+            75,
+            258,
+            470,
+            319
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/c6f11c666b1ba43ee4e5cfd5153a648568fc6a9997c7d5316ca4db3e25bc5057.jpg",
+        "text": "$$\nf _ { j } = \\mathrm { R O I - p o o l } ( F , B _ { j } ) ,\\tag{1}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            240,
+            332,
+            398,
+            348
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/afe749aff8135d84b43cb6b509806900d66a56403e72f168e69f2e2ed3559a53.jpg",
+        "text": "$$\nS ( [ f _ { 1 } , \\cdot \\cdot \\cdot , f _ { M } ] ) = [ \\pi _ { 1 } , \\cdot \\cdot \\cdot , \\pi _ { M } ] ,\\tag{2}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            147,
+            351,
+            377,
+            368
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "where [·] concatenates features along the channel dimension, and the ROI-pool operation [19] is used to perform pooling for the feature $\\bar { F } \\in \\mathbb { R } ^ { d \\times h \\times w }$ with respect to the box $B _ { j }$ , resulting in a feature tensor $f _ { j } \\in \\mathbb { R } ^ { d \\times \\hat { l } \\times l }$ . In our experiments, we set l as 7. S is the proposed region generation network consisting of two convolutional layers and two linear layers, with a ReLU activation layer between consecutive layers. The output from the final linear layer, denoted as $\\pi _ { j }$ in Eq. (2) as the logits for the bounding box with size $j ,$ , is fed into a softmax function to predict the scores for the bounding box proposal, $i . e .$ , Softmax $\\left( \\left[ \\pi _ { 1 } , \\cdots , \\pi _ { M } \\right] \\right)$",
+        "bbox": [
+            75,
+            381,
+            470,
+            547
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "To learn the parameters of the region generation network, we use the Gumbel-Softmax trick [24]. We re-parameterize $\\pi _ { j }$ by adding a small Gumbel noise $g _ { j } = - \\log ( - \\log ( u _ { j } ) )$ where $u _ { j } \\ \\sim \\ \\mathrm { U n i f o r m } ( 0 , 1 )$ During training, we apply straight-through gradient estimation, in which backward propagation uses the differentiable variable $( i . e .$ , softmax) while the forward pass still takes the argmax, treating π as the categorical variable. For each anchor point, once we obtain the editing region with the highest softmax score, we first generate a corresponding box-like mask image, and then feed the mask image, input image, and editing prompt into the text-to-image model to obtain the edited image. Thus, we can get K edited images considering all anchor points, in Section 3.3, we explain how to produce the final edited image as inference output.",
+        "bbox": [
+            75,
+            547,
+            470,
+            775
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "3.2. Training Objectives",
+        "text_level": 2,
+        "bbox": [
+            76,
+            785,
+            266,
+            801
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "As the CLIP model [42] can estimate the similarity between images and texts, we employ it to guide our image editing based on user-specified prompts.",
+        "bbox": [
+            76,
+            808,
+            468,
+            854
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "To train our models, we propose a composite editing loss that consists of three components: 1) the CLIP guidance loss ${ \\mathcal { L } } _ { \\mathrm { C l i p } }$ stands for the cosine distance between features extracted from generated images and texts, specifically derived from the last layers of CLIP’s encoders. 2) the directional loss $\\mathcal { L } _ { \\mathrm { D i r } } \\left[ 4 1 \\right]$ controls the direction of the applied edit within the CLIP space [17, 41], and 3) the structural loss ${ \\mathcal { L } } _ { \\mathrm { S t r } }$ takes into account the self-similarity [29, 50] of features between source and generated images, which facilitates editing in texture and appearance while preserving the original spatial layout of objects in the source images. The total loss L and each loss term are:",
+        "bbox": [
+            76,
+            856,
+            470,
+            901
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            90,
+            893,
+            227
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/07737d2ea5a3a1e64708b353c856f795f6aad64d640355ba2bad4f4fb086a72c.jpg",
+        "text": "$$\n\\begin{array} { r } { \\mathcal { L } = \\lambda _ { C } \\mathcal { L } _ { \\mathrm { C l i p } } + \\lambda _ { S } \\mathcal { L } _ { \\mathrm { S t r } } + \\lambda _ { D } \\mathcal { L } _ { \\mathrm { D i r } } , } \\end{array}\\tag{3}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            581,
+            233,
+            810,
+            251
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/40737f0a66d87a5bf7eb68cc405239e17ac1cbe9b2b1bbb7c26595f3a1554cae.jpg",
+        "text": "$$\n\\mathcal { L } _ { \\mathrm { C l i p } } = \\mathcal { D } _ { \\mathrm { c o s } } ( E _ { \\mathrm { v } } ( X _ { o } ) , E _ { \\mathrm { t } } ( T ) ) ,\\tag{4}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            581,
+            255,
+            785,
+            272
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/dbcb72c0455319ec167bcd89f27aca5dda723a57640ebcf66cfb1bc1380249df.jpg",
+        "text": "$$\n\\mathcal { L } _ { \\mathrm { S t r } } = | | Q ( f _ { X _ { o } } ) - Q ( f _ { X } ) | | _ { 2 } ,\\tag{5}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            586,
+            273,
+            787,
+            291
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/d318d1e636264773428fd87b9e0d9ac80c5441523f3c0f18b1928fd7db554320.jpg",
+        "text": "$$\n\\mathcal { L } _ { \\mathrm { D i r } } = \\mathcal { D } _ { \\mathrm { c o s } } ( E _ { \\mathrm { v } } ( X _ { o } ) - E _ { \\mathrm { v } } ( X ) , E _ { \\mathrm { t } } ( T ) - E _ { \\mathrm { t } } ( T _ { \\mathrm { R O I } } ) ) ,\\tag{6}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            514,
+            292,
+            856,
+            310
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "where $E _ { \\mathrm { v } }$ and $E _ { \\mathrm { t } }$ are the visual and textual encoder of the CLIP model. We empirically set the weights $\\lambda _ { C } ~ = ~ 1$ $\\lambda _ { D } = 1$ , and $\\lambda _ { S } = 1$ for our composite editing loss. Here, X, T, and $X _ { o }$ denote the input image, text prompt, and the edited image by the proposed region, respectively. $f _ { X _ { o } }$ and $f _ { X }$ indicate the visual features of $X _ { o }$ and X from the last layer of CLIP’s visual encoder, while $Q ( f _ { X _ { o } } )$ and $Q ( f _ { X } )$ denote the similarity matrix of $f _ { X _ { c } }$ and $f _ { X }$ respectively. For simplicity, we use the cosine distance $\\mathcal { D } _ { \\mathrm { c o s } }$ to measure the similarity between images and texts. Note that $T _ { \\mathrm { R O I } }$ represents a given region-of-interest of the source image for editing $( e . g .$ , in Figure 5, when $T$ is $\\mathbf { \\ddot { a } }$ big tree with many flowers in the center”, then $T _ { \\mathrm { R O I } }$ could be “tree”).",
+        "bbox": [
+            498,
+            314,
+            893,
+            510
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "During training, our loss functions encourage the region generator to produce appropriate regions for editing by taking into account the similarity between the edited images and the given text descriptions.",
+        "bbox": [
+            498,
+            510,
+            892,
+            570
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "3.3. Inference",
+        "text_level": 2,
+        "bbox": [
+            500,
+            577,
+            611,
+            592
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "During the inference process, we define a quality score to rank the edited images generated from different anchor points and select the image with the highest score for presentation to the user.",
+        "bbox": [
+            496,
+            599,
+            892,
+            660
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "While there exist more advanced methods, we use a simple weighted average to compute the quality score:",
+        "bbox": [
+            498,
+            660,
+            892,
+            691
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/427c5c906dc80e57e851de0a2aa2390e5a6772fd3c8206b7e9396ba482b151ec.jpg",
+        "text": "$$\nS = \\alpha \\cdot S _ { \\mathrm { t 2 i } } + \\beta \\cdot S _ { \\mathrm { i 2 i } } ,\\tag{7}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            619,
+            696,
+            772,
+            713
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "where $S _ { \\mathrm { t 2 i } }$ estimates the cosine similarity scores between the given text descriptions and the edited images, $S _ { \\mathrm { i 2 i } }$ measures the cosine similarity scores between the source images and the edited images, and α and $\\beta$ are the coefficients to control the influences of $S _ { \\mathrm { t 2 i } }$ and $S _ { \\mathrm { i 2 i } }$ . We adopt the features extracted from the last layer of CLIP’s encoders for similarity calculation.",
+        "bbox": [
+            496,
+            719,
+            893,
+            825
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "In our experiments, we set α and β as 2 and 1 respectively, since a higher value for α can encourage the model to place more weight on the faithfulness of text-conditioned image editing. The edited image with the highest quality score S is chosen as the final edited image.",
+        "bbox": [
+            496,
+            825,
+            893,
+            901
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "page_number",
+        "text": "7062",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "image",
+        "img_path": "images/42090030c2cd83557f352b4d8bcde90e89ad658dfc450ad2a993768e54411e6a.jpg",
+        "image_caption": [],
+        "image_footnote": [
+            "A cartoon panda is preparingfood. It wears cloth which has blue and white colors and there are several plates offood on the table",
+            "The cartoon character is smiling. It looks funny. The shape ofitsface is square, and its eyes and mouth are very large"
+        ],
+        "bbox": [
+            76,
+            84,
+            890,
+            594
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Figure 4. Image editing results with simple and complex prompts. Given the input images and prompts, our method edits the image without requiring masks from the users. The learned region is omitted for better visualization. The 1<sup>st</sup> row contains diverse prompts for one kind of object. The 2<sup>nd</sup> row displays prompts featuring multiple objects. The 3<sup>rd</sup> row shows prompts with geometric relations, and the last row presents prompts with extended length.",
+        "bbox": [
+            75,
+            650,
+            893,
+            707
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "3.4. Compatibility with Pretrained Editing Models",
+        "text_level": 2,
+        "bbox": [
+            76,
+            731,
+            467,
+            748
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Our proposed region generator can be integrated with various image editing models [1, 8, 39, 45] for modifying the content of source images conditioning on the prompts, and to demonstrate its versatility, we apply it to two distinct image synthesis models: non-autoregressive transformers as used in MaskGIT [8] or Muse [9], as well as diffusion U-Nets [46] as used in Stable Diffusion [45].",
+        "bbox": [
+            75,
+            760,
+            470,
+            867
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "The transformer and diffusion models represent distinct base editing models to verify the applicability of the proposed method. It is worth noting that MaskGIT and Muse are transformers that operate over discrete tokens created by a VQ autoencoder [55], unlike diffusion models [22, 45, 52] operating within the continuous space. As a result, the latent spaces in MaskGIT and Muse are only compatible with box-like masks and lack the precision for pixel-level masks in image editing.",
+        "bbox": [
+            75,
+            869,
+            470,
+            901
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            732,
+            893,
+            838
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "For our experiments, we use the official MaskGIT model instead of the Muse model [9], which is not publicly available. We also limit the text prompt to the class vocabulary that the model is trained on.",
+        "bbox": [
+            496,
+            839,
+            893,
+            901
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "page_number",
+        "text": "7063",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Editing Text:",
+        "bbox": [
+            78,
+            728,
+            160,
+            742
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "image",
+        "img_path": "images/7c26a790dfdb86dbdaf517c2ae0a75c3218a956ba864dec5a79bb0ef6270899c.jpg",
+        "image_caption": [
+            "a bloomingflower and dessert",
+            "Figure 5. Comparison with existing methods. We compare our method with existing text-driven image editing methods. From left to right: Input image, Plug-and-Play [54], InstructPix2Pix [4], Null-text [38], DiffEdit [10], MasaCtrl [6], and ours."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            76,
+            87,
+            888,
+            729
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "4. Experimental Results",
+        "text_level": 2,
+        "bbox": [
+            76,
+            808,
+            282,
+            825
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Implementation Details. In our evaluation, we collect high-resolution and free-to-use images covering a variety of objects from Unsplash (https://unsplash.com/). For edit-region generation, the total number of bounding box proposals (i.e., M) is 7 and the CLIP guidance model is initialized with ViT-B/16 weights. We do not use superresolution models to enhance the quality of the resultant images. By default, we adopt the pre-trained Stable Diffusionv-1-2 as our editing model. Our main experiments are conducted using two A5000 GPUs, where we train the model for 5 epochs using Adam optimizer [28] with an initial learning rate of 0.003.",
+        "bbox": [
+            75,
+            839,
+            470,
+            901
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            808,
+            893,
+            901
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "page_number",
+        "text": "7064",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "image",
+        "img_path": "images/2cf515ffc061f4c9c695ee6129fdec5cd1f5bcd479fd0ecf7e8eb0a73607cf9d.jpg",
+        "image_caption": [
+            "Figure 6. Generated results using MaskGIT [8] as the image synthesis model. Aside from using the Stable Diffusion, our method can also generate reasonable editing results with the non-autoregressive transformer-based MaskGIT."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            76,
+            85,
+            875,
+            220
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            280,
+            470,
+            310
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "4.1. Qualitative Evaluation",
+        "text_level": 2,
+        "bbox": [
+            76,
+            320,
+            287,
+            337
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "We assess the performance of our proposed method on a diverse set of high-quality images featuring various objects. Figure 4 shows that our approach takes an image and a language description to perform mask-free edits. We display complex text prompts that feature one category of object (the 1<sup>st</sup> row), multiple objects (the 2<sup>nd</sup> row), geometric relations (the $3 ^ { \\mathrm { r d } }$ row), and long paragraphs (the 4<sup>th</sup> row).",
+        "bbox": [
+            75,
+            344,
+            470,
+            452
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "4.2. Comparisons with Prior Work",
+        "text_level": 2,
+        "bbox": [
+            76,
+            462,
+            348,
+            478
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "We compare our method with five state-of-the-art textdriven image editing approaches: Plug-and-Play [54] preserves the semantic layout of the source image by injecting features from the source image into the generation process of the target image. InstructPix2Pix [4] first utilizes GPT-3 and Stable Diffusion to produce paired training data for image editing. It then trains a diffusion model with classifierfree guidance under conditions. Null-text Inversion [38] enables text-based image editing with Stable Diffusion, using an initial DDIM inversion [13, 52] as a pivot for optimization, tuning only the null-text embedding in classifierfree guidance. DiffEdit [10] automatically generates masks for the regions that require editing by contrasting predictions of the diffusion model conditioned on different text prompts. MasaCtrl [6] performs text-based non-rigid image editing by converting self-attention in diffusion models into mutual self-attention, and it extracts the masks from the cross-attention maps as the editing regions.",
+        "bbox": [
+            75,
+            486,
+            472,
+            758
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "In all experiments, we report the results of the compared methods using their official code, except for DiffEdit<sup>1</sup>. Figure 5 displays the editing results from existing methods. We have the following observations, InstructPix2Pix inevitably leads to undesired changes in the global appearance (e.g., background). DiffEdit and MasaCtrl will yield unsatisfactory results when using the more complex prompts containing multiple objects. Other methods generate less realistic results (e.g., coffee in the 4<sup>th</sup> row) or results that do not correspond with the text prompt (e.g., only one apple and pear in the 3<sup>rd</sup> row).",
+        "bbox": [
+            75,
+            758,
+            470,
+            866
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "table",
+        "img_path": "images/a6b1da17052ae0794d769c6720b39763ffc563f56352c8a1756bcfe699d9faba.jpg",
+        "table_caption": [
+            "Table 1. User studies. We show the percentage (mean, std) of user preference for our approach over compared methods."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Compared Methods</td><td>Preference for Ours</td></tr><tr><td>vs. Plug-and-Play [54]</td><td> $8 0 . 5 \\% \\pm 1 . 9 \\%$ </td></tr><tr><td>vs. InstructPix2Pix [4]</td><td> $7 3 . 2 \\% \\pm 2 . 2 \\%$ </td></tr><tr><td>vs. Null-text [38]</td><td> $8 8 . 2 \\% \\pm 1 . 6 \\%$ </td></tr><tr><td>vs. DiffEdit [10]</td><td> $9 1 . 9 \\% \\pm 1 . 3 \\%$ </td></tr><tr><td>vs. MasaCtrl [6]</td><td> $9 0 . 8 \\% \\pm 1 . 4 \\%$ </td></tr><tr><td>Average</td><td>84.9%</td></tr></table>",
+        "bbox": [
+            503,
+            277,
+            887,
+            404
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "image",
+        "img_path": "images/ff02b267ffc02bdbaee0e5acc8f21f5c633139c437a26ec57a53441f3ea6a4b9.jpg",
+        "image_caption": [
+            "Editing Text: a large flying fish",
+            "a cat wearing sunglasses",
+            "Figure 7. Failure cases. We show two failure cases generated by our method."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            500,
+            452,
+            887,
+            544
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            622,
+            893,
+            683
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "4.3. User Study",
+        "text_level": 2,
+        "bbox": [
+            500,
+            694,
+            622,
+            710
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "To evaluate the quality of the edited images, we conduct a user study using 60 input images and text prompts. We employ paired comparisons to measure user preference. In each test, we show an input image, a text prompt, and two edited images generated by our method and one of the compared approaches. We ask the subject to choose the one that performs better in coherence with the text prompt while maintaining fidelity to the input image.",
+        "bbox": [
+            496,
+            718,
+            893,
+            839
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "There are 203 participants in this study, where each par ticipant evaluates 40 pairs of images. The image set and compared method for each image are randomly selected for each user. The order in each comparison pair is shuffled when presenting to each user. All the methods are compared for the same number of times.",
+        "bbox": [
+            496,
+            840,
+            893,
+            901
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "page_footnote",
+        "text": "<sup>1</sup>As there’s no official code of DiffEdit, we use the code https:// github.com/Xiang-cd/DiffEdit-stable-diffusion",
+        "bbox": [
+            76,
+            875,
+            468,
+            901
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "page_number",
+        "text": "7065",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            92,
+            468,
+            122
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Table 1 shows the user study results. The proposed method performs favorably against all five compared approaches. On average, our method is preferred in 84.9% of all the comparisons, which demonstrates the effectiveness of the proposed method.",
+        "bbox": [
+            75,
+            122,
+            470,
+            199
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Failure cases. We present some failure cases of our approach to analyze the reasons. As shown in Figure 7, the failure results can be caused by improper anchor point initialization, especially when the anchor points fall into the background area.",
+        "bbox": [
+            75,
+            213,
+            470,
+            290
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "4.4. Ablation Study",
+        "text_level": 2,
+        "bbox": [
+            76,
+            301,
+            230,
+            318
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Compatibility with image synthesis models. To demonstrate the generalizability of the proposed method, we conduct experiments using MaskGIT [8], a distinct image generative transformer. As shown in Figure 6, we can generate results that adhere to the text prompt while preserving the background content. Note that the latent spaces within MaskGIT exclusively accommodate box-like masks, lacking the requisite precision for manipulating pixel-level masks in the context of image editing.",
+        "bbox": [
+            75,
+            324,
+            470,
+            463
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Effect of different loss components. To evaluate the influences of different loss components in our training loss, in Figure 8, we show the results generated without the directional loss $\\mathcal { L } _ { D i r }$ that controls the directional edit, or without the structural loss $\\mathcal { L } _ { S t r }$ that focuses on preserving the appearance of the source image. We observe that the result without $\\mathcal { L } _ { D i r }$ does not fully match the context of the text prompt, and the result without $\\mathcal { L } _ { S t r }$ fails to preserve the posture and shape of the object from the source image. In contrast, our method using all loss components can generate results that adhere to the text prompt while preserving the concept in the source image.",
+        "bbox": [
+            75,
+            484,
+            472,
+            667
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Effect of region generation methods. In Table 2, we present the user study results by comparing our method with two other baselines for bounding box generation. (1) Random-anchor-random-size: The editing regions are bounding boxes centered at anchor points uniformly sampled from the whole image, with height and width uniformly sampled from [0, H] and [0, W], where H and W are the height and width of the image. We clamp the regions exceeding the image boundary. (2) DINO-anchorrandom-size: The editing regions are bounding boxes centered at anchor points selected from the DINO self-attention map, which are identical to those generated by our method, but with height and width uniformly sampled from [0, H] and [0, W]. For both baselines, we use the same number of anchor points as our method, and select the image with the highest quality score S to present to the user.",
+        "bbox": [
+            75,
+            689,
+            472,
+            902
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "image",
+        "img_path": "images/9b443b14678453e315af41a00f030a81d04ca22a706be3ecb8f2adfc190c3479.jpg",
+        "image_caption": [
+            "a high quality photo of a lovely dog"
+        ],
+        "image_footnote": [],
+        "bbox": [
+            500,
+            88,
+            887,
+            178
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "table",
+        "img_path": "images/15816150d148f9a9c88c6ab780dbaef70c10075c9c4d4ee8ae22fc82e4d564fd.jpg",
+        "table_caption": [
+            "Figure 8. Effect of different loss components. The $2 ^ { \\mathrm { n d } }$ and $3 ^ { \\mathrm { r d } }$ columns present results without $\\mathcal { L } _ { D i r }$ and $\\mathcal { L } _ { S t r }$ respectively. The last column is generated by the model using all loss components.",
+            "Table 2. Ablation study of region generation methods. We show the percentage (mean, std) of user preference for our approach over two compared baselines."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Compared Methods</td><td>Preference for Ours</td></tr><tr><td>vs. Random-anchor-random-size</td><td> $8 3 . 9 \\% \\pm 2 . 6 \\%$ </td></tr><tr><td>vs. DINO-anchor-random-size</td><td> $7 1 . 0 \\% \\pm 3 . 2 \\%$ </td></tr></table>",
+        "bbox": [
+            503,
+            260,
+            887,
+            316
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            398,
+            892,
+            429
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "The results show that our method is preferred in 83.9% compared with Random-anchor baseline. Even when compared to the competitive baseline where the anchor point is selected from the DINO self-attention map with the randomly chosen bounding box size, the proposed method is still preferred in 71.0% of all comparisons. These results validate the effectiveness of our model in generating meaningful editing regions.",
+        "bbox": [
+            496,
+            431,
+            893,
+            553
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "4.5. Limitation",
+        "text_level": 2,
+        "bbox": [
+            500,
+            568,
+            620,
+            584
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "We observe two limitations of our method. First, the performance is affected by the choice of the self-supervised model, particularly regarding anchor initialization. Second, since no user-specified region guidance is provided, the predicted region may include background areas, resulting in unintentional modifications in certain image contents. To address this, we plan to model the mask using more finegrained representations (e.g., patches).",
+        "bbox": [
+            496,
+            594,
+            893,
+            717
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "5. Conclusion",
+        "text_level": 2,
+        "bbox": [
+            500,
+            736,
+            619,
+            752
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "In this paper, we propose a method for editing given images based on freely provided language descriptions, including paragraphs, without the need for user-specified edit regions. We introduce a region generation network and incorporate text-driven editing training losses to generate high-quality and realistic images. The proposed method seamlessly integrates with various image synthesis models. Experiments including user studies are conducted, demonstrating the competitive performance of our proposed method.",
+        "bbox": [
+            496,
+            765,
+            893,
+            902
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "page_number",
+        "text": "7066",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "References",
+        "text_level": 2,
+        "bbox": [
+            78,
+            89,
+            176,
+            106
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "list",
+        "sub_type": "ref_text",
+        "list_items": [
+            "[1] Omri Avrahami, Dani Lischinski, and Ohad Fried. Blended diffusion for text-driven editing of natural images. In CVPR, 2022. 1, 3, 5",
+            "[2] Omer Bar-Tal, Dolev Ofri-Amar, Rafail Fridman, Yoni Kasten, and Tali Dekel. Text2LIVE: Text-driven layered image and video editing. In ECCV, 2022. 1, 3",
+            "[3] David Bau, Alex Andonian, Audrey Cui, YeonHwan Park, Ali Jahanian, Aude Oliva, and Antonio Torralba. Paint by word. arXiv:2103.10951, 2021. 3",
+            "[4] Tim Brooks, Aleksander Holynski, and Alexei A Efros. Instructpix2pix: Learning to follow image editing instructions. In CVPR, 2023. 3, 6, 7",
+            "[5] Tom Brown, Benjamin Mann, Nick Ryder, Melanie Subbiah, Jared D Kaplan, Prafulla Dhariwal, Arvind Neelakantan, Pranav Shyam, Girish Sastry, Amanda Askell, et al. Language models are few-shot learners. In NeurIPS, 2020. 3",
+            "[6] Mingdeng Cao, Xintao Wang, Zhongang Qi, Ying Shan, Xiaohu Qie, and Yinqiang Zheng. Masactrl: Tuning-free mutual self-attention control for consistent image synthesis and editing. In ICCV, 2023. 1, 2, 3, 6, 7",
+            "[7] Mathilde Caron, Hugo Touvron, Ishan Misra, Hervé Jégou, Julien Mairal, Piotr Bojanowski, and Armand Joulin. Emerging properties in self-supervised vision transformers. In ICCV, 2021. 2, 3, 4",
+            "[8] Huiwen Chang, Han Zhang, Lu Jiang, Ce Liu, and William T Freeman. MaskGIT: Masked generative image transformer. In CVPR, 2022. 1, 2, 5, 7, 8",
+            "[9] Huiwen Chang, Han Zhang, Jarred Barber, AJ Maschinot, Jose Lezama, Lu Jiang, Ming-Hsuan Yang, Kevin Murphy, William T Freeman, Michael Rubinstein, et al. Muse: Text-to-image generation via masked generative transformers. arXiv:2301.00704, 2023. 1, 2, 3, 5",
+            "[10] Guillaume Couairon, Jakob Verbeek, Holger Schwenk, and Matthieu Cord. Diffedit: Diffusion-based semantic image editing with mask guidance. In ICLR, 2023. 2, 3, 6, 7",
+            "[11] Katherine Crowson. CLIP guided diffusion HQ 256x256. https://colab.research.google.com/drive/ 12a\\_Wrfi2\\_gwwAuN3VvMTwVMz9TfqctNj. 3",
+            "[12] Katherine Crowson, Stella Biderman, Daniel Kornis, Dashiell Stander, Eric Hallahan, Louis Castricato, and Edward Raff. VQGAN-CLIP: Open domain image generation and editing with natural language guidance. In ECCV, 2022. 3",
+            "[13] Prafulla Dhariwal and Alexander Nichol. Diffusion models beat GANs on image synthesis. In NeurIPS, 2021. 3, 7",
+            "[14] Ming Ding, Wendi Zheng, Wenyi Hong, and Jie Tang. CogView2: Faster and better text-to-image generation via hierarchical transformers. In NeurIPS, 2022. 3",
+            "[15] Alexey Dosovitskiy, Lucas Beyer, Alexander Kolesnikov, Dirk Weissenborn, Xiaohua Zhai, Thomas Unterthiner, Mostafa Dehghani, Matthias Minderer, Georg Heigold, Sylvain Gelly, et al. An image is worth 16x16 words: Transformers for image recognition at scale. arXiv:2010.11929, 2020. 3",
+            "[16] Patrick Esser, Robin Rombach, and Björn Ommer. Taming transformers for high-resolution image synthesis. In CVPR, 2021. 3",
+            "[17] Rinon Gal, Or Patashnik, Haggai Maron, Amit H Bermano, Gal Chechik, and Daniel Cohen-Or. StyleGAN-NADA: CLIP-guided domain adaptation of image generators. ACM Transactions on Graphics (TOG), 41(4):1–13, 2022. 3, 4",
+            "[18] Rinon Gal, Yuval Alaluf, Yuval Atzmon, Or Patashnik, Amit H. Bermano, Gal Chechik, and Daniel Cohen-Or. An image is worth one word: Personalizing text-to-image generation using textual inversion. In ICLR, 2023. 3",
+            "[19] Ross Girshick. Fast R-CNN. In ICCV, 2015. 4",
+            "[20] Shuyang Gu, Dong Chen, Jianmin Bao, Fang Wen, Bo Zhang, Dongdong Chen, Lu Yuan, and Baining Guo. Vector quantized diffusion model for text-to-image synthesis. In CVPR, 2022. 3",
+            "[21] Amir Hertz, Ron Mokady, Jay Tenenbaum, Kfir Aberman, Yael Pritch, and Daniel Cohen-Or. Prompt-to-prompt image editing with cross-attention control. In ICLR, 2023. 1",
+            "[22] Jonathan Ho, Ajay Jain, and Pieter Abbeel. Denoising diffusion probabilistic models. In NeurIPS, 2020. 3, 5",
+            "[23] Jonathan Ho, William Chan, Chitwan Saharia, Jay Whang, Ruiqi Gao, Alexey Gritsenko, Diederik P Kingma, Ben Poole, Mohammad Norouzi, David J Fleet, et al. Imagen video: High definition video generation with diffusion models. arXiv:2210.02303, 2022. 3",
+            "[24] Eric Jang, Shixiang Gu, and Ben Poole. Categorical reparameterization with gumbel-softmax. arXiv:1611.01144, 2016. 4",
+            "[25] Tero Karras, Samuli Laine, Miika Aittala, Janne Hellsten, Jaakko Lehtinen, and Timo Aila. Analyzing and improving the image quality of StyleGAN. In CVPR, 2020. 3",
+            "[26] Bahjat Kawar, Shiran Zada, Oran Lang, Omer Tov, Huiwen Chang, Tali Dekel, Inbar Mosseri, and Michal Irani. Imagic: Text-based real image editing with diffusion models. arXiv:2210.09276, 2022. 3",
+            "[27] Gwanghyun Kim, Taesung Kwon, and Jong Chul Ye. DiffusionCLIP: Text-guided diffusion models for robust image manipulation. In CVPR, 2022. 3",
+            "[28] Diederik P Kingma and Jimmy Ba. Adam: A method for stochastic optimization. arXiv:1412.6980, 2014. 7",
+            "[29] Nicholas Kolkin, Jason Salavon, and Gregory Shakhnarovich. Style transfer by relaxed optimal transport and self-similarity. In CVPR, 2019. 4",
+            "[30] Gihyun Kwon and Jong Chul Ye. CLIPstyler: Image style transfer with a single text condition. In CVPR, 2022. 1, 3",
+            "[31] Bowen Li, Xiaojuan Qi, Thomas Lukasiewicz, and Philip HS Torr. ManiGAN: Text-guided image manipulation. In CVPR, 2020. 3",
+            "[32] Yuanze Lin, Xun Guo, and Yan Lu. Self-supervised video representation learning with meta-contrastive network. In ICCV, 2021. 1",
+            "[33] Yuanze Lin, Yujia Xie, Dongdong Chen, Yichong Xu, Chenguang Zhu, and Lu Yuan. Revive: Regional visual representation matters in knowledge-based visual question answering. In NeurIPS, 2022."
+        ],
+        "bbox": [
+            84,
+            114,
+            468,
+            155
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "page_number",
+        "text": "7067",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "list",
+        "sub_type": "ref_text",
+        "list_items": [
+            "[34] Yuanze Lin, Chen Wei, Huiyu Wang, Alan Yuille, and Cihang Xie. Smaug: Sparse masked autoencoder for efficient video-language pre-training. In ICCV, 2023. 1",
+            "[35] Xingchao Liu, Chengyue Gong, Lemeng Wu, Shujian Zhang, Hao Su, and Qiang Liu. FuseDream: Training-free text-to-image generation with improved CLIP+GAN space optimization. arXiv:2112.01573, 2021. 3",
+            "[36] Xihui Liu, Dong Huk Park, Samaneh Azadi, Gong Zhang, Arman Chopikyan, Yuxiao Hu, Humphrey Shi, Anna Rohrbach, and Trevor Darrell. More control for free! image synthesis with semantic diffusion guidance. In WACV, 2023. 3",
+            "[37] Chenlin Meng, Yutong He, Yang Song, Jiaming Song, Jiajun Wu, Jun-Yan Zhu, and Stefano Ermon. SDEdit: Guided image synthesis and editing with stochastic differential equations. In ICLR, 2021. 3",
+            "[38] Ron Mokady, Amir Hertz, Kfir Aberman, Yael Pritch, and Daniel Cohen-Or. Null-text inversion for editing real images using guided diffusion models. In CVPR, 2023. 1, 6, 7",
+            "[39] Alex Nichol, Prafulla Dhariwal, Aditya Ramesh, Pranav Shyam, Pamela Mishkin, Bob McGrew, Ilya Sutskever, and Mark Chen. GLIDE: Towards photorealistic image generation and editing with text-guided diffusion models. arXiv:2112.10741, 2021. 1, 3, 5",
+            "[40] Alexander Quinn Nichol and Prafulla Dhariwal. Improved denoising diffusion probabilistic models. In ICML, 2021. 3",
+            "[41] Or Patashnik, Zongze Wu, Eli Shechtman, Daniel Cohen-Or, and Dani Lischinski. StyleCLIP: Text-driven manipulation of StyleGAN imagery. In ICCV, 2021. 3, 4",
+            "[42] Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, et al. Learning transferable visual models from natural language supervision. In ICML, 2021. 1, 2, 3, 4",
+            "[43] Aditya Ramesh, Mikhail Pavlov, Gabriel Goh, Scott Gray, Chelsea Voss, Alec Radford, Mark Chen, and Ilya Sutskever. Zero-shot text-to-image generation. In ICML, 2021. 1, 3",
+            "[44] Aditya Ramesh, Prafulla Dhariwal, Alex Nichol, Casey Chu, and Mark Chen. Hierarchical text-conditional image generation with CLIP latents. arXiv:2204.06125, 2022. 3",
+            "[45] Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, and Björn Ommer. High-resolution image synthesis with latent diffusion models. In CVPR, 2022. 2, 3, 5",
+            "[46] Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-net: Convolutional networks for biomedical image segmentation. In MICCAI, 2015. 5",
+            "[47] Nataniel Ruiz, Yuanzhen Li, Varun Jampani, Yael Pritch, Michael Rubinstein, and Kfir Aberman. DreamBooth: Fine tuning text-to-image diffusion models for subject-driven generation. arXiv:2208.12242, 2022. 3",
+            "[48] Chitwan Saharia, William Chan, Saurabh Saxena, Lala Li, Jay Whang, Emily L. Denton, Seyed Kamyar Seyed Ghasemipour, Burcu Karagol Ayan, Seyedeh Sara Mahdavi, Raphael Gontijo Lopes, Tim Salimans, Jonathan Ho, David J. Fleet, and Mohammad Norouzi. Photorealistic textto-image diffusion models with deep language understanding. In NeurIPS, 2022. 3",
+            "[49] Christoph Schuhmann, Richard Vencu, Romain Beaumont, Robert Kaczmarczyk, Clayton Mullis, Aarush Katta, Theo Coombes, Jenia Jitsev, and Aran Komatsuzaki. LAION-400M: Open dataset of CLIP-filtered 400 million image-text pairs. arXiv:2111.02114, 2021. 3",
+            "[50] Eli Shechtman and Michal Irani. Matching local selfsimilarities across images and videos. In CVPR, 2007. 4",
+            "[51] Oriane Siméoni, Gilles Puy, Huy V Vo, Simon Roburin, Spyros Gidaris, Andrei Bursuc, Patrick Pérez, Renaud Marlet, and Jean Ponce. Localizing objects with self-supervised transformers and no labels. arXiv:2109.14279, 2021. 3",
+            "[52] Jiaming Song, Chenlin Meng, and Stefano Ermon. Denoising diffusion implicit models. In ICLR, 2021. 3, 5, 7",
+            "[53] Xuan Su, Jiaming Song, Chenlin Meng, and Stefano Ermon. Dual diffusion implicit bridges for image-to-image translation. In ICLR, 2022. 1, 3",
+            "[54] Narek Tumanyan, Michal Geyer, Shai Bagon, and Tali Dekel. Plug-and-play diffusion features for text-driven image-to-image translation. In CVPR, 2023. 1, 6, 7",
+            "[55] Aaron Van Den Oord, Oriol Vinyals, et al. Neural discrete representation learning. In NeurIPS, 2017. 5",
+            "[56] Tao Xu, Pengchuan Zhang, Qiuyuan Huang, Han Zhang, Zhe Gan, Xiaolei Huang, and Xiaodong He. AttnGAN: Finegrained text to image generation with attentional generative adversarial networks. In CVPR, 2018. 3",
+            "[57] Shuquan Ye, Yujia Xie, Dongdong Chen, Yichong Xu, Lu Yuan, Chenguang Zhu, and Jing Liao. Improving commonsense in vision-language models via knowledge graph riddles. arXiv:2211.16504, 2022. 1",
+            "[58] Jiahui Yu, Yuanzhong Xu, Jing Yu Koh, Thang Luong, Gunjan Baid, Zirui Wang, Vijay Vasudevan, Alexander Ku, Yinfei Yang, Burcu Karagol Ayan, Ben Hutchinson, Wei Han, Zarana Parekh, Xin Li, Han Zhang, Jason Baldridge, and Yonghui Wu. Scaling autoregressive models for content-rich text-to-image generation. arXiv:2206.10789, 2022. 3",
+            "[59] Han Zhang, Tao Xu, Hongsheng Li, Shaoting Zhang, Xiaogang Wang, Xiaolei Huang, and Dimitris N Metaxas. Stack-GAN: Text to photo-realistic image synthesis with stacked generative adversarial networks. In ICCV, 2017. 3",
+            "[60] Han Zhang, Tao Xu, Hongsheng Li, Shaoting Zhang, Xiaogang Wang, Xiaolei Huang, and Dimitris N Metaxas. Stack-GAN++: Realistic image synthesis with stacked generative adversarial networks. IEEE TPAMI, 41(8):1947–1962, 2018. 3",
+            "[61] Lvmin Zhang, Anyi Rao, and Maneesh Agrawala. Adding conditional control to text-to-image diffusion models. In ICCV, 2023. 3",
+            "[62] Tianhao Zhang, Hung-Yu Tseng, Lu Jiang, Weilong Yang, Honglak Lee, and Irfan Essa. Text as neural operator: Image manipulation by text instruction. In ACM MM, pages 1893– 1902, 2021. 1"
+        ],
+        "bbox": [
+            78,
+            93,
+            468,
+            133
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "page_number",
+        "text": "7068",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 9
+    }
+]

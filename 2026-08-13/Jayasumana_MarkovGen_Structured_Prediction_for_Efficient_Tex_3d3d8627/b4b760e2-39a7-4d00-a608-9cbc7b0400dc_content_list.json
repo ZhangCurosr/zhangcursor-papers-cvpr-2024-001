@@ -1,0 +1,1358 @@
+[
+    {
+        "type": "text",
+        "text": "MarkovGen: Structured Prediction for Efficient Text-to-Image Generation",
+        "text_level": 1,
+        "bbox": [
+            107,
+            130,
+            861,
+            151
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Sadeep Jayasumana",
+        "bbox": [
+            138,
+            181,
+            302,
+            199
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Daniel Glasner Ayan Chakrabarti",
+        "bbox": [
+            334,
+            181,
+            478,
+            215
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Srikumar Ramalingam Sanjiv Kumar",
+        "bbox": [
+            501,
+            181,
+            684,
+            217
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Andreas Veit",
+        "bbox": [
+            723,
+            181,
+            830,
+            196
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Google Research, New York",
+        "bbox": [
+            369,
+            219,
+            599,
+            237
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "{sadeep, dglasner, rsrikumar, aveit, ayanchakrab, sanjivk}@google.com",
+        "bbox": [
+            179,
+            241,
+            787,
+            255
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/206d747ea963677ad75f79b405224062b4822c09ed844a9cc1165a0e130c346e.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            161,
+            271,
+            374,
+            436
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/877c9be44dff34aa9e0192797c1d049a0d44940890b92741c07a708e0c7e193c.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            377,
+            271,
+            593,
+            436
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/0001f3dee5d3691a0a6892cc19818bb31191e6b14fea253017ccabba6719e5a4.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            596,
+            271,
+            808,
+            436
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/ec45d2c3777add0980d8716c3843bda2407431d6b4cb4cf2a41a1c4d9eb124e0.jpg",
+        "image_caption": [],
+        "image_footnote": [
+            "Full Muse: All steps"
+        ],
+        "bbox": [
+            160,
+            438,
+            375,
+            603
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/e9739f2a27cad2f6dfda966c2e3d8e87152e42cc4b1e9c419d5672c13f64fd9b.jpg",
+        "image_caption": [],
+        "image_footnote": [
+            "Early Exit Muse: Fewer steps 1.5x faster"
+        ],
+        "bbox": [
+            377,
+            438,
+            593,
+            604
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/2d464d04440d06c144dde604121e2a525fa36ed30617de5d20eb43001c4b811a.jpg",
+        "image_caption": [],
+        "image_footnote": [
+            "MarkovGen: Fewer steps + MRF 1.5x faster"
+        ],
+        "bbox": [
+            596,
+            438,
+            810,
+            604
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Figure 1. MarkovGen improves the speed and quality of token-based image generation models such as Muse, by reducing the number of sampling steps and replacing them with a light-weight Markov Random Field (MRF) model.",
+        "bbox": [
+            76,
+            636,
+            893,
+            665
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Abstract",
+        "text_level": 2,
+        "bbox": [
+            233,
+            676,
+            315,
+            693
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Modern text-to-image generation models produce highquality images that are both photorealistic and faithful to the text prompts. However, this quality comes at significant computational cost: nearly all of these models are iterative and require running sampling multiple times with large models. This iterative process is needed to ensure that different regions of the image are not only aligned with the text prompt, but also compatible with each other. In this work, we propose a light-weight approach to achieving this compatibility between different regions of an image, using a Markov Random Field (MRF) model. We demonstrate the effectiveness of this method on top of the latent token-based Muse text-to-image model. The MRF richly",
+        "bbox": [
+            75,
+            703,
+            470,
+            901
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "encodes the compatibility among image tokens at different spatial locations to improve quality and significantly reduce the required number of Muse sampling steps. Inference with the MRF is significantly cheaper, and its parameters can be quickly learned through back-propagation by modeling MRF inference as a differentiable neural-network layer. Our full model, MarkovGen, uses this proposed MRF model to both speed up Muse by 1.5× and produce higher quality images by decreasing undesirable image artifacts.",
+        "bbox": [
+            496,
+            679,
+            893,
+            816
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "1. Introduction",
+        "text_level": 2,
+        "bbox": [
+            500,
+            829,
+            632,
+            844
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Recent image-to-text models [18, 21, 24, 25, 34] are remarkably successful at producing high-quality, photorealistic images that are faithful to the provided text prompts, and are poised to drive a new generation of tools for creativity and graphic design. However, the generation process with these models is iterative and computationally expensive, requiring multiple sampling steps through large models. For example, diffusion models [24, 25] require multiple denoising steps to generate the final image, the Parti model [34] auto-regressively generates image tokens one at a time. While the recently proposed Muse model [2] generates multiple tokens at a time, it still requires a large number of sampling steps to arrive at the final image.",
+        "bbox": [
+            496,
+            854,
+            893,
+            901
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "CVF",
+        "bbox": [
+            104,
+            2,
+            181,
+            41
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore.",
+        "bbox": [
+            235,
+            1,
+            810,
+            46
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "page_number",
+        "text": "9316",
+        "bbox": [
+            480,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            92,
+            472,
+            243
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "This iterative process is needed to ensure that different regions or patches of the images are not only aligned with the provided text prompt, but also compatible with each other. Current text-to-image models achieve this spatial compatibility by repeatedly applying their full model multiple times on intermediate image predictions—a process that is computationally very expensive. In this paper, we demonstrate that a significantly lighter-weight approach can achieve the same compatibility.",
+        "bbox": [
+            75,
+            244,
+            470,
+            382
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "To this end, we propose a new structured prediction approach that applies to image generation models operating in a discrete token space, such as the VQGAN token space [2,3,8]. These models generate images by first selecting tokens in a fixed-size token grid and later detokenizing them into an RGB image. Usual token-based image generation methods select tokens by independently sampling from the probability distributions at different patch locations. In contrast, we model the whole image jointly using a fully-connected Markov Random Field (MRF) that encodes compatibility between all pairs of tokens (image patches). The tokens at different patch locations are then determined based on this joint distribution. Consequently, as illustrated in Figure 2, a confident token at one location can influence the selected tokens at other locations to enhance the overall compatibility of the token arrangement, and therefore the fidelity of the final image. We use meanfield inference [13, 14, 36] to solve this MRF, which also permits training the compatibility parameters of the model through back-propagation. During image generation with a trained model, the MRF inference comes at a negligible cost compared to the cost of large Transformer models used to predict the initial token probabilities.",
+        "bbox": [
+            75,
+            385,
+            472,
+            733
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "To showcase the benefits of our MRF model, we introduce a new text-to-image model, MarkovGen, that can work in conjunction with the Muse model [2]. Muse uses a parallel decoding approach where all tokens of an image are predicted in parallel at each step. Muse has been shown to be much faster (around 3× faster than the closest competitor) than other state-of-the-art image generation models such as DALL-E, Imagen, Parti, and Stable Diffusion, while producing similar or better quality images [2]. Although Muse produces predictions for every patch simultaneously, single-shot parallel decoding leads to serious quality degradation in the generated images [2]. Muse solves this by embracing progressive parallel decoding, where a small incremental number of high confidence tokens are fixed after each iteration. We show that by learning the compatibility of the tokens and applying the MRF inference after limited number of sampling steps with the Muse model, we achieve significant quality and efficiency gains over the Muse’s full iterative approach (see Figure 1).",
+        "bbox": [
+            75,
+            734,
+            472,
+            902
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "image",
+        "img_path": "images/ba170320ecacc261d566837eaccf3c9e1c6ec1b40aa96f71d7b677e8eb59a1fd.jpg",
+        "image_caption": [
+            "Figure 2. Benefits of encouraging token compatibility with an MRF model. During MRF inference, a confident token, such as the token representing the giraffe’s eye, encourages the neighboring tokens to be compatible to represent other parts of a giraffe face such as ears and nose. Similarly, tokens representing the texture of the giraffe body can influence nearby tokens to encourage consistent patterns. Our formulation also supports long-range connections, such as the one shown with the dashed yellow line."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            578,
+            92,
+            813,
+            273
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            414,
+            893,
+            535
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Reducing the latency and improving the quality of Muse, one of the fastest text-to-image models, will have important practical implications for real-world deployments. The success of our MRF formulation in modeling spatial and label relationships of image tokens opens up the future possibility of refining predictions of other token-based methods such as Parti [34] and discrete-diffusion models [11] with MRFs.",
+        "bbox": [
+            498,
+            535,
+            893,
+            641
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "In summary, our contributions are:",
+        "bbox": [
+            519,
+            641,
+            751,
+            656
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• We propose an MRF model, a type of probabilistic graphical model, that can predict a globally compatible set of image tokens by explicitly modeling spatial and token label relationships. To the best of our knowledge, this is the first work to exploit MRFs to improve the efficiency and quality of text-to-image models.",
+        "bbox": [
+            516,
+            666,
+            893,
+            758
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• Our MarkovGen model, where we replace the last few steps of Muse with a learned MRF layer, leads to a 1.5× speedup as well as improved quality results, as demonstrated by human evaluation and FID distances.",
+        "bbox": [
+            516,
+            768,
+            893,
+            830
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• We show that the MRF model parameters can be trained in just a few hours, allowing us to quickly combine the MRF model with pre-trained Muse models to reap efficiency and quality gains.",
+        "bbox": [
+            516,
+            840,
+            893,
+            901
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "page_number",
+        "text": "9317",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "2. Related Work",
+        "text_level": 2,
+        "bbox": [
+            76,
+            89,
+            220,
+            106
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Text-to-Image Generation: In recent years, papers such as [2,3,10,15,21,24,25,27,33–35] have proposed a diverse variety of methods to generate high-quality images given a text prompt as input. We discuss some of the most relevant approaches below.",
+        "bbox": [
+            75,
+            114,
+            470,
+            190
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Many text-to-image models [9, 18, 19, 21, 24, 25] use denoising diffusion probabilistic models (DDPM) [12] to generate images, where the model is invoked successively to “denoise” previous intermediate versions and progressively refine the image output. While in theory, we need infinitely small and many denoising steps, only a few hundreds of steps are used in practice [28]. Progressive distillation algorithms are being developed to cut down the number of steps [26]. Most of these models directly operate on and produce pixel intensities, [24, 35] are variants that operate on a lower-dimensional latent representation.",
+        "bbox": [
+            75,
+            191,
+            472,
+            357
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "In contrast, the Parti [34], DALL-E [22], and Muse [2] models generate images in a space of discrete token representation. They use a VQGAN [8] model, derived from VQ-VAE [32], to represent non-overlapping image patches with tokens—with values from a discrete vocabulary—and cast the image generation task as that of generating image tokens. The Parti and DALL-E models approach token generation with auto-regressive modeling, generating tokens one at a time in sequence, where each token is generated conditioned on the text input and all previously generated tokens.",
+        "bbox": [
+            75,
+            357,
+            470,
+            507
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "The Muse model [2], on the other hand, is trained to take the text prompt and any already generated image tokens as input, and make predictions for all remaining image tokens simultaneously. In particular, it is trained as a BERTstyle [6] encoder model operating on a masked set of image tokens (with tokens not already generated being masked), with cross-attention to an encoding of the text prompt input. To generate an image, the model is invoked in multiple sampling steps, with all image tokens being masked in the first step. At each step, the Muse model makes predictions for all masked tokens. A subset of these predictions are selected and added to the set of fixed and non-masked tokens, which are then used as conditioning input for subsequent invocations till the all tokens have been fixed. Similar to Muse, Paella [23] and Cogview2 [7] also exploit progressive parallel decoding to achieve speedup. A similar approach to parallel decoding for text was introduced by [17].",
+        "bbox": [
+            75,
+            507,
+            472,
+            765
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Like many other text-to-image generation models, Muse first generates a low-resolution version of the target image, and then conditions on this low-resolution image to generate the high-resolution version. It uses a similar architecture and sampling approach for the high-resolution generation stage, except in this case, the low-resolution image tokens are provided as additional conditioning input.",
+        "bbox": [
+            75,
+            765,
+            470,
+            871
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "For the selected tokens at each sampling stage of Muse, the token values are determined independently for each token from the predicted per-token distributions. Our structured prediction approach, in contrast, considers compatibility between the values of different tokens, and by doing so, is able to improve the quality and reduce the number of sampling steps required—in both the low- and highresolution stages.",
+        "bbox": [
+            76,
+            871,
+            470,
+            901
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            92,
+            893,
+            181
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Many of the text-to-image algorithms are also being extended to develop algorithms to handle other conditional inputs [35], and text-to-video generation [10, 27, 33].",
+        "bbox": [
+            496,
+            181,
+            893,
+            227
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Structured Prediction: Markov and Conditional random fields (CRF)s have a long history of being used in computer vision for diverse applications such as stereo, segmentation, and image reconstruction [31]. These MRF and CRF models have typically been used to enforce smoothness constraints, i.e., that semantic labels, pixel intensities, stereo depths, etc. at nearby locations are similar. In neural network-based methods too, they have been a useful postprocessing step [4] to yield smooth consistent results.",
+        "bbox": [
+            496,
+            227,
+            893,
+            363
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "While early MRF and CRF models considered edges only among immediate pixel neighbors on the image plane, [14] introduced “fully-connected” CRF models that had far longer range connections, and showed that the energy for these models could effectively be minimized using meanfield inference. Using this fully-connected formulation, [36] proposed back-propagating through the mean-field inference steps to jointly train a CRF model with a CNN network to achieve better semantic image segmentation.",
+        "bbox": [
+            498,
+            363,
+            893,
+            500
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "In this work, we use an MRF formulation to achieve consistency in predicted image tokens in the context of text-to-image generation, and like [36], we also use a fully connected MRF model and learn its parameters by backpropagation. However, in our case, the MRF is defined over tokenized patches, the label space corresponds to the vocabulary of a VQGAN [8] and the MRF enforces consistency between different token values rather than smoothness.",
+        "bbox": [
+            496,
+            500,
+            893,
+            619
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "It is worth mentioning here that CRFs have recently also been proposed to improve text generation [29, 30]. Like our case, these methods also use a Transformer model to generate “unaries” that are then provided as input to a CRF model. However, these methods consider edges only between neighboring tokens, and since text sequences are onedimensional, are able to use chain decoding techniques (like beam search) for inference. In contrast, our method reasons with a two-dimensional MRF model with edges between all pairs of patches in the image.",
+        "bbox": [
+            496,
+            619,
+            893,
+            772
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "3. Structured Token Prediction",
+        "text_level": 2,
+        "bbox": [
+            500,
+            784,
+            764,
+            801
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "In this section, we introduce our MRF formulation for structured token prediction. In token-based image generation, a neural network (often a Transformer model) makes predictions to generate a fixed size (16×16, for example) token image containing token labels. This token image is then sent through a detokenizer to generate an RGB image [8].",
+        "bbox": [
+            496,
+            809,
+            893,
+            902
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "page_number",
+        "text": "9318",
+        "bbox": [
+            480,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "image",
+        "img_path": "images/7e761b0a1ec78ef0f9c2eb1dd9534773d9b8dbef84b95e4b3a6c6483389a4742.jpg",
+        "image_caption": [
+            "Figure 3. Given individual token probabilities from an underlying Transformer-based image generation backbone, the MRF improves image quality by utilizing learned spatial and label compatibility relations in the latent token space."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            84,
+            88,
+            459,
+            282
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Consider a common vocabulary size of $V = 8 1 9 2 .$ . For a full sized $1 6 \\times 1 6$ image, there are $8 1 9 2 ^ { 2 5 6 } = 6 . 7 \\times 1 0 ^ { 1 0 0 2 }$ different arrangements of tokens, many of which will represent some kind of “garbage” images that lie outside the manifold of photorealistic images. Intuitively, a structured prediction mechanism that accounts for the compatibility of token arrangements could significantly reduce this massive search space of token arrangements and make the token prediction models more efficient.",
+        "bbox": [
+            75,
+            363,
+            470,
+            500
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "We propose a probabilistic graphical model for this structured prediction task. Specifically, we formulate finding the token arrangement as maximum a posteriori (MAP) inference of an MRF model, as described in the following. The high-level idea is illustrated in Figure 3.",
+        "bbox": [
+            75,
+            500,
+            470,
+            575
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Let $i \\in \\{ 1 , 2 , . . . , n \\}$ denote the location indices of the token image, arranged in row-major order. Let ${ \\mathcal { L } } =$ $\\{ l _ { 1 } , l _ { 2 } , \\ldots , l _ { V } \\}$ be the token labels, which are used to index each element in the codebook of V tokens. For a $1 6 \\times 1 6$ token image with vocabulary size 8192, we have $n = 2 5 6$ and $V = 8 1 9 2$ . Define a random variable $X _ { i } \\in { \\mathcal { L } }$ for each $i = 1 , 2 , \\dots , n$ to hold the token assignment for the $i ^ { \\mathrm { { t h } } }$ location. The collection of these random variables $\\mathbf { X } = [ X _ { 1 } , X _ { 2 } , \\ldots , X _ { n } ]$ then forms a random field, where the value of one variable depends on that of the others. We can then model the probability of an assignment to this random field (and therefore a token arrangement on the grid) with the Gibbs measure:",
+        "bbox": [
+            75,
+            575,
+            470,
+            773
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/6c4337e3fa754f4e382a92ba780cc3c8caee9f8ccc81d82a924a25ed26734b74.jpg",
+        "text": "$$\nP ( \\mathbf { X } = \\mathbf { x } ) = \\frac { 1 } { Z } \\exp ( - E ( \\mathbf { x } ) ) ,\\tag{1}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            169,
+            782,
+            377,
+            814
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "where $\\textbf { x } \\in \\mathbf { \\Omega } { \\mathcal { L } } ^ { n }$ is a given token arrangement and $Z =$ $\\begin{array} { r } { \\sum _ { \\mathbf { x } } \\exp ( - E ( \\mathbf { x } ) ) } \\end{array}$ is the partition function. The “energy” $E ( \\mathbf { x } )$ of an assignment $\\mathbf { x } = \\{ x _ { 1 } , x _ { 2 } , . . . , x _ { n } \\}$ is modeled with two components: the unary component $u _ { i } ( . )$ and the pairwise component $p _ { i j } ( . , . )$",
+        "bbox": [
+            75,
+            824,
+            470,
+            902
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "code",
+        "sub_type": "code",
+        "code_caption": [],
+        "code_footnote": [],
+        "code_body": "```latex\nAlgorithm 1 The MRF Inference Algorithm\nQ (k) ← softmax $( f _ { i } ( k ) ) , \\forall ( i , k )$\nfor num iterations do\n$\\begin{array} { r } { Q _ { i } ( k ) \\gets \\sum _ { j = 1 } ^ { n } \\mathbf { W ^ { s } } _ { i j } Q _ { j } ( k ) , \\forall ( i , k ) } \\end{array}$\n$\\begin{array} { r } { Q _ { i } ( k ) \\gets \\sum _ { k ^ { \\prime } = 1 } ^ { V } \\mathbf { W ^ { c } } _ { k k ^ { \\prime } } Q _ { i } ( k ^ { \\prime } ) , \\forall ( i , k ) } \\end{array}$\n$Q _ { i } ( k ) \\gets Q _ { i } ( k ) + f _ { i } ( k ) , \\forall ( i , k )$\n$Q _ { i } ( k ) \\gets \\mathrm { s o f t m a x } ( Q _ { i } ) ( k ) , \\forall ( i , k )$\nend for\nreturn Q\n```",
+        "bbox": [
+            500,
+            88,
+            892,
+            239
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/ebc134f9a00f4caa0ae2956203fb2f2aeb7861cc22d2aed6ab1440af1424cd6d.jpg",
+        "text": "$$\nE ( \\mathbf { x } ) = \\sum _ { i = 1 } ^ { n } { u _ { i } ( x _ { i } ) } + \\sum _ { i = 1 } ^ { n } \\sum _ { j = 1 } ^ { n } p _ { i j } ( x _ { i } , x _ { j } ) .\\tag{2}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            555,
+            287,
+            834,
+            329
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "The unary component captures the confidence of the neural network prediction model, such as a Transformer model, for a given token and a location. Therefore, given a condition y, such as a text prompt or pre-fixed tokens, if the neural network’s predicted logit value for location i and label $x _ { i }$ is $f _ { i } ( x _ { i } , y )$ , we set:",
+        "bbox": [
+            496,
+            339,
+            893,
+            431
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/df92ec597bdd3d22a78980a214a5de22b820b7f3c55c575d761e1a8ffd40fab1.jpg",
+        "text": "$$\nu _ { i } ( x _ { i } ) = - f _ { i } ( x _ { i } , y ) .\\tag{3}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            624,
+            457,
+            766,
+            473
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Note that we use negative logits because the energy function is in the log domain and a high energy corresponds to a low probability. We drop conditioning on y hereafter to keep the notation uncluttered. Also note that our MRF formulation is not conditioned on y.",
+        "bbox": [
+            496,
+            483,
+            893,
+            559
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "The pairwise component, $p _ { i j } ( x _ { i } , x _ { j } )$ , captures the compatibility of the label $x _ { i }$ assigned to the location i and the label $x _ { j }$ assigned to the location $j .$ . It encodes the notion that while some pairs of tokens are highly compatible with each other and can appear in the same image, other pairs are highly incompatible. For example, a token representing an eye of a giraffe is more likely to appear next to a token representing a different part of a giraffe face, than a token representing something completely different like a part of car wheel. We factorize this pairwise compatibility into two parts: the spatial similarity $s ( i , j )$ between the locations i and $j$ (for example, if i and $j$ are close to each other in the 2D token image, they will be strongly related) and the label compatibility $c ( x _ { i } , x _ { j } )$ between the tokens $x _ { i }$ and $x _ { j }$ (for example, highly compatible tokens are able to coexist with each other). We therefore have:",
+        "bbox": [
+            496,
+            559,
+            893,
+            803
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/8808bf1aca5a48d1b7179a718cfbf9a42659933245046c9e957f9483300f4f64.jpg",
+        "text": "$$\np _ { i j } ( x _ { i } , x _ { j } ) = - c ( x _ { i } , x _ { j } ) s ( i , j ) .\\tag{4}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            588,
+            828,
+            802,
+            844
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "In classic MRFs, the pairwise interactions exist only between neighboring pixels. In contrast, for increased flexibility, we allow interactions between all pairs of locations, similar to the fully-connected CRFs in the image segmentation setting [14,36]. However, there are a number of important differences in our formulation compared to the fullyconnected CRFs in image segmentation: in the latter, spatial similarity $s ( i , j )$ is derived conditioned on the input image (hence the name conditional random fields), using Gaussian potentials in spatial and bilateral domains. This Gaussian assumption is crucial for the tractability of their models since the image segmentation CRFs work in a large image grid: in practical implementations pixels that are far away by more than a few standard deviations of the Gaussian kernel are considered not connected [1]. In contrast, we make our graphical model truly fully-connected and learn $s ( i , j )$ with backpropagation without fixing them to be Gaussian. Furthermore, the CRFs in image segmentation can assume a Potts model for label compatibility because assigning the same label to nearby pixels generally improves the smoothness of the segmentation. In our application, on the other hand, it is not straightforward to assign semantic meanings to tokens and Potts model does not intuitively makes sense since the same token at similar locations does not increase the meaningfulness of a token assignment. We therefore learn the pairwise connections $p _ { i j } ( . , . )$ , completely from data without using any priors or heuristics. Thus, our MRF formulation has two learnable weight matrices: $\\mathbf { W ^ { s } }$ , with $\\mathbf { W ^ { s } } _ { i j } : = s ( i , j )$ and $\\mathbf { W ^ { c } }$ , with $\\mathbf { W ^ { c } } _ { k k ^ { \\prime } } : = c ( k , k ^ { \\prime } )$",
+        "bbox": [
+            496,
+            854,
+            892,
+            901
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "page_number",
+        "text": "9319",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            92,
+            472,
+            484
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Given our probabilistic graphical model, finding the final token arrangement amounts to finding the assignment x that maximizes $P ( \\mathbf { X } = \\mathbf { x } )$ This can be done efficiently via mean-field inference, where we approximate P(X) ≈ $\\begin{array} { r } { Q ( \\mathbf { X } ) : = \\prod _ { i } Q _ { i } ( X _ { i } ) } \\end{array}$ , with $Q _ { i } ( . )$ being the marginal distribution for $X _ { i }$ . The distribution $Q ( \\mathbf { X } )$ is then iteratively refined to minimize the KL divergence between P and Q. We refer the reader to [13] and [14] for more details on the derivations. The resulting inference algorithm is summarized in Algorithm 1. Note that all operations of this algorithm can be implemented via simple matrix multiplication and other common operations such as softmax(. ), which are readily available in any deep learning library. Importantly, the cost our MRF inference is negligible compared to prediction with a large Transformer model.",
+        "bbox": [
+            75,
+            483,
+            470,
+            712
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "4. MarkovGen",
+        "text_level": 2,
+        "bbox": [
+            76,
+            723,
+            205,
+            739
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "We now demonstrate the benefits of the proposed MRF model by using it to speed up the state-of-the-art Muse image generation model [2]. We achieve this speed-up by replacing the last few sampling steps of Muse with MRF inference. Specifically, we let Muse execute the first few steps and then use our extremely lightweight MRF inference to fast-forward the remaining steps. This model, dubbed MarkovGen, improves the speed of image generation by 1.5× while simultaneously also improving quality.",
+        "bbox": [
+            75,
+            750,
+            470,
+            886
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "The Muse model works in the discrete VQGAN token space [8], which is gradually emerging as a centerpiece of many text-to-image generation algorithms. Muse generates images by first performing a series of inference steps with the base model to predict a small grid of $1 6 \\times 1 6$ image tokens, conditioned on text embeddings generated by a T5- XXL [20] text encoder. This is followed by a few steps of the super-resolution (SR) model to predict a larger grid of 32 × 32 image tokens by conditioning on both the text embeddings and the tokens generated by the base model. Due to the larger set of tokens, a single iteration of the SR transformer model is substantially more computationally expensive than that of the base model. We exploit this multi-scale approach to speed up inference efficiency by using more steps in the base model, followed by much fewer steps with the SR model. Once SR tokens are generated, the VQGAN [8] detokenizer is used to render the image in pixel space.",
+        "bbox": [
+            96,
+            885,
+            468,
+            900
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "table",
+        "img_path": "images/0dc17351ce58b995063db848e5ac1433caa049b8787725ee001288e464e1d83a.jpg",
+        "table_caption": [
+            "Table 1. Average inference times for different components of the MarkovGen models on a TPUv4 device. The MRF inference is almostfree compared to the costs of the Muse Transformer models. Furthermore, MRF inference is independent of the image resolutions (rows 3 and 4). We make Muse inference 1.5× faster by introducing the MRF model."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Model Time (ms)</td></tr><tr><td>Muse base (single step) 10.40</td></tr><tr><td>Muse super-resolution (single step) 24.00</td></tr><tr><td>MRF inference on base 0.29</td></tr><tr><td>MRF inference on super-resolution 0.29</td></tr><tr><td>T5-XXL inference 0.30</td></tr><tr><td>Detokenizer 0.15</td></tr><tr><td>Muse 442.05</td></tr><tr><td>MarkovGen (ours) 281.03</td></tr></table>",
+        "bbox": [
+            526,
+            89,
+            866,
+            244
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            385,
+            893,
+            643
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "The goal of MarkovGen is to fast-forward the later part of the Muse model and replacing it with the MRF outlined in the previous section. To achieve this, we train the MRF to match the final predictions of the Muse model, given the output at an intermediate step. By fast-forwarding after the step k, out of a total of n, we instantly save $( n - k ) / n \\times$ 100% of the Muse model’s inference time. This is because the inference time of the MRF is negligible compared to that of the Muse steps as shown in Table 1. The same strategy is used for both the base model and the SR model, to achieve an overall boost of 1.5× in inference speed.",
+        "bbox": [
+            496,
+            650,
+            893,
+            818
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Muse determines the token values independently at each sampling stage, and our structured prediction, enforces the learned compatibility relations jointly on the different token values, and thereby leading to improved quality as demonstrated in the experiments.",
+        "bbox": [
+            496,
+            824,
+            893,
+            901
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "page_number",
+        "text": "9320",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "image",
+        "img_path": "images/feef037374cefd667257bcbe87f3135c38d54699a60cacc305cb5c9887147eb0.jpg",
+        "image_caption": [
+            "Step 1",
+            "Figure 4. The first four steps of the Muse super-resolution model without (top) and with (bottom) the application of the MarkovGen MRF model. Note that the MRF fixes complex object structures such as the dog’s face as well as texture-inconsistencies in areas such as the brick wall. MarkovGen generates good looking high quality images starting from the first step."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            81,
+            106,
+            890,
+            412
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "5. Experiments",
+        "text_level": 2,
+        "bbox": [
+            76,
+            479,
+            210,
+            496
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "In this section, we show that MarkovGen achieves both faster inference and improved image quality compared to Muse, which it uses as its backbone. Muse by itself has already been shown to be much faster than other stateof-the-art text-to-image models such as Dall-E, Dall-E 2, Parti, Imagen, and Stable Diffusion [2], outperforming the second-fastest method by a factor of approximately 3× (Table 3 of [2]). Furthermore, as evidenced by Table 1 & 2 of [2], Muse achieves better quality results compared to these methods, as measured with the FID scores. Human evaluation results for image quality in [2] showed that humans preferred Muse outputs for 70.6% prompts while Stable Diffusion was preferred for only 25.4%. Since Muse is already shown to outperform other state-of-the-art methods in terms of both speed and quality, we focus on comparing our results to that of Muse.",
+        "bbox": [
+            75,
+            508,
+            472,
+            751
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Model and Dataset: We use a Muse model with approximately 1.7B parameters, trained on the WebLI dataset [5]. This model was generously made available to us by the authors of the Muse paper. We refer the reader to [2] for more details on the architecture and the training setup of Muse. The same WebLI dataset was used to train the MRF model.",
+        "bbox": [
+            75,
+            772,
+            470,
+            864
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "MRF Training: We train two MRF models, one for fastforwarding the base and one for SR model respectively. Each model contains two weight matrices for spatial and label compatibilities: $2 5 6 \\times 2 5 6 ~ \\mathbf { W _ { b a s e } ^ { s } }$ and $8 1 9 2 \\times 8 1 9 2$ $\\mathbf { W _ { b a s e } ^ { c } }$ for thr base, and $1 0 2 4 \\times 1 0 2 4 \\mathrm { \\mathbf { W _ { S R } ^ { s } } }$ and 8192×8192 $\\mathbf { W _ { S R } ^ { c } }$ for the SR model. All MRF weights are trained with back-propagation and gradient descent, with the ADAM optimizer. We use a two-stage approach for MRF training. First, we pre-train the MRF model using a self-supervised masked-token prediction loss [2, 6]. Specifically, we obtain VQGAN tokens for an image, randomly mask 20% of them and train the MRF model to predict the masked tokens using the categorical cross-entropy loss. Second, we fine-tune the MRF model to imitate the last n − k steps of the Muse model: Given the output of the Muse model after the kth iteration, the spatial and label compatibility matrices are learned such that the MRF inference matches the final predictions of the Muse model after n iterations using the KL divergence loss. Both base and SR MRF models are trained in the same manner. Both MRF models complete training in just a few hours on TPUv4 chips.",
+        "bbox": [
+            75,
+            885,
+            468,
+            900
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            481,
+            893,
+            785
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Experimental Setup: The base model operates on a 16×16 token grid with 24 sampling steps to produce 256 × 256 images. The SR model works on a $3 2 \\times 3 2$ token grid and produces 512 × 512 images in 8 additional steps. Markov-Gen uses both the base and SR MRF models to trade with the base and SR sampling steps of the Muse model, respectively. We apply the base MRF after step 20 of the base Muse model, and the SR MRF after 3 steps of the SR Muse model, cutting down 4 and 5 steps respectively. This results in a speedup of 1.5× for MarkovGen compared to Muse.",
+        "bbox": [
+            496,
+            809,
+            893,
+            901
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "header",
+        "text": "Step 2",
+        "bbox": [
+            375,
+            89,
+            423,
+            103
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "header",
+        "text": "Step 3",
+        "bbox": [
+            573,
+            89,
+            620,
+            103
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "header",
+        "text": "Step 4",
+        "bbox": [
+            767,
+            89,
+            816,
+            103
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "page_number",
+        "text": "9321",
+        "bbox": [
+            480,
+            944,
+            514,
+            958
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "chart",
+        "img_path": "images/8debd45b6944f55b7c4a8bdfa305b86ed4e60ff21db22d9def8d66135de1197b.jpg",
+        "content": "",
+        "chart_caption": [
+            "Figure 5. Percentage ofprompts for which human raters prefer images by a given model in a side-by-side comparison. We observe that human raters strongly prefer the images generated by MarkovGen over those of both early exit Muse (left) and even the more expensive and slowerfull Muse model (center)."
+        ],
+        "chart_footnote": [],
+        "bbox": [
+            191,
+            92,
+            772,
+            250
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "table",
+        "img_path": "images/58244c30a22d869833d54037070bb1d9906faadbd39ac4201e20d21172efbab4.jpg",
+        "table_caption": [
+            "Table 2. Quantitative evaluation of FID scores on the MS-COCO [16] dataset for 256 × 256 image resolution. MarkovGen outperforms both the Early Exit as well as the full Muse model."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Model</td><td>FID</td></tr><tr><td>Early Exit Muse base (18 iters)</td><td>14.37</td></tr><tr><td>Full Muse base (24 iters)</td><td>13.13</td></tr><tr><td>MarkovGen (18 iters)</td><td>12.28</td></tr></table>",
+        "bbox": [
+            130,
+            311,
+            413,
+            386
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            455,
+            470,
+            517
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "In our experiments we compare 3 different models: (A) full Muse, (B) MarkovGen, and (C) an early exit Muse model that also stops Muse iterations early to have comparable speed to MarkovGen, but without the application of the MarkovGen MRF model.",
+        "bbox": [
+            75,
+            517,
+            472,
+            593
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Qualitative Evaluation:",
+        "text_level": 2,
+        "bbox": [
+            76,
+            609,
+            246,
+            625
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "In Figure 4 we study the progression of the generated images during the invocation of the Muse SR model. At each step, we show the output of early exit Muse (top) and the improved result after the application of the MarkovGen MRF (bottom). The results show that while the Muse model slowly improves result quality, MarkovGen provides high quality results already after the first step. We observe that MarkovGen with just 3 SR steps already consistently produces images comparable or better than the full Muse results after the total of 8 SR steps. Figure 6 demonstrates this using a series of Parti Prompts [34], where we compare the results of the full Muse model (left), early exit Muse (middle) and, our MarkovGen model with a 1.5× speed-up (right). We observe that the model is able to produce a wide variety of images ranging from artistic to natural images.",
+        "bbox": [
+            75,
+            626,
+            472,
+            854
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Quantitative Evaluation: Figure 5 summarizes the results of our human evaluation study. Using the 1633 prompts from the Parti promts dataset, we generated three images with full Muse, early exit Muse, and our proposed Markov-Gen model respectively. To allow raters to focus on image quality, we use the same random seed across models to ensure that image content and degree of alignment to the prompt are the same across the generated images. Asked to evaluate which image is of higher quality, we present human raters with two generated images side-by-side. Raters are given the option of choosing either image or that they are indifferent. All image pairs are evaluated by 3 independent raters that were hired through a high-quality crowd computing platform. The raters and the authors of this paper were anonymous to each other. For each pairwise comparison, we consider an image to be of higher quality if it is selected by at least 2 raters.",
+        "bbox": [
+            75,
+            869,
+            472,
+            901
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            314,
+            893,
+            541
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "From the results we observe that human raters strongly prefer the images generated by MarkovGen over those of both early exit Muse (left) and even the more expensive and slower full Muse model (center). We also compared early exit Muse to full Muse (right) and verified that human raters can clearly identify the quality improvement achieved by the last stages of the Muse model. This result demonstrates that MarkovGen not only achieves a drastic speedup of 1.5x over Muse, but also significantly improves image quality.",
+        "bbox": [
+            496,
+            541,
+            893,
+            693
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "In addition to human evaluation, Table 2 shows singleshot FID scores on the MS-COCO dataset [16]. We use the base Muse model for this evaluation. Again, in line with the human evaluation, we observe that MarkovGen achieves better results than full Muse, which in turn outperforms early exit Muse.",
+        "bbox": [
+            496,
+            693,
+            893,
+            785
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "6. Conclusion",
+        "text_level": 2,
+        "bbox": [
+            500,
+            814,
+            620,
+            832
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "The proposed MarkovGen model showed a significant inference speed-up of 1.5× and a clear quality gain over Muse by fast-forwarding the last few steps of Muse model with MRF inference. The MRF model achieves this by",
+        "bbox": [
+            496,
+            839,
+            895,
+            901
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "page_number",
+        "text": "9322",
+        "bbox": [
+            480,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "image",
+        "img_path": "images/872287619f76887ffca4e07d71de2a44c2ab66282930ce50cb35c6d4841e20ac.jpg",
+        "image_caption": [],
+        "image_footnote": [
+            "A robot painted as graffiti on a brick wall. a sidewalk is in front of the wall, and grass is growing out of cracks in the concrete.",
+            "A set of 2x2 emoji icons with happy, angry, surprised and sobbing faces. The emoji icons look like pandas. All of the pandas are wearing colorful sunglasses."
+        ],
+        "bbox": [
+            78,
+            85,
+            892,
+            674
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Figure 6. Within each set of three, MarkovGen (right) speeds up Muse (left) by 1.5× and improves image quality. A similar speed up by only reducing the step count with early exit Muse (middle) results in a significant loss ofquality.",
+        "bbox": [
+            75,
+            696,
+            892,
+            726
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "learning the spatial and token label compatibility relationships in the discrete VQGAN token space. Our MRF model can be trained in just a few hours, allowing us to use it in conjunction with pre-trained Muse models, to observe almost immediate improvements.",
+        "bbox": [
+            75,
+            733,
+            470,
+            809
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "While providing clear benefits over independent perpatch token selection, our current MRF model does not yet utilize the provided text prompt, with text guidance coming solely through the unaries. An interesting direction of future work would be to make the spatial and token compatibility weights be dependent on the text prompt, allowing the MRF (or in this case, the CRF) to adapt to text input.",
+        "bbox": [
+            75,
+            810,
+            472,
+            901
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            498,
+            734,
+            812,
+            748
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Another direction of future work lies in training the Muse model itself jointly with the MRF layers, so as to ensure that the unaries produced by Muse are optimal for use with MRF-based decoding.",
+        "bbox": [
+            496,
+            750,
+            893,
+            810
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Acknowledgment",
+        "text_level": 2,
+        "bbox": [
+            500,
+            828,
+            651,
+            845
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "We would like to thank Apurv Suman, Dilip Krishnan, Jarred Barber, Huiwen Chang, Jason Baldridge, and the anonymous reviewers for their valuable feedback.",
+        "bbox": [
+            496,
+            854,
+            893,
+            901
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "page_number",
+        "text": "9323",
+        "bbox": [
+            480,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "References",
+        "text_level": 2,
+        "bbox": [
+            78,
+            89,
+            174,
+            106
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "list",
+        "sub_type": "ref_text",
+        "list_items": [
+            "[1] Andrew Adams, Jongmin Baek, and Myers Abraham Davis. Fast high-dimensional filtering using the permutohedral lattice. In Eurographics, 2010. 5",
+            "[2] Huiwen Chang, Han Zhang, Jarred Barber, AJ Maschinot, Jose Lezama, Lu Jiang, Ming-Hsuan Yang, Kevin Murphy, William T. Freeman, Michael Rubinstein, Yuanzhen Li, and Dilip Krishnan. Muse: Text-to-image generation via masked generative transformers. ICML, 2023. 2, 3, 5, 6",
+            "[3] Huiwen Chang, Han Zhang, Lu Jiang, Ce Liu, and William T. Freeman. Maskgit: Masked generative image transformer. In CVPR, 2022. 2, 3",
+            "[4] Liang-Chieh Chen, George Papandreou, Iasonas Kokkinos, Kevin Murphy, and Alan L. Yuille. Semantic image segmentation with deep convolutional nets and fully connected crfs. In ICLR, 2015. 3",
+            "[5] Xi Chen, Xiao Wang, Soravit Changpinyo, AJ Piergiovanni, Piotr Padlewski, Daniel Salz, Sebastian Goodman, Adam Grycner, Basil Mustafa, Lucas Beyer, Alexander Kolesnikov, Joan Puigcerver, Nan Ding, Keran Rong, Hassan Akbari, Gaurav Mishra, Linting Xue, Ashish Thapliyal, James Bradbury, Weicheng Kuo, Mojtaba Seyedhosseini, Chao Jia, Burcu Karagol Ayan, Carlos Riquelme, Andreas Steiner, Anelia Angelova, Xiaohua Zhai, Neil Houlsby, and Radu Soricut. Pali: A jointly-scaled multilingual language-image model, 2022. 6",
+            "[6] Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova. Bert: Pre-training of deep bidirectional transformers for language understanding. arXiv preprint arXiv:1810.04805, 2018. 3, 6",
+            "[7] Ming Ding, Wendi Zheng, Wenyi Hong, and Jie Tang. Cogview2: Faster and better text-to-image generation via hierarchical transformers. In NeurIPS, 2022. 3",
+            "[8] Patrick Esser, Robin Rombach, and Bjorn Ommer. Taming¨ transformers for high-resolution image synthesis. In CVPR, 2021. 2, 3, 5",
+            "[9] Oran Gafni, Adam Polyak, Oron Ashual, Shelly Sheynin, Devi Parikh, and Yaniv Taigman. Make-a-scene: Scenebased text-to-image generation with human priors. In ECCV, 2022. 3",
+            "[10] Songwei Ge, Thomas Hayes, Harry Yang, Xi Yin, Guan Pang, David Jacobs, Jia-Bin Huang, and Devi Parikh. Long video generation with time-agnostic vqgan and timesensitive transformer, 2022. 3",
+            "[11] Shuyang Gu, Dong Chen, Jianmin Bao, Fang Wen, Bo Zhang, Dongdong Chen, Lu Yuan, and Baining Guo. Vector quantized diffusion model for text-to-image synthesis. In CVPR, 2021. 2",
+            "[12] Jonathan Ho, Ajay Jain, and Pieter Abbeel. Denoising diffusion probabilistic models. In NeurIPS, 2020. 3",
+            "[13] D. Koller and N. Friedman. Probabilistic Graphical Models: Principles and Techniques. MIT Press, 2009. 2, 5",
+            "[14] Philipp Krahenbuhl and Vladlen Koltun. Efficient inference in fully connected crfs with gaussian edge potentials. In NeurIPS, 2011. 2, 3, 5",
+            "[15] Nupur Kumari, Bingliang Zhang, Richard Zhang, Eli Shechtman, and Jun-Yan Zhu. Multi-concept customization of text-to-image diffusion, 2023. 3",
+            "[16] Tsung-Yi Lin, Michael Maire, Serge Belongie, James Hays, Pietro Perona, Deva Ramanan, Piotr Dollar, and C Lawrence´ Zitnick. Microsoft coco: Common objects in context. In Computer Vision–ECCV 2014: 13th European Conference, Zurich, Switzerland, September 6-12, 2014, Proceedings, Part V 13, pages 740–755. Springer, 2014. 7",
+            "[17] Y. Liu M. Ghazvininejad, O. Levy and L. Zettlemoyer. Mask-predict: Parallel decoding of conditional masked language models. In EMNLP, 2019. 3",
+            "[18] Midjourney, 2022. https:://www.midjourney.com. 1, 3",
+            "[19] Alex Nichol, Prafulla Dhariwal, Aditya Ramesh, Pranav Shyam, Pamela Mishkin, Bob McGrew, Ilya Sutskever, and Mark Chen. GLIDE: towards photorealistic image generation and editing with text-guided diffusion models. In ICML, 2022. 3",
+            "[20] Colin Raffel, Noam Shazeer, Adam Roberts, Katherine Lee, Sharan Narang, Michael Matena, Yanqi Zhou, Wei Li, and Peter J. Liu. Exploring the limits of transfer learning with a unified text-to-text transformer. J. Mach. Learn. Res., 2020. 5",
+            "[21] Aditya Ramesh, Prafulla Dhariwal, Alex Nichol, Casey Chu, and Mark Chen. Hierarchical text-conditional image generation with clip latents. preprint, 2022. [arxiv:2204.06125]. 1, 3",
+            "[22] Aditya Ramesh, Mikhail Pavlov, Gabriel Goh, Scott Gray, Chelsea Voss, Alec Radford, Mark Chen, and Ilya Sutskever. Zero-shot text-to-image generation. In International Conference on Machine Learning, pages 8821–8831. PMLR, 2021. 3",
+            "[23] Dominic Rampas, Pablo Pernias, Elea Zhong, and Marc Aubreville. Fast text-conditional discrete denoising on vector-quantized latent spaces. preprint, 2022. [arXiv:2211.07292]. 3",
+            "[24] Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, and Bjorn Ommer. High-resolution image syn-¨ thesis with latent diffusion models. In CVPR, 2022. 1, 2, 3",
+            "[25] Chitwan Saharia, William Chan, Saurabh Saxena, Lala Li, Jay Whang, Emily Denton, Seyed Kamyar Seyed Ghasemipour, Burcu Karagol Ayan, S. Sara Mahdavi, Rapha Gontijo Lopes, Tim Salimans, Jonathan Ho, David J Fleet, and Mohammad Norouzi. Photorealistic text-toimage diffusion models with deep language understanding. preprint, 2022. [arXiv:2205.11487]. 1, 2, 3",
+            "[26] Tim Salimans and Jonathan Ho. Progressive distillation for fast sampling of diffusion models. In ICLR, 2022. 3",
+            "[27] Uriel Singer, Adam Polyak, Thomas Hayes, Xi Yin, Jie An, Songyang Zhang, Qiyuan Hu, Harry Yang, Oron Ashual, Oran Gafni, Devi Parikh, Sonal Gupta, and Yaniv Taigman. Make-a-video: Text-to-video generation without text-video data, 2022. 3",
+            "[28] Jascha Sohl-Dickstein, Eric Weiss, Niru Maheswaranathan, and Surya Ganguli. Deep unsupervised learning using nonequilibrium thermodynamics. In Proceedings of the 32nd International Conference on Machine Learning, 2015. 3"
+        ],
+        "bbox": [
+            84,
+            116,
+            467,
+            157
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "page_number",
+        "text": "9324",
+        "bbox": [
+            482,
+            945,
+            516,
+            957
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "list",
+        "sub_type": "ref_text",
+        "list_items": [
+            "[29] Yixuan Su, Deng Cai, Yan Wang, David Vandyke, Simon Baker, Piji Li, and Nigel Collier. Non-autoregressive text generation with pre-trained language models. In EACL, 2021. 3",
+            "[30] Zhiqing Sun, Zhuohan Li, Haoqing Wang, Zi Lin, Di He, and Zhi-Hong Deng. Fast structured decoding for sequence models. In NeurIPS, 2019. 3",
+            "[31] Richard Szeliski, Ramin Zabih, Daniel Scharstein, Olga Veksler, Vladimir Kolmogorov, Aseem Agarwala, Marshall Tappen, and Carsten Rother. A comparative study of energy minimization methods for markov random fields with smoothness-based priors. IEEE Transactions on Pattern Analysis and Machine Intelligence, 30(6):1068–1080, 2008. 3",
+            "[32] Aaron van den Oord, Oriol Vinyals, and Koray¨ Kavukcuoglu. Neural discrete representation learning. preprint, 2017. [arXiv:1711.00937]. 3",
+            "[33] Ruben Villegas, Mohammad Babaeizadeh, Pieter-Jan Kindermans, Hernan Moraldo, Han Zhang, Mohammad Taghi Saffar, Santiago Castro, Julius Kunze, and Dumitru Erhan. Phenaki: Variable length video generation from open domain textual description, 2022. 3",
+            "[34] Jiahui Yu, Yuanzhong Xu, Jing Yu Koh, Thang Luong, Gunjan Baid, Zirui Wang, Vijay Vasudevan, Alexander Ku, Yinfei Yang, Burcu Karagol Ayan, Ben Hutchinson, Wei Han, Zarana Parekh, Xin Li, Han Zhang, Jason Baldridge, and Yonghui Wu. Scaling autoregressive models for content-rich text-to-image generation. In ICML, 2022. 1, 2, 3, 7",
+            "[35] Lvmin Zhang, Anyi Rao, and Maneesh Agrawala. Adding conditional control to text-to-image diffusion models, 2023. 3",
+            "[36] Shuai Zheng, Sadeep Jayasumana, Bernardino Romera-Paredes, Vibhav Vineet, Zhizhong Su, Dalong Du, Chang Huang, and Philip H. S. Torr. Conditional random fields as recurrent neural networks. In ICCV, 2015. 2, 3, 5"
+        ],
+        "bbox": [
+            80,
+            93,
+            468,
+            146
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "page_number",
+        "text": "9325",
+        "bbox": [
+            482,
+            945,
+            516,
+            957
+        ],
+        "page_idx": 9
+    }
+]
