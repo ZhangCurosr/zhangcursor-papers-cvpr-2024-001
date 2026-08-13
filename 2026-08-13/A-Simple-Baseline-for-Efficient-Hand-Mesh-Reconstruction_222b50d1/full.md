@@ -1,0 +1,392 @@
+# A Simple Baseline for Efficient Hand Mesh Reconstruction
+
+Zhishan Zhou<sup>\*</sup>, Shihao Zhou<sup>\*</sup>, Zhi Lv , Minqiang Zou, Yao Tang, Jiajun Liang Jiiov Technology
+
+{ zhishan.zhou, shihao.zhou, zhi.lv, minqiang.zou, yao.tang, jiajun.liang}@jiiov.com
+
+http://simplehand.github.io
+
+## Abstract
+
+Hand mesh reconstruction has attracted considerable attention in recent years, with various approaches and techniques being proposed. Some of these methods incorporate complex components and designs, which, while effective, may complicate the model and hinder efficiency. In this paper, we decompose the mesh decoder into token generator and mesh regressor. Through extensive ablation experiments, we found that the token generator should select discriminating and representative points, while the mesh regressor needs to upsample sparse keypoints into dense meshes in multiple stages. Given these functionalities, we can achieve high performance with minimal computational resources. Based on this observation, we propose a simple yet effective baseline that outperforms state-of-the-art methods by a large margin, while maintaining real-time efficiency. Our method outperforms existing solutions, achieving state-of-the-art (SOTA) results across multiple datasets. On the FreiHAND dataset, our approach produced a PA-MPJPE of 5.8mm and a PA-MPVPE of 6.1mm. Similarly, on the DexYCB dataset, we observed a PA-MPJPE of 5.5mm and a PA-MPVPE of 5.5mm. As for performance speed, our method reached up to 33 frames per second (fps) when using HRNet and up to 70 fps when employing FastViT-MA36. Code will be made available.
+
+## 1. Introduction
+
+The field of hand mesh reconstruction has seen rapid advancements, with various types of mesh decoders being proposed. Despite their commendable performance, these methods often suffer from high system complexity, involving unnecessary components that may hinder efficiency. To facilitate a clear discussion, we decompose the mesh decoder into two primary components: the token generator and the mesh regressor.
+
+![](images/1dad238c5d8472e9c664128e74fe0fa7b473d927b3be177e8b95fe2d553b0e12.jpg)  
+Figure 1. Trade-off between Accuracy and Inference Speed. Our technique surpasses non-real-time methods(≤ 40 fps) in both speed and precision. Compared to real-time methods (≥ 70 fps), it offers a substantial boost in accuracy while preserving comparable speeds. For fair comparison, all speed evaluations were conducted on a 2080ti GPU with a batch size of one.
+
+The token generator serves a crucial role by integrating prior information with image features to extract taskspecific features. For instance, FastMETRO [5] employs a strategy to predict weak-perspective camera parameters, which aggregates image features. MobRecon [4] develops a stacked encoding network to obtain gradually refined encoding features, and applies a technique known as pose pooling to suppress features that are unrelated to joint landmarks. PointHMR [7] on the other hand, proposes to use features sampled at positions of vertices projected from 3D to 2D spaces as intermediate guidance. These approaches collectively provide informative and discriminating features that enhance the overall performance of the system.
+
+The mesh regressor, the second component, decodes the tokenized features obtained from the token generator into mesh predictions. FastMETRO [5] takes a set of learnable joint tokens and vertex tokens as input and masks self-attentions of non-adjacent vertices according to the topology of the triangle mesh during training. MobRecon [4] employs a strategy of 2D-to-3D lifting and Poseto-vertex lifting to gradually approximate meshes. Mesh-Graphormer [11] uses a coarse template mesh for positional encoding and then applies a linear Multi-Layer Perceptron (MLP) to sample the coarse mesh up to the original resolution. These methods aim to alleviate training difficulties due to heterogeneous modalities.
+
+Through investigation on existing methods, we found a interesting phenomenon that, although some methods shares same performance, they differs in specific failure cases. Namely, methods with coarse sampling strategy lack perceptual ability for fine-grained gestures such as pinch. Methods with limited upsample layers struggles in generating reasonable hand shapes. This observation prompts us to question: How different structures make effect on mesh decoder? By answering the question, we can streamline the process, eliminating excessive computation and complex components, to complete mesh prediction in a simple and efficient way. To design concise experiments, we start from the simplest structure for the aforementioned two modules, then gradually add and optimize the most commonly used components abstracted from the state-of-the-art (SOTA) methods.
+
+Through extensive ablation experiments, we discovered that the important structure of token generator is to sample discriminating and representative points, while the important structure of mesh generator is to upsample sparse keypoints into dense meshes. For implicitly, in the following paper, we define each of these structure as core structure. In the model design process, provided that the core structure’s functionality is fulfilled, high performance can be achieved with minimal computational resources.
+
+Based on these observations, we propose a simple baseline that surpasses the SOTA methods by a significant margin and is computationally efficient. Referring to Figure 1, our proposed technique delivers state-of-the-art performance on various datasets. On the FreiHAND [28] dataset, it recorded a PA-MPJPE of 5.8mm and PA-MPVPE of 6.1mm. When tested on the DexYCB [1] dataset, these metrics were further refined to a PA-MPJPE of 5.5mm and a PA-MPVPE of 5.5mm. Our method is also advantaged in efficiency, achieving 33 frames per second (fps) on HRNet[23] and an impressive 70 fps on FastViT-MA36 [21]. Our contributions can be summarized as follows:
+
+1. We abstract existing methods into token generator and mesh regressor modules, and reveal the core structures of these two modules respectively.
+
+2. Based on these core structures, we developed a streamlined, real-time hand mesh regression module that excels in both efficiency and accuracy.
+
+3. Our method has achieved PA-MPJPE of 5.7mm and PA-MPVPE of 6.0mm on FreiHAND, and achieved SOTA results on multiple datasets, demonstrating its effectiveness and generalizability.
+
+## 2. Related Work
+
+In this section, we briefly review existing methods of hand mesh reconstruction which usually include two main components: a token generator and a mesh regressor. Token generator processes the backbone image feature and generates tokens fed to the decoder. Mesh regressor decodes the input tokens into 3D mesh directly or parametric hand model coefficient.
+
+## 2.1. Hand Mesh Reconstruction
+
+Estimating the 3D hand mesh from a single image has been widely researched. [27] proposes an end-to-end framework to recover hand mesh from a monocular RGB image. They use the 2D heatmap as input tokens and fully convolutional and fully connected layers to regress the MANO [17] parameters.
+
+Transformer [22] has shown powerful performance in language and vision tasks which could model long range relation among input tokens. MetaFormer [26] argues that the general architecture of transformers instead of the spe cific token mixer is the key player. They replace the selfattention module with a simple spatial pooling operator and achieve competitive performance with fewer parameters and less computation. METRO [11] extracts a single global image feature with a convolutional neural network and performs position encoding by repeatedly concatenating the image feature with 3D coordinates of a mesh template. A multi-layer transformer encoder with progressive dimensionality reduction regresses the 3D coordinates of mesh vertices with these input tokens. Due to the constraints of memory and computation, the transformer only processes a coarse mesh by sub-sampling twice with a sampling algorithm [16], and Multi-Layer Perceptrons (MLPs) are then used to upsample the coarse mesh to the original mesh.
+
+Graph convolutional neural network(GCNN) [9] is good at modeling the local interaction between neighbor vertices, thus it is very appropriate for mesh reconstruction. Pose2Mesh [6] designs a cascaded architecture to regress 3D mesh vertices from 2D pose directly using GCNN. MeshGraphormer [11] combines the ability of transformer and GCNN presenting a graph-convolutionreinforced transformer to model both local and global interactions.
+
+Instead of extracting a global feature from the input image, pointHMR [7] argues that sampling features guided by vertex-relevant points could better utilize the correspondence between encoded features and spatial positions. They conduct feature sampling by element-wise multiplication of image feature and 2D heatmap trained by projection of 3D mesh vertices. These sampled features are then fed into the transformer encoder with progressive attention mask as the form of vertex token. The progressively decreased local connection range realized by constraining the attention mask encourage the model to consider the local relationship between neighbor vertices. They also use linear projection to reduce the dimension of the encoded token and upsampling algorithm [16] to expand the sparse vertices into original dense vertices.
+
+![](images/26cb27bf72cca81e01dd7f1fb5b713235d4853cb0549256376e0686a9407e456.jpg)  
+A
+
+![](images/2e60bde848164c264ad80417dc562ff48a4bed6f1ca224d20cf0e69005ca4cf8.jpg)  
+B
+
+![](images/824a07aa2073aa01eb2e9ac77d7769a641897bd52bc3d0aa8298aad43b8902ea.jpg)
+
+![](images/981d928b858ae57f34e7bb66212dd7c611fba65556bafc59b9b1eb3105fd6e4f.jpg)
+
+![](images/49642e7693b0581444704f0807c50b77761bfc325e91fd197f34e5a72996f12e.jpg)  
+D  
+E
+
+C  
+![](images/38a7d85a03d01341fd991c6641f5543203ff3ad0240efa50a833298ab3a648a8.jpg)  
+F  
+Figure 2. An illustration demonstrates various designs of token generators. The grids colored in red represent the sampled points. a) Global feature; b) Grid sampling; c) Keypoint-guided sampling on the original feature map; d) Keypoint-guided sampling with 4x upsampling, resulting in an enhanced feature; e) Keypoint-guided sampling with 4x upsampling, where the feature is further improved by convolution; f) Coarse-mesh-guided point sampling with 4x upsampling.
+
+## 2.2. Lightweight Networks
+
+To achieve real-time hand mesh reconstruction, many lightweight networks have been studied for years. FastViT [21] is a hybrid vision transformer architecture which obtains state-of-the-art latency-accuracy tradeoff by structural reparameterization and train-time overparametrization techniques. MobRecon [4] designs multiple complicated modules to improve efficiency, including a stacked 2D encoding structure, a map-based position regression 2D-to-3D block and a graph operator based on spiral sampling [10]. FastMETRO [5] identifies the performance bottleneck of encoder-based transformers is caused by token design. They propose an encoder-decoder architecture to disentangle the interaction among input tokens which reduces the parameter.
+
+## 3. Method
+
+In our research, we dissected the existing methods into two key components: a token generator and a mesh regressor. However, defining the optimal core structure for each of these modules remains a challenging task. For each module, we start with a fundamental, intuitive structure, and then progressively incorporate the most commonly used components, which we have abstracted from state-of-theart (SOTA) methods.
+
+Given that these two modules, the token generator and the mesh regressor, operate in tandem, it’s important to keep one constant when analysing the other. In practical terms, we first conduct experiments on the mesh regressor while keeping the token generator, as depicted in Figure 2-B, constant. Then, we apply the mesh regressor configuration that demonstrated the best performance to the token generator in subsequent experiments.
+
+## 3.1. Token Generator
+
+Given a single image of dimensions {H, W}, our model utilizes a backbone to extract image features $\sum _ { b } \in \frac { H } { 3 2 } \times \frac { W } { 3 2 } \times C$ The token generator T takes $X _ { b }$ as input and produces tokenized mesh feature $X _ { m } ^ { \in N \times C }$ , where N denotes the number of sampled points. Thus, we can express this as $X _ { m } \ =$ $T ( X _ { b } )$ .
+
+Starting with the simplest implementation, we apply a single spatial pooling (Figure 2-A). This approach establishes a surprisingly competitive baseline, comparable to the Fastmetro [5]. Changing spatial pooling to point sample (Figure 2-B) improves the performance. To further improve the quality of the feature, we follow the MobRecon [4] model and conduct keypoint-guided point sampling(Figure 2-C). However, this modification did not yield any noticeable improvement.
+
+Upon visual inspection, it appears that a $7 \times 7$ resolution is not sufficiently discriminating. Consequently, we apply deconvolution on $X _ { b }$ to sample the feature map to 14 × 14 then $2 8 \times 2 8 ( \mathrm { F i g u r e } \ 2 \mathbf { - D } )$ ), respectively. This approach results in progressive improvement, but it does not work for 8× deconvolution or larger.
+
+Models such as MobRecon [4] and PointHMR [7] report improvements by enhancing features, for example, using a FPN-like structure or stacked blocks. In our study, we tested different 4× upsample schemes, including double 2× upsampling, directly 4× upsampling, and adding more convolution layers during the upsampling process(Figure 2-E). Although these schemes vary in computational complexity, their performance remains consistent.
+
+We also tested the coarse mesh sampling method proposed by FastMETRO [5]. This method (Figure 2-F) generates denser points compared to keypoint-guided sampling but does not offer any significant advantages. Detailed results are shown in table 5. These experiments suggest that keypoint-guided point sampling at an appropriate resolution is a crucial structure for the token generator. As such, feature enhancement and exhaustive point sampling are not as necessary as initially thought.
+
+## 3.2. Mesh Regressor
+
+The mesh regressor R takes the tokenized mesh feature $X _ { m } ^ { \in N \times C }$ as input and outputs predicted meshes Figure 3. [5] [4] adopts a multi-stage approximation approach and proposes various methods to formulate the topology relationship between joints and mesh. Finding their intersection components, we construct a cascading upsampling mesh regressor R using a series of decoder layers:
+
+$$
+R = H _ { k } H _ { k - 1 } . . . H _ { 0 }\tag{1}
+$$
+
+Each decoder layer $H _ { k }$ takes the calculated tokens $T _ { k }$ as input, then subsequently processes these using a dimension reduce layer, metaformer, and upsample layer:
+
+$$
+H _ { k } ( X _ { k } ) = U _ { k } ( M F _ { k } ( P _ { k } ( X _ { k } ) ) )\tag{2}
+$$
+
+where $U _ { k } , P _ { k }$ denotes the $k _ { t h }$ upsample layer and dimension reduce layer respectively, each composed of a singlelayer MLP. The upsample layer increases token numbers, while the dimension reduce layer modifies channel shapes. $M F _ { k }$ denotes the $k _ { t h }$ metaformer block, $T _ { k }$ is the $k _ { t h }$ output token where $X _ { k + 1 } = H _ { k } ( X _ { k } ) , X _ { 0 } = X _ { m }$
+
+Let $d _ { k }$ be the output dimension of $U _ { k }$ and token numbers of $M F _ { k } , n _ { k } , c _ { k }$ and $m _ { k }$ are the block number, tokenmixer and block dimensions for $M F _ { k }$ . We start with the first layer $M F _ { 0 }$ to demonstrate its operation. For the $N \times C$ shaped tensor $T _ { 0 } , P _ { 0 }$ projects it to $N \times c$ , which is then processed by $M F _ { 0 }$ and outputs a tensor of the same shape. Subsequently, $U _ { k }$ upsamples it to $d \times c .$ The following decoder layers repeat this procedure to output $X _ { k }$
+
+![](images/efb33f6fccabc80e1c36ae05fb81242d01b3eff1701209a10f4826c0f30701b6.jpg)  
+Figure 3. Architecture of decoder layer in mesh regressor. It is composed of sequentially connected dimension reduce layer, metaformer block and upsample layer.
+
+We began from a baseline where $\{ k = 1 , n = \{ 1 \} , d =$ $\{ 7 7 8 \} , m = \{ i d e n t i t y \}$ , which yielded competitive performance despite its simplicity. We then increase flops by enlarge n but observe no improvement. Inspired by [4], We sequentially add blocks with an increasing value of $d .$ When $k \ \leq \ 3 .$ , Significant performance improvements are observed. However, as k continues to increase beyond this point, no further gains are detected. Moreover, Modifying the token mixer from ide to attn also beneficial. However, for fixed d, simply increasing n did not improve performance. According to our experimental findings, the core function of each decoder layer is to incrementally elevate the number of tokens from an initial quantity of 21 up to 778. Additional strategies like augmenting computational workload or altering intricate specifics of the network appear to have minimal impact. In our best practice, parameters were set to $\{ k = 3 , n = \{ 1 , 1 , 1 \} , d =$ $\{ 2 1 , 8 4 , 3 3 6 \} , m = \{ a t t n , a t t n , a t t n \} \}$
+
+Existing hand joints and mesh topology modulation approaches stand out due to their ability to incorporate spatial information. However, their heuristic design is heavily reliant on hyperparameters and can be labor-intensive. Recognizing these strengths, we propose a novel method that modulates spatial relations without requiring manual design or additional computational resources. We achieve this by introducing learnable position embedding parameters $e m b _ { k }$ to each output tensor $X _ { k }$ where
+
+$$
+X _ { k } = X _ { k } + e m b _ { k }\tag{3}
+$$
+
+## 3.3. Framework Design
+
+As discussed above, the image feature extracted by the backbone is sequentially processed by both the token generator and the mesh regressor. The overall framework can be simply computed by $R ( T ( X _ { b } ) )$ ).
+
+The core structures form the basis of the overall structure, which is depicted in Figure 4. Given an input image of size {H, W}, we conduct point sampling guided by the predicted 21 keypoints at a resolution of H/8, W/8. For image classification style backbones like Fast-ViT, we apply a 4x upsample deconvolution to its final layer. However, for segmentation style backbones like HRNet, we directly use the feature on the corresponding resolution. In the mesh regressor, we apply position encoding before each MetaFormer block. Although this is not regarded as a core structure, it serves as a beneficial addition.
+
+![](images/6b9a92af503d5e85056e65b7673e04aca973a81c73a4db9b28a670b474ecb50f.jpg)  
+Figure 4. Overview of our architecture. The architecture of our model proceeds as follows: Firstly, the image feature $X _ { b }$ is extracted via a backbone network. These features are then passed to our token generator module, responsible for predicting 2D keypoints and performing point sampling on the upsampled feature map, thus generating joint tokens. Next, these joint tokens are input into our mesh regressor module, which carries out the mesh prediction to get the final coordinates.
+
+## 3.4. Loss Functions
+
+The method proposed in this paper is trained with supervision for vertices, 3D joints, and 2D joints. In our implementation, both the 2D joints, denoted as $J _ { 2 d }$ , and the vertices, denoted as $V _ { 3 d } .$ are directly predicted by the model’s output. The 3D joints, represented as ${ \cal J } _ { 3 d } ^ { ' } ,$ are calculated using the equation $J _ { 3 d } = J \times V _ { 3 d }$ , where J signifies the regression matrix. All of these components utilize the L1 loss to compute the discrepancy between the ground truth and the predictions. The losses for the vertex, 3D joint, and 2D joint, denoted as $L _ { v e r t } , L _ { J _ { 3 d } }$ , and $L _ { J _ { 2 d } }$ , are respectively formulated as follows:
+
+$$
+L _ { J _ { 3 d } } = \frac { 1 } { M _ { J _ { 3 d } } } \| J _ { 3 d } - J _ { 3 d } ^ { ' } \| _ { 1 }\tag{4}
+$$
+
+$$
+L _ { J _ { 2 d } } = \frac { 1 } { M _ { J _ { 2 d } } } \lVert J _ { 2 d } - J _ { 2 d } ^ { ' } \rVert _ { 1 }\tag{5}
+$$
+
+$$
+L _ { v e r t } = \frac { 1 } { M _ { V _ { 3 d } } } \Vert V _ { 3 d } - V _ { 3 d } ^ { ' } \Vert _ { 1 }\tag{6}
+$$
+
+Here, $J _ { 3 d } ~ \in ~ R ^ { M \times 3 }$ represents all the ground truth points, and the symbols annotated with primes denote the predicted values. The overall loss function is defined as:
+
+$$
+L = w _ { 3 d } L _ { J _ { 3 d } } + w _ { 2 d } L _ { J _ { 2 d } } + w _ { v e r t } L _ { v e r t }\tag{7}
+$$
+
+Given that the primary objective of this study is mesh prediction, 2D keypoints only affect point sampling and
+
+thus do not need to be highly accurate, we have accordingly adjusted the coefficients w<sub>3d</sub>, w<sub>2d</sub>, and $w _ { v e r t }$ to 10, 1, and 10, respectively.
+
+## 4. Experiments
+
+## 4.1. Implementation Details
+
+Our network is implemented based on Pytorch [15]. We use HRNet64[23] and FastViT-MA36 [21] as our backbones, with their initial weights pre-trained on ImageNet. We use the AdamW [8] optimizer to train our network, with a total of 100 epochs. The learning rate is initially set to 5e-4, and then adjusted to 5e-5 after 50 epochs. We train the network with eight RTX2080Ti GPUs, with a batch size of 32 per GPU. It costs 7 hours training with FastViT-MA36 backone and 11 hours with HRNet. The features of intermediate layers are directly fed to the Token Generator without extra upsampling layer when the backbone is HRNetw64. The Mesh Regressor has three Encoder Layers, with the corresponding input token numbers being [21, 84, 336], output token numbers being [84, 336, 778], and feature dimensions being [256, 128, 64] respectively. We adopt Attention as the default token mixer, as its performance is slightly better.
+
+## 4.2. Datasets
+
+Our primary experiments and analyses are conducted on the FreiHAND [28] dataset. In order to validate the generalization of our method, we also do experiments on the largescale 3D hand-object dataset, DexYCB [1]. The FreiHAND dataset contains 130,240 training samples and 3,960 testing samples. DexYCB contains 406,888 training samples and 78,768 testing samples.
+
+## 4.3. Evaluation Metrics
+
+To evaluate the accuracy of 3D Hand Mesh Reconstruction methods, we adopt five metrics: Procrustes-aligned mean per joint position error (PA-MPJPE), Procrustes-aligned mean per vertex position error (PA-MPVPE), mean per joint position error (MPJPE), mean per vertex position error (MPVPE), and F-Score. PA-MPJPE and PA-MPVPE refer to the MPJPE and MPVPE after aligning the predicted hand results with the Ground Truth using Procrustes alignment, respectively. These two metrics do not consider the impact of global rotation and scale.
+
+<table><tr><td>Method</td><td>Backbone</td><td>PA-MPJPE↓</td><td>PA-MPVPE↓</td><td>F@05↑</td><td>F@15↑</td><td>FPS</td></tr><tr><td>I2L-MeshNet [13]</td><td>ResNet50</td><td>7.4</td><td>7.6</td><td>0.681</td><td>0.973</td><td>72</td></tr><tr><td>CMR [3]</td><td>ResNet50</td><td>6.9</td><td>7.0</td><td>0.715</td><td>0.977</td><td>-</td></tr><tr><td>I2UV [2]</td><td>ResNet50</td><td>7.2</td><td>7.4</td><td>0.682</td><td>0.973</td><td>-</td></tr><tr><td>Tang et al. [20]</td><td>ResNet50</td><td>6.7</td><td>6.7</td><td>0.724</td><td>0.981</td><td>47</td></tr><tr><td>MobRecon [4]</td><td>DenseStack</td><td>6.9</td><td>7.2</td><td>0.694</td><td>0.979</td><td>80</td></tr><tr><td>METRO [27]</td><td>HRNet</td><td>6.7</td><td>6.8</td><td>0.717</td><td>0.981</td><td>27</td></tr><tr><td>MeshGraphomer [11]</td><td>HRNet</td><td>6.3</td><td>6.5</td><td>0.738</td><td>0.983</td><td>24</td></tr><tr><td>FastMETRO [5]</td><td>HRNet</td><td>6.5</td><td>7.1</td><td>0.687</td><td>0.983</td><td>28</td></tr><tr><td>Deformer [25]</td><td>HRNet</td><td>6.2</td><td>6.4</td><td>0.743</td><td>0.984</td><td>-</td></tr><tr><td>PointHMR [7]</td><td>HRNet</td><td>6.1</td><td>6.6</td><td>0.720</td><td>0.984</td><td>-</td></tr><tr><td>FastViT [21]</td><td>FastViT-MA36</td><td>6.6</td><td>6.7</td><td>0.722</td><td>0.981</td><td>84</td></tr><tr><td>Ours</td><td>HRNet</td><td>5.8</td><td>6.1</td><td>0.766</td><td>0.986</td><td>33</td></tr><tr><td>Ours</td><td>FastViT-MA36</td><td>5.7</td><td>6.0</td><td>0.772</td><td>0.986</td><td>70</td></tr></table>
+
+Table 1. Results on the FreiHAND dataset. Our results are shown in bold. “-” indicates not reported. Our results surpass all existing methods in terms of accuracy metrics.
+
+## 4.4. Results
+
+Comparison with previous methods To validate our proposed modules., we adopted HRNet and FastViT-MA36 as backbones for non-real-time and real-time methods respectively, following established models [27] [11] [5] [21]. For fair comparison, we provide performance metrics without Test-Time Augmentation (TTA) and FPS without TensorRT optimization. Table 1 shows that our method, despite being slightly slower than FastViT, improves PA-MPJPE by 0.9mm. Compared to transformer-based methods, our approach demonstrates superior speed and performance, while only requiring 10% of parameters, as shown in Table 2.
+
+The qualitative comparison results are shown in the figure 5. Compared to previous methods, our method produces more accurate hand reconstruction results.
+
+<table><tr><td>Method</td><td>#Params</td><td>PA-MPJPE↓</td><td>PA-MPVPE↓</td></tr><tr><td>METRO [27]</td><td>102M</td><td>6.7</td><td>6.8</td></tr><tr><td>MeshGraphormer [11]</td><td>98M</td><td>6.3</td><td>6.5</td></tr><tr><td>FastMETRO [5]</td><td>25M</td><td>6.5</td><td>7.1</td></tr><tr><td>Ours</td><td>1.9M</td><td>5.8</td><td>6.1</td></tr></table>
+
+Table 2. Comparison of transformer-based approaches. #Params refer to the network parameters that are not included within the backbone structure of the model. Our approach not only surpasses existing benchmarks in key metrics but also achieves a parameter reduction of one to two orders of magnitude.
+
+Evaluation on DexYCB We employed the large-scale hand-object dataset DexYCB to validate our method’s effectiveness and generalizability. As shown in Table 3, our model outperforms existing single-image input methods on all metrics. Significantly, we surpassed previous benchmarks by 1.5mm and 0.8mm on the MPJPE and MPVPE measures respectively, thereby setting new standards and demonstrating our method’s broad applicability.
+
+<table><tr><td>Method</td><td>PA-MPJPE↓</td><td>PA-MPVPE↓</td><td>MPJPE↓</td><td>MPVPE↓</td></tr><tr><td>METRO [27]</td><td>7.0</td><td></td><td></td><td></td></tr><tr><td>Spurr et al. [19]</td><td>6.8</td><td></td><td></td><td></td></tr><tr><td>Liu et al. [12]</td><td>6.6</td><td></td><td></td><td></td></tr><tr><td>HandOccNet [14]</td><td>5.8</td><td>5.5</td><td>14.0</td><td>13.1</td></tr><tr><td>MobRecon [4]</td><td>6.4</td><td>5.6</td><td>14.2</td><td>13.1</td></tr><tr><td>H2ONet [24]</td><td>5.7</td><td>5.5</td><td>14.0</td><td>13.0</td></tr><tr><td>Ours</td><td>5.5</td><td>5.5</td><td>12.4</td><td>12.1</td></tr></table>
+
+Table 3. Results on DexYCB. Our method shows advantages on Procrustes-Aligned metrics and surpassed the previous methods by a large margin on non-Procrustes-Aligned metrics.
+
+## 4.5. Ablation Study
+
+To thoroughly validate the various parameter combinations, a large number of ablation experiments were conducted. For efficiency, all ablation experiments were implemented on smaller models (e.g., Hiera-tiny). After identifying the optimal parameter combination, it is then applied to the standard models to facilitate a fair comparison with existing methods.
+
+The state-of-the-art backbone, Hiera-Tiny [18], is utilized in our study as a strong baseline. We conduct a series of ablation experiments on the FreiHAND dataset with the aim of examining the efficacy of the structure we propose.
+
+Effectiveness of Our Token Generator and Mesh Regressor. In order to evaluate the effectiveness of our Token Generator and Mesh Regressor, we initially set up a standard baseline model. This model’s Token Generator is constructed based on global features, while its Mesh Regres-
+
+![](images/28f01abf395ca80a1328191cbf5f5f560a65da1c0b558ab059ad9757241ac4f1.jpg)
+
+![](images/6c04a6c897d697fe81cbf80a35b49b5b080db769fc76fda968823c1447f0a66c.jpg)
+
+![](images/13a7e62bf086f5af969911f2e0285439cab3bfe233a08a28262e596f5fbdec9f.jpg)  
+Input
+
+![](images/42df9b51300ce8b725c8633ffe62962826c5f98f042ad2bd0a71dbead5373e64.jpg)
+
+![](images/ddc75fae0c5b6b5c2d954b9dc3c4dda41fbff2a90e40d0c65667a8a4ee51dedf.jpg)
+
+![](images/3860575af0a65198d7449ecc1c0cfc577fabbc35f69da83b303ee5fb28d348c4.jpg)
+
+![](images/1414367680ff6e239e0fbe76e45c5b1d619572bdf56104a9b411f463633583aa.jpg)
+
+![](images/8c98410fa2c5b871740ea82c1576979b0e31747bf679bb9077bb7c91fe37d615.jpg)
+
+![](images/8a032ec8c991276a93d1e321638a29c738be82fb0a21159936591d6faa28a833.jpg)
+
+![](images/7157637fb19a802599b44ed703c6b377dc441d8b648ecb3130926fa5bd222e43.jpg)
+
+![](images/713349a00b4112f5abc89a01894cd7366b6383d4f2c632e148071f74415bd203.jpg)
+
+![](images/e162666c3a36ffe32efca1475ca96f255903b27a2f414c2e1bc4684e60413da8.jpg)
+
+![](images/0e5d66389b52a8b84b63452de43af23f2f000fb6182dee0b1e6fb730c8831ca3.jpg)
+
+![](images/fd93ee2938b7056eb2b82e4df4f0abe2edb94fdcec12bfcadc7fcb709540b7a9.jpg)
+
+![](images/b5e863882a80261689e03f9c363e95d2f4f435310eeb9a1bcf39c7820dfb8373.jpg)
+
+![](images/338bfd096992434a4f0af5f56c72928e16bfa05e4503020b5ae78a64c7eed198.jpg)
+
+![](images/ec7116ed3140d8831f5171008bdb67c48893827f7227b296eedadb0d03b27c67.jpg)  
+MobRecon [4]
+
+![](images/f873bc3c235a816cf5903347d030840b801dbb3c39cd5f2168fe5ee2ef46c979.jpg)  
+METRO [27]
+
+![](images/2bb5d649086a3f79a4008fd797a8253b26ee663a6429cd231c5585efaab7d09b.jpg)  
+MeshGraphormer [11]
+
+![](images/f41dabb1ee1e703288e4dbe2ae06a9a34f01f2f57b5c84b38a5bea7723ca2bd1.jpg)  
+Ours
+
+![](images/f28782d00b6cf61cb309bdd5fef6d8ee9db725d16894685b3513fb06358b2fb4.jpg)  
+GT
+
+Figure 5. Qualitative comparison between our method and other state-of-the-art approaches.
+
+sor is designed as a Multilayer Perceptron (MLP). We subsequently substitute these components with our proposed structures individually. The results of these experiments, detailed in Table 4, confirm that both modules, when incorporated in place of the original structures, contribute positively towards enhancing overall performance. When implemented together, these modifications lead to even further improvements.
+
+<table><tr><td>Method</td><td>PA-MPJPE↓</td><td>PA-MPVPE↓</td></tr><tr><td>Simple Baseline</td><td>6.9</td><td>7.2</td></tr><tr><td>+ mesh regressor</td><td>6.5</td><td>6.8</td></tr><tr><td>+ token generator</td><td>6.6</td><td>7.1</td></tr><tr><td>+ both</td><td>6.2</td><td>6.5</td></tr></table>
+
+Table 4. Ablation study of our proposed modules. Each of these methods brings about enhancements when utilized individually. However, when these strategies are integrated, they yield an even more substantial improvement.
+
+Analysing Core Structure of Token Generator. As shown in Table 5, performance using only global features is competitive. The grid sampling and point sampling on a 7 × 7 feature map show similar efficiencies. Increasing the resolution of the feature map to 28 × 28 through a single four-fold deconvolution improves performance. However, further optimization is not achieved by replacing single four-fold deconvolution with two layers of two-fold deconvolutions or adding more convolutions. Similarly, no improvement is observed when changing from point sampling to coarse mesh sampling. Qualitative comparison of different point sampling strategies is shown in Fig. 6
+
+<table><tr><td rowspan=1 colspan=1>Sample Method</td><td rowspan=1 colspan=1>Resolution</td><td rowspan=1 colspan=1>PA-MPJPE↓</td><td rowspan=1 colspan=1>PA-MPVPE↓</td></tr><tr><td rowspan=1 colspan=1>Global</td><td rowspan=1 colspan=1>1x1</td><td rowspan=1 colspan=1>6.5</td><td rowspan=1 colspan=1>6.8</td></tr><tr><td rowspan=1 colspan=1>Grid</td><td rowspan=1 colspan=1>7x7</td><td rowspan=1 colspan=1>6.3</td><td rowspan=1 colspan=1>6.6</td></tr><tr><td rowspan=1 colspan=1>Point</td><td rowspan=1 colspan=1>7x7</td><td rowspan=1 colspan=1>6.3</td><td rowspan=1 colspan=1>6.6</td></tr><tr><td rowspan=1 colspan=1>Point</td><td rowspan=1 colspan=1>14x14</td><td rowspan=1 colspan=1>6.3</td><td rowspan=1 colspan=1>6.6</td></tr><tr><td rowspan=1 colspan=1>Point</td><td rowspan=1 colspan=1>28x28</td><td rowspan=1 colspan=1>6.2</td><td rowspan=1 colspan=1>6.5</td></tr><tr><td rowspan=1 colspan=1>Point</td><td rowspan=1 colspan=1>28 x28 enhanced</td><td rowspan=1 colspan=1>6.2</td><td rowspan=1 colspan=1>6.5</td></tr><tr><td rowspan=1 colspan=1>Coarse mesh</td><td rowspan=1 colspan=1>28x28</td><td rowspan=1 colspan=1>6.2</td><td rowspan=1 colspan=1>6.5</td></tr></table>
+
+Table 5. Ablation study of Our Token generator A point sample at a resolution of 28x28 achieves optimal efficiency. Contrarily, increasing the number of sampled points or incorporating additional convolutional layers do not lead to any further improvements.
+
+Analysing the Core Structure of the Mesh Regressor. As shown in Table 6, for a single encoder layer, adding an extra encoder layer with a larger token number sharply increases performance by 0.3mm. The optimal setting consists of three encoder layers, with token numbers progressively multiplied by 4. As the layer number increases further, the marginal benefit becomes inconsequential and sometimes even decreases. Furthermore, as shown in Table 7, given a fixed set of token numbers, increasing computational complexity produces negligible differences in either block numbers or block dimensions in the encoder layer. A middle-sized block dimensions setting is optimal. Qualitative comparison of different upsample layers is shown in Figure 7.
+
+<table><tr><td rowspan=1 colspan=1>Layer Nums</td><td rowspan=1 colspan=1>Token Nums</td><td rowspan=1 colspan=1>PA-MPJPE↓</td><td rowspan=1 colspan=1>PA-MPVPE↓</td></tr><tr><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>[21]</td><td rowspan=1 colspan=1>6.6</td><td rowspan=1 colspan=1>7.1</td></tr><tr><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>[21,256]</td><td rowspan=1 colspan=1>6.3</td><td rowspan=1 colspan=1>6.6</td></tr><tr><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>[21,384]</td><td rowspan=1 colspan=1>6.3</td><td rowspan=1 colspan=1>6.6</td></tr><tr><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>[21, 256, 384]</td><td rowspan=1 colspan=1>6.2</td><td rowspan=1 colspan=1>6.5</td></tr><tr><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>[21, 84, 336]</td><td rowspan=1 colspan=1>6.2</td><td rowspan=1 colspan=1>6.5</td></tr><tr><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>[21, 128, 256, 384]</td><td rowspan=1 colspan=1>6.2</td><td rowspan=1 colspan=1>6.5</td></tr><tr><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>[21, 63, 126, 252]</td><td rowspan=1 colspan=1>6.3</td><td rowspan=1 colspan=1>6.6</td></tr></table>
+
+Table 6. The Number of Upsampling Layers and Corresponding Token Numbers in Encoding Layers. Three encoding layers yield optimal efficiency.
+
+<table><tr><td>Dimensions</td><td>PA-MPJPE↓</td><td>PA-MPVPE↓</td></tr><tr><td>64, 32, 16</td><td>6.5</td><td>6.9</td></tr><tr><td>128, 64, 32</td><td>6.3</td><td>6.6</td></tr><tr><td>256, 128, 64</td><td>6.2</td><td>6.5</td></tr><tr><td>512, 256, 12</td><td>6.2</td><td>6.5</td></tr><tr><td>1024, 512,256</td><td>6.4</td><td>6.7</td></tr><tr><td>Block Nums</td><td>PA-MPJPE↓</td><td>PA-MPVPE↓</td></tr><tr><td>1,1,1</td><td>6.2</td><td>6.5</td></tr><tr><td>2,2,2</td><td>6.2</td><td>6.6</td></tr><tr><td>3,3,3</td><td>6.3</td><td>6.6</td></tr></table>
+
+Table 7. Dimensions and block nums. Single layer blocks with middle sized dimensions are optimal.
+
+Position Encoding and Attention Mixer. We utilized position encoding layer and attention mixer during ablation experiments because they are intuitively helpful. Based on our SOTA result, we remove position encoding layers to observe a slightly 0.1mm degrade. Similar thing happens when we substitute attention mixer to identity mixer, see Tab. 8.
+
+<table><tr><td>Method</td><td>PA-MPJPE↓</td><td>PA-MPVPE↓</td></tr><tr><td>hiera-tiny sota</td><td>6.2</td><td>6.5</td></tr><tr><td>Identity mixer</td><td>6.3</td><td>6.6</td></tr><tr><td>w/o position emb</td><td>6.3</td><td>6.6</td></tr></table>
+
+Table 8. Token mixer and position embedding. When substitute attention mixer to identity mixer, or remove position encoding layer, the performance dropped sligntly by 0.1mm.  
+Figure 8. Typical Failure Cases. Failure cases are concentrated in scenes with self-occlusion and object occlusion. Some are difficult to discern due to the small area of exposure, while others present ambiguities caused by the occlusion.
+
+Limits and Failure cases. As mentioned earlier, our work is dedicated to summarizing and abstracting from existing work. Since no targeted optimization was performed, some failure cases present in previous work remains challenging. These cases are concentrated in scenes with selfocclusion and object occlusion, see Fig. 8.
+
+![](images/4a32d9678a3b4a11d3976c99a5bb4ae5d82ee1c8a7b3bf5f697ded4791092339.jpg)  
+Input
+
+![](images/926f8c083d75294ce8d7d20d26fb59657cc8c6cfe609bcd1412b586b8c300918.jpg)  
+global
+
+![](images/1727e8024982bbd57c3cfb8d61950ffae32499852ed0f4cb214a087dbb5a643d.jpg)  
+coarse
+
+![](images/f942117bf4c83f2172ebbafd20abf6b9cb19fcc0924c9deaac31492b67921c99.jpg)  
+upsampled
+
+![](images/ffa153b0c93610a04826962cab3b816dd73df60f45b067c249081638e8d76cc2.jpg)  
+GT
+
+Figure 6. Qualitative Comparison of Different Point Sampling Strategies. The global/coarse feature fails in scenarios with detailed finger interactions, where upsampled feature works well.  
+![](images/bdba235b6811b7e278c2134efb9c8a0089c1cd19b91e8a318a282541dd682438.jpg)  
+Input
+
+![](images/09c2bc3bbccaea4a42bcb791659e94737d40f8dd0347aa167cad54030549d96b.jpg)  
+one layer
+
+![](images/bde953316874d90ee0bbaf5a9e55f2845021af9516bde91f5e70dd016f6c4e66.jpg)  
+two layer
+
+![](images/5542694e3b87178eb2bd8f2db09567ec2fba0d50acb62cb1f6eeaad148b45f76.jpg)  
+three layer
+
+![](images/6c6c55b64b46c1e6331279594c778527fca1a3b5d0c96a9f520f05ac10ba0e40.jpg)  
+GT
+
+Figure 7. Qualitative Comparison of the Number of Layers of Mesh Decoder. When constrained to one, the reconstructed mesh tends to corrupt into unnatural shapes. Performance improves as the number of layers increases.  
+![](images/8450f3f8a84c86acf037c5b49f98762c02355ab25c902da95b6538ace4fb520b.jpg)
+
+![](images/096caa6d381351b4d87a1411b053babda63bc9cc1d769ac53988309fc4e112ae.jpg)  
+Input  
+ours
+
+![](images/05b3933446f7afef3c5b0f950bfeb2f706afb26ada54bb74ecf6bac5ced501b4.jpg)  
+gt
+
+![](images/d46bf8ac2b4e294b52630f59b5000d365a87709814dd3d7fa27e000d15f89ef0.jpg)  
+Input
+
+![](images/994266e26cad3c76ee6ca3e2d57c9b75f7dd03118d0187fc49c6764cd69e0ac2.jpg)  
+ours
+
+![](images/caa0ae6bc38e642036b77c64d6f14182a827b1691e35e9faec6dc17ae255fb0e.jpg)  
+gt
+
+## 5. Conclusion and Future Work
+
+We observed shared advantages and disadvantages of typical structures. Based on these observations, we introduce the concept of the core structure. Through experiments, we revealed that a framework with the core structure could achieve high performance with limited computational load. We evaluated our approach quantitatively and qualitatively to demonstrate its effectiveness.
+
+However, our method is explicitly designed to reconstruct single hand gestures. Other scenarios, such as extreme lighting, occlusion, interactions, or out-ofdistribution cases, showed no improvement over existing methods. Such cases require specifically designed methods.
+
+## References
+
+[1] Yu-Wei Chao, Wei Yang, Yu Xiang, Pavlo Molchanov, Ankur Handa, Jonathan Tremblay, Yashraj S Narang, Karl Van Wyk, Umar Iqbal, Stan Birchfield, et al. Dexycb: A benchmark for capturing hand grasping of objects. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 9044–9053, 2021. 2, 5
+
+[2] Ping Chen, Yujin Chen, Dong Yang, Fangyin Wu, Qin Li, Qingpei Xia, and Yong Tan. I2uv-handnet: Image-to-uv prediction network for accurate and high-fidelity 3d hand mesh modeling. In Proceedings of the IEEE/CVF International Conference on Computer Vision, pages 12929–12938, 2021. 6
+
+[3] Xingyu Chen, Yufeng Liu, Chongyang Ma, Jianlong Chang, Huayan Wang, Tian Chen, Xiaoyan Guo, Pengfei Wan, and Wen Zheng. Camera-space hand mesh recovery via semantic aggregation and adaptive 2d-1d registration. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 13274–13283, 2021. 6
+
+[4] Xingyu Chen, Yufeng Liu, Yajiao Dong, Xiong Zhang, Chongyang Ma, Yanmin Xiong, Yuan Zhang, and Xiaoyan Guo. Mobrecon: Mobile-friendly hand mesh reconstruction from monocular image. In 2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2022. 1, 2, 3, 4, 6, 7
+
+[5] Junhyeong Cho, Kim Youwang, and Tae-Hyun Oh. Crossattention of disentangled modalities for 3d human mesh recovery with transformers. 1, 3, 4, 6
+
+[6] Hongsuk Choi, Gyeongsik Moon, and Kyoung Mu Lee. Pose2Mesh: Graph Convolutional Network for 3D Human Pose and Mesh Recovery from a 2D Human Pose, page 769–787. 2020. 2
+
+[7] Jeonghwan Kim, Mi-Gyeong Gwon, Hyunwoo Park, Hyukmin Kwon, Gi-Mun Um, and Wonjun Kim. Sampling is matter: Point-guided 3d human mesh reconstruction. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 12880–12889, 2023. 1, 2, 4, 6
+
+[8] Diederik P Kingma and Jimmy Ba. Adam: A method for stochastic optimization. arXiv preprint arXiv:1412.6980, 2014. 5
+
+[9] Thomas Kipf and Max Welling. Semi-supervised classification with graph convolutional networks. arXiv: Learning,arXiv: Learning, 2016. 2
+
+[10] Isaak Lim, Alexander Dielen, Marcel Campen, and Leif Kobbelt. A Simple Approach to Intrinsic Correspondence Learning on Unstructured 3D Meshes, page 349–362. 2019. 3
+
+[11] Kevin Lin, Lijuan Wang, and Zicheng Liu. Mesh graphormer. In 2021 IEEE/CVF International Conference on Computer Vision (ICCV), 2021. 2, 6, 7
+
+[12] Shaowei Liu, Hanwen Jiang, Jiarui Xu, Sifei Liu, and Xiaolong Wang. Semi-supervised 3d hand-object poses estimation with interactions in time. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 14687–14697, 2021. 6
+
+[13] Gyeongsik Moon and Kyoung Mu Lee. I2l-meshnet: Imageto-lixel prediction network for accurate 3d human pose and mesh estimation from a single rgb image. In Computer Vision–ECCV 2020: 16th European Conference, Glasgow, UK, August 23–28, 2020, Proceedings, Part VII 16, pages 752–768. Springer, 2020. 6
+
+[14] JoonKyu Park, Yeonguk Oh, Gyeongsik Moon, Hongsuk Choi, and Kyoung Mu Lee. Handoccnet: Occlusion-robust 3d hand mesh estimation network. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 1496–1505, 2022. 6
+
+[15] Adam Paszke, Sam Gross, Soumith Chintala, Gregory Chanan, Edward Yang, Zachary DeVito, Zeming Lin, Alban Desmaison, Luca Antiga, and Adam Lerer. Automatic differentiation in pytorch. 2017. 5
+
+[16] Anurag Ranjan, Timo Bolkart, Soubhik Sanyal, and Michael J. Black. Generating 3D faces using Convolutional Mesh Autoencoders, page 725–741. 2018. 2, 3
+
+[17] Javier Romero, Dimitrios Tzionas, and Michael J. Black. Embodied hands: modeling and capturing hands and bodies together. ACM Transactions on Graphics, page 1–17, 2017. 2
+
+[18] Chaitanya Ryali, Yuan-Ting Hu, Daniel Bolya, Chen Wei, Haoqi Fan, Po-Yao Huang, Vaibhav Aggarwal, Arkabandhu Chowdhury, Omid Poursaeed, Judy Hoffman, et al. Hiera: A hierarchical vision transformer without the bells-andwhistles. arXiv preprint arXiv:2306.00989, 2023. 6
+
+[19] Adrian Spurr, Umar Iqbal, Pavlo Molchanov, Otmar Hilliges, and Jan Kautz. Weakly supervised 3d hand pose estimation via biomechanical constraints. In European conference on computer vision, pages 211–228. Springer, 2020. 6
+
+[20] Xiao Tang, Tianyu Wang, and Chi-Wing Fu. Towards accurate alignment in real-time 3d hand-mesh reconstruction. In Proceedings of the IEEE/CVF International Conference on Computer Vision, pages 11698–11707, 2021. 6
+
+[21] PavanKumarAnasosalu Vasu, James Gabriel, Jeff Zhu, Oncel Tuzel, and Anurag Ranjan. Fastvit: A fast hybrid vision transformer using structural reparameterization. 2023. 2, 3, 5, 6
+
+[22] Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, AidanN. Gomez, Lukasz Kaiser, and Illia Polosukhin. Attention is all you need. Neural Information Processing Systems,Neural Information Processing Systems, 2017. 2
+
+[23] Jingdong Wang, Ke Sun, Tianheng Cheng, Borui Jiang, Chaorui Deng, Yang Zhao, Dong Liu, Yadong Mu, Mingkui Tan, Xinggang Wang, et al. Deep high-resolution representation learning for visual recognition. IEEE transactions on pattern analysis and machine intelligence, 43(10):3349– 3364, 2020. 2, 5
+
+[24] Hao Xu, Tianyu Wang, Xiao Tang, and Chi-Wing Fu. H2onet: Hand-occlusion-and-orientation-aware network for real-time 3d hand mesh reconstruction. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 17048–17058, 2023. 6
+
+[25] Yusuke Yoshiyasu. Deformable mesh transformer for 3d human mesh recovery. In Proceedings of the IEEE/CVF Con-
+
+ference on Computer Vision and Pattern Recognition, pages 17006–17015, 2023. 6
+
+[26] Weihao Yu, Mi Luo, Pan Zhou, Chenyang Si, Yichen Zhou, Xinchao Wang, Jiashi Feng, and Shuicheng Yan. Metaformer is actually what you need for vision. In 2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2022. 2
+
+[27] Xiong Zhang, Qiang Li, Hong Mo, Wenbo Zhang, and Wen Zheng. End-to-end hand mesh recovery from a monocular rgb image. In 2019 IEEE/CVF International Conference on Computer Vision (ICCV), 2019. 2, 6, 7
+
+[28] Christian Zimmermann, Duygu Ceylan, Jimei Yang, Bryan Russell, Max Argus, and Thomas Brox. Freihand: A dataset for markerless capture of hand pose and shape from single rgb images. In Proceedings of the IEEE/CVF International Conference on Computer Vision, pages 813–822, 2019. 2, 5
