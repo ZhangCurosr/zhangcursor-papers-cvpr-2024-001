@@ -1,0 +1,4044 @@
+[
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "GoMAvatar: Efficient Animatable Human Modeling from Monocular Video Using Gaussians-on-Mesh"
+                    }
+                ],
+                "level": 1
+            },
+            "bbox": [
+                102,
+                128,
+                867,
+                174
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Jing Wen Xiaoming Zhao Zhongzheng Ren Alexander G. Schwing Shenlong Wang University of Illinois Urbana-Champaign"
+                    }
+                ]
+            },
+            "bbox": [
+                116,
+                203,
+                854,
+                239
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "jw116, xz23, zr5, aschwing, shenlong @illinois.edu"
+                    }
+                ]
+            },
+            "bbox": [
+                259,
+                241,
+                710,
+                257
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "https://wenj.github.io/GoMAvatar/"
+                    }
+                ]
+            },
+            "bbox": [
+                333,
+                260,
+                632,
+                275
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/bf2e0c754a5e8575bf98f4bb7b1aabe976954252f6fa1fc69bbcdda7527339ac.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 1. GoMAvatar takes a monocular RGB video (left) as input to establish an explicit and accurate 4D representation of a dynamic human. It can render efficiently at novel views and poses with state-of-the-art quality. Additionally, it is extremely compact (3.63 MB pe subject), efficient (43 FPS), and seamlessly compatible with the graphics pipeline such as OpenGL."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                81,
+                290,
+                882,
+                486
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "Abstract"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                233,
+                545,
+                315,
+                563
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We introduce GoMAvatar, a novel approach for realtime, memory-efficient, high-quality animatable human modeling. GoMAvatar takes as input a single monocular video to create a digital avatar capable of re-articulation in new poses and real-time rendering from novel viewpoints, while seamlessly integrating with rasterizationbased graphics pipelines. Central to our method is the Gaussians-on-Mesh (GoM) representation, a hybrid 3D model combining rendering quality and speed of Gaussian splatting with geometry modeling and compatibility of deformable meshes. We assess GoMAvatar on ZJU-MoCap, PeopleSnapshot, and various YouTube videos. GoMAvatar matches or surpasses current monocular human modeling algorithms in rendering quality and significantly outperforms them in computational efficiency (43 FPS) while being memory-efficient (3.63 MB per subject)."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                575,
+                472,
+                820
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "1. Introduction"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                844,
+                209,
+                861
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "High-fidelity, animatable digital avatar modeling is crucial for various applications such as movie making, healthcare,"
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                869,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "AR/VR, and simulation. Conventional approaches carried out in Motion Capture (MoCap) studios are slow, expensive, and cumbersome, due to costly wearable devices [42, 52] and intricate multi-view camera systems [28, 74]. Hence, to enable widespread personal use, affordable methods which only rely on monocular RGB videos for creating digital avatars are much desired."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                546,
+                893,
+                654
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Reconstruction of digital humans from monocular videos has been studied intensively recently [16, 25, 64, 70, 81]. The key lies in choosing a suitable 3D representation, flexible for articulation, efficient for rendering and storage, and capable of modeling high-quality geometry and appearance all while being easily integrated into graphics pipelines. Despite various proposals, no animated 3D representation has met all these needs. Neural fields based avatars [16, 27, 70, 81] offer photorealism, but they are challenging to articulate and lack explicit geometry, making them less compatible with game engines. Mesh-based methods [58] excel in articulation and rendering but fall short in modeling topological changes and high-quality appearance. Point-based methods [88] are limited by incomplete topology and surface geometry. Recent successes of Gaussian splatting in neural rendering motivate extensions to free-form dynamic scenes [73], but a knowledge gap exists in how to leverage Gaussiansfor articulatable humans. Besides, the lack of explicit surface modeling of Gaussian splats hinders their broader use in digital avatar modeling."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                659,
+                895,
+                902
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": []
+            },
+            "bbox": [
+                104,
+                2,
+                181,
+                41
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": [
+                    {
+                        "type": "text",
+                        "content": "This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore."
+                    }
+                ]
+            },
+            "bbox": [
+                235,
+                1,
+                810,
+                46
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2059"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                92,
+                470,
+                154
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To address these challenges, we present GoMAvatar, a novel digital avatar modeling framework. GoMAvatar operates on a single monocular video and yields an articulated character that encodes high-fidelity appearance and geometry. It is both articulable and memory-efficient, rendering in real-time (see Fig. 1). Central to the framework is a novel articulated human representation, which we refer to as Gaussians-on-Mesh (GoM) (Sec. 3.1). GoM combines rendering quality and speed of Gaussian splatting with geometry modeling and compatibility of deformable meshes. Specifically, GoM employs Gaussian splats for rendering, offering flexibility in modeling rich appearances and enabling real-time performance (Sec. 3.2). GoM utilizes a skeleton-driven deformable mesh, enabling the creation of compact, topologically complete digital avatars, while easing mesh articulation through forward kinematics (Sec. 3.3). Crucially, to integrate both representations, we attach a Gaussian to each mesh face. This method differs from traditional mesh techniques that rely on texturing or vertex coloring to enhance rendering. It also differs from standard freeform Gaussian splats, thereby better regularizing Gaussians for novel poses. Furthermore, to tackle view dependency, we factorize the final RGB color into a pseudo albedo map rendering and a pseudo shading map prediction. This entire representation can be inferred from a single input video without additional training data (Sec. 3.5). We find this dual representation to balance performance and efficiency effectively. Importantly, the entire animation and rendering of GoM are fully compatible with graphics engines, such as OpenGL."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                159,
+                472,
+                613
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We conducted extensive experiments on the ZJU-MoCap data [54], PeopleSnapshot [1] and YouTube videos. Go-MAvatar matches or surpasses the rendering quality of the best monocular human modeling algorithms (GoMAvatar reaches 30.37 dB PSNR in novel view synthesis and 30.31 dB PSNR in novel pose synthesis). Meanwhile, it is faster than competing algorithms, reaching a rendering speed of 43 FPS on an NVIDIA A100 GPU and remains compact in memory, only costing 3.63 MB per subject (Fig. 2). To summarize, our main contributions are:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                618,
+                472,
+                771
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• We introduce the Gaussians-on-Mesh representation for efficient, high-fidelity articulated human reconstruction from a single video, combining Gaussian splats with deformable meshes for real-time, free-viewpoint rendering."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                776,
+                470,
+                838
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• We design a unique differentiable shading module for view dependency, splitting color into a pseudo albedo map from Gaussian splatting and a pseudo shading map derived from the normal map."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                838,
+                472,
+                898
+            ]
+        },
+        {
+            "type": "chart",
+            "content": {
+                "image_source": {
+                    "path": "images/434e4f243899737ea1c38d977a1ae01d16a7ce7ac921f12f922a369e25ea6a3e.jpg"
+                },
+                "content": "",
+                "chart_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 2. Our approach is simultaneously faster (represented by x coordinates of circle centers , smaller is better), memoryefficient (represented by circle size, smaller is better), and renders at a higher quality (represented by y coordinates of circle centers, higher is better). The horizontal brown line denotes our PSNR."
+                    }
+                ],
+                "chart_footnote": []
+            },
+            "bbox": [
+                501,
+                88,
+                890,
+                265
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2. Related Work"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                343,
+                643,
+                359
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Representations for novel view synthesis. Several representations have been proposed for the task of novel view synthesis, such as light fields [3, 17, 36], layered representations [61, 62, 71, 90], voxels [41, 63], and meshes [18, 23]. Recently, several works also demonstrated the effectiveness of an implicit representation, i.e., a neural network, for a scene [12, 47, 51]. Further, neural radiance fields (NeRFs) [49] utilize a volume rendering equation [29] to optimize the implicit representation, yielding high-quality view synthesis. Follow-up works further improve and demonstrate compelling rendering results [4–6, 46, 57, 67, 82]. Meanwhile, other works use volume rendering equations to optimize more explicit representations [7, 50, 80], largely accelerating the optimization procedure. Pointbased rendering (e.g., Gaussian splatting [30, 45, 72]) has recently been adopted for fast rendering. It models the scenes as a set of 3D Gaussians, each equipped with rotation, scale, and appearance-related features, and rasterizes by projecting the 3D Gaussians to the 2D image plane. To model dynamic scenes, [45, 72] further extend the 3D Gaussians, adding a time dependency. To regularize the 3D Gaussians through time, [45] adds physically-based priors during training, and [72] uses a neural network to predict the deformation of Gaussians. Our approach is inspired by the recent progress of point-based rendering to facilitate fast rendering. More concretely, we also use Gaussian splatting for rendering. However, different from previous approaches, we propose the Gaussians-on-Mesh representation that combines 3D Gaussians with a mesh representation. By doing so, we obtain fast rendering speed as well as regularized deformation of 3D Gaussians."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                371,
+                895,
+                839
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Human modeling. Early works to model humans rely on templates, e.g., SCAPE [2] and SMPL [43]. Later, [56, 59, 60, 86] utilize (pixel-aligned) image features to reconstruct human geometry and appearance from a single image. However, such human modeling is not animatable. ARCH [19, 76] and S3 [77] incorporate reanimation capabilities but they fall short in delivering high-quality rendering. Recently, efforts on human geometry modeling exploit implicit representations [10, 11, 24, 48, 66]. Their use of 3D scans also limits their application. To address this limitation, human modeling from videos has received a lot of attention from the community: many prior efforts utilize implicit representations and differentiable renderers for either non-animatable [54] or animatable [16, 22, 25, 37, 39, 53, 55, 64, 69, 70, 75, 81, 83, 89] scene-specific human modeling while other efforts focus on scene-agnostic modeling [9, 14, 21, 31, 34, 35, 56, 85, 87]. In this study, our approach focuses on scene-specific modeling following prior works. Different from the common pure implicit representations, we utilize an explicit representation termed Gaussians-on-Mesh. The explicit canonical geometry enables us to apply well-defined forward kinematics, such as linear blend skinning, to transform from the canonical space to the observation space. In contrast, methods using implicit representations can only perform mapping in a backward manner, i.e., from the observation space to the canonical space, which is inherently ill-posed and ambiguous."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                839,
+                895,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2060"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                92,
+                472,
+                453
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Real-time rendering of animatable human modeling. The key to real-time rendering in our approach is the codesign of an explicit geometry representation and rasterization: Gaussian splatting and mesh rasterization are faster than volume rendering in general. This principle has been explored by prior efforts to accelerate the rendering of general-purpose NeRFs. Representative approaches propose to either bake [20, 78, 79] or cache [15] the trained implicit representation. Another line of work exploits meshbased rasterization to boost the inference speed [13, 38, 78]. Inspired by the success, concurrent works explore efficient NeRF rendering for humans [16, 58]. Note, [58] firstly trains a NeRF representation and then bakes it into a mesh for real-time rendering. However, the second baking stage is shown to harm the rendering quality. In contrast, the proposed Gaussians-on-Mesh representation is trained end-toend, achieving a superior quality-speed trade-off."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                454,
+                470,
+                712
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3. Gaussians-on-Mesh (GoM)"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                723,
+                328,
+                741
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In the following, we present the Gaussians-on-Mesh (GoM) representation, how to render it, and its articulation. The goal of the proposed representation is to combine the benefits of both Gaussian splatting and meshes while alleviating some of their individual shortcomings. Concretely, by using Gaussian splatting, we attain a high-quality real-time rendering capability, achieving 43 FPS. By utilizing a mesh, we conduct effective articulation in a forward manner while also regularizing the underlying geometry."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                750,
+                470,
+                887
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Overview. Given a monocular video capturing a human subject of interest, we aim to learn a canonical Gaussianson-Mesh representation GoM<sup>c</sup> such that we can render that human in real-time given any camera intrinsics "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "K \\in \\mathbb { R } ^ { 3 \\times 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "extrinsics "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "E \\in S E ( 3 )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and a human pose P. Note, here and below, parameters ✓ indicate that the corresponding function or variable is learnable and superscript c indicates the canonical pose space. To render, we first articulate GoM<sup>c</sup> to the observation space to obtain"
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                885,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/7c96e530de43c13060446f729ba10b7136fbd6945541338e53ff13fe68ecea76.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 3. Gaussians-on-Mesh (GoM). We learn Gaussians in the local coordinates of each triangle and transform them to the world coordinate based on the triangle’s shape. We initialize the rotation "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "r _ { \\theta , j } \\in s o ( 3 )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to zeros and scale "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { \\theta , j } \\in \\mathbb { R } ^ { 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to ones so that we start with a Gaussian that’s thin along the normal axis of the triangle. Meanwhile, the projection of the ellipsoid "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ x : ( x - \\mu _ { j } ) ^ { T } \\Sigma _ { j } ^ { - 1 } ( x -"
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mu _ { j } ) = 1 \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "on the triangle recovers the Steiner ellipse. See Sec. 3.1 and the appendix for details."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                501,
+                89,
+                885,
+                244
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                368,
+                893,
+                491
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\operatorname { G o M } ^ { o } = \\operatorname { \\mathbb { A } } \\operatorname { r t i c u l a t o r } _ { \\theta } \\left( \\operatorname { G o M } _ { \\theta } ^ { c } , P \\right) ,\\tag{1}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/184dcfcdc6ca2cb099a5bf22a7e5eeca8ce3be5019534f8f070927db861c9729.jpg"
+                }
+            },
+            "bbox": [
+                560,
+                503,
+                830,
+                520
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where GoM<sup>o</sup> denotes the Gaussians-on-Mesh representation in the observation space. To obtain a rendering with resolution "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "H \\times W"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", we formulate a neural renderer to yield the human appearance "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I \\in \\mathbb { R } ^ { H \\times W \\times 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and the alpha mask "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "M \\in \\mathbb { R } ^ { H \\times W \\times 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Formally,"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                534,
+                893,
+                609
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\left( I , M \\right) = \\mathrm { R e n d e r e r } _ { \\theta } \\left( K , E , { \\bf G o M } ^ { o } \\right) .\\tag{2}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/761ab191d5faaf003466f9007eb4c37af4d9b414086f7079a3130665ba3fa2d3.jpg"
+                }
+            },
+            "bbox": [
+                563,
+                622,
+                828,
+                638
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The final rendering is obtained from a classical alphacomposition based on I and M. We will first discuss the details of the Gaussians-on-Mesh human representation in Sec. 3.1 and the rendering pipeline in Sec. 3.2. Then we introduce how to articulate the Gaussians-on-Mesh representation in Sec. 3.3."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                651,
+                893,
+                743
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.1. Gaussians-on-Mesh Representation"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                498,
+                755,
+                808,
+                772
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The core of our approach is the Gaussians-on-Mesh (GoM) representation in the canonical space. The design of the representation is motivated by the following two key considerations: 1) GoM can be rendered efficiently through Gaussian splatting [30] which eliminates the need of dense samples along rays used in volume rendering; 2) By attaching Gaussians to a mesh, we effectively adapt the shapes of Gaussians to different human poses and enable regularization."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                780,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2061"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                514,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Formally, our canonical Gaussians-on-Mesh representation is specified via a collection of points and faces with associated attributes:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                90,
+                470,
+                136
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbf { G o M } _ { \\boldsymbol { \\theta } } ^ { c } \\triangleq \\{ \\{ v _ { \\boldsymbol { \\theta } , i } ^ { c } \\} _ { i = 1 } ^ { V } , \\{ f _ { \\boldsymbol { \\theta } , j } \\} _ { j = 1 } ^ { F } \\} .\\tag{3}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/06cdf314cedd8d24899bebf1b77d50fea667100339333b65ae6ee98bd69a9f1d.jpg"
+                }
+            },
+            "bbox": [
+                160,
+                147,
+                383,
+                167
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Here, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ v _ { \\theta , i } ^ { c } \\} _ { i = 1 } ^ { V }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ f _ { \\theta , j } \\} _ { j = 1 } ^ { F }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "represent V vertices and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "F"
+                    },
+                    {
+                        "type": "text",
+                        "content": "triangle faces along with their related attributes respectively. We further define a vertex as"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                179,
+                468,
+                227
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { r } { v _ { \\theta , i } ^ { c } = ( p _ { \\theta , i } ^ { c } , w _ { i } ) , } \\end{array}\\tag{4}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/7ac73442dafe541329e8de05cd0a344c58575f2d040cfee93e17c04aef10385c.jpg"
+                }
+            },
+            "bbox": [
+                214,
+                238,
+                331,
+                256
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "p _ { \\theta , i } ^ { c } \\in \\mathbb { R } ^ { 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the vertex coordinate and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "w _ { i } \\in \\mathbb { R } ^ { J }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "refers to the linear blend skinning weights with respect to J joints. We define the face as"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                268,
+                468,
+                315
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "f _ { \\theta , j } = ( r _ { \\theta , j } , s _ { \\theta , j } , c _ { \\theta , j } , \\{ \\Delta _ { j , k } \\} _ { k = 1 } ^ { 3 } ) .\\tag{5}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/b8dc2efc0528c27dd4318d06f01337ab4950532711b708e2e32e8733f7a28ef4.jpg"
+                }
+            },
+            "bbox": [
+                153,
+                328,
+                390,
+                345
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "equation_inline",
+                        "content": "r _ { \\theta , j } ~ \\in ~ s o ( 3 )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { \\theta , j } \\in \\mathbb { R } ^ { 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "define the rotation and scale of the local Gaussian associated with a face. Further, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "c _ { \\theta , j } ~ \\in ~ \\mathbb { R } ^ { 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the color vector. "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\Delta _ { j , k } \\} _ { k = 1 } ^ { 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are the indices of the three vertices belonging to the j-th face, where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\Delta _ { j , k } \\in \\{ 1 , \\ldots , V \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Note that we associate Gaussian parameters with faces. We will delve into the derivation of the Gaussian distributions in the world coordinates for rendering in the following section."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                357,
+                470,
+                479
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.2. Rendering"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                489,
+                196,
+                506
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In contrast to directly computing the final color as done by prior monocular human rendering works [70, 81], rendering of the Gaussians-on-Mesh representation decomposes the RGB image I into the pseudo albedo map "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { \\mathrm { G S } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and the pseudo shading map S, i.e., the final image I is given by"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                512,
+                470,
+                590
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "I = I _ { \\mathrm { G S } } \\cdot S .\\tag{6}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/a61b92e46d3076c921ddf54df4f94efdb8eebefcb5568b938d199dd74c6051e2.jpg"
+                }
+            },
+            "bbox": [
+                230,
+                602,
+                315,
+                617
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Here, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { \\mathrm { G S } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is rendered by Gaussian splatting and S is predicted from the normal map obtained from mesh rasterization. We find this combination of Gaussian splatting and mesh rasterization to better capture view-dependent shading effects than each individual approach while retaining efficiency. We use ‘pseudo’ because the decomposition is not perfect. Even though, we will show that the pseudo shading map encodes lighting effects to some extent."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                631,
+                470,
+                752
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We emphasize that rendering operates on the GoM representation in the observation space (see Eq. (2)), i.e., on"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                752,
+                470,
+                784
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathrm { G o M } ^ { o } \\triangleq \\{ \\{ ( p _ { i } ^ { o } , w _ { i } ) \\} _ { i = 1 } ^ { V } , \\{ ( r _ { \\theta , j } , s _ { \\theta , j } , c _ { \\theta , j } ) \\} _ { j = 1 } ^ { F } \\} .\\tag{7}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/7bc16ab43ffcf5b6b4fcb2769e1a48e19d1fad803f2f965dc9490a644a8a5f6e.jpg"
+                }
+            },
+            "bbox": [
+                98,
+                809,
+                426,
+                829
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Note, the only difference between GoM<sup>o</sup> and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\operatorname { G o M } _ { \\boldsymbol { \\theta } } ^ { c }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "defined in Eq. (3) is the use of observation space vertex coordinates "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "p _ { i } ^ { o }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Sec. 3.3 will provide more details about how to compute "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "p _ { i } ^ { o }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "from the vertex coordinates in canonical space "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "p _ { \\theta , i } ^ { c }"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                839,
+                470,
+                902
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In greater detail, Gaussian splatting is used to render the pseudo albedo map "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { \\mathrm { G S } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", specified in Eq. (6), and the subject mask M, specified in Eq. (2). To obtain the pseudo shading map S, specified in Eq. (6), we use the normal map "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "N _ { \\mathrm { m e s h } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "obtained via standard mesh rasterization. During training, we also use the subject mask "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "M _ { \\mathrm { m e s h } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "which is obtained through the SoftRasterizer [40]. We now discuss the computation of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { \\mathrm { G S } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and S."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                90,
+                893,
+                212
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Pseudo albedo map "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { \\mathbf G \\mathbf S }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "rendering. We render "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { \\mathrm { G S } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and M with Gaussian splatting given "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "F"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Gaussians in the world coordinate system "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathsf { \\bar { \\{ G _ { j } } }  \\triangleq \\mathsf { N } ( \\mu _ { j } , \\Sigma _ { j } ) \\} _ { j = 1 } ^ { F }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and the corresponding colors "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ c _ { \\theta , j } \\} _ { j = 1 } ^ { F }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "which are defined in "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\operatorname { E q . } \\left( 5 \\right)"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". F indicates the number of faces."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                212,
+                893,
+                287
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Importantly, different from the original 3D Gaussian splatting that directly learns Gaussian parameters within the world coordinate system, we acquire these parameters within the local coordinate frame of each triangle face. Subsequently, we transform these local Gaussians into the world coordinate system, taking into account the deformations of the individual faces. This distinctive formulation allows our Gaussian representation to dynamically adapt to the varying shapes of triangles, which can change across different human poses due to articulation. Concretely, given a face and its local parameters "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f _ { \\theta , j } ~ ="
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( r _ { \\theta , j } , s _ { \\theta , j } , c _ { \\theta , j } , \\{ \\Delta _ { j , k } \\} _ { k = 1 } ^ { 3 } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", the mean "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mu _ { j }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "of a Gaussian in world coordinates is the centroid of the face, i.e.,"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                289,
+                893,
+                486
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mu _ { j } = \\frac { 1 } { 3 } \\sum _ { k = 1 } ^ { 3 } p _ { \\Delta _ { j , k } } ^ { o } .\\tag{8}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/b5656c58944bc3780f7f21b12642140bb66e93de93c829cab0c0bb0c0c0a1c84.jpg"
+                }
+            },
+            "bbox": [
+                632,
+                493,
+                758,
+                535
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "equation_inline",
+                        "content": "p _ { \\Delta _ { j , k } } ^ { o }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the coordinate of the triangle’s vertex. The Gaussian’s covariance is"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                541,
+                892,
+                571
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\Sigma _ { j } = A _ { j } ( R _ { j } S _ { j } S _ { j } ^ { T } R _ { j } ^ { T } ) A _ { j } ^ { T } .\\tag{9}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/f7982966368cf1e6e401a17bba7f5afec2d8e5ccd5772c95b053208746abee81.jpg"
+                }
+            },
+            "bbox": [
+                602,
+                580,
+                787,
+                601
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "equation_inline",
+                        "content": "R _ { j }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "S _ { j }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are the matrices encoding rotation "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ r _ { \\theta , j } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and scale "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { \\theta , j } . \\ A _ { j }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the transformation matrix from local coordinates to world coordinates which is a function of the face vertices, i.e., "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "A _ { j } = T ( \\{ p _ { \\Delta _ { i . k } } ^ { o } \\} _ { k = 1 } ^ { 3 } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". We provide a detailed derivation of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "A _ { j }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in the supplementary material. Through Eq. (8) and (9), Gaussians are dynamically adapted to the shapes of triangles of different human poses."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                607,
+                893,
+                713
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Pseudo shading map S prediction. For view-dependent shading effects, we predict the pseudo shading map from the mesh rasterized normal map "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "N _ { \\mathrm { m e s h } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "via"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                713,
+                892,
+                758
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbb { R } ^ { H \\times W \\times 1 } \\ni S = \\mathtt { S h a d i n g } _ { \\theta } \\left( \\gamma ( N _ { \\mathrm { m e s h } } ) \\right) .\\tag{10}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/9d28e55c3366ab1a607e3b68aee7a053149485b6dece1acf913bbce740507907.jpg"
+                }
+            },
+            "bbox": [
+                553,
+                766,
+                834,
+                785
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Here "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\gamma ( \\cdot )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "denotes the positional encoding [49]. Shading is a "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "1 \\times 1"
+                    },
+                    {
+                        "type": "text",
+                        "content": "convolutional network that maps each pixel to a scaling factor."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                792,
+                892,
+                838
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.3. Articulation"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                847,
+                632,
+                862
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Different from NeRF-based approaches [16, 70, 81] that require the ill-posed backward mapping from observation space to canonical space, our articulation follows the mesh’s forward articulation, i.e., from canonical space to observation space, taking advantage of our Gaussians-on-Mesh representation."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                869,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_footer",
+            "content": {
+                "page_footer_content": [
+                    {
+                        "type": "text",
+                        "content": "2062"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                73,
+                92,
+                470,
+                151
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The goal of the articulator defined in Eq. (1) is to obtain the Gaussians-on-Mesh representation in observation space, i.e., GoM<sup>o</sup> (see Eq. (7)), given the canonical representation "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\operatorname { G o M } _ { \\boldsymbol { \\theta } } ^ { c }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and a human pose P. Note, we only transform "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "p _ { \\theta , i } ^ { c }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "p _ { i } ^ { o }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "as all the other attributes are shared."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                151,
+                468,
+                227
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To transform, linear blend skinning (LBS) is applied to warp the vertices to the observation space. For posedependent non-rigid motion, we utilize a non-rigid motion module to deform the canonical vertices before applying LBS. We refer to the space after non-rigid deformation as ‘the non-rigidly transformed canonical space’."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                227,
+                470,
+                318
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Linear blend skinning. We adhere to the standard linear blend skinning for the transformation of vertices from the non-rigidly transformed canonical space into the observation space as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbb { R } ^ { 3 } \\ni p _ { i } ^ { 0 } ="
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                318,
+                470,
+                378
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathrm { L B S } \\left( p _ { i } ^ { \\mathrm { n r } } , w _ { i } , P \\right) = \\frac { \\sum _ { j = 1 } ^ { J } w _ { i } ^ { j } ( R _ { j } ^ { p } p _ { i } ^ { \\mathrm { n r } } + t _ { j } ^ { p } ) } { \\sum _ { k = 1 } ^ { J } w _ { i } ^ { k } } .\\tag{11}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/18668a27f5054d9887b6050fca4b80af05110a34b3e48a1190ca3b9ff2459160.jpg"
+                }
+            },
+            "bbox": [
+                112,
+                386,
+                405,
+                426
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In this equation, the human pose "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "P = \\{ ( R _ { j } ^ { p } , t _ { j } ^ { p } ) \\} _ { j = 1 } ^ { J }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is represented by the rotations and translations of J joints. Each vertex is associated with LBS weights denoted as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "w _ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". And "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "p _ { i } ^ { \\mathrm { n r } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "represents the coordinates in the non-rigidly transformed canonical space, which we will elaborate on next."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                433,
+                470,
+                508
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Non-rigid deformation. To transform to the non-rigidly transformed canonical space, we model a pose-dependent non-rigid deformation before LBS. Specifically, we predict an offset and add it to the i-th canonical vertex, i.e.,"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                510,
+                470,
+                570
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "p _ { i } ^ { \\mathrm { n r } } = p _ { \\theta , i } ^ { c } + \\tt N R D e f o r m e r _ { \\theta } \\left( \\gamma ( { p _ { \\theta , i } ^ { c } } ) , P \\right) .\\tag{12}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/1abf039f77b4b66e765beef8d55f357c31e2510c483017bf80295d7dc46abe90.jpg"
+                }
+            },
+            "bbox": [
+                114,
+                577,
+                400,
+                595
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "NRDeformer refers to an MLP network. "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\gamma ( \\cdot )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "denotes the sinusoidal positional encoding [49]."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                602,
+                468,
+                633
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.4. Pose Refinement"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                640,
+                241,
+                655
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Human poses are typically estimated from the image and hence often inaccurate. Therefore, we follow Human-NeRF [70] to add a pose refinement module that learns to correct the estimated poses. Specifically, given a human pose "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { P } = \\{ ( \\hat { R } _ { j } ^ { p } , t _ { j } ^ { p } ) \\} _ { j = 1 } ^ { j }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "estimated from a video frame, we predict a correction to the joint rotations via"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                662,
+                470,
+                753
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\{ \\xi _ { j } \\} _ { j = 1 } ^ { J } = \\mathtt { P o s e R e f i n e r } _ { \\theta } \\left( \\{ \\hat { R } _ { j } ^ { p } \\} _ { j = 1 } ^ { J } \\right) .\\tag{13}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/c92dfbdbfae375da7dafc4d400251704d7e1569ea19cb01a9b636c656a769591.jpg"
+                }
+            },
+            "bbox": [
+                117,
+                761,
+                400,
+                786
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\xi _ { j } ~ \\in ~ S O ( 3 )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". We obtain the updated pose "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "P ="
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\begin{array} { r c l } { \\{ ( R _ { j } ^ { p } , t _ { j } ^ { p } ) \\} _ { j = 1 } ^ { J } } & { = } & { \\{ ( \\hat { R } _ { j } ^ { p } \\ \\cdot \\ \\xi _ { j } , t _ { j } ^ { p } ) \\} _ { j = 1 } ^ { J } } \\end{array}"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", which is used in Eq. (11) and (12)."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                792,
+                468,
+                839
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "It’s important to note that pose refinement occurs only during novel view synthesis and the training stage to compensate for the inaccuracies in pose estimation from the videos. It is not needed for animation."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                840,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.5. Training"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                89,
+                606,
+                107
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We supervise the predicted RGB image I and subject mask M with ground-truth "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { \\mathrm { { g t } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "M _ { \\mathrm { g t } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Our overall loss is"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                113,
+                892,
+                145
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "L = L _ { I } + \\alpha _ { \\mathrm { l p i p s } } L _ { \\mathrm { l p i p s } } + \\alpha _ { M } L _ { M } + \\alpha _ { \\mathrm { r e g } } L _ { \\mathrm { r e g } } .\\tag{14}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/b82a566f9723f400cbc561b5892464514cee6b68170681b0e8f3b5c7dede739c.jpg"
+                }
+            },
+            "bbox": [
+                535,
+                156,
+                828,
+                172
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Here, ↵ are weights for losses. "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { I }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { M }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are the L1 loss on the RGB images and subject masks respectively. "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { l p i p s } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the LPIPS loss [84] between predicted RGB image I and ground-truth "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { \\mathrm { g t } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ". We add additional regularization on the underlying mesh via "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { r e g } } ="
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                183,
+                893,
+                261
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "{ \\cal L } _ { \\mathrm { m a s k } } + \\alpha _ { \\mathrm { l a p } } { \\cal L } _ { \\mathrm { l a p } } + \\alpha _ { \\mathrm { n o r m a l } } { \\cal L } _ { \\mathrm { n o r m a l } } + \\alpha _ { \\mathrm { c o l o r } } { \\cal L } _ { \\mathrm { c o l o r } } .\\tag{15}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/d79ac5865e17b05ff1e55c27d1c897dc73c33075cdf4f860fe87640c9b5cfa5b.jpg"
+                }
+            },
+            "bbox": [
+                524,
+                272,
+                839,
+                287
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { m a s k } } = \\lVert M _ { \\mathrm { m e s h } } - M _ { \\mathrm { g t } } \\rVert"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the regularization on the mesh silhouette. "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\begin{array} { r } { L _ { \\mathrm { l a p } } = \\frac { 1 } { N } \\sum _ { i = 1 } ^ { N } \\| \\delta _ { i } \\| ^ { 2 } } \\end{array}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the Laplacian smoothing loss, where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\delta _ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the Laplacian coordinate of the i-th vertex. "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { n o r m a l } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the normal consistency loss that maximizes the cosine similarity of adjacent face normals. Similar to the normal consistency, we apply a color smoothness loss denoted as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { \\mathrm { c o l o r } } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ", which penalizes the differences in colors between two adjacent faces."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                297,
+                893,
+                420
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We initialize the vertices and faces with SMPL [43]. We initialize the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ r _ { \\theta , j } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { \\boldsymbol { \\theta } , j }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in Eq. (5) to zeros and ones respectively so that we start with a thin Gaussian whose variance in the face normal axis is small. Meanwhile, the projection of the ellipsoid "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ x : ( x - \\mu _ { j } ) ^ { T } \\Sigma _ { i } ^ { - 1 } ( x - \\mu _ { j } ) \\stackrel { - } { = } 1 \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "on the triangle recovers the Steiner ellipse (see Fig. 3). To enhance the details, we upsample the canonical GoM<sup>c</sup> using GoM subdivision during training. We first subdivide the underlying mesh by introducing new vertices at the center of each edge, followed by replacing each face with four smaller faces. The properties of each face, as described in Eq. (5), are duplicated across the newly generated faces."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                420,
+                893,
+                604
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4. Experiments"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                616,
+                633,
+                633
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We evaluate GoMAvatar on the ZJU-MoCap dataset [54], the PeopleSnapshot dataset [1] and on YouTube videos, comparing with state-of-the-art human avatar modeling methods from monocular videos. We showcase our method’s rendering quality under novel views and poses, as well as its speed and geometry."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                640,
+                893,
+                734
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.1. Experimental setup"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                741,
+                687,
+                757
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Datasets. We validate our proposed approach on ZJU-MoCap [54] data, PeopleSnapshot [1] data and Youtube videos. ZJU-MoCap: The ZJU-MoCap dataset provides a comprehensive multi-camera, multi-subject benchmark for human rendering evaluation. It has 9 dynamic human videos captured by 21 synchronized cameras. In our paper, to ensure a fair comparison, we adhere to the training/test split in MonoHuman [81] and follow their monocular video human rendering setting. We validate our approach on six subjects (377, 386, 387, 392, 393, and 394) in the dataset. For each subject, the first 4/5 frames from Camera 0 are used for training. We use the corresponding frames in the remaining cameras to evaluate novel view synthesis, and the last 1/5 frames from all views to evaluate novel pose synthesis. PeopleSnapshot: The PeopleSnapshot dataset provides monocular videos where humans rotate in front of the cameras. We follow the evaluation protocol in InstantAvatar [26] to validate our approach. We report results averaged on four subjects (f3c, f4c, m3c, and m4c) and refine the test poses. Youtube videos: We qualitatively validate our approach on Youtube dancing videos used in HumanNeRF [70]. We generate the subject masks with MediaPipe [44], and the SMPL poses with PARE [33]."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                763,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2063"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/61c9ffe56cdb8b83a598b9f16e73b348f4de354a7fe5556a516105c86d34f857.jpg"
+                },
+                "table_caption": [],
+                "table_footnote": [],
+                "html": "<table><tr><td rowspan=\"2\"></td><td colspan=\"3\">Novel view synthesis</td><td colspan=\"3\">Novel pose synthesis</td><td rowspan=\"2\">Inference time (ms) ↓</td><td rowspan=\"2\">Memory (MB) ↓</td></tr><tr><td>PSNR ↑</td><td>SSIM↑</td><td>LPIPS*↓</td><td>PSNR ↑</td><td>SSIM↑</td><td>LPIPS*↓</td></tr><tr><td>Neural Body [54]</td><td>28.72</td><td>0.9611</td><td>52.25</td><td>28.54</td><td>0.9604</td><td>53.91</td><td>212.3</td><td>16.76</td></tr><tr><td>HumanNeRF [70]</td><td>29.61</td><td>0.9625</td><td>38.45</td><td>29.74</td><td>0.9655</td><td>34.79</td><td>1776.7</td><td>245.73</td></tr><tr><td>NeuMan [27]</td><td>28.96</td><td>0.9479</td><td>60.74</td><td>28.75</td><td>0.9406</td><td>62.35</td><td>3412.5</td><td>2.27</td></tr><tr><td>MonoHuman [81]</td><td>30.26</td><td>0.9692</td><td>30.92</td><td>30.05</td><td>0.9684</td><td>31.51</td><td>5970.0</td><td>280.67</td></tr><tr><td>Ours</td><td>30.37</td><td>0.9689</td><td>32.53</td><td>30.34</td><td>0.9688</td><td>32.39</td><td>23.2</td><td>3.63</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                140,
+                89,
+                830,
+                195
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/07d5618106ece6fde9ea796aa996bcc09a5789df4ad9c779e8214cd3c0d8681c.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 1. Quantitative results on ZJU-MoCap dataset. Our results generally provide the best (or second best) quality across both novel view and novel pose rendering while being the fastest and having the second smallest parameter size. ( best, second best)"
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>CD↓</td><td rowspan=1 colspan=1>NC↑</td></tr><tr><td rowspan=2 colspan=1>Neural Body [54]HumanNeRF [70]</td><td rowspan=1 colspan=1>5.1473</td><td rowspan=1 colspan=1>0.4985</td></tr><tr><td rowspan=1 colspan=1>2.8029</td><td rowspan=1 colspan=1>0.5039</td></tr><tr><td rowspan=1 colspan=1>MonoHuman [81]</td><td rowspan=1 colspan=1>2.6303</td><td rowspan=1 colspan=1>0.5205</td></tr><tr><td rowspan=1 colspan=1>Ours</td><td rowspan=1 colspan=1>2.8364</td><td rowspan=1 colspan=1>0.6201</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                147,
+                234,
+                400,
+                315
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/36374009997f850c92fa676219f5101064d04aea4f257f960853a40f8935fbfc.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 2. Geometry quality evaluation. Our approach provides the best normal consistency across all methods, and MonoHuman achieves best quality in surface geometry. ( best, second best)"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Table 3. Quantitative results on PeopleSnapshot dataset. Our approach provides the best results regarding PSNR and SSIM while being the fastest in inference. ( best, second best)"
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td rowspan=1 colspan=2></td><td rowspan=1 colspan=3>Novel view synthesisPSNR ↑ SSIM↑ LPIPS ↓</td><td rowspan=1 colspan=1>Inferencetime (ms) ↓</td></tr><tr><td rowspan=1 colspan=2>Anim-NeRF [8]</td><td rowspan=1 colspan=1>28.89</td><td rowspan=1 colspan=1>0.9682</td><td rowspan=1 colspan=1>0.0206</td><td rowspan=1 colspan=1>217.00</td></tr><tr><td rowspan=2 colspan=2>InstantAvatar [26]Ours</td><td rowspan=1 colspan=1>ntAvatar [26]</td><td rowspan=1 colspan=1>28.61</td><td rowspan=1 colspan=1>0.9698</td><td rowspan=1 colspan=1>0.0242</td></tr><tr><td rowspan=1 colspan=1>30.68</td><td rowspan=1 colspan=1>0.9767</td><td rowspan=1 colspan=1>0.0213</td><td rowspan=1 colspan=1>25.82</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                78,
+                366,
+                467,
+                440
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                489,
+                470,
+                702
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Baselines. We compare with state-of-the-art approaches for single-video articulated human capturing algorithms, including NeuralBody [54], HumanNeRF [70], NeuMan [27], MonoHuman [81], Anim-NeRF [8] and InstantAvatar [26]. Similar to our method, these methods take as input a single video and 3D skeleton and output an articulated neural human representation, that can facilitate both novel view and novel pose synthesis."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                703,
+                470,
+                824
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Evaluation metrics. We report PSNR, SSIM and LPIPS or LPIPS* (= LPIPS 1000) for novel view synthesis and novel pose synthesis. To compare the geometry, we report Chamfer Distance (CD) and the Normal Consistency (NC) following the protocol in ARAH [69]. For normal consistency, we compute 1  L2 distance between normals for 1) each vertex in the ground-truth mesh; and 2) its closest vertex in the predicted mesh. We also benchmark the inference speed in milliseconds (ms) / frame on an NVIDIA A100 GPU and the memory cost (the size of parameters used in inference)."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                824,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                238,
+                893,
+                329
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.2. Quantitative results"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                343,
+                689,
+                359
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Tab. 1 presents our results on ZJU-MoCap data following MonoHuman’s split. In terms of perceptual performance, our approach achieves PSNR/SSIM/LPIPS* of 30.37/0.9689/32.53 on novel view synthesis and 30.34/0.9688/32.39 on novel pose synthesis, which is on par with the top-performing competitive methods MonoHuman. Notably, in terms of inference time, our approach achieves a rendering speed of 23.2ms/frame (43 FPS), which is 257 faster than MonoHuman, 76 faster than HumanNeRF, and more than 9 faster than any competing algorithm. These results indicate that our proposed method enables real-time articulated neural human rendering from a single video. Meanwhile, our approach is memory-efficient (3.63 MB parameters), which is smaller than all competitive methods except NeuMan [27]."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                368,
+                893,
+                595
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We also evaluate the Chamfer distance and the normal consistency between predicted geometry and pseudo ground-truth geometry in Tab. 2. Note that the pseudo ground-truths are generated from NeuS [68] on all viewpoints and are then filtered, following ARAH [69]. Our approach significantly outperforms NeRF-based approaches in terms of normal consistency, which indicates that our approach can learn meaningful geometry. Note that our Chamfer distance is slightly worse than HumanNeRF and MonoHuman. It is possibly due to the use of 3D Gaussians, which have thickness in the surface normal direction. The rendered mask is larger than the actual mesh’s silhouette. Hence, our meshes are a bit smaller than the ‘real’ meshes."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                597,
+                895,
+                792
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Following InstantAvatar’s split, we evaluate our approach on four subjects in PeopleSnapshot dataset in Tab. 3. Our approach achieves the PSNR/SSIM/LPIPS/inference time of 30.68/0.9767/0.0213/25.82ms, significantly outperforming InstantAvatar’s 28.61/0.9698/0.0242/71.26ms. Compared to Anim-NeRF’s PSNR/SSIM/LPIPS of 28.89/0.9682/0.0206, our PSNR and SSIM are significantly (a) Target pose (b) HumanNeRF (c) MonoHuman"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                795,
+                895,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2064"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                509,
+                478,
+                797,
+                491
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/c4e19a124f2c8c06fd81df4354e5c9125071fc50b2b744da0e2357fcbc9e749a.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                250,
+                89,
+                397,
+                301
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/940a52995d189630d2297db6800efc33be7bfaa79ebf486d3aa3546f08ba36ab.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                733,
+                89,
+                879,
+                200
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/d3f205c201edfdeec719c6455651c668f08e238b0b2440f3c30acb7e7ce4a5c7.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": [
+                    {
+                        "type": "text",
+                        "content": "(a) Ground truth"
+                    },
+                    {
+                        "type": "text",
+                        "content": "(b) Neural Body"
+                    }
+                ]
+            },
+            "bbox": [
+                88,
+                92,
+                233,
+                303
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/5a2cf0bb5aadf6d1733948868b8bc9a78b348e08fcad987ac253bae3c065fb23.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": [
+                    {
+                        "type": "text",
+                        "content": "(c) HumanNeRF"
+                    }
+                ]
+            },
+            "bbox": [
+                416,
+                196,
+                552,
+                301
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/a2637d212b98b235149ba78a44ead9800a324f13c55143b4763181d7357cfd2d.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": [
+                    {
+                        "type": "text",
+                        "content": "(d) MonoHuman"
+                    }
+                ]
+            },
+            "bbox": [
+                580,
+                196,
+                714,
+                300
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/510384e17891c08bba5d158dcddb9bce685fac30c2991325a22116fd24427900.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": [
+                    {
+                        "type": "text",
+                        "content": "(e) GoMAvatar (ours)"
+                    }
+                ]
+            },
+            "bbox": [
+                743,
+                198,
+                875,
+                301
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Figure 4. Qualitative comparison to state-of-the-arts. In each pair, we render the RGB image and normal map. The normal map is rendered from the extracted mesh. We show that our approach can produce realistic details in both rendered images and geometry, while other approaches struggle to generate a smooth mesh."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                330,
+                893,
+                372
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/b74edde2e8efb38c27b04fb641cb6876d6fd7417dfb1bf3fd869ea1e2e39b5d0.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": [
+                    {
+                        "type": "text",
+                        "content": "(a) Reference (b) HumanNeRF (c) MonoHuman (d) Ours"
+                    }
+                ]
+            },
+            "bbox": [
+                83,
+                377,
+                457,
+                555
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Figure 5. Qualitative results on YouTube videos. The first image is the reference image. We compare novel view synthesis in the first row and novel pose synthesis in the second row."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                585,
+                470,
+                628
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "better, while LPIPS is on par. Also, Anim-NeRF renders at a speed of 217ms/frame on an Nvidia A100, while ours achieves 25.82ms/frame, being 8.4 faster."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                636,
+                470,
+                681
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.3. Qualitative results"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                694,
+                254,
+                710
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Novel view synthesis. We provide a qualitative comparison with NeuralBody, HumanNeRF and MonoHuman on rendered images and normal maps in Fig. 4. The normal maps are rendered from the extracted meshes. As can be seen from the figure, our approach captures fine details, such as facial features and wrinkles, and avoids the “ghost effect” and “floaters” observed in HumanNeRF’s and MonoHuman’s output (see the armpit of the second subject in HumanNeRF’s rendering and floaters around Mono-Human’s rendering). The ghost effect typically occurs when two body parts come too close, an artifact due to Human-NeRF’s and MonoHuman’s voxel-based inverse blend skin-"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                719,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/c226b3f682f2f1eb13483fb64d61325c60ec14d1552919f4d242049d80103ac8.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                514,
+                391,
+                565,
+                472
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/1157d8c704673d9004e97c7e67d508a0fed21387353b6977c4a299d996ed08b3.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                607,
+                388,
+                663,
+                473
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/1f8bf2b16dc5e9146f6764f7053d95a00a59978a892a7a8922a7afd741e6b506.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                704,
+                387,
+                761,
+                474
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/001a815effd649c61069ff9dbe8cea4463c2c0eb538e97b6a3d0ecd4fbc0a3dc.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": [
+                    {
+                        "type": "text",
+                        "content": "(d) Ours"
+                    }
+                ]
+            },
+            "bbox": [
+                802,
+                388,
+                852,
+                473
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Figure 6. Novel pose synthesis. Poses are from using poses generated from MDM [65]."
+                    }
+                ]
+            },
+            "bbox": [
+                500,
+                494,
+                892,
+                522
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "ning. Specifically, limited by the resolution of the LBS weights, the free space is affected by two unrelated body parts and thus obtains a large foreground score. The floaters are typical volume rendering artifacts as in other NeRF representations. In contrast, our approach uses explicit geometry and thus does not suffer from both issues. We additionally test our approach on YouTube dancing videos in the first row of Fig. 5. Note that the human poses and masks are predicted and thus inaccurate. However, our method still renders novel views well, while HumanNeRF and Mono-Human suffer from imperfect masks and produce floaters."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                530,
+                893,
+                698
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Novel pose synthesis. We render novel poses generated from MDM [65], as depicted in Fig. 6. Remarkably, our approach performs effectively even in extremely challenging poses characterized by self-penetration, such as sitting. In contrast, both HumanNeRF and MonoHuman lack the capability to handle such self-penetration, due to the voxel-based inverse blend skinning (see the incomplete left hands). We validate our approach on novel view synthesis using an inthe-wild YouTube video, as illustrated in the second row of Fig. 5. Specifically, when rendering the avatar in a legcrossing pose, both HumanNeRF and MonoHuman fail to produce accurate results, whereas our approach successfully renders the pose with fidelity."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                704,
+                895,
+                902
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2065"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/ed2fe19aacd0560376e2f3a28700e63d005e704aa8fffabadd76cf62c6db8374.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 4. Ablations on scene representation for novel view synthesis. Gaussians-on-Mesh achieves the best results."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td>Gaussians</td><td>Mesh</td><td>PSNR ↑</td><td>SSIM ↑</td><td>LPIPS*↓</td></tr><tr><td>√</td><td>X</td><td>30.06</td><td>0.9673</td><td>34.13</td></tr><tr><td>X</td><td>√</td><td>28.93</td><td>0.9615</td><td>38.11</td></tr><tr><td>√</td><td>√</td><td>30.36</td><td>0.9690</td><td>33.28</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                117,
+                90,
+                428,
+                151
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.4. Ablation studies"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                191,
+                238,
+                207
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Canonical representation. We conduct ablation studies on the Gaussians-on-Mesh (GoM) representation and 3D Gaussians or meshes alone, as summarized in Tab. 4. In the 3D Gaussians experiment, we only use Gaussian splatting for rendering, and supervise the rendered image and subject mask during training. We initialize the Gaussians’ centroids as the vertices of the canonical T-pose SMPL mesh and directly learn their centroids, rotations and scales in the world coordinates, which differs from the triangle’s local coordinates used in our approach. We also compare with just using a mesh: We initialize using the canonical SMPL mesh and attach the pseudo-albedo colors to the vertices. We render the RGB image and subject mask with mesh rasterization [40]. We supervise the rendered image and subject mask and apply all regularizations in Eq. (15). We also utilize the color decomposition in Eq. (6)."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                213,
+                472,
+                455
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We find 3D Gaussians alone suffer from overfitting: without geometry regularization, Gaussians are too flexible and achieve similar rendering quality on training images, while the outputs are undesirable during inference. When using only the mesh, optimization is a known challenge. In contrast, GoM alleviates these issues and combines the strengths of both representations. GoM produces the highest rendering quality among the three representations."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                457,
+                470,
+                579
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Local Gaussians vs. world Gaussians. We compare three choices of attaching Gaussians to the mesh: 1) World Gaussians: We associate the Gaussian’s centroid with the face’s centroid (Eq. (8)). However, we directly learn the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ r _ { \\theta , j } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { \\boldsymbol { \\theta } , j }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in the world coordinates, i.e., "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\Sigma _ { j } = \\mathbf { \\bar { \\it { R } } } _ { j } S _ { j } S _ { j } ^ { T } , \\bar { R _ { j } ^ { T } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "R _ { j }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "S _ { j }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are the matrix encodings of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ r _ { \\theta , j } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { \\boldsymbol { \\theta } , j } ;"
+                    },
+                    {
+                        "type": "text",
+                        "content": "2) Local fixed Gaussians: We follow Eqs. (8) and (9) to compute a Gaussian’s mean and covariance in the world coordinates. However, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ r _ { \\theta , j } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { \\boldsymbol { \\theta } , j }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are fixed so that the variance in the normal axis is small. Meanwhile, the projection of the ellipsoid "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ x : ( x - \\mu _ { j } ) ^ { T } \\Sigma _ { j } ^ { - 1 } ( x - \\mu _ { j } ) = 1 \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "on the triangle recovers the Steiner ellipse. 3) Local Gaussians: We use Eqs. (8) and (9) to transform the Gaussians and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ r _ { \\theta , j } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { \\boldsymbol { \\theta } , j }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are free variables."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                579,
+                470,
+                791
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We show the comparison in the top section of Tab. 5. In terms of rendering quality, world Gaussians and local Gaussians achieve similar performance. But world Gaussians tend to enlarge the scales instead of stretching the faces, so the geometry is worse. Local fixed Gaussians can produce equally good geometry, but lose rendering flexibility."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                792,
+                470,
+                883
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Shading Module. As shown in the middle section of Tab. 5, without the shading module in Eq. (6)—that is, by directly using "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "I _ { \\mathrm { G S } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "as the RGB prediction—our model achieves a PSNR of 30.13. However, with the shading module included, the PSNR increases to 30.36. We also visualize the pseudo shading map, demonstrating that our shading module learns lighting effects, as illustrated in Fig. 7."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                885,
+                470,
+                900
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/da1312437b5e5f46491c1312ccd45de22722c154bbf743fac5e952666c573224.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 5. Ablation Studies. Top section: locally deformed Gaussians help improve both geometry and rendering quality. Middle section: our proposed shading module enhances rendering quality. Bottom section: subdivision significantly improves geometry."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>PSNR ↑SSIM ↑ LPIPS* ↓|</td><td rowspan=1 colspan=1>CD↓ NC↑</td></tr><tr><td rowspan=2 colspan=1>World GaussiansLocal Fixed GaussiansLocal Flex. Gaussians</td><td rowspan=1 colspan=1>30.340.9689 33.99</td><td rowspan=1 colspan=1>4.39410.6223</td></tr><tr><td rowspan=1 colspan=1>30.270.9685 34.1130.360.9690 33.28</td><td rowspan=1 colspan=1>3.08980.62473.07280.6366</td></tr><tr><td rowspan=1 colspan=1>w/o Shadingw/ Shading</td><td rowspan=1 colspan=1>30.130.9684 32.0730.360.9690 33.28</td><td rowspan=1 colspan=1>|3.01770.63603.0728 0.6366</td></tr><tr><td rowspan=2 colspan=1>w/o Subdivisionw/ Subdivision</td><td rowspan=1 colspan=1>30.360.9690 33.28</td><td rowspan=1 colspan=1>|3.07280.6366</td></tr><tr><td rowspan=1 colspan=1>30.370.9689 32.53</td><td rowspan=1 colspan=1>2.83640.6201</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                504,
+                89,
+                890,
+                214
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/3ebd8c7705adb4497e088dd55e1eb661d86a49a0a6a7887f3c8d58f294e2c44f.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                566,
+                284,
+                710,
+                397
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/c9b6bc43791483660b1d27203bbe84fe854d66bef2785d9847dab773a1b2176f.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "(a) Pseudo shading map"
+                    },
+                    {
+                        "type": "text",
+                        "content": "(b) Rendered image"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Figure 7. Pseudo shading map. We visualize the pseudo shading map and the rendered image for reference. Our approach learns view-dependent shading effects as seen in the highlighted regions. The pseudo shading map is normalized for better visualization."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                759,
+                285,
+                854,
+                398
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                481,
+                893,
+                571
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "GoM subdivision. We show in the bottom section of Tab. 5 that GoM subdivision enhances the LPIPS* from 33.28 to 32.53 and reduces the Chamfer distance from 3.0728 to 2.8364. Importantly, the geometry significantly improves with a more fine-grained mesh. Note, this increases inference time to 23.2ms per frame from 17.5ms."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                571,
+                893,
+                664
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5. Conclusion"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                665,
+                620,
+                681
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We introduce GoMAvatar, a framework designed for rendering high-fidelity, free-viewpoint images of a human performer, using a single input video. At the core of our method is the Gaussians-on-Mesh representation. Paired with forward articulation and neural rendering, our method renders quickly while being memory efficient. Notably, the method handles in-the-wild videos well."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                683,
+                893,
+                790
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "Acknowledgement"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                791,
+                661,
+                808
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Project supported by Intel AI SRS gift, IBM IIDAI Grant, Insper-Illinois Innovation Grant, NCSA Faculty Fellowship, NSF Awards #2008387, #2045586, #2106825, #2331878, #2340254, #2312102, and NIFA award 2020- 67021-32799. We thank NCSA for providing computing resources. We thank Yiming Zuo for helpful discussions."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                809,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2066"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "References"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                78,
+                89,
+                176,
+                106
+            ]
+        },
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[1] Thiemo Alldieck, Marcus A. Magnor, Weipeng Xu, Christian Theobalt, and Gerard Pons-Moll. Video based reconstruction of 3D people models. In CVPR, 2018. 2, 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[2] Dragomir Anguelov, Praveen Srinivasan, Daphne Koller, Sebastian Thrun, Jim Rodgers, and James Davis. SCAPE: shape completion and animation of people. ACM TOG, 2005. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[3] Benjamin Attal, Jia-Bin Huang, Michael Zollhoefer, Johannes Kopf, and Changil Kim. Learning Neural Light Fields with Ray-Space Embedding. In CVPR, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[4] Jonathan T. Barron, Ben Mildenhall, Matthew Tancik, Peter Hedman, Ricardo Martin-Brualla, and Pratul P. Srinivasan. Mip-NeRF: A Multiscale Representation for Anti-Aliasing Neural Radiance Fields. In ICCV, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[5] Jonathan T. Barron, Ben Mildenhall, Dor Verbin, Pratul P. Srinivasan, and Peter Hedman. Mip-NeRF 360: Unbounded Anti-Aliased Neural Radiance Fields. In CVPR, 2022."
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[6] Jonathan T. Barron, Ben Mildenhall, Dor Verbin, Pratul P. Srinivasan, and Peter Hedman. Zip-NeRF: Anti-Aliased Grid-Based Neural Radiance Fields. In ICCV, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[7] Anpei Chen, Zexiang Xu, Andreas Geiger, Jingyi Yu, and Hao Su. TensoRF: Tensorial Radiance Fields. In ECCV, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[8] Jianchuan Chen, Ying Zhang, Di Kang, Xuefei Zhe, Linchao Bao, and Huchuan Lu. Animatable Neural Radiance Fields from Monocular RGB Video. arXiv, 2021. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[9] Jianchuan Chen, Wen Yi, Liqian Ma, Xu Jia, and Huchuan Lu. GM-NeRF: Learning Generalizable Model-based Neural Radiance Fields from Multi-view Images. In CVPR, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[10] Xu Chen, Yufeng Zheng, Michael J Black, Otmar Hilliges, and Andreas Geiger. SNARF: Differentiable Forward Skinning for Animating Non-Rigid Neural Implicit Shapes. In ICCV, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[11] Xu Chen, Tianjian Jiang, Jie Song, Max Rietmann, Andreas Geiger, Michael J. Black, and Otmar Hilliges. Fast-SNARF: A Fast Deformer for Articulated Neural Fields. TPAMI, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[12] Zhiqin Chen and Hao Zhang. Learning Implicit Fields for Generative Shape Modeling. In CVPR, 2019. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[13] Zhiqin Chen, Thomas A. Funkhouser, Peter Hedman, and Andrea Tagliasacchi. MobileNeRF: Exploiting the Polygon Rasterization Pipeline for Efficient Neural Field Rendering on Mobile Architectures. In CVPR, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[14] Xiangjun Gao, Jiaolong Yang, Jongyoo Kim, Sida Peng, Zicheng Liu, and Xin Tong. MPS-NeRF: Generalizable 3D Human Rendering from Multiview Images. TPAMI, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[15] Stephan J. Garbin, Marek Kowalski, Matthew Johnson, Jamie Shotton, and Julien P. C. Valentin. FastNeRF: High-Fidelity Neural Rendering at 200FPS. In ICCV, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[16] Chen Geng, Sida Peng, Zhenqi Xu, Hujun Bao, and Xiaowei Zhou. Learning Neural Volumetric Representations of Dynamic Humans in Minutes. In CVPR, 2023. 1, 3, 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[17] Steven J. Gortler, Radek Grzeszczuk, Richard Szeliski, and Michael F. Cohen. The lumigraph. In SIGGRAPH, 1996. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[18] Jon Hasselgren, Nikolai Hofmann, and Jacob Munkberg. Shape, Light & Material Decomposition from Images using Monte Carlo Rendering and Denoising. In NeurIPS, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[19] Tong He, Yuanlu Xu, Shunsuke Saito, Stefano Soatto, and Tony Tung. Arch++: Animation-ready clothed human reconstruction revisited. In ICCV, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[20] Peter Hedman, Pratul P. Srinivasan, Ben Mildenhall, Jonathan T. Barron, and Paul E. Debevec. Baking Neural Radiance Fields for Real-Time View Synthesis. In ICCV, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[21] Shou-Yong Hu, Fangzhou Hong, Liang Pan, Haiyi Mei, Lei Yang, and Ziwei Liu. SHERF: Generalizable Human NeRF from a Single Image. In ICCV, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[22] T. Hu, Tao Yu, Zerong Zheng, He Zhang, Yebin Liu, and Matthias Zwicker. HVTR: Hybrid Volumetric-Textural Rendering for Human Avatars. 3DV, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[23] Satoshi Iizuka, Edgar Simo-Serra, and Hiroshi Ishikawa. Let there be color! ACM TOG, 2016. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[24] Timothy Jeruzalski, Boyang Deng, Mohammad Norouzi, J. P. Lewis, Geo rey E. Hinton, and Andrea Tagliasacchi. NASA: Neural Articulated Shape Approximation. In ECCV, 2020. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[25] Boyi Jiang, Yang Hong, Hujun Bao, and Juyong Zhang. SelfRecon: Self Reconstruction Your Digital Avatar from Monocular Video. In CVPR, 2022. 1, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[26] Tianjian Jiang, Xu Chen, Jie Song, and Otmar Hilliges. Instantavatar: Learning avatars from monocular video in 60 seconds. In CVPR, 2023. 6, 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[27] Wei Jiang, Kwang Moo Yi, Golnoosh Samei, Oncel Tuzel, and Anurag Ranjan. Neuman: Neural human radiance field from a single video. In ECCV, 2022. 1, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[28] Hanbyul Joo, Tomas Simon, Xulong Li, Hao Liu, Lei Tan, Lin Gui, Sean Banerjee, Timothy Scott Godisart, Bart Nabbe, Iain Matthews, Takeo Kanade, Shohei Nobuhara, and Yaser Sheikh. Panoptic Studio: A Massively Multiview System for Social Interaction Capture. TPAMI, 2017. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[29] James T. Kajiya and Brian Von Herzen. Ray Tracing Volume Densities. In SIGGRAPH, 1984. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[30] Bernhard Kerbl, Georgios Kopanas, Thomas Leimkuhler,¨ and George Drettakis. 3D Gaussian Splatting for Real-Time Radiance Field Rendering. ACM TOG, 2023. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[31] Jaehyeok Kim, Dongyoon Wee, and Dan Xu. You Only Train Once: Multi-Identity Free-Viewpoint Neural Human Rendering from Monocular Videos. arXiv, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[32] Diederik P. Kingma and Jimmy Ba. Adam: A Method for Stochastic Optimization. arXiv, 2014. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[33] Muhammed Kocabas, Chun-Hao P Huang, Otmar Hilliges, and Michael J Black. PARE: Part attention regressor for 3D human body estimation. In ICCV, 2021. 6, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[34] Youngjoon Kwon, Dahun Kim, Duygu Ceylan, and Henry Fuchs. Neural Human Performer: Learning Generalizable Radiance Fields for Human Performance Rendering. In NeurIPS, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[35] Young Chan Kwon, Dahun Kim, Duygu Ceylan, and Henry Fuchs. Neural Image-based Avatars: Generalizable Radiance Fields for Human Avatar Modeling. In ICLR, 2023. 3"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                84,
+                114,
+                468,
+                156
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2067"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[36] Marc Levoy and Pat Hanrahan. Light Field Rendering. In SIGGRAPH, 1996. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[37] Ruilong Li, Julian Tanke, Minh Vo, Michael Zollhofer, Jurgen Gall, Angjoo Kanazawa, and Christoph Lassner. TAVA: Template-free Animatable Volumetric Actors. In ECCV, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[38] Zhi-Hao Lin, Wei-Chiu Ma, Hao-Yu Hsu, Yu-Chiang Frank Wang, and Shenlong Wang. Neurmips: Neural Mixture of Planar Experts for View Synthesis. In CVPR, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[39] Lingjie Liu, Marc Habermann, Viktor Rudnev, Kripasindhu Sarkar, Jiatao Gu, and Christian Theobalt. Neural actor: Neural free-view synthesis of human actors with pose control. ACM TOG, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[40] Shichen Liu, Tianye Li, Weikai Chen, and Hao Li. Soft rasterizer: A differentiable renderer for image-based 3d reasoning. In ICCV, 2019. 4, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[41] Stephen Lombardi, Tomas Simon, Jason M. Saragih, Gabriel Schwartz, Andreas M. Lehrmann, and Yaser Sheikh. Neural Volumes: Learning Dynamic Renderable Volumes from Images. ACM TOG, 2019. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[42] Matthew Loper, Naureen Mahmood, and Michael J Black. Mosh: Motion and shape capture from sparse markers. ACM TOG, 2014. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[43] Matthew Loper, Naureen Mahmood, Javier Romero, Gerard Pons-Moll, and Michael J. Black. SMPL: A skinned multiperson linear model. ACM TOG, 2015. 2, 5, 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[44] Camillo Lugaresi, Jiuqiang Tang, Hadon Nash, Chris Mc-Clanahan, Esha Uboweja, Michael Hays, Fan Zhang, Chuo-Ling Chang, Ming Guang Yong, Juhyun Lee, et al. Mediapipe: A framework for building perception pipelines. arXiv, 2019. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[45] Jonathon Luiten, Georgios Kopanas, Bastian Leibe, and Deva Ramanan. Dynamic 3d gaussians: Tracking by persistent dynamic view synthesis. In 3DV, 2024. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[46] Ricardo Martin-Brualla, Noha Radwan, Mehdi S. M. Sajjadi, Jonathan T. Barron, Alexey Dosovitskiy, and Daniel Duckworth. NeRF in the Wild: Neural Radiance Fields for Unconstrained Photo Collections. In CVPR, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[47] Lars M. Mescheder, Michael Oechsle, Michael Niemeyer, Sebastian Nowozin, and Andreas Geiger. Occupancy networks: Learning 3D reconstruction in function space. In CVPR, 2019. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[48] Marko Mihajlovic, Shunsuke Saito, Aayush Bansal, Michael ´ Zollhoefer, and Siyu Tang. COAP: Compositional Articulated Occupancy of People. In CVPR, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[49] Ben Mildenhall, Pratul P. Srinivasan, Matthew Tancik, Jonathan T. Barron, Ravi Ramamoorthi, and Ren Ng. NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis. In ECCV, 2020. 2, 4, 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[50] Thomas Muller, Alex Evans, Christoph Schied, and Alexan-¨ der Keller. Instant neural graphics primitives with a multiresolution hash encoding. ACM TOG, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[51] Jeong Joon Park, Peter Florence, Julian Straub, Richard A. Newcombe, and Steven Lovegrove. DeepSDF: Learning continuous signed distance functions for shape representation. In CVPR, 2019. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[52] Sang Il Park and Jessica K Hodgins. Capturing and animating skin deformation in human motion. ACM TOG, 2006. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[53] Sida Peng, Junting Dong, Qianqian Wang, Shang-Wei Zhang, Qing Shuai, Xiaowei Zhou, and Hujun Bao. Animatable Neural Radiance Fields for Modeling Dynamic Human Bodies. In ICCV, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[54] Sida Peng, Yuanqing Zhang, Yinghao Xu, Qianqian Wang, Qing Shuai, Hujun Bao, and Xiaowei Zhou. Neural body: Implicit neural representations with structured latent codes for novel view synthesis of dynamic humans. In CVPR, 2021. 2, 3, 5, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[55] Edoardo Remelli, Timur M. Bagautdinov, Shunsuke Saito, Chenglei Wu, Tomas Simon, Shih-En Wei, Kaiwen Guo, Zhe Cao, Fabian Prada, Jason M. Saragih, and Yaser Sheikh.´ Drivable Volumetric Avatars using Texel-Aligned Features. In SIGGRAPH, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[56] Zhongzheng Ren, Xiaoming Zhao, and Alexander G. Schwing. Class-agnostic Reconstruction of Dynamic Objects from Videos. In NeurIPS, 2021. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[57] Zhongzheng Ren, Aseem Agarwala, Bryan Russell, Alexander G. Schwing, and Oliver Wang. Neural volumetric object selection. In CVPR, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[58] Ignacio Rocco, Iurii Makarov, Filippos Kokkinos, David Novotny, Benjamin Graham, Natalia Neverova, and Andrea´ Vedaldi. Real-time Volumetric Rendering of Dynamic Humans. arXiv, 2023. 1, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[59] Shunsuke Saito, Zeng Huang, Ryota Natsume, Shigeo Morishima, Angjoo Kanazawa, and Hao Li. PIFu: Pixel-aligned implicit function for high-resolution clothed human digitization. In ICCV, 2019. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[60] Shunsuke Saito, Tomas Simon, Jason Saragih, and Hanbyul Joo. PIFuHD: Multi-level pixel-aligned implicit function for high-resolution 3d human digitization. In CVPR, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[61] Jonathan Shade, Steven J. Gortler, Li wei He, and Richard Szeliski. Layered depth images. In SIGGRAPH, 1998. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[62] Meng-Li Shih, Shih-Yang Su, Johannes Kopf, and Jia-Bin Huang. 3D Photography Using Context-Aware Layered Depth Inpainting. In CVPR, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[63] Vincent Sitzmann, Justus Thies, Felix Heide, Matthias Nießner, Gordon Wetzstein, and Michael Zollhofer. Deep- ¨ Voxels: Learning Persistent 3D Feature Embeddings. In CVPR, 2019. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[64] Shih-Yang Su, Frank Yu, Michael Zollhoefer, and Helge Rhodin. A-NeRF: Articulated Neural Radiance Fields for Learning Human Shape, Appearance, and Pose. In NeurIPS, 2021. 1, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[65] Guy Tevet, Sigal Raab, Brian Gordon, Yonatan Shafir, Daniel Cohen-Or, and Amit H Bermano. Human motion diffusion model. In ICLR, 2023. 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[66] Garvita Tiwari, Nikolaos Sarafianos, Tony Tung, and Gerard Pons-Moll. Neural-GIF: Neural Generalized Implicit Functions for Animating People in Clothing. In ICCV, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[67] Dor Verbin, Peter Hedman, Ben Mildenhall, Todd E. Zickler, Jonathan T. Barron, and Pratul P. Srinivasan. Ref-NeRF: Structured View-Dependent Appearance for Neural Radiance Fields. In CVPR, 2022. 2"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                78,
+                93,
+                468,
+                119
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2068"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[68] Peng Wang, Lingjie Liu, Yuan Liu, Christian Theobalt, Taku Komura, and Wenping Wang. Neus: Learning neural implicit surfaces by volume rendering for multi-view reconstruction. In NeurIPS, 2021. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[69] Shaofei Wang, Katja Schwarz, Andreas Geiger, and Siyu Tang. ARAH: Animatable Volume Rendering of Articulated Human SDFs. In ECCV, 2022. 3, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[70] Chung-Yi Weng, Brian Curless, Pratul P. Srinivasan, Jonathan T. Barron, and Ira Kemelmacher-Shlizerman. HumanNeRF: Free-viewpoint Rendering of Moving People from Monocular Video. In CVPR, 2022. 1, 3, 4, 5, 6, 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[71] Suttisak Wizadwongsa, Pakkapon Phongthawee, Jiraphon Yenphraphai, and Supasorn Suwajanakorn. NeX: Real-time View Synthesis with Neural Basis Expansion. In CVPR, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[72] Guanjun Wu, Taoran Yi, Jiemin Fang, Lingxi Xie, Xiaopeng Zhang, Wei Wei, Wenyu Liu, Qi Tian, and Xinggang Wang. 4d gaussian splatting for real-time dynamic scene rendering. arXiv, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[73] Guanjun Wu, Taoran Yi, Jiemin Fang, Lingxi Xie, Xiaopeng Zhang, Wei Wei, Wenyu Liu, Qi Tian, and Wang Xinggang. 4D Gaussian Splatting for Real-Time Dynamic Scene Rendering. arXiv, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[74] Cheng-hsin Wuu, Ningyuan Zheng, Scott Ardisson, Rohan Bali, Danielle Belko, Eric Brockmeyer, Lucas Evans, Timothy Godisart, Hyowon Ha, Alexander Hypes, Taylor Koska, Steven Krenn, Stephen Lombardi, Xiaomin Luo, Kevyn McPhail, Laura Millerschoen, Michal Perdoch, Mark Pitts, Alexander Richard, Jason Saragih, Junko Saragih, Takaak Shiratori, Tomas Simon, Matt Stewart, Autumn Trimble, Xinshuo Weng, David Whitewolf, Chenglei Wu, Shoou-I Yu, and Yaser Sheikh. Multiface: A Dataset for Neural Face Rendering, 2022. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[75] Hongyi Xu, Thiemo Alldieck, and Cristian Sminchisescu. H-NeRF: Neural Radiance Fields for Rendering and Temporal Reconstruction of Humans in Motion. In NeurIPS, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[76] Yuanlu Xu, Bingpeng Ma, and Rui Huang Liang Lin. Person search in a scene by jointly modeling people commonness and person uniqueness. In ACM MM, 2014. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[77] Ze Yang, Shenlong Wang, Sivabalan Manivasagam, Zeng Huang, Wei-Chiu Ma, Xinchen Yan, Ersin Yumer, and Raquel Urtasun. S3: Neural shape, skeleton, and skinning fields for 3d human modeling. In CVPR, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[78] Lior Yariv, Peter Hedman, Christian Reiser, Dor Verbin, Pratul P Srinivasan, Richard Szeliski, Jonathan T Barron, and Ben Mildenhall. Bakedsdf: Meshing neural sdfs for realtime view synthesis. In SIGGRAPH, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[79] Alex Yu, Ruilong Li, Matthew Tancik, Hao Li, Ren Ng, and Angjoo Kanazawa. PlenOctrees for Real-time Rendering of Neural Radiance Fields. In ICCV, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[80] Alex Yu, Sara Fridovich-Keil, Matthew Tancik, Qinhong Chen, Benjamin Recht, and Angjoo Kanazawa. Plenoxels: Radiance Fields without Neural Networks. In CVPR, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[81] Zhengming Yu, Wei Cheng, Xian Liu, Wayne Wu, and Kwan-Yee Lin. Monohuman: Animatable human neural field from monocular video. In CVPR, 2023. 1, 3, 4, 5, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[82] Kai Zhang, Gernot Riegler, Noah Snavely, and Vladlen Koltun. NeRF++: Analyzing and Improving Neural Radiance Fields. arXiv, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[83] Rui Zhang and Jie Chen. NDF: Neural Deformable Fields for Dynamic Human Modelling. In ECCV, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[84] Richard Zhang, Phillip Isola, Alexei A Efros, Eli Shechtman, and Oliver Wang. The unreasonable effectiveness of deep features as a perceptual metric. In CVPR, 2018. 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[85] Fuqiang Zhao, Wei Yang, Jiakai Zhang, Pei-Ying Lin, Yingliang Zhang, Jingyi Yu, and Lan Xu. HumanNeRF: Efficiently Generated Human Radiance Field from Sparse Inputs. In CVPR, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[86] Xiaoming Zhao, Yuan-Ting Hu, Zhongzheng Ren, and Alexander G. Schwing. Occupancy Planes for Single-view RGB-D Human Reconstruction. In AAAI, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[87] Xiaoming Zhao, Alex Colburn, Fangchang Ma, Miguel Angel Bautista, Joshua M. Susskind, and Alexander G. <sup>´</sup> Schwing. Pseudo-Generalized Dynamic View Synthesis from a Video. In ICLR, 2024. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[88] Yufeng Zheng, Yifan Wang, Gordon Wetzstein, Michael J. Black, and Otmar Hilliges. PointAvatar: Deformable Pointbased Head Avatars from Videos. In CVPR, 2023. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[89] Zerong Zheng, Han Huang, Tao Yu, Hongwen Zhang, Yandong Guo, and Yebin Liu. Structured Local Radiance Fields for Human Avatar Modeling. In CVPR, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[90] Tinghui Zhou, Richard Tucker, John Flynn, Graham Fyffe, and Noah Snavely. Stereo Magnification: Learning View Synthesis using Multiplane Images. ACM TOG, 2018. 2"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                78,
+                93,
+                468,
+                146
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "2069"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ]
+]
