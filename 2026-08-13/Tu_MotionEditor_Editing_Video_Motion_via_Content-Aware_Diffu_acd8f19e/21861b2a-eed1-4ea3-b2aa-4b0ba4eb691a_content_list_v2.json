@@ -1,0 +1,2848 @@
+[
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "MotionEditor: Editing Video Motion via Content-Aware Diffusion"
+                    }
+                ],
+                "level": 1
+            },
+            "bbox": [
+                150,
+                130,
+                818,
+                151
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Shuyuan Tu<sup>1,2</sup> Qi Dai<sup>3</sup> <sup>∗</sup> Zhi-Qi Cheng<sup>4</sup> Han Hu<sup>3</sup> Xintong Han<sup>5</sup> Zuxuan Wu<sup>1,2</sup> <sup>∗</sup> Yu-Gang Jiang<sup>1,2</sup> <sup>1</sup>Shanghai Key Lab of Intell. Info. Processing, School of CS, Fudan University <sup>2</sup>Shanghai Collaborative Innovation Center of Intelligent Visual Computing <sup>3</sup>Microsoft Research Asia <sup>4</sup>Carnegie Mellon University <sup>5</sup>Huya Inc. https://francis-rings.github.io/MotionEditor"
+                    }
+                ]
+            },
+            "bbox": [
+                86,
+                179,
+                918,
+                275
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/5b7bb5ec8bf5d40580749740db7d7fee98a62f54328f4bfe1fd3e3651b70685c.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 1. MotionEditor: A diffusion-based video editing method aimed at transferring motion from a reference to a source."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                102,
+                301,
+                890,
+                732
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "Abstract"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                233,
+                773,
+                313,
+                791
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Existing diffusion-based video editing models have made gorgeous advances for editing attributes of a source video over time but struggle to manipulate the motion information while preserving the original protagonist’s appearance and background. To address this, we propose MotionEditor, the first diffusion model for video motion editing. MotionEditor incorporates a novel content-aware motion adapter into ControlNet to capture temporal motion correspondence. While ControlNet enables direct generation based on skeleton poses, it encounters challenges when modifying the source motion in the inverted noise due to contradictory signals between the noise (source) and the condition (reference). Our adapter complements Control-Net by involving source content to transfer adapted control signals seamlessly. Further, we build up a two-branch architecture (a reconstruction branch and an editing branch) with a high-fidelity attention injection mechanism facilitating branch interaction. This mechanism enables the editing branch to query the key and value from the reconstruction branch in a decoupled manner, making the editing branch retain the original background and protagonist appearance. We also propose a skeleton alignment algorithm to address the discrepancies in pose size and position. Experiments demonstrate the promising motion editing ability of MotionEditor, both qualitatively and quantitatively. To the best of our knowledge, MotionEditor is the first to use diffusion models specifically for video motion editing, considering the origin dynamic background and camera movement."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                811,
+                472,
+                875
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                776,
+                893,
+                897
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": []
+            },
+            "bbox": [
+                104,
+                2,
+                181,
+                41
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": [
+                    {
+                        "type": "text",
+                        "content": "This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore."
+                    }
+                ]
+            },
+            "bbox": [
+                235,
+                0,
+                810,
+                46
+            ]
+        },
+        {
+            "type": "page_footnote",
+            "content": {
+                "page_footnote_content": [
+                    {
+                        "type": "text",
+                        "content": "<sup>∗</sup>Corresponding authors."
+                    }
+                ]
+            },
+            "bbox": [
+                101,
+                887,
+                236,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "7882"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                92,
+                472,
+                334
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "1. Introduction"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                361,
+                209,
+                377
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Diffusion models [5, 9, 11, 12, 22, 25, 31, 39, 40, 42, 46, 55, 56] have achieved remarkable success in image and video generation, which inspired plenty studies in video editing [3, 17, 19, 29, 47, 49, 50]. While significant progress has been made, existing diffusion models for video editing primarily focus on texture editing, such as attribute manipulation for protagonists, background editing, and style editing. The motion information, which is widely studied in video understanding [34, 38, 41, 48] and stands out as the most unique and distinct feature when compared to images, is mostly ignored. This raises the question: Can we manipulate the motion of a video in alignment with a reference video? In this paper, we attempt to explore a novel, higherlevel, and more challenging video editing scenario—motion editing. Given a reference video and prompt, we aim to change the protagonist’s motion in the source to match the reference video while preserving the original appearance."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                387,
+                472,
+                645
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To date in literature, researchers have explored human motion transfer [20] and pose-guided video generation [21]. The former focuses on animating still images based on reference skeletons, while the latter tries to generate posealigned videos without preserving a desired appearance. Motion editing differs in that it directly modifies the motion in video while preserving other information, such as dynamic per-frame background and camera movement."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                643,
+                470,
+                765
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Recent advancements in visual editing have mainly emerged through the use of diffusion models [2, 21, 24, 35, 52, 54]. For example, ControlNet [52] enables direct controllable generation conditioned on poses. However, they suffer from severe artifacts when trying to edit the motion according to another pose. We hypothesize the reason is that the control signals are only derived from the reference poses, which cannot properly accommodate the source content, thus resulting in a contradiction. Some methods also lack the ability to preserve the appearance of the protagonist and background, as well as the temporal consistency. In this paper, we rethink the fundamental efficacy of ControlNet. We argue that it is essential to involve the source latent when generating the controlling signal for the editing task. With the help of source contents, the condition guidance can precisely perceive the entire context and structures, and adjust its distribution to prevent undesired distortion."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                765,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                92,
+                893,
+                212
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To this end, we propose MotionEditor, depicted in Fig. 2, to take one step forward in exploring video motion editing with diffusion models. MotionEditor requires one-shot learning on a source video to preserve the original texture feature. We then introduce a content-aware motion adapter appended to ControlNet for enhancing control capability and temporal modeling. The adapter consists of content-aware blocks and temporal blocks. In particular, content-aware blocks perform cross-attention to incorporate the source frame feature, which significantly boosts the quality of motion control."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                213,
+                893,
+                378
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "At inference time, a skeleton alignment algorithm is devised to counter the size and position disparities between source and reference skeletons. We further propose an attention injection mechanism based on a two-branch architecture (reconstruction and editing branches) to preserve the source appearance of the protagonist and the background. Previous attention fusion strategies directly inject the attention map or key into the editing branch. The direct injection may result in confusion between the edited foreground and background. In some cases, it would bring noise to the editing branch, thereby resulting in the phenomenon of overlapping and shadow flickering. To avoid this, we propose to decouple the keys/values in the foreground and background using a segmentation mask. The keys/values in the editing branch are thus supplemented by those from the foreground and background in the reconstruction branch. As such, the editing branch is able to capture the background details and the geometric structure of the protagonist from the source."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                378,
+                893,
+                650
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In conclusion, our contributions are as follows: (1) We are the first to explore video diffusion models for motion editing, which is usually ignored by previous video editing works. (2) A novel content-aware motion adapter is proposed to enable the ControlNet to perform consistent and precise motion editing. (3) We propose a high-fidelity attention injection mechanism that preserves the background information and the geometric structure of the protagonist from the source. The mechanism is only active during inference, making it training-free. (4) We conduct experiments on in-the-wild videos, where the results show the superiority of our method compared with the state-of-the-art."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                650,
+                893,
+                833
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2. Related Work"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                844,
+                643,
+                861
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Diffusion for Image Editing Image generation has been remarkably improved with diffusion models [31], surpassing previous GAN models [7, 8, 27, 28, 44] in quality and editing capabilities. Building on the pioneering work by [31], researchers have made progress in this direction. Meng et al. propose SDEdit, the first approach that enables image editing via inversion and reversion. This allows more precise control over the edits compared with previous GAN-based approaches. Prompt-to-Prompt [9] and Plugand-Play [42] introduce techniques to generate more coherent hybrid images, tackling the inconsistent noise. Meanwhile, UniTune [43] and Imagic [16] focus on personalized fine-tuning of diffusion models. In short, these approaches enable edits that remain truer to the original image."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                869,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "7883"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                90,
+                472,
+                272
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To generate diverse contents, researchers have proposed several controllable diffusion models [6, 13, 26, 32, 33, 52]. Zhang et al. introduce ControlNet, which enables Stable Diffusion [31] to embrace multiple controllable conditions for text-to-image synthesis. Cao et al. propose MasaCtrl, which converts existing self-attention into mutual self-attention to achieve non-rigid image synthesis. Overall, these approaches have advanced diffusion-based image editing by handling inconsistent noise, fine-tuning strategies, and inversion-based editing. However, it remains an open challenge to enable precise semantic edits while maintaining perfect fidelity and coherence."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                272,
+                470,
+                455
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Diffusion Models for Video Editing and Generation Video editing is complex, which demands temporal consistency in editing. Most methods [47, 49] use existing T2I diffusion models with an additional temporal modeling module. Tune-a-Video [47], SimDA [51], and Text2Video-Zero [17] inflate 2D diffusion models to 3D models. FateZero [29] and Vid2Vid-zero [45] use mutual attention to ensure consistency of geometry and color. On the other hand, Text2LIVE [1] and StableVideo [4] decompose video semantics by leveraging layered neural atlas [15]. However, these models are limited to low-level attribute editing and cannot edit complex information such as motion."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                458,
+                472,
+                640
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Recently, pose-driven video generation has become popular. Follow-Your-Pose [21] extracts coarse temporal motion information by implementing an adapter on the text-toimage diffusion model. ControlVideo [54] introduces full cross-frame attention by extending ControlNet to videos. However, these methods focus on video generation rather than motion editing, resulting in distortion of the protagonist and background. Unlike these models, our MotionEditor aims to perform motion editing while preserving the appearance of the original video."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                640,
+                472,
+                791
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Human Motion Transfer This task aims to transfer the motion from a video to a target image, enabling animation of the target. Previous GAN-based methods [14, 18, 20, 36, 37] have tackled this task but struggle with complex motions and backgrounds. LWG [20] uses 3D pose projection for motion transfer but cannot model internal motions well. FOMM [36] approximates motion transfer via boundary key points. MRAA [37] exploits regional features to capture part motion, yet the performance is limited on complex scenes. To address these limitations, we propose MotionEditor for high-quality motion editing on complex motions and backgrounds. In contrast to prior work, it leverages diffusion models capable of generating consistent details even for intricate motions and backgrounds."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                795,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                495,
+                90,
+                895,
+                198
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3. Preliminaries"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                498,
+                208,
+                640,
+                224
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Diffusion models [11, 25, 39] have recently shown promising results for synthesizing high-quality and diverse contents using iterative denoising operations. They consist of a forward diffusion process and a reverse denoising process. During the forward process, models equipped with a predefined noise schedule "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\alpha _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "add random noise to the source sample "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\scriptstyle { \\mathbf { { \\mathit { x } } } } _ { 0 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "at time step t for obtaining a noised sample "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { \\nabla } _ { \\mathbf { x } _ { t } : }"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                233,
+                893,
+                342
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { r l } & { \\pmb q ( \\pmb x _ { 1 : T } ) = \\pmb q ( \\pmb x _ { 0 } ) \\prod _ { t = 1 } ^ { T } \\pmb q ( \\pmb x _ { t } | \\pmb x _ { t - 1 } ) , } \\\\ & { \\pmb q ( \\pmb x _ { t } | \\pmb x _ { t - 1 } ) = \\mathcal N ( \\pmb x _ { t } ; \\sqrt { \\alpha _ { t } } \\pmb x _ { t - 1 } , ( 1 - \\alpha _ { t } ) \\mathbf I ) . } \\end{array}\\tag{1}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/5233d1b223d07dad4e2e70c97c59ad1b4ec709882b31870edfd43c6297fa91da.jpg"
+                }
+            },
+            "bbox": [
+                555,
+                344,
+                833,
+                401
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The original input "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\scriptstyle { \\mathbf { { \\mathit { x } } } } _ { 0 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is inverted into Gaussian noise x<sub>T</sub> ∼ "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { N } ( \\mathbf { 0 } , \\mathbf { 1 } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "after "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "T"
+                    },
+                    {
+                        "type": "text",
+                        "content": "forward steps. The reverse process attempts to predict a cleaner sample "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathbf { \\mathcal { x } } } _ { t - 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "based on "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { \\Delta } _ { \\mathbf { \\mathcal { X } } _ { t } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by removing noise. The process is depicted as:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                406,
+                893,
+                467
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { r } { p _ { \\theta } ( \\pmb { x } _ { t - 1 } | \\pmb { x } _ { t } ) = \\mathcal { N } ( \\pmb { x } _ { t - 1 } ; \\pmb { \\mu } _ { \\theta } ( \\pmb { x } _ { t } , t ) , \\pmb { \\sigma } _ { t } ^ { 2 } \\mathbf { I } ) , } \\end{array}\\tag{2}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/cf19417ba287c4ea71659ceaa894b80d7af9b57d6b8825d43d10c7205304cb28.jpg"
+                }
+            },
+            "bbox": [
+                563,
+                472,
+                825,
+                488
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mu _ { \\theta } ( x _ { t } , t )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\sigma _ { t } ^ { 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "indicate the mean and variance of the sample at the current time step. Only the mean is correlated with the time step and noise, while the variance is constant. The denoising network "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\varepsilon _ { \\boldsymbol { \\theta } } ( \\boldsymbol { x } _ { t } , t )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "aims to predict the noise ε by training with a simplified mean squared error:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                493,
+                893,
+                570
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { r } { \\mathcal { L } _ { s i m p l e } = \\mathbb { E } _ { \\pmb { x } _ { 0 } , \\pmb { \\varepsilon } , t } ( \\| \\pmb { \\varepsilon } - \\pmb { \\varepsilon } _ { \\theta } ( \\pmb { x } _ { t } , t ) \\| ^ { 2 } ) . } \\end{array}\\tag{3}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/dabbd24feed00515b7f77b10e448ad9e5aa023a9822fb15c83edc5b48e1f4bf7.jpg"
+                }
+            },
+            "bbox": [
+                576,
+                574,
+                813,
+                592
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Once the model is trained, we feed "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { \\ d } \\mathbf { x } _ { T } \\sim \\mathcal { N } ( \\mathbf { 0 } , \\bf { 1 } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to the diffusion model and iteratively perform DDIM sampling for predicting cleaner "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathbf { \\mathcal { x } } } _ { t - 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "from the noise sample "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { \\Delta } _ { \\mathbf { \\mathcal { X } } _ { t } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "of a previous time step. The process is shown as follows:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                597,
+                893,
+                659
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\pmb { x } _ { t - 1 } = \\sqrt { \\alpha _ { t - 1 } } \\frac { \\pmb { x } _ { t } - \\sqrt { 1 - \\alpha _ { t } } \\pmb { \\varepsilon } _ { \\theta } ( \\pmb { x } _ { t } , t ) } { \\sqrt { \\alpha _ { t } } } + \\sqrt { 1 - \\alpha _ { t - 1 } } \\pmb { \\varepsilon } _ { \\theta } ( \\pmb { x } _ { t } , t ) .\\tag{4}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/cd4c011810efc19ddfb23221fc373aa3df9e403b8ed7e95318a8df7da4deb36b.jpg"
+                }
+            },
+            "bbox": [
+                496,
+                662,
+                892,
+                694
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "One can also inject a text prompt p into the prediction model "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\varepsilon _ { \\boldsymbol { \\theta } } ( x _ { t } , t , p )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "as a condition, where the diffusion model can perform T2I synthesis. Recent work [31] introduces an encoder E to compress images x into a latent space "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "z = \\mathcal { E } ( { \\pmb x } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and a decoder D to transfer the latent embedding back to the pixel space. In this way, the diffusion process is performed in the latent space."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                704,
+                893,
+                811
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4. Method"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                498,
+                821,
+                591,
+                838
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.1. Architecture Overview"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                498,
+                845,
+                712,
+                863
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "As illustrated in Fig. 2, MotionEditor is based on the commonly used T2I diffusion model (i.e. LDM [31]) and ControlNet [52]. We first inflate the spatial transformer in the U-Net of the LDM to a 3D transformer by appending a temporal self-attention layer. We also propose Consistent-Sparse attention, described in Sec. 4.3, to replace the spatial self-attention. To achieve precise motion manipulation and temporal consistency, we design a content-aware motion adapter, operating on features from the U-Net and conditional pose information from the ControlNet. Following [47], we perform one-shot training to compute the weights for the temporal attention module and the motion adapter to reconstruct the input source video."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                869,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "7884"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/e67bdbcc80eea3b8c970a77159c6484e55c65b2ea25da07c2581668dc7760c92.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 2. Architecture overview of MotionEditor. In training, only the motion adapter and temporal attention in U-Net are trainable. In inference, we first align the source and reference skeletons through resizing and translation. We then build a two-branch framework: one for reconstruction and the other for editing. Motion adapter enhances the motion guidance of ControlNet by leveraging the information from the source latent. We also inject the key/value in the reconstruction branch into the editing branch to preserve the source appearance."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                78,
+                97,
+                887,
+                354
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                425,
+                470,
+                593
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "During inference, given a reference target video "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "X _ { r f } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "MotionEditor aims to transfer the motion of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "X _ { r f }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to the source while preserving the appearance information of the source. To this end, we first develop a skeleton alignment algorithm to narrow the gap between source skeleton "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "S _ { s r }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and reference skeleton "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "S _ { r f }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by considering the position and size, and produce a refined target skeleton "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { S } _ { t g }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". We then employ the DDIM inversion [39] on pixel values of the video to produce a latent noise that serves as the starting point for sampling. More importantly, we introduce a high-fidelity attention injection module exploring a carefully designed twobranch network. One is dedicated to reconstruction, while the other one focuses on editing. More specifically, the editing branch takes features from the refined target skeleton as inputs, transferring the motion information from the reference to the source. Meanwhile, critical appearance information encoded in the reconstruction branch is further injected into the editing branch so that the appearance and the background are preserved. Below, we introduce the proposed components in detail."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                598,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.2. Content-Aware Motion Adapter"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                425,
+                782,
+                440
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Our goal is to manipulate the body motion in videos under the guidance of pose signals. While ControlNet [52] enables direct controllable generation based on conditions, it has difficulties modifying the source motion from the inverted noise. The motion signals injected by the ControlNet could conflict with the source motion, thereby resulting in pronounced ghosting and blurring effects or even the loss of controlling ability. Furthermore, the model is derived from an image, lacking the ability to generate temporal consistent contents. Therefore, we propose a temporal content-aware motion adapter that enhances motion guidance as well as facilitates temporal consistency, as shown in Fig. 2."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                448,
+                893,
+                630
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Our motion adapter takes as input the feature output by ControlNet, which has been observed to achieve promising spatial control. Instead of inserting temporal layers into ControlNet, we leave it as is to prevent prejudicing its inherent modeling capability. The adapter consists of two parallel paths corresponding to different perception granularity. One is the global modeling path, including a content-aware cross-attention block and a temporal attention block. The other is the local modeling path, which uses two temporal convolution blocks to capture local motion features. Specifically, our cross-attention involves the latent feature from the U-Net to model the pose feature, where the query comes from the pose feature "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "m _ { i } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and the key/value is from the corresponding frame latent "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "z _ { i }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "produced by the U-Net:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                630,
+                893,
+                842
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\pmb { Q } = \\pmb { W } _ { c } ^ { Q } m _ { i } , \\pmb { K } = \\pmb { W } _ { c } ^ { K } z _ { i } , \\pmb { V } = \\pmb { W } _ { c } ^ { V } z _ { i } ,\\tag{5}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/f6a63e10e89daa957456c4289414dbc6de7a928d8298da8802ce0119418bf80b.jpg"
+                }
+            },
+            "bbox": [
+                563,
+                845,
+                826,
+                863
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "W _ { c } ^ { Q }"
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\pmb { W } _ { c } ^ { K }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "W _ { c } ^ { V }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are projection matrices. Our cross-attention enables the motion adapter to concentrate on correlated motion clues in the video latent space, which significantly enhances the control capability. By building up a bridge between them, the model can thereby manipulate the source motion seamlessly, without contradiction."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                869,
+                893,
+                900
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "7885"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/e67a28df1b594269aeea44e1f18799a755fc1f30afd2e4d17fc4cf33a9d3a9cd.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 3. Illustration of high-fidelity attention injection during inference. We leverage the source foreground masks to guide the decoupling of key/value in the Consistent-Sparse Attention."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                81,
+                88,
+                462,
+                265
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                315,
+                470,
+                377
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.3. High-Fidelity Attention Injection"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                385,
+                369,
+                401
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Although our motion adapter can accurately capture body poses, it may undesirably alter the appearance of the protagonist and the background. Consequently, we propose a high-fidelity attention injection from the reconstruction branch to the editing branch, which preserves the details of the subject and background in the synthesized video. While previous attention fusion paradigms [2, 29, 45] have used attention maps or keys/values for editing, they suffer from severe quality degradation in ambiguous regions, i.e. motion areas, due to context confusion. To solve the issue, we decouple the keys and values into foreground and background through semantic masks. By injecting separated keys and values into the editing branch from the reconstruction branch, we can reduce the confusion hindering the editing. The pipeline is shown in Fig. 3."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                409,
+                470,
+                636
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Before introducing the injection, we first present the details of attention blocks in the model. Each attention block in U-Net consists of our designed Consistent-Sparse Attention (CS Attention), Cross Attention, and Temporal Attention. The Consistent-Sparse Attention, as a sparse causal attention, replaces the spatial attention in the original U-Net. It aims to perform spatiotemporal modeling with little additional computational overhead. Specifically, taking the reconstruction branch as an example, the query in CS Attention is derived from the current frame "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\boldsymbol { z } _ { i } ^ { r }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", while the key/value is obtained from the preceding and current frames "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "z _ { i - 1 } ^ { r } , z _ { i } ^ { r }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". This design can improve the frame consistency:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                635,
+                470,
+                818
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\pmb { Q } ^ { r } = \\pmb { W } ^ { Q } z _ { i } ^ { r } , \\pmb { K } ^ { r } = \\pmb { W } ^ { K } [ z _ { i - 1 } ^ { r } , z _ { i } ^ { r } ] , \\pmb { V } ^ { r } = \\pmb { W } ^ { V } [ z _ { i - 1 } ^ { r } , z _ { i } ^ { r } ] ,\\tag{6}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/824ae73e53e52fd9a87ae25af6b7001d7e313e612da17dfa94665d3af8963057.jpg"
+                }
+            },
+            "bbox": [
+                86,
+                825,
+                459,
+                843
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where [·] refers to concatenation. "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "W ^ { Q } , W ^ { K }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "W ^ { V }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are projection matrices. It is worth noting that we do not employ the sparse attention in [47], in which the key/value is from the first and preceding frames "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "z _ { \\mathrm { 0 } } , z _ { i - 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". We find that it may force the synthesized motion to favor the first frame excessively, resulting in flickering."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                853,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                498,
+                92,
+                892,
+                136
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We now present the injection of keys and values from the reconstruction branch to those of the editing branch, operating on both Consistent-Sparse Attention (CS Attention) and Temporal Attention. The injection is only active in the decoder of U-Net. For CS Attention, we leverage a source foreground mask "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "M ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "obtained from an off-the-shelf segmentation model, to decouple the foreground and background information. Given the key "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\pmb { K } ^ { r }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and value "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "V ^ { r }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in the reconstruction branch, we separate them into the foreground "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( K _ { f g } ^ { r }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "V _ { f g } ^ { r } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and background "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( K _ { b g } ^ { r }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "V _ { b g } ^ { r } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ","
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                136,
+                893,
+                290
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { r l } & { { \\pmb K } _ { f g } ^ { r } = { \\pmb K } ^ { r } \\odot { \\pmb M } , ~ { \\pmb V } _ { f g } ^ { r } = { \\pmb V } ^ { r } \\odot { \\pmb M } , } \\\\ & { { \\pmb K } _ { b g } ^ { r } = { \\pmb K } ^ { r } \\odot ( { \\bf 1 } - { \\pmb M } ) , ~ { \\pmb V } _ { b g } ^ { r } = { \\pmb V } ^ { r } \\odot ( { \\bf 1 } - { \\pmb M } ) . } \\end{array}\\tag{7}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/6ef3f16a4e2f07f65e098bfc88ce188c9b037498eddc1692d7a72bd70a9ef0ac.jpg"
+                }
+            },
+            "bbox": [
+                539,
+                296,
+                851,
+                330
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The decoupling operation introduces an explicit distinction between background and foreground. It encourages the model to focus more on the individual appearance instead of mixing both, ensuring the high fidelity of the subject and background. Notably, simply replacing the key/value in the editing branch with the above ones would cause a large number of abrupt motion changes, as the model is significantly influenced by the source motion. Instead, we combine them to maintain the target motion precisely. Therefore, in the editing branch, the key and value of CS Attention are updated by the injected key "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "K _ { i n j }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and value "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "V _ { i n j } { \\mathrm { : } }"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                338,
+                893,
+                506
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { r l } & { \\boldsymbol { K } ^ { e } = \\boldsymbol { W } ^ { K } [ z _ { i - 1 } ^ { e } , z _ { i } ^ { e } ] = [ \\boldsymbol { W } ^ { K } z _ { i - 1 } ^ { e } , \\boldsymbol { W } ^ { K } z _ { i } ^ { e } ] : = [ \\boldsymbol { K } _ { p r } ^ { e } , \\boldsymbol { K } _ { c u } ^ { e } ] , } \\\\ & { \\boldsymbol { V } ^ { e } = \\boldsymbol { W } ^ { V } [ z _ { i - 1 } ^ { e } , z _ { i } ^ { e } ] = [ \\boldsymbol { W } ^ { V } z _ { i - 1 } ^ { e } , \\boldsymbol { W } ^ { V } z _ { i } ^ { e } ] : = [ \\boldsymbol { V } _ { p r } ^ { e } , \\boldsymbol { V } _ { c u } ^ { e } ] , } \\\\ & { \\boldsymbol { K } _ { i n j } = [ \\boldsymbol { K } _ { f g } ^ { r } , \\boldsymbol { K } _ { b g } ^ { r } , \\boldsymbol { K } _ { c u } ^ { e } ] , } \\\\ & { \\boldsymbol { V } _ { i n j } = [ \\boldsymbol { V } _ { f g } ^ { r } , \\boldsymbol { V } _ { b g } ^ { r } , \\boldsymbol { V } _ { c u } ^ { e } ] , } \\end{array}\\tag{8}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/c63b208d2aa19b8fe62d76af251b0b1f491cb0a479610fa6d2370f78f74cc4f4.jpg"
+                }
+            },
+            "bbox": [
+                506,
+                511,
+                882,
+                584
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "z _ { i } ^ { e } , z _ { i - 1 } ^ { e }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "indicate the current and preceding frames in the editing branch. "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "K ^ { e } , V ^ { e }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are the original key and value in CS attention of the editing branch. "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "K _ { c u } ^ { e } , V _ { c u } ^ { e }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are the key and value from the current frame."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                595,
+                892,
+                656
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The injection in temporal attention is much simpler than in CS Attention since it already performs the local operation concerning the spatial region. We directly inject the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "K ^ { r } , V ^ { r }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "of reconstruction branch into the editing branch."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                656,
+                892,
+                718
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.4. Skeleton Signal Alignment"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                726,
+                741,
+                742
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Given the source and reference videos, there always exists a gap between the source and the target protagonists due to different sizes and coordinated positions. The discrepancy may affect the performance of editing. Therefore, we propose an alignment algorithm for addressing this issue."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                750,
+                893,
+                825
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Our algorithm contains two steps, namely a resizing operation, and a translation operation. Concretely, given the source video "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "X _ { s r }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and a reference video "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "X _ { r f }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", we first extract the source skeleton "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "S _ { s r }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and a foreground mask "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "M _ { s r } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "as well as the reference skeleton "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "S _ { r f }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and its mask "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "M _ { r f } ."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                825,
+                892,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "7886"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/09148e6a7e1d0b73d87a3c667a423cd0858a62c35344c1e649d6b1460ae4a794.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                88,
+                89,
+                472,
+                518
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/376d1d874ff02886dc872620989b19a4bc70a85799346fbfbbd8450749621614.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 4. Motion editing results of our MotionEditor. More examples can be found in the supplementary material and anonymous website."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                501,
+                88,
+                883,
+                520
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "using off-the-shelf models. We then perform edge detection on the masks to obtain rectangular outlines of the foreground. Based on the area of two rectangular outlines, we scale "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "S _ { r f }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to the same size as the source. Regarding the foreground position, we calculate the average coordinate of the foreground pixels in each mask, which denotes the center of the protagonist. An offset vector is computed by calculating the difference between the two centers. With this vector, we obtain an affine matrix for the translation operation, which is further applied to the resized reference skeleton. Finally, the target skeleton "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { S } _ { t g }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is generated. The details of alignment are depicted in the supplementary material."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                549,
+                470,
+                731
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5. Experiments"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                744,
+                210,
+                762
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.1. Implementation Details"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                770,
+                295,
+                786
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Our proposed MotionEditor is based on the Latent Diffusion Model [31] (Stable Diffusion). The person segmentation and skeleton estimation methods refer to SAM and OpenPose. We evaluate our model on YouTube videos and videos from the TaichiHD [36] dataset, in which each video includes a protagonist of at least 70 frames. The resolution of frames is unified to "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "5 1 2 \\times 5 1 2"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". We perform one-shot learning for the motion adapter for 300 steps with a constant learning rate of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "3 \\times 1 0 ^ { - 5 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". We employ DDIM inversion [39] and null-text optimization [23] with classifier-free guidance [10] during inference. Due to the usage of DDIM inversion and null-text optimization, MotionEditor needs 10 minutes to perform motion editing for each video on a single NVIDIA A100 GPU."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                795,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                549,
+                893,
+                655
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.2. Motion Editing Results"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                662,
+                715,
+                679
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We validate the motion editing superiority of our proposed MotionEditor extensively. Here, we demonstrate several cases in Figure 4 and the rest of the cases are in the supplementary materials. We can see that our MotionEditor can accomplish a wide range of motion editing while simultaneously preserving the original protagonist’s appearance and background information."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                685,
+                893,
+                794
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.3. Comparison with State-of-the-Art Methods"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                498,
+                801,
+                869,
+                818
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Competitors. We compare our MotionEditor against recent approaches to validate the superiority of our model. The competitors are depicted as follows: (1) Models based on GANs for human motion transfer, including LWG [20] that disentangles the pose and shape, and MRAA [37] that learns semantic object parts. (2) Tune-A-Video [47], which inflates Stable Diffusion in a one-shot learning manner. (3) Follow-Your-Pose [21], which proposes a spatial pose adapter for pose-guided video generation. (4) ControlVideo [54], which designs fully cross-frame attention, attempting to stitch video frames into one large image. (5) MasaCtrl [2], which conducts mask-guided mutual selfattention fusion, in which the masks are derived from text cross attention. (6) FateZero [29], which designs inversion attention fusion for retaining source structure. It is worth noting that Tune-A-Video and Masactrl are equipped with a conditional T2I model (i.e. ControlNet) for controllable video editing. We also combine FateZero with ControlNet to enable pose-guided editing. More details on implementation are depicted in the supplementary material."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                824,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "7887"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/b149e3930dbab481b0d22cd41b7301c78f6e8e0c3ef857bab08aee8e81ca8a6e.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 5. Qualitative comparison between our MotionEditor and other state-of-the-art video editing models. Source prompt: “a girl in a black dress is dancing.” Target prompt: “a girl in a black dress is practicing tai chi.” Our method exhibits accurate motion editing and appearance preservation."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                76,
+                87,
+                468,
+                477
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                565,
+                472,
+                794
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Qualitative results. We conduct a qualitative comparison of our MotionEditor against several competitors in Fig. 5. The results of LWG [20] and MRAA [37] are provided in the supplementary material. By analyzing the results, we have the following observations: (1) Tune-A-Video [47], ControlVideo [54], Masactrl [2] and FateZero [29] demonstrate capabilities in editing motion to a certain extent. Nevertheless, their edited videos exhibit a considerable degree of ghosting, manifested as overlapping frames of the protagonist’s heads and legs. (2) Follow-Your-Pose [21] fails to perform motion editing and preserve the source appearance. The ghosting effect also exists in the result. The plausible reason is that it has difficulties handling the motion conflict between inverted noise and input reference pose. (3) Tune-A-Video [47] and ControlVideo [54] both have dramatic appearance changes, e.g., hairstyle, texture of clothes and background. Due to the constraint of a single-branch architecture, they are unable to interact with the original video features when additional pose conditions are introduced. This leads to a gradual loss of the source appearance along with the increasing denoising steps. (4) Masactrl [2] generates an excessive amount of blurry noise. The possible reason is that the masks generated by cross-attention maps are unreliable and inconsistent across time, thus introducing blurring noise to the result. (5) The edited result of FateZero [29] shows overlapping frames of the protagonist’s legs. It demonstrates that the attention fusion strategy in FateZero may not be suitable for motion editing. (6) Finally, our MotionEditor can effectively perform motion editing while preserving the original background and appearance compared with previous approaches, highlighting its great potential."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                795,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/24d7ef18252ab559ccf04dfeab6e5b92672f1b73674c320157c368014ce9d674.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 1. Quantitative comparisons on 20 in-the-wild cases. L-S, L-N, and L-T indicate LPIPS-S, LPIPS-N, LPIPS-T respectively."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td>Method</td><td>CLIP (↑)</td><td>L-S (↓)</td><td>L-N(↓)</td><td>L-T (↓)</td></tr><tr><td>LWG [20]</td><td>25.35</td><td>0.431</td><td>0.194</td><td>0.203</td></tr><tr><td>MRAA [37]</td><td>26.80</td><td>0.462</td><td>0.269</td><td>0.353</td></tr><tr><td>Tune-A-Video [47]</td><td>27.71</td><td>0.345</td><td>0.169</td><td>0.157</td></tr><tr><td>Follow-Your-Pose [21]</td><td>26.55</td><td>0.337</td><td>0.144</td><td>0.183</td></tr><tr><td>ControlVideo [54]</td><td>26.87</td><td>0.428</td><td>0.228</td><td>0.311</td></tr><tr><td>MasaCtrl [2]</td><td>27.14</td><td>0.372</td><td>0.236</td><td>0.177</td></tr><tr><td>FateZero [29]</td><td>28.07</td><td>0.308</td><td>0.176</td><td>0.124</td></tr><tr><td>MotionEditor</td><td>28.86</td><td>0.273</td><td>0.124</td><td>0.082</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                506,
+                119,
+                885,
+                260
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                265,
+                893,
+                643
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Quantitative results. To our best knowledge, there is still no widely recognized metric for evaluating the performance of video editing. In this paper, we conduct quantitative comparisons against previous methods through several perceptual metrics [53] and a user study on edited videos. The detailed metrics are as follows: (1) CLIP score [30]: Target textual faithfulness. (2) LPIPS-S: Learned Perceptual Image Patch Similarity (LPIPS) [53] between edited frames and source frames. (3) LPIPS-N: LPIPS between edited neighboring frames. (4) LPIPS-T: We split a long video into two segments. The first segment is used for the source, while the second segment is for the reference. We compute LPIPS between the edited video and the second segment. The results are shown in Table 1. We observe that MotionEditor surpasses the competitors by a large margin."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                642,
+                893,
+                871
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We also conduct a user study to evaluate the human preference between our method and the competitors. For each case, participants are first presented with the source and target videos, as well as the prompts. We then show two motion-edited videos; one is generated by our method and the other is from a competitor, in random order. Participants are asked to answer the following questions: “which one has better motion alignment with reference”, “which one has better appearance alignment with source”, and “which one has better content alignment with the prompt.” The total number of cases is 20, and the participants are mainly university students. Table 2 shows that our method outperforms other methods in terms of subjective evaluation."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                871,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "7888"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/0aaf6e817dfd89fc347495923ca8690647a16ac69b771aa793b5a40576c9253b.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 2. User preference ratio of MotionEditor when comparing with each method. Higher indicates the users prefer more to our MotionEditor. M-A, A-A and T-A indicate motion alignment, appearance alignment, and textual alignment, respectively."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td>Method</td><td>M-A</td><td>A-A</td><td>T-A</td></tr><tr><td>LWG [20]</td><td>91.9%</td><td>95.7%</td><td>90.0%</td></tr><tr><td>MRAA [37]</td><td>94.8%</td><td>98.4%</td><td>92.6%</td></tr><tr><td>Tune-A-Video [47]</td><td>87.6%</td><td>90.8%</td><td>79.2%</td></tr><tr><td>Follow-Your-Pose [21]</td><td>96.3%</td><td>85.0%</td><td>84.6%</td></tr><tr><td>ControlVideo [54]</td><td>94.1%</td><td>98.8%</td><td>86.0%</td></tr><tr><td>MasaCtrl [2]</td><td>89.4%</td><td>94.6%</td><td>87.8%</td></tr><tr><td>FateZero [29]</td><td>78.9%</td><td>74.5%</td><td>74.7%</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                117,
+                148,
+                429,
+                273
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                279,
+                470,
+                444
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.4. Ablation Study"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                452,
+                230,
+                468
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To validate the importance of the core components in MotionEditor, we conduct an ablation study. The results are illustrated in Fig. 6. It is worth noting that we replace our proposed CS Attention with the previous Sparse Attention [47] in (c). The results in row (c) indicate that Sparse Attention attempts to force the frames to be aligned with the first frame, resulting in unreliable motion. Rows (d) and (e) both fail to accomplish motion editing and background preservation. It demonstrates that the original ControlNet has weak constraints on the motion without additional content-aware modeling. It also forces the model to retain background information. In row (f), model w/o highfidelity attention injection loses the original background details as the road sign behind the girl has disappeared. It validates that our proposed mechanism can promote the model to preserve the source background. Model w/o skeleton alignment suffers from appearance change due to the misalignment, as in row (g). The misalignment of the skeletons may potentially introduce unexpected noise to the content latent, thus destroying source data distribution. The ablation results show that our core components certainly contribute to the promising motion editing capability of MotionEditor."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                476,
+                472,
+                809
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "6. Limitations"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                820,
+                200,
+                837
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Temporal inconsistencies sometimes occur in the foreground subjects. Our model only conducts one-shot learning on a single video without any large-scale video pertaining. We will tackle the above issues in the future."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                839,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "(a)"
+                    }
+                ]
+            },
+            "bbox": [
+                503,
+                108,
+                522,
+                122
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "(b)"
+                    }
+                ]
+            },
+            "bbox": [
+                503,
+                164,
+                522,
+                178
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "(c)"
+                    }
+                ]
+            },
+            "bbox": [
+                503,
+                215,
+                522,
+                229
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "(d)"
+                    }
+                ]
+            },
+            "bbox": [
+                503,
+                270,
+                522,
+                284
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "(e)"
+                    }
+                ]
+            },
+            "bbox": [
+                503,
+                321,
+                522,
+                334
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "(f)"
+                    }
+                ]
+            },
+            "bbox": [
+                503,
+                375,
+                521,
+                388
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "(g)"
+                    }
+                ]
+            },
+            "bbox": [
+                503,
+                431,
+                522,
+                445
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "(h)"
+                    }
+                ]
+            },
+            "bbox": [
+                503,
+                484,
+                522,
+                500
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/1f44615a0139891dbcc969fcbee8e081a975a338fe4dceebc9e83a13143f1817.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 6. Ablations on core components of MotionEditor. Rows in the figure are: (a) source, (b) reference, (c) w/o CS Attention, (d) w/o cross attention in motion adapter, (e) w/o motion adapter, (f) w/o high-fidelity attention injection, (g) w/o skeleton alignment, and (h) MotionEditor. Source prompt: “A girl is dancing.” Target prompt: “A girl is practicing tai chi.”"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                547,
+                90,
+                892,
+                517
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "7. Conclusion"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                618,
+                619,
+                635
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In this paper, we proposed MotionEditor for tackling video motion editing challenges, which is rated as high-level video editing compared with previous video attribute editing. To enhance the motion controllability, a content-aware motion adapter was designed to build up a relationship with the source content, enabling seamless motion editing as well as temporal modeling. We further proposed a highfidelity attention injection for preserving the source appearance of the background and protagonist. To alleviate the misalignment problem of skeleton signals, we presented a simple yet effective skeleton alignment to normalize the target skeletons. To our knowledge, MotionEditor is the first diffusion model to explore the video motion editing task, encouraging more studies in this challenging scenario."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                646,
+                893,
+                858
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Acknowledgement This project was supported by NSFC under Grant No. 62032006 and No. 62102092."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                858,
+                893,
+                887
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "7889"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "References"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                78,
+                89,
+                176,
+                106
+            ]
+        },
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[1] Omer Bar-Tal, Dolev Ofri-Amar, Rafail Fridman, Yoni Kasten, and Tali Dekel. Text2live: Text-driven layered image and video editing. In ECCV, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[2] Mingdeng Cao, Xintao Wang, Zhongang Qi, Ying Shan, Xiaohu Qie, and Yinqiang Zheng. Masactrl: Tuning-free mutual self-attention control for consistent image synthesis and editing. In ICCV, 2023. 2, 3, 5, 7, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[3] Duygu Ceylan, Chun-Hao P Huang, and Niloy J Mitra. Pix2video: Video editing using image diffusion. In ICCV, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[4] Wenhao Chai, Xun Guo, Gaoang Wang, and Yan Lu. Stablevideo: Text-driven consistency-aware diffusion video editing. In ICCV, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[5] Prafulla Dhariwal and Alexander Nichol. Diffusion models beat gans on image synthesis. In NeurIPS, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[6] Rinon Gal, Yuval Alaluf, Yuval Atzmon, Or Patashnik, Amit H Bermano, Gal Chechik, and Daniel Cohen-Or. An image is worth one word: Personalizing text-toimage generation using textual inversion. arXiv preprint arXiv:2208.01618, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[7] Rinon Gal, Or Patashnik, Haggai Maron, Amit H Bermano, Gal Chechik, and Daniel Cohen-Or. Stylegan-nada: Clipguided domain adaptation of image generators. ACM Transactions on Graphics, 41(4):1–13, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[8] Ian Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David Warde-Farley, Sherjil Ozair, Aaron Courville, and Yoshua Bengio. Generative adversarial networks. Communications ofthe ACM, 63(11):139–144, 2020. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[9] Amir Hertz, Ron Mokady, Jay Tenenbaum, Kfir Aberman, Yael Pritch, and Daniel Cohen-Or. Prompt-to-prompt image editing with cross attention control. arXiv preprint arXiv:2208.01626, 2022. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[10] Jonathan Ho and Tim Salimans. Classifier-free diffusion guidance. arXiv preprint arXiv:2207.12598, 2022. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[11] Jonathan Ho, Ajay Jain, and Pieter Abbeel. Denoising diffusion probabilistic models. In NeurIPS, 2020. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[12] Jonathan Ho, Chitwan Saharia, William Chan, David J Fleet, Mohammad Norouzi, and Tim Salimans. Cascaded diffusion models for high fidelity image generation. JMLR, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[13] Lianghua Huang, Di Chen, Yu Liu, Yujun Shen, Deli Zhao, and Jingren Zhou. Composer: Creative and controllable image synthesis with composable conditions. arXiv preprint arXiv:2302.09778, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[14] Zhichao Huang, Xintong Han, Jia Xu, and Tong Zhang. Fewshot human motion transfer by personalized geometry and texture modeling. In CVPR, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[15] Yoni Kasten, Dolev Ofri, Oliver Wang, and Tali Dekel. Layered neural atlases for consistent video editing. ACM Transactions on Graphics, 40(6):1–12, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[16] Bahjat Kawar, Shiran Zada, Oran Lang, Omer Tov, Huiwen Chang, Tali Dekel, Inbar Mosseri, and Michal Irani. Imagic: Text-based real image editing with diffusion models. In CVPR, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[17] Levon Khachatryan, Andranik Movsisyan, Vahram Tadevosyan, Roberto Henschel, Zhangyang Wang, Shant"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "Navasardyan, and Humphrey Shi. Text2video-zero: Textto-image diffusion models are zero-shot video generators. In ICCV, 2023. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[18] Hongyu Liu, Xintong Han, Chengbin Jin, Lihui Qian, Huawei Wei, Zhe Lin, Faqiang Wang, Haoye Dong, Yibing Song, Jia Xu, et al. Human motionformer: Transferring human motions with vision transformers. ICLR, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[19] Shaoteng Liu, Yuechen Zhang, Wenbo Li, Zhe Lin, and Jiaya Jia. Video-p2p: Video editing with cross-attention control. arXiv preprint arXiv:2303.04761, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[20] Wen Liu, Zhixin Piao, Jie Min, Wenhan Luo, Lin Ma, and Shenghua Gao. Liquid warping gan: A unified framework for human motion imitation, appearance transfer and novel view synthesis. In ICCV, 2019. 2, 3, 6, 7, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[21] Yue Ma, Yingqing He, Xiaodong Cun, Xintao Wang, Ying Shan, Xiu Li, and Qifeng Chen. Follow your pose: Pose-guided text-to-video generation using pose-free videos. arXiv preprint arXiv:2304.01186, 2023. 2, 3, 7, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[22] Chenlin Meng, Yutong He, Yang Song, Jiaming Song, Jiajun Wu, Jun-Yan Zhu, and Stefano Ermon. Sdedit: Guided image synthesis and editing with stochastic differential equations. In ICLR, 2021. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[23] Ron Mokady, Amir Hertz, Kfir Aberman, Yael Pritch, and Daniel Cohen-Or. Null-text inversion for editing real images using guided diffusion models. In CVPR, 2023. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[24] Chong Mou, Xintao Wang, Jiechong Song, Ying Shan, and Jian Zhang. Dragondiffusion: Enabling drag-style manipulation on diffusion models. arXiv preprint arXiv:2307.02421, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[25] Alexander Quinn Nichol and Prafulla Dhariwal. Improved denoising diffusion probabilistic models. In ICML, 2021. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[26] Yaniv Nikankin, Niv Haim, and Michal Irani. Sinfusion: Training diffusion models on a single image or video. arXiv preprint arXiv:2211.11743, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[27] Taesung Park, Ming-Yu Liu, Ting-Chun Wang, and Jun-Yan Zhu. Semantic image synthesis with spatially-adaptive normalization. In CVPR, pages 2337–2346, 2019. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[28] Or Patashnik, Zongze Wu, Eli Shechtman, Daniel Cohen-Or, and Dani Lischinski. Styleclip: Text-driven manipulation of stylegan imagery. In ICCV, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[29] Chenyang Qi, Xiaodong Cun, Yong Zhang, Chenyang Lei, Xintao Wang, Ying Shan, and Qifeng Chen. Fatezero: Fusing attentions for zero-shot text-based video editing. In ICCV, 2023. 2, 3, 5, 7, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[30] Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, et al. Learning transferable visual models from natural language supervision. In ICML, 2021. 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[31] Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, and Bjorn Ommer. High-resolution image syn-¨ thesis with latent diffusion models. In CVPR, 2022. 2, 3, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[32] Nataniel Ruiz, Yuanzhen Li, Varun Jampani, Yael Pritch, Michael Rubinstein, and Kfir Aberman. Dreambooth: Fine tuning text-to-image diffusion models for subject-driven generation. In CVPR, 2023. 3"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                84,
+                114,
+                468,
+                156
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "7890"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[33] Chitwan Saharia, William Chan, Huiwen Chang, Chris Lee, Jonathan Ho, Tim Salimans, David Fleet, and Mohammad Norouzi. Palette: Image-to-image diffusion models. In SIG-GRAPH, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[34] Baifeng Shi, Qi Dai, Yadong Mu, and Jingdong Wang. Weakly-supervised action localization by generative attention modeling. In CVPR, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[35] Yujun Shi, Chuhui Xue, Jiachun Pan, Wenqing Zhang, Vincent YF Tan, and Song Bai. Dragdiffusion: Harnessing diffusion models for interactive point-based image editing. arXiv preprint arXiv:2306.14435, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[36] Aliaksandr Siarohin, Stephane Lathuili ´ ere, Sergey Tulyakov,` Elisa Ricci, and Nicu Sebe. First order motion model for image animation. NeurIPS, 2019. 3, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[37] Aliaksandr Siarohin, Oliver J Woodford, Jian Ren, Menglei Chai, and Sergey Tulyakov. Motion representations for articulated animation. In CVPR, 2021. 3, 6, 7, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[38] Karen Simonyan and Andrew Zisserman. Two-stream convolutional networks for action recognition in videos. NeurIPS, 2014. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[39] Jiaming Song, Chenlin Meng, and Stefano Ermon. Denoising diffusion implicit models. In ICLR, 2021. 2, 3, 4, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[40] Yang Song, Jascha Sohl-Dickstein, Diederik P Kingma, Abhishek Kumar, Stefano Ermon, and Ben Poole. Score-based generative modeling through stochastic differential equations. In ICLR, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[41] Shuyuan Tu, Qi Dai, Zuxuan Wu, Zhi-Qi Cheng, Han Hu, and Yu-Gang Jiang. Implicit temporal modeling with learnable alignment for video recognition. In ICCV, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[42] Narek Tumanyan, Michal Geyer, Shai Bagon, and Tali Dekel. Plug-and-play diffusion features for text-driven image-to-image translation. In CVPR, 2023. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[43] Dani Valevski, Matan Kalman, Yossi Matias, and Yaniv Leviathan. Unitune: Text-driven image editing by fine tuning an image generation model on a single image. arXiv preprint arXiv:2210.09477, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[44] Ting-Chun Wang, Ming-Yu Liu, Jun-Yan Zhu, Andrew Tao, Jan Kautz, and Bryan Catanzaro. High-resolution image synthesis and semantic manipulation with conditional gans. In CVPR, 2018. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[45] Wen Wang, Kangyang Xie, Zide Liu, Hao Chen, Yue Cao, Xinlong Wang, and Chunhua Shen. Zero-shot video editing using off-the-shelf image diffusion models. arXiv preprint arXiv:2303.17599, 2023. 3, 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[46] Yanhui Wang, Jianmin Bao, Wenming Weng, Ruoyu Feng, Dacheng Yin, Tao Yang, Jingxu Zhang, Qi Dai, Zhiyuan Zhao, Chunyu Wang, Kai Qiu, Yuhui Yuan, Chuanxin Tang, Xiaoyan Sun, Chong Luo, and Baining Guo. Microcinema: A divide-and-conquer approach for text-to-video generation. In CVPR, 2024. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[47] Jay Zhangjie Wu, Yixiao Ge, Xintao Wang, Stan Weixian Lei, Yuchao Gu, Yufei Shi, Wynne Hsu, Ying Shan, Xiaohu Qie, and Mike Zheng Shou. Tune-a-video: One-shot tuning of image diffusion models for text-to-video generation. In ICCV, 2023. 2, 3, 4, 5, 7, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[48] Zhen Xing, Qi Dai, Han Hu, Jingjing Chen, Zuxuan Wu, and Yu-Gang Jiang. Svformer: Semi-supervised video transformer for action recognition. In CVPR, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[49] Zhen Xing, Qi Dai, Zihao Zhang, Hui Zhang, Han Hu, Zuxuan Wu, and Yu-Gang Jiang. Vidiff: Translating videos via multi-modal instructions with diffusion models. arXiv preprint arXiv:2311.18837, 2023. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[50] Zhen Xing, Qijun Feng, Haoran Chen, Qi Dai, Han Hu, Hang Xu, Zuxuan Wu, and Yu-Gang Jiang. A survey on video diffusion models. arXiv preprint arXiv:2310.10647, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[51] Zhen Xing, Qi Dai, Han Hu, Zuxuan Wu, and Yu-Gang Jiang. Simda: Simple diffusion adapter for efficient video generation. In CVPR, 2024. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[52] Lvmin Zhang, Anyi Rao, and Maneesh Agrawala. Adding conditional control to text-to-image diffusion models. In ICCV, 2023. 2, 3, 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[53] Richard Zhang, Phillip Isola, Alexei A Efros, Eli Shechtman, and Oliver Wang. The unreasonable effectiveness of deep features as a perceptual metric. In CVPR, 2018. 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[54] Yabo Zhang, Yuxiang Wei, Dongsheng Jiang, Xiaopeng Zhang, Wangmeng Zuo, and Qi Tian. Controlvideo: Training-free controllable text-to-video generation. arXiv preprint arXiv:2305.13077, 2023. 2, 3, 7, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[55] Zhongwei Zhang, Fuchen Long, Yingwei Pan, Zhaofan Qiu, Ting Yao, Yang Cao, and Tao Mei. Trip: Temporal residual learning with image noise prior for image-to-video diffusion models. In CVPR, 2024. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[56] Rui Zhu, Yingwei Pan, Yehao Li, Ting Yao, Zhenglong Sun, Tao Mei, and Chang Wen Chen. Sd-dit: Unleashing the power of self-supervised discrimination in diffusion transformer. In CVPR, 2024. 2"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                78,
+                93,
+                468,
+                146
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "7891"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                514,
+                957
+            ]
+        }
+    ]
+]

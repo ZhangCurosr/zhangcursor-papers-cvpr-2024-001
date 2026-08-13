@@ -1,0 +1,1396 @@
+[
+    {
+        "type": "text",
+        "text": "MoML: Online Meta Adaptation for 3D Human Motion Prediction",
+        "text_level": 1,
+        "bbox": [
+            147,
+            128,
+            821,
+            151
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Xiaoning Sun<sup>1</sup>, Huaijiang Sun<sup>1</sup>, Bin Li<sup>2</sup>, Dong Wei<sup>1\u0000</sup>, Weiqing Li<sup>1</sup>, Jianfeng Lu<sup>1</sup> <sup>1</sup>Nanjing University of Science and Technology, China <sup>2</sup>Tianjin AiForward Science and Technology Co., Ltd., China {sunxiaoning,sunhuaijiang,csdwei}@njust.edu.cn, libin@aiforward.com",
+        "bbox": [
+            160,
+            179,
+            807,
+            252
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Abstract",
+        "text_level": 2,
+        "bbox": [
+            235,
+            285,
+            313,
+            303
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "In the academicfield, the research on human motion prediction tasks mainly focuses on exploiting the observed information to forecast human movements accurately in the near future horizon. However, a significant gap appears when it comes to the application field, as current models are all trained offline, with fixed parameters that are inherently suboptimal to handle the complex yet ever-changing nature of human behaviors. To bridge this gap, in this paper, we introduce the task ofonline meta adaptationfor human motion prediction, based on the insight that finding “smart weights” capable of swift adjustments to suit different motion contexts along the time is a key to improving predictive accuracy. We propose MoML, which ingeniously borrows the bilevel optimization spirit of model-agnostic meta-learning, to transform previous predictive mistakes into strong inductive biases to guide online adaptation. This is achieved by our MoAdapter blocks that can learn error information byfacilitating efficient adaptation via afew gradient steps, which fine-tunes our meta-learned “smart” initialization produced by the generic predictor. Considering real-time requirements in practice, we further propose Fast-MoML, a more efficient variant ofMoML thatfeatures a closed-form solution instead ofconventional gradient update. Experimental results show that our approach can effectively bring many existing offline motion prediction models online, and improves their predictive accuracy.",
+        "bbox": [
+            75,
+            318,
+            470,
+            712
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "1. Introduction",
+        "text_level": 2,
+        "bbox": [
+            76,
+            739,
+            209,
+            756
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "3D human motion prediction is aimed at forecasting a future motion sequence accurately based on the historical observation. As a core technology in computer vision and robotics, it has been widely used in applications such as human-robot collaboration [27, 40] and autonomous driving [6, 34].",
+        "bbox": [
+            75,
+            763,
+            470,
+            840
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Academically, current mainstream works on this task are formulated as an offline problem. They are dedicated to exploiting spatial correlations of body-joints [9, 26, 30] and temporal information of sequences [32, 38, 54], with the goal of learning a generic predictor that can handle various motions over the entire data distribution. Meanwhile, they only model the prescribed observation-target window with static data, with samples less than one second. However, real motions are streaming data that dynamically arrive, with diverse movements and may keep changing continuously over time, e.g., leading to concept drift [41]. Existing offline-trained predictors use frozen parameters to tackle the complexity and variability of human motions, which is inherently suboptimal for real-world applications.",
+        "bbox": [
+            75,
+            840,
+            470,
+            901
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/6366b4bb2af2f02d1728e39dc2e1feac7140dea8370b5f3d85404dfc1c099571.jpg",
+        "image_caption": [
+            "Figure 1. Existing methods predicts a short future given the observation, with frozen parameters handling all scenarios. We present a new paradigm for this task, in which: (1) motions are dynamically arriving as streaming data, instead of previous static setting; (2) we propose online meta adaptation approach, with adaptive parameters fitting the ever-changing nature of human motions; (3) as new data appears, we exploit the information in previous predictive mistakes as the driving force for online adaptation."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            503,
+            284,
+            890,
+            411
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            564,
+            893,
+            715
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "To bridge this gap, we draw inspiration from the human mindsets. Humans have derived basic predictive ability through their growth and learning, while making mistakes is still inevitable. A remarkable attribute of human intelligence is the ability to quickly adjust his/her thinking to suit the new situation and avoid making further mistakes during prediction. In contrast, for existing deep learning-based motion predictors, the dynamic relations between model parameters and testing errors are never discussed.",
+        "bbox": [
+            496,
+            717,
+            893,
+            853
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "In this paper, we introduce the task of online meta adaptation for human motion prediction, based on the insight that finding “smart” weights capable of swift parameter adjustments along the time can effectively benefits the predictive accuracy during inference. We propose an online meta adaptation approach named MoML, which transforms the recently-produced predictive mistakes into strong inductive biases as the driving force for online adaptation, to ensure a closer alignment with the temporary context and thereby improved prediction performance then. We customize the bilevel optimization spirit of model-agnostic meta-learning (MAML) algorithm [11] to train with inner loops and outer loops. The inner loops conduct a few gradient steps to learn the error information, which constrain parameters to optimize into a context-specific configuration w.r.t. the temporary motion status, while the outer loops enable predictors with a generic parameter setting over various motion status via meta-updates.",
+        "bbox": [
+            496,
+            854,
+            893,
+            901
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "",
+        "bbox": [
+            106,
+            2,
+            181,
+            41
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore.",
+        "bbox": [
+            235,
+            1,
+            810,
+            46
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "page_number",
+        "text": "1042",
+        "bbox": [
+            482,
+            944,
+            516,
+            958
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            92,
+            472,
+            319
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "To achieve this, we design MoAdapter blocks that serve as the adaptive parameters to realize online adaptation. During meta-training, we introduce the notion of temporary prediction loss, which reflects the predictive errors that just happened, and guides the learning of inner loops by supervising MoAdapters towards the optimal parameters under the temporary context. Our meta-loss, however, is a general prediction loss used to optimize the “smart” initialization over the entire motion distribution as a generic predictor in outer loops. Therefore, when performing online adaptation along the direction of time, we only update MoAdapters based on each temporary prediction loss and keep the generic parameters fixed, which exactly emulates the flexible adaptability and the basic predictability possessed in human thinking. The separation of adaptive and generic parameters in MoML allows us to discard the entire model update strategy in vanilla MAML. This ensures stable training as well as avoiding excessive time cost for adaptation during inference. Additionally, considering the real-time requirements for human motion prediction in practice, we further propose a more efficient variant named Fast-MoML, which features only a one-layer motion embedding as MoAdapter. Rather than performing gradient update, it conducts adaptation with the direct calculation of a closed-form solution, and appears less time-consuming.",
+        "bbox": [
+            75,
+            321,
+            472,
+            699
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "In summary, our contributions are as follows:",
+        "bbox": [
+            96,
+            702,
+            398,
+            717
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• We are the first to address online adaptive human motion prediction, which introduces recent predictive mistakes as the driving force for adaptation along the time, to suit the ever-changing motion contexts.",
+        "bbox": [
+            76,
+            719,
+            470,
+            780
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• We propose MoML, an online meta adaptation approach that utilizes MoAdapters to capture error information for adaptation towards context-specific weights, by operating a few gradient steps from the meta-learned initialization. Fast-MoML is further developed for efficient adaptation.",
+        "bbox": [
+            76,
+            780,
+            470,
+            854
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• We empirically show that our approach can bring many existing offline-trained predictors online, and help constantly yield improved prediction performance.",
+        "bbox": [
+            76,
+            856,
+            470,
+            901
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Notably, so far, meta-learning has only been employed in a few studies on human motion prediction tasks. They are mainly aimed at few-shot learning for novel/unseen motion categories [10, 14, 55], which uses small samples from certain unseen category to adjust parameters for this specific category. Essentially, all of them are still under the offline setting to tackle the static distributional discrepancy. Orthogonal to them, we argue that cultivating the adaptability of predictors (1) in the time direction and (2) with an online manner for streaming data could bring a fresh perspective to improve both predictive accuracy and model practicability.",
+        "bbox": [
+            496,
+            92,
+            893,
+            260
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "2. Related Work",
+        "text_level": 2,
+        "bbox": [
+            500,
+            272,
+            643,
+            289
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "2.1. Human Motion Prediction",
+        "text_level": 2,
+        "bbox": [
+            500,
+            297,
+            740,
+            314
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Current mainstream academical research on human motion prediction primarily focuses on two aspects: capturing spatial correlations of body-joints and extracting temporal dependencies of motion sequences, to predict a short, near future based on observations. Concretely, RNNs [7, 21], LSTMs [12, 32], GRUs [38, 39], or Discrete Cosine Transformation (DCT) [30, 31] are employed to learn temporal information. Recently, by exploring the natural graph structure in human body, GNN-based [25, 26] and GCNbased [9, 28–31, 42, 58] are proposed to depict spatial correlations. Meanwhile, recent architectures like Transformer [1, 5, 48, 52] and MLP-Mixer [4, 49] are also involved. Additionally, [53] presents a motion prediction network that is theoretically equivariant under Euclidean transformations and can achieve state-of-the-art performance. The new [52] designs auxiliary denoising branch and masking prediction branch to assist the main prediction, to exploit spatio-temporal dependencies more comprehensively. However, all these models are trained offline. When applied to real world where motions are of an ever-changing nature, it is neither possible nor optimal for the fixed parameters to make accurate predictions constantly. On the other hand, these works are all restricted to the static data within the short prescribed research window, and never consider the dynamic arrival of streaming motion data. Although [43] takes the latter issue into account, the offline-trained manner still hinders its ability to fully exploit error patterns during inference. Motivated by the above, we introduce the online meta adaptation paradigm for human motion prediction, to take a step from the academic field towards applications.",
+        "bbox": [
+            496,
+            321,
+            895,
+            777
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "2.2. Meta-Learning",
+        "text_level": 2,
+        "bbox": [
+            500,
+            786,
+            655,
+            803
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Known as learning-to-learn, meta-learning is used to realize quick model adaptation to novel data or tasks. Our work borrows the bilevel optimization spirit from model-agnostic meta-learning (MAML) [11], one of the most representative and influential algorithms in meta-learning, which consists of inner loops and outer loops of training process, to obtain a meta-learner that can learn task-specific parameters via a few gradient updates. [35] proposes Reptile, a simplified version of MAML by replacing second-order gradient calculation with first-order.",
+        "bbox": [
+            496,
+            809,
+            893,
+            901
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "page_number",
+        "text": "1043",
+        "bbox": [
+            482,
+            944,
+            516,
+            958
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            92,
+            470,
+            151
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Online Meta Adaptation. Meta-learning for online adaptation has been discussed in various time series-related tasks in computer vision, such as human mesh recovery in videos [13], video depth estimation [24, 56, 57], video object segmentation [51] and video semantic segmentation [36, 46]. The adaptation in these works focuses more on the domain shift problem caused by the distributional discrepancy between training data and testing data (i.e., between different sequences). However, our adaptation focuses more on an orthogonal perspective, motivated by the inherent everchanging nature of 3D human motion in the time direction (along the sequence). In other words, we address concept drift, rather than domain shift.",
+        "bbox": [
+            75,
+            151,
+            470,
+            347
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Meta-Learning in Human Motion Prediction. To date, there are only a few works in this task concerning metalearning, which are mainly designed for few-shot learning over unseen motion categories [10, 14, 55], wherein [14] employs gradient-based, [55] memory-based and [10] graph-based meta-learning paradigms. To the best of our knowledge, the remaining two works [8, 33] aim to handle out-of-distribution problems caused by new/unseen human subjects with unique properties, such as motion style, rhythm or personal preferences. All of them are different from our setting that realizes online meta adaptation along the time to better fit the various motion contexts.",
+        "bbox": [
+            75,
+            347,
+            470,
+            530
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "3. Method",
+        "text_level": 2,
+        "bbox": [
+            76,
+            541,
+            168,
+            558
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "In this section, we provide formal descriptions of human motion prediction under online meta adaptation setting, and introduce the working mechanism of our proposed MoML.",
+        "bbox": [
+            75,
+            566,
+            468,
+            613
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "3.1. Problem Formulation & Overview",
+        "text_level": 2,
+        "bbox": [
+            76,
+            621,
+            377,
+            636
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Preliminary. Currently, mainstream human motion prediction works (like [26, 29, 30]) have formed a basic routine as follows. Let $\\mathbf { X } = \\left[ \\mathbf { x } _ { 1 } , \\mathbf { x } _ { 2 } , \\cdots , \\mathbf { x } _ { N } \\right]$ be the observed motion sequence, the goal is to predict the future motion sequence $\\hat { \\bf Y } = [ \\hat { \\bf y } _ { 1 } , \\hat { \\bf y } _ { 2 } , \\cdot \\cdot \\cdot , \\hat { \\bf y } _ { T } ]$ as accurately as possible towards the target Y, with each human pose $\\mathbf { x } _ { i } , \\hat { \\mathbf { y } } _ { i }$ or $\\mathbf { y } _ { i } ~ \\in \\mathbb { R } ^ { J \\times 3 }$ denoted by 3D body joint position coordinate. J is for joint number. N and $T$ mean the frame numbers of observation and prediction target, respectively.",
+        "bbox": [
+            75,
+            643,
+            470,
+            780
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Online Meta Adaptation Setup. As we are aimed at addressing online meta adaptation along the time, the above prescribed research time window $( N + T )$ is not fully applicable. Here we introduce our formulation. We define the conventional goal of predicting T frames based on the observed N frames as a sub-task $\\textstyle S _ { s } ,$ , which involves the (observed, target) motion pair $( \\mathbf { X } , \\mathbf { Y } ) _ { s } , \\mathrm { i . e . , } ( \\mathbf { x } _ { 1 : N } , \\mathbf { y } _ { 1 : T } ) _ { s }$ . To realize online motion prediction over long-range horizon, we need to implement all these sub-tasks that are stacked along the time, i.e., $\\mathcal { S } = [ S _ { 1 } , S _ { 2 } , \\cdots , S _ { s } , \\cdots ]$ . Every subtask is intended for predicting the next T poses compared to its adjacent previous sub-task.",
+        "bbox": [
+            75,
+            780,
+            470,
+            901
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            92,
+            893,
+            151
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Our ultimate goal, i.e., online meta adaptation for motion prediction, is to learn from the mistakes made in previous sub-task $ { \\boldsymbol { S } } _ { s - 1 }$ , using this error information to adapt model parameters for closer alignment with the temporary context, and therefore improve the prediction performance of current sub-task $S _ { s }$ . Formally, in our setting, each task is defined as $\\mathcal { T } _ { \\tau } = \\{ \\mathcal { D } ^ { s p t } , \\mathcal { D } ^ { q r y } , \\mathcal { L } ^ { t m p } \\}$ <sub>τ</sub> that contains support data, query data and our temporary prediction loss. We draw adjacent sub-task pair $( S _ { s - 1 } , S _ { s } )$ from ${ \\mathcal { S } } _ { : }$ , with the former $ { \\mathcal { S } } _ { s - 1 }$ as $\\mathcal { D } ^ { s p t }$ and the latter $S _ { s }$ as $\\mathcal { D } ^ { q r y }$ . Specifically, $\\mathcal { D } _ { \\tau } ^ { s p t }$ is used to learn the error information guided by $\\mathcal { L } _ { \\tau } ^ { t m p }$ so that model parameters can be adapted to better fit the temporary context τ ; the prediction performance of the updated parameters is then evaluated by $\\mathcal { D } _ { \\tau } ^ { q r y }$ to ensure the effectiveness of adaptation towards this context (i.e., task).",
+        "bbox": [
+            496,
+            152,
+            893,
+            378
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "During training, we aim to find the “smart” initialization that close to every task-specific parameter configuration in the parameter space. Therefore, during inference where each $S _ { s }$ is executed one by one for online motion prediction, the meta-learned initialization can conduct quick adaptation according to the context it confronts, and thereby solving the distributional changing in the time direction.",
+        "bbox": [
+            496,
+            380,
+            893,
+            486
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "MoML Overview. Our approach of MoML (online Motion Meta adaptation) consists of two components: the adaptive parameter θ that keeps adjusting to fit each temporary context over time, and the generic parameter φ shared across all prediction scenarios. The consecutive adaptations along the prediction process can be regarded as performing swift fine-tuning of θ based on recent predictive mistake under $\\phi$ initialization. To achieve this, we propose MoAdapters as $\\theta ,$ and integrate them into the model hidden layers. By learning the temporary error information, they adapt to $\\theta _ { \\tau }$ for context τ as context-specific weights, and therefore enable improved predictive accuracy. Our generic $\\phi$ can be constructed with many existing end-to-end motion predictors, in the seek of a smart initialization that determines where is the best starting point for adaptive operation for every temporary context. We visualize the our overview in Figure 2.",
+        "bbox": [
+            496,
+            486,
+            893,
+            729
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "3.2. MoAdapter",
+        "text_level": 2,
+        "bbox": [
+            500,
+            739,
+            627,
+            756
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "To accommodate the ever-changing nature of human motion, we design MoAdapters to realize online adaptation to fit diverse motion contexts, which essentially integrate the recent error information for the subsequent prediction rectification. We propose two types of MoAdapter shown in Figure 3. The first type FC-MoAdapter is modified from the adapter architectures in transfer learning works [15, 17] in NLP, which can produce the adapter representation at each insertion layer l. Given the input of MoAdapter at this layer as $\\mathbf { H } ^ { l } \\in \\mathbb { R } ^ { d _ { s } \\times d _ { t } }$ , with $d _ { s }$ and $d _ { t }$ the spatial and temporal dimensions, respectively, the adapter representation $\\mathbf { Z } ^ { \\bar { l } }$ can be expressed as:",
+        "bbox": [
+            496,
+            765,
+            893,
+            901
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "page_number",
+        "text": "1044",
+        "bbox": [
+            482,
+            945,
+            516,
+            958
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "image",
+        "img_path": "images/282594f1c4d1ebb3f9bbe89d2f661a6dc302095e3bf0b38c149574d3c932b672.jpg",
+        "image_caption": [
+            "Figure 2. A sub-task is defined as predicting T frames based on N frames. To keep predicting along the time, we perform the subsequent sub-tasks, with each T frames further. In our setting, every adjacent sub-task pair is a task $\\mathcal { T } _ { \\tau } = ( S _ { s - 1 } , S _ { s } )$ with a temporary context τ . To drive MoAdapters $( \\mathrm { i . e . , } \\theta )$ to fit context $\\tau ,$ we feed $ { \\boldsymbol { S } } _ { s - 1 }$ into the model, and the produced temporary prediction loss $\\bar { \\mathcal { L } } _ { \\tau } ^ { t m p }$ contains error information that depicts how the model deviates from current context. Using it to optimize MoAdapters θ towards the context-specific θ forms our inner loops. With the updated MoAdapters, the current model can be evaluated by feeding $\\boldsymbol { S _ { s } }$ and calculating the prediction loss $\\mathcal { L } _ { \\tau } ^ { m e t a }$ . By back-propagating multiple contexts of $\\mathcal { L } ^ { m e t a }$ over main pipeline blocks $( \\mathrm { i } . \\mathrm { e } . , \\phi )$ , we can ensure the shared parameter to obtain generic weights for all scenarios that serves as the optimal starting points for different adaptation operations. This forms our outer loops."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            81,
+            92,
+            887,
+            219
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            76,
+            354,
+            468,
+            400
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/128ad29eff034880ae098c64d5d0d62dc6920fa970833c35bcecf9cc252a5dd9.jpg",
+        "text": "$$\n\\mathbf { Z } ^ { l } = \\mathbf { W } _ { 2 } ^ { l } ( \\sigma ( \\mathbf { W } _ { 1 } ^ { l } \\mathsf { L N } ( \\mathbf { H } ^ { l } ) ) ) + \\mathbf { H } ^ { l } ,\\tag{1}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            161,
+            405,
+            382,
+            424
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "where σ is the activation function that is set to $g e l u ( \\cdot ) \\ [ 1 6 ] .$ and $\\mathsf { L N } ( \\cdot )$ indicates layer normalization [2]. We regard $\\mathbf { W } _ { 1 } ^ { l }$ and $\\mathbf { W } _ { 2 } ^ { l }$ as the adaptive parameters of each MoAdapter. If L MoAdapters are utilized totally, then $\\mathbf { \\nabla } \\theta = \\{ \\mathbf { W } _ { 1 } , \\mathbf { W } _ { 2 } \\} _ { 1 : L }$ Meanwhile, we design GC-MoAdapter as the second type that specially considers the graph structure of human motion data, which employs the graph convolution operation [23, 45] among the explicit body-joints or the latent bodyjoint features. Similarly, given the MoAdapter input as $\\mathbf { \\bar { H } } ^ { l } \\in \\mathbb { R } ^ { d _ { s } \\times d _ { t } }$ , the adapter representation $\\mathbf { Z } ^ { \\bar { l } }$ can be expressed as:",
+        "bbox": [
+            75,
+            429,
+            470,
+            595
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/1d6cc6258eeb76919e190d18a6647aeec30c1c00279989ea030cb97d4b3fc07f.jpg",
+        "text": "$$\n\\mathbf { Z } ^ { l } = \\mathbf { W } _ { \\mathrm { 3 } } ^ { l } ( \\mathsf { G r a p h C o n v } ( \\mathsf { L N } ( \\mathbf { H } ^ { l } ) ) ) + \\mathbf { H } ^ { l } .\\tag{2}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            140,
+            601,
+            403,
+            618
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Particularly, GraphConv(·) learns the graph connectivity by modeling a fully-connected graph with $d _ { s }$ nodes, with the trainable weighted adjacency matrix $\\mathbf { A } ^ { l } \\in \\mathbb { R } ^ { d _ { s } \\times d _ { s } }$ . Taking $\\mathbf { Z } _ { g c _ { - } i n } ^ { l } \\in \\mathbb { R } ^ { d _ { s } \\times d _ { t } }$ as input, GraphConv(·) outputs:",
+        "bbox": [
+            75,
+            625,
+            470,
+            686
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/107a79899668ad0153230f6043bc6e60fb24667643165f8f9a316b8bb31e610f.jpg",
+        "text": "$$\n\\mathbf { Z } _ { g c _ { - } o u t } ^ { l } = \\varphi ( \\mathbf { A } ^ { l } \\mathbf { Z } _ { g c _ { - } i n } ^ { l } \\mathbf { W } _ { g c } ^ { l } ) ,\\tag{3}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            178,
+            691,
+            367,
+            712
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "where the activation function $\\varphi$ is tanh(·) attached with batch normalization [19], and the trainable weights ${ \\bf W } _ { g c } ^ { l } \\in  \\Psi$ $\\mathbb { R } ^ { d _ { t } \\times d _ { t } ^ { \\prime } }$ . We define $\\theta = \\{ \\mathbf { A } , \\mathbf { W } _ { g c } , \\mathbf { W } _ { 3 } \\} _ { 1 : L }$ if L MoAdapters participate in online adaptation. The separation of θ from the generic φ allows for adjustments over limited parameters w.r.t. different contexts instead of updating the entire model, which can ensure stable training and efficient online adaptation during inference.",
+        "bbox": [
+            75,
+            715,
+            470,
+            840
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "3.3. Meta-optimization",
+        "text_level": 2,
+        "bbox": [
+            76,
+            847,
+            258,
+            863
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "To enable online adaptability to suit every motion context along the time, we should learn a model that can learn",
+        "bbox": [
+            75,
+            869,
+            470,
+            901
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "image",
+        "img_path": "images/14d1ad1ca236b1bbf15634d8e6ff97fa4516d4f8f3dab3b953f4e1e4b8fba4f7.jpg",
+        "image_caption": [
+            "Figure 3. Architectures of the two proposed MoAdapters. Either of them is integrated into the main pipeline by attaching at the end of each network block at layer l with residual connections."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            539,
+            353,
+            852,
+            464
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "MoAdapters guided by temporary error information, $\\mathrm { i . e . }$ learn-to-learn. We customize the bilevel optimization spirit in model-agnostic meta-learning (MAML), where the optimal θ for context $\\tau \\ ( \\mathrm { i } . \\mathrm { e } . , \\ \\theta _ { \\tau } ^ { * } )$ is obtained by MoAdapter adaptation steps, and the generic parameters φ shared across all scenarios are learned via meta-update. Recall our task definition $\\mathcal { T } _ { \\tau } = \\{ \\mathcal { D } ^ { s p t } , \\mathcal { D } ^ { q r y } , \\mathcal { L } ^ { t m p } \\} _ { \\tau } = \\{ S _ { s - 1 } , S _ { s } , \\mathcal { L } _ { \\tau } ^ { t m p } \\}$ in Section 3.1. During the inner loops, θ is optimized by implementing sub-task $ { \\boldsymbol { S } } _ { s - 1 }$ via the entire model parameterized as $\\{ \\theta , \\phi \\}$ , and conducting back-propagation on $\\mathcal { L } _ { \\tau } ^ { t m p } ( \\theta , \\phi ; S _ { s - 1 } )$ . To be specific, the model predicts $\\hat { \\mathbf { Y } } _ { s - 1 }$ based on the observed ${ \\bf X } _ { s - 1 }$ , and calculate the predictive mistake",
+        "bbox": [
+            498,
+            545,
+            892,
+            741
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/4307d22aaf8ad76cded0c743021827977faf59ddd30537e499a3d40d535b6b34.jpg",
+        "text": "$$\n\\begin{array} { r l } {  { \\mathcal { L } _ { \\tau } ^ { t m p } ( \\theta , \\phi ; \\mathcal { S } _ { s - 1 } ) = \\| \\hat { \\mathbf { Y } } _ { s - 1 } - \\mathbf { Y } _ { s - 1 } \\| _ { F } ^ { 2 } } } \\\\ & { = \\displaystyle \\frac { 1 } { T } \\sum _ { t = 1 } ^ { T } \\| \\hat { \\mathbf { y } } _ { s - 1 , t } - \\mathbf { y } _ { s - 1 , t } \\| _ { 2 } ^ { 2 } } \\end{array}\\tag{4}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            539,
+            751,
+            851,
+            814
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "as temporary prediction loss to optimize θ, where ${ \\bf Y } _ { s - 1 } \\in$ $\\mathbb { R } ^ { J \\times 3 \\times T }$ is the prediction target of sub-task $ { \\boldsymbol { S } } _ { s - 1 }$ corresponding to the context $\\tau ,$ and ${ \\bf y } _ { s - 1 , t }$ denotes the t-th frame of the entire target sequence. One or few times of such optimization steps can be operated to produce the optimal $\\theta _ { \\tau } ^ { * }$",
+        "bbox": [
+            498,
+            824,
+            892,
+            901
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "page_number",
+        "text": "1045",
+        "bbox": [
+            482,
+            944,
+            516,
+            958
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "code",
+        "sub_type": "algorithm",
+        "code_caption": [],
+        "code_footnote": [],
+        "code_body": "Algorithm 1: MoML training procedure   \nRequire: Meta-dataset $\\mathcal { D } ^ { t r }$   \nRequire: Hyper-parameters $\\alpha , \\beta , \\gamma$   \nRandomly initialize θ and φ   \nwhile max interation do   \nSample batch of tasks $\\mathcal { T } _ { \\tau }$ composed of adjacent   \nsub-task pair $( S _ { s - 1 } , S _ { s } )$ , where $\\forall S _ { s } \\sim \\mathcal { D } ^ { t r }$   \nfor all $\\mathcal { T } _ { \\tau }$ do   \nInitialize $\\theta _ { \\tau } = \\theta$   \nfor number ofadaptation steps do   \nCompute temporary prediction loss   \n$\\bar { \\mathcal { L } } _ { \\tau } ^ { t \\bar { m p } } ( \\theta , \\phi ; \\bar { S } _ { s - 1 } )$ using Eq (4)   \nUpdate MoAdapters:   \n$\\theta _ { \\tau }  \\theta _ { \\tau } - \\alpha \\nabla _ { \\theta _ { \\tau } } \\mathcal { L } _ { \\tau } ^ { t m p } ( \\theta _ { \\tau } , \\phi ; \\mathcal { S } _ { s - 1 } )$   \nend   \nCompute $\\mathcal { L } _ { \\tau } ^ { m e t a } ( \\theta _ { \\tau } , \\phi ; S _ { s } )$ using Eq (5)   \nend   \nUpdate shared parameters φ by performing:   \n$\\begin{array} { r } { \\phi  \\phi - \\beta \\nabla _ { \\phi } \\sum _ { \\tau } \\mathcal { L } _ { \\tau } ^ { m e t a } ( \\theta _ { \\tau } , \\phi ; \\mathcal { S } _ { s } ) } \\end{array}$   \nover all the contexts in this batch   \n$\\beta \\gets \\gamma \\cdot \\beta$   \nend",
+        "bbox": [
+            80,
+            92,
+            467,
+            433
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "During outer loops, we implement sub-task $S _ { s }$ that predicts $\\hat { \\mathbf { Y } } _ { s }$ given observed $\\mathbf { X } _ { s }$ , and optimize φ guided by:",
+        "bbox": [
+            76,
+            460,
+            468,
+            492
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "img_path": "images/55dd768031604f56d882fa601f4c7b63f64cb391ba1affbaa3d7549fa2d52778.jpg",
+        "text": "$$\n\\mathcal { L } _ { \\tau } ^ { m e t a } ( \\boldsymbol { \\phi } ; \\mathcal { S } _ { s } ) = \\Vert \\hat { \\mathbf { Y } } _ { s } - \\mathbf { Y } _ { s } \\Vert _ { F } ^ { 2 } = \\frac { 1 } { T } \\sum _ { t = 1 } ^ { T } \\Vert \\hat { \\mathbf { y } } _ { s , t } - \\mathbf { y } _ { s , t } \\Vert _ { 2 } ^ { 2 } ,\\tag{5}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            84,
+            497,
+            441,
+            539
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "with the adapted $\\theta _ { \\tau }$ fixed. The meta-update is performed across different $\\mathcal { L } _ { \\tau } ^ { m e t a }$ for multiple motion contexts, to obtain an optimal starting point $\\phi ^ { * }$ that can be quickly adapted to all prediction scenarios. The formal training procedure is shown in Algorithm 1, and the formulation of MoML can be expressed as:",
+        "bbox": [
+            75,
+            544,
+            470,
+            636
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "img_path": "images/a9611dc6515dc2b9d8d3f7d864d64f8849e635bb4800eb15461c0704706f87f8.jpg",
+        "text": "$$\n\\begin{array} { r l } { \\phi ^ { * } = \\underset { \\phi } { \\arg \\operatorname* { m i n } } \\sum _ { \\tau } \\mathcal { L } _ { \\tau } ^ { m e t a } ( \\theta _ { \\tau } ^ { * } , \\phi ; S _ { s } ) } & { } \\\\ { s . t . } & { \\theta _ { \\tau } ^ { * } = \\underset { \\theta } { \\arg \\operatorname* { m i n } } \\mathcal { L } _ { \\tau } ^ { t m p } ( \\theta , \\phi ; S _ { s - 1 } ) } \\end{array}\\tag{6}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            147,
+            641,
+            400,
+            698
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "As a result, with the meta-learned $\\phi ^ { * }$ as the generic initialization, we use the temporary prediction loss over the former $ { \\boldsymbol { S } } _ { s - 1 }$ in every task, to help θ transit into $\\theta _ { \\tau } ^ { * }$ to suit its context, and improve the performance of the latter $S _ { s } .$ Note that, both of the two losses are essentially prediction losses, but the inner $\\mathcal { L } _ { \\tau } ^ { t m p }$ drives θ towards specific context, and the outer $\\mathcal { L } _ { \\tau } ^ { m e t a }$ serves as meta-loss to find the optimal initialization for the entire data distribution.",
+        "bbox": [
+            75,
+            704,
+            470,
+            825
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "3.4. Fast-MoML",
+        "text_level": 2,
+        "bbox": [
+            76,
+            832,
+            209,
+            847
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Apart from the above gradient-based optimization framework, considering the real-time requirements of online motion prediction, we present a more efficient version of",
+        "bbox": [
+            75,
+            854,
+            470,
+            901
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "MoML, named Fast-MoML. We specify that the adaptive parameters θ only exist as the last layer of the entire model, with all the other parameters as $\\phi ,$ , which means that only the last layer is involved in inner loops. Motivated by [3, 50], we discover that such last-layer optimization with MSE loss can be regarded as a simple ridge regression problem with an analytic solution instead of the complex and time-consuming gradient-based optimization. Suppose an L-layer network denoted as $\\phi _ { n e t } $ , which outputs ${ \\bf { H } } _ { s - 1 } ^ { L }$ during the sub-task $ { \\boldsymbol { S } } _ { s - 1 }$ With $\\boldsymbol { \\theta } = \\{ \\mathbf { W } ^ { L } \\}$ , the solution of inner loop optimization can be expressed as:",
+        "bbox": [
+            498,
+            90,
+            893,
+            261
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "img_path": "images/6da405ab6a7b4e584dc5da488cc74095789be79561096aa5ec453b3093f35771.jpg",
+        "text": "$$\n\\begin{array} { r } { \\mathbf { W } _ { \\tau } ^ { L ^ { * } } = \\underset { \\mathbf { W } } { \\arg \\operatorname* { m i n } } \\| \\mathbf { H } _ { s - 1 } ^ { L } \\mathbf { W } - \\mathbf { Y } _ { s - 1 } \\| ^ { 2 } + \\lambda \\| \\mathbf { W } \\| ^ { 2 } } \\\\ { = \\big ( \\big ( \\mathbf { H } _ { s - 1 } ^ { L } \\big ) ^ { T } \\mathbf { H } _ { s - 1 } ^ { L } + \\lambda \\mathbf { I } \\big ) ^ { - 1 } \\big ( \\mathbf { H } _ { s - 1 } ^ { L } \\big ) ^ { T } \\mathbf { Y } _ { s - 1 } } \\end{array}\\tag{7}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            527,
+            271,
+            846,
+            323
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "for each adaptation. When θ is adapted to $\\theta _ { \\tau } ^ { * }$ as $\\mathbf { W } _ { \\tau } ^ { L ^ { * } }$ , the prediction process in the subsequent $S _ { s }$ can be improved as $\\hat { \\mathbf { Y } } _ { s } = \\mathbf { H } _ { s } ^ { L } \\mathbf { \\hat { W } } _ { \\tau } ^ { L ^ { * } }$ . λ serves as the regularization parameter in ridge regression, which is trainable and belongs to φ that participates meta-update, i.e., $\\phi = \\{ \\phi _ { n e t } , \\lambda \\}$ . Similar to [3], we also involve a bias term by appending a scalar 1 to $\\mathbf { H } ^ { L }$ during the calculation. As the above closed-form solution is differentiable, gradient-based optimization only happens to $\\phi .$ In inference, we can directly conduct matrix multiplication to realize fast adaptation for every context over time.",
+        "bbox": [
+            498,
+            337,
+            893,
+            491
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "4. Experiments",
+        "text_level": 2,
+        "bbox": [
+            500,
+            505,
+            633,
+            522
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "In this section, we evaluate our MoML approach over the task of human motion prediction with online meta adaptation. Following [26, 30], we train on Human3.6M [20], CMU-Mocap and 3DPW [47] datasets. The experiments are conducted by modifying three baselines into online meta adaptive setting, and we provide numerical results, visualizations, with ablation studies for full analysis.",
+        "bbox": [
+            496,
+            531,
+            893,
+            638
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "4.1. Datasets",
+        "text_level": 2,
+        "bbox": [
+            500,
+            648,
+            604,
+            665
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Human3.6M is the most influential and representative dataset for human motion prediction, which contains seven actors performing 15 types of actions, such as walking, eating, smoking and discussion. Motion sequences are downsampled into 25 Hz to form our motion data. Each human body is denoted by 32 body-joints pre-processed into 3D coordinates. We follow the mainstream [4, 26, 30, 32] and consider 22 of these joints. Subjects 1 (S1), S6, S7-S9 are for training, S5 and S11 are for testing and validation.",
+        "bbox": [
+            496,
+            672,
+            893,
+            809
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "CMU-Mocap denotes each body by 28 joints as 3D coordinates. Following [26, 30], we leave 25 joints for experiments and use the same protocol to split training and testing sets. Similar to them, we include 8 categories: basketball, basketball signal, directing traffic, jumping, running, soccer, walking and washing window.",
+        "bbox": [
+            496,
+            809,
+            893,
+            901
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "page_number",
+        "text": "1046",
+        "bbox": [
+            482,
+            944,
+            516,
+            958
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "table",
+        "img_path": "images/ad8065c83aac2ef3790ed1a63d6feb8f619d52a2edc4406ce44e4fa351d1c69e.jpg",
+        "table_caption": [
+            "Table 1. Comparisons of MPJPE errors of 5 typical activities in Human3.6M between baselines without/with our MoML approach. The suffix of FC or GC indicates integrating FC-MoAdapters or GC-MoAdapters, respectively. Lower errors are highlighted in bold, where our designs gain improvement in most cases. As we perform each sub-task one by one along the time to predict with streaming motion data, each error of ours is calculated by averaging errors of all sub-tasks at the corresponding timestamp."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td colspan=\"4\">walking</td><td colspan=\"4\">eating</td><td colspan=\"4\">smoking</td><td colspan=\"4\">discussion</td><td colspan=\"4\">directions</td></tr><tr><td>millisecond (ms)</td><td>80</td><td>160</td><td>320</td><td>400</td><td>80</td><td>160</td><td>320</td><td>400</td><td>80 160</td><td>320</td><td>400</td><td>80</td><td>160</td><td>320</td><td>400</td><td>80</td><td>160</td><td>320</td><td>400</td></tr><tr><td>Res. sup [32]</td><td>29.4</td><td>50.8</td><td>76.0</td><td>81.5</td><td>16.8</td><td>30.6</td><td>56.9</td><td>68.7</td><td>23.0</td><td>42.6</td><td>70.1</td><td>82.7</td><td>32.9</td><td>61.2 90.9</td><td>96.2</td><td>35.4</td><td>57.3</td><td>76.3</td><td>87.7</td></tr><tr><td>DMGNN [25]</td><td>17.3</td><td>30.7</td><td>54.6</td><td>65.2</td><td>11.0</td><td>21.4</td><td>36.2</td><td>43.9</td><td>9.0</td><td>17.6</td><td>32.1 40.3</td><td>17.3</td><td>34.8</td><td>61.0</td><td>69.8</td><td>13.1</td><td>24.6</td><td>64.7</td><td>81.9</td></tr><tr><td>MSR [9]</td><td>12.2</td><td>22.7</td><td>38.6</td><td>45.2</td><td>8.4</td><td>17.1</td><td>33.0</td><td>40.4</td><td>8.0</td><td>16.3</td><td>31.3 38.2</td><td>12.0</td><td>26.8</td><td>57.1</td><td>69.7</td><td>8.6</td><td>19.7</td><td>43.3</td><td>53.8</td></tr><tr><td>LTD [30]</td><td>12.3</td><td>23.0</td><td>39.8</td><td>46.1</td><td>8.4</td><td>16.9</td><td>33.2</td><td>40.7</td><td>8.0</td><td>16.2</td><td>31.9 38.9</td><td>12.5</td><td>27.4</td><td>58.5</td><td>71.7</td><td>9.0</td><td>19.9</td><td>43.4</td><td>53.7</td></tr><tr><td>LTD-FC</td><td>10.9</td><td>19.5</td><td>37.3</td><td>42.2</td><td>7.8</td><td>15.7</td><td>31.6</td><td>38.4</td><td>7.2</td><td>14.2</td><td>28.5 36.9</td><td>11.2</td><td>25.0</td><td>55.8</td><td>68.9</td><td>8.2</td><td>17.5</td><td>41.7</td><td>51.0</td></tr><tr><td>LTD-GC</td><td>10.5</td><td>19.5</td><td>36.9</td><td>42.7</td><td>7.0</td><td>15.1</td><td>31.6</td><td>38.0</td><td>6.9</td><td>14.5</td><td>29.0 36.6</td><td>11.0</td><td>24.5</td><td>55.4</td><td>68.7</td><td>8.0</td><td>17.6</td><td>39.8</td><td>50.6</td></tr><tr><td>MotionMixer [4]</td><td>10.8</td><td>22.4</td><td>36.5</td><td>42.4</td><td>7.7</td><td>14.0</td><td>27.3</td><td>36.1</td><td>7.1</td><td>14.0</td><td>29.1 36.8</td><td>10.2</td><td>22.5</td><td>51.0</td><td>64.1</td><td>8.3</td><td>18.1</td><td>43.8</td><td>53.4</td></tr><tr><td>MotionMixer-FC</td><td>9.9</td><td>20.7</td><td>34.0</td><td>40.1</td><td>6.8</td><td>12.8</td><td>25.4</td><td>34.7</td><td>7.4</td><td>14.1</td><td>27.3 34.5</td><td>9.4</td><td>19.7</td><td>48.6</td><td>61.4</td><td>7.8</td><td>17.2</td><td>41.5</td><td>51.3</td></tr><tr><td>MotionMixer-GC</td><td>9.6</td><td>21.4</td><td>34.7</td><td>41.0</td><td>6.2</td><td>12.5</td><td>26.1</td><td>35.4</td><td>7.5</td><td>13.8</td><td>27.9 34.6</td><td>9.3</td><td>20.8</td><td>49.5</td><td>62.5</td><td>8.5</td><td>17.6</td><td>42.6</td><td>51.7</td></tr><tr><td>SPGSN [26]</td><td>10.1</td><td>19.4</td><td>34.8</td><td>41.5</td><td>7.1</td><td>14.9</td><td>30.5</td><td>37.9</td><td>6.7</td><td>13.8</td><td>28.0 34.6</td><td>10.4</td><td>23.8</td><td>53.6</td><td>67.1</td><td>7.4</td><td>17.2</td><td>39.8</td><td>50.3</td></tr><tr><td>SPGSN-FC</td><td>9.2</td><td>18.1</td><td>32.9</td><td>40.0</td><td>6.5</td><td>14.1</td><td>28.1</td><td>36.8</td><td>6.7</td><td>12.7</td><td>26.1 32.9</td><td>9.1</td><td>21.7</td><td>51.0</td><td>65.2</td><td>7.3</td><td>16.3</td><td>37.0</td><td>48.0</td></tr><tr><td>SPGSN-GC</td><td>9.3</td><td>17.5</td><td>32.2</td><td>39.8</td><td>7.3</td><td>14.3</td><td>28.2</td><td>36.4</td><td>6.3</td><td>12.5</td><td>26.3 33.6</td><td>9.3</td><td>21.9</td><td>51.9</td><td>63.9</td><td>7.1</td><td>16.2</td><td>37.4</td><td>47.2</td></tr></table>",
+        "bbox": [
+            91,
+            88,
+            882,
+            258
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "3DPW is a more challenging dataset containing 51k frames of both indoor and outdoor human activities. Each body is represented by 3D coordinate of 23 joints, and the frame rate is 30 Hz. We follow [26, 30] to split training, testing and validation sets as official suggestion.",
+        "bbox": [
+            75,
+            353,
+            470,
+            429
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Evaluation Metric. Following standard human motion prediction works [4, 9, 26, 29, 30], we evaluate our approach by Mean Per Joint Position Error (MPJPE) on 3D human joint coordinates. It calculates the average $L _ { \\mathrm { { 2 } } } \\mathrm { { - n o r m } }$ on the discrepancies between the prediction and corresponding ground truth over all body-joints.",
+        "bbox": [
+            75,
+            429,
+            470,
+            521
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "4.2. Baselines",
+        "text_level": 2,
+        "bbox": [
+            76,
+            529,
+            186,
+            545
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "We provide comparisons with mainstream Res. sup [32], DMGNN [25], LTD [30], MSR [9], SPGSN [26] and MotionMixer [4]. As our goal is to use MoML to bring offlinetrained baselines online, we choose the following baselines for our online meta adaptive modification.",
+        "bbox": [
+            75,
+            553,
+            470,
+            628
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "LTD [30] is a typical (also the first) GCN-based model for human motion prediction, which designs stacked graph convolutional blocks with skip connections to model the spatial correlations of body-joints. Discrete Cosine Transformation (DCT) is employed to extract temporal information.",
+        "bbox": [
+            75,
+            627,
+            470,
+            704
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "SPGSN [26] is a reformative graph-based model with cascaded graph scattering blocks to capture fine representation of both spatial and spectrum features. Within each block, human body are divided into separated body-parts to conduct their respective graph modeling, which are then fused with the full-body modeling.",
+        "bbox": [
+            75,
+            704,
+            470,
+            795
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "MotionMixer [4] is an efficient motion predictor features the recent MLP-Mixer architecture [44]. It customizes spatial mixing blocks and temporal mixing blocks, and stacks them with squeeze-and-excitation [18] enhanced.",
+        "bbox": [
+            75,
+            795,
+            470,
+            856
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Implementation Details. Our experiments are conducted under Pytorch [37] framework with Adam optimizer [22] on a single NVIDIA RTX 3090. We train all three baselines with MoML for 50 epochs. As the network architecture and other experimental details are different for each model, we leave them in supplementary for further introduce.",
+        "bbox": [
+            75,
+            856,
+            470,
+            901
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            498,
+            353,
+            893,
+            398
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Fairness Discussion. Motion data is very long, containing multiple sequences with hundreds to thousands of frames. Existing offline-trained predictors are evaluated by shortterm and long-term prediction, which stand for predicting 400ms and 1000ms of motions, respectively. They cut short samples from the long sequence data regardless of their streaming structure, and test on every single sample. For our online adaptive setting, we treat every 400ms-prediction as a sub-task and predict with adaptive parameters to suit each motion context along the time. We evaluate the effectiveness of MoML by averaging the predictive errors of all sub-tasks at certain timestamps. In other words, we all go through the entire dataset, so the comparison is fair.",
+        "bbox": [
+            496,
+            398,
+            895,
+            597
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "4.3. Results",
+        "text_level": 2,
+        "bbox": [
+            500,
+            604,
+            596,
+            621
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Human3.6M. Table 1 provides the prediction performance of 5 typical activities in Human3.6M, which shows comparison of MPJPE errors between baselines without/with MoML approach. Values in bold indicate the lowest error among baseline and two types of baseline+MoML. Results of the remaining activities in Human3.6M are shown in Table 2. Both designs of MoML improve the predictive accuracy in most cases. We also observe that failures may happen to motions with relatively static status, such as sitting and waiting where the contexts barely changed, and updating parameters in this scenario may tend to be unnecessary.",
+        "bbox": [
+            496,
+            628,
+            893,
+            795
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "In Figure 4, we present visualized comparisons of two cases on discussion and walking dog. We draw motion contents in eight seconds, where significant errors produced by baselines are highlighted with red boxes, and the benefits brought by our MoML are highlighted with green. For example, in the bottom sub-figure, the person is walking fast and appears to be dragged by a dog from the side. The baseline fails to predict accurately as the motions are complex and quickly changing, while with our MoML, although we still cannot produce the exact true poses, many predictions have already obtained the right motion tendencies.",
+        "bbox": [
+            496,
+            795,
+            895,
+            901
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "page_number",
+        "text": "1047",
+        "bbox": [
+            482,
+            944,
+            516,
+            958
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "table",
+        "img_path": "images/621f2ebeb9e896b2b3152e0cb6dda8ccd478063c3b564a4a257fce455bcaac62.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td></td><td colspan=\"3\">greeting</td><td colspan=\"3\">phoning</td><td colspan=\"3\"></td><td colspan=\"3\">posing</td><td colspan=\"3\">purchases</td><td colspan=\"3\">sitting</td></tr><tr><td>millisecond (ms)</td><td>80</td><td>160</td><td>320</td><td>400</td><td>80 160</td><td>320</td><td>400</td><td>80</td><td>160</td><td>320</td><td>400</td><td>80</td><td>160</td><td>320</td><td>400 80</td><td>160</td><td>320</td><td>400</td></tr><tr><td>LTD [30]</td><td>18.7</td><td>38.7</td><td>77.7</td><td>93.4</td><td>10.2 21.0</td><td>42.5</td><td>52.3</td><td>13.7</td><td>29.9</td><td>66.6</td><td>84.1</td><td>15.6</td><td>32.8</td><td>65.7</td><td>79.3 10.6</td><td>21.9</td><td>46.3</td><td>57.9</td></tr><tr><td>LTD-FC</td><td>18.0</td><td>36.9</td><td>75.5</td><td>91.1</td><td>10.8 21.2</td><td>42.1</td><td>51.4</td><td>14.0</td><td>28.5</td><td>65.5</td><td>84.3</td><td>15.2</td><td>31.2</td><td>64.0 77.1</td><td>11.0</td><td>22.6</td><td>46.7</td><td>59.0</td></tr><tr><td>LTD-GC</td><td>16.9</td><td>36.1</td><td>74.9</td><td>90.6</td><td>10.6 20.4</td><td>42.5</td><td>51.2</td><td>13.3</td><td>28.4</td><td>65.7</td><td>81.8</td><td>15.1</td><td>30.6 63.7</td><td>76.8</td><td>10.9</td><td>21.0</td><td>46.5</td><td>58.3</td></tr><tr><td>MotionMixer [4]</td><td>12.8</td><td>33.4</td><td>62.3 82.2</td><td>10.0</td><td>20.1</td><td>37.4</td><td>51.1</td><td>11.7</td><td>23.3</td><td>62.4</td><td>79.5</td><td>14.6</td><td>31.3 62.8</td><td>76.1</td><td>10.0</td><td>20.9</td><td>43.7</td><td>54.5</td></tr><tr><td>MotionMixer-FC</td><td>12.4</td><td>33.0</td><td>61.1 80.8</td><td>9.9</td><td>19.4</td><td>36.6</td><td>48.9</td><td>12.2</td><td>23.0</td><td>60.8</td><td>77.5</td><td>13.8</td><td>30.2 60.4</td><td>75.7</td><td>10.2</td><td>20.7</td><td>43.3</td><td>53.8</td></tr><tr><td>MotionMixer-GC</td><td>13.6</td><td>33.6</td><td>61.7 81.3</td><td>9.7</td><td>19.9</td><td>36.1</td><td>49.4</td><td>12.0</td><td>23.3</td><td>61.3</td><td>77.7</td><td>13.8</td><td>30.9 60.6</td><td>75.4</td><td>10.6</td><td>21.0</td><td>43.6</td><td>54.2</td></tr><tr><td>SPGSN [26]</td><td>14.6</td><td>32.6</td><td>70.6 86.4</td><td></td><td>8.7 18.3</td><td>38.7</td><td>48.5</td><td>10.7</td><td>25.3</td><td>59.9</td><td>76.5</td><td>12.8</td><td>28.6</td><td>61.0 74.4</td><td>9.3</td><td>19.4</td><td>42.3</td><td>53.6</td></tr><tr><td>SPGSN-FC</td><td>13.8</td><td>31.1</td><td>69.6 84.1</td><td>8.5</td><td>17.1</td><td>37.8</td><td>48.0</td><td>10.8</td><td>24.4</td><td>57.1</td><td>74.7</td><td>12.2</td><td>27.8 58.8</td><td>72.3</td><td>10.2</td><td>21.1</td><td>42.3</td><td>53.2</td></tr><tr><td>SPGSN-GC</td><td>12.6</td><td>31.8 68.9</td><td>84.0</td><td>8.7</td><td>18.0</td><td>38.9</td><td>49.1</td><td>10.2</td><td>25.2</td><td>57.8</td><td>74.2</td><td>12.9</td><td>28.2 59.5</td><td>72.8</td><td>9.8</td><td>20.8</td><td>42.5</td><td>53.8</td></tr><tr><td rowspan=\"2\">millisecond (ms)</td><td colspan=\"3\">sittingdown</td><td colspan=\"3\">takingphoto</td><td colspan=\"3\"></td><td colspan=\"3\">waiting</td><td colspan=\"2\">walkingdog</td><td colspan=\"3\"></td><td rowspan=\"2\"></td></tr><tr><td>80</td><td>160</td><td>320</td><td>400</td><td>80 160</td><td>320</td><td>400</td><td>80</td><td>160</td><td>320</td><td>400</td><td>80</td><td>160</td><td>400</td><td>80</td><td>160</td><td>walkingtogether 320</td><td>400</td></tr><tr><td>LTD [30]</td><td>16.1</td><td>31.1</td><td>61.5</td><td>75.5</td><td>9.9</td><td>20.9 45.0</td><td>56.6</td><td>11.4</td><td>24.0</td><td>50.1</td><td>61.5</td><td>23.4</td><td>46.2</td><td>320 83.5</td><td>96.0</td><td>10.5</td><td>21.0</td><td></td></tr><tr><td>LTD-FC</td><td>15.8</td><td>30.7</td><td>60.6</td><td>74.1</td><td>8.6</td><td>19.0 44.3</td><td>54.8</td><td>11.8</td><td>24.1</td><td>49.2</td><td>59.1</td><td>21.9</td><td>43.4</td><td>80.7 94.1</td><td>9.6</td><td>19.7</td><td>38.5 36.6</td><td>45.2 43.0</td></tr><tr><td>LTD-GC</td><td>15.5</td><td>30.3</td><td>60.4</td><td>73.8</td><td>8.2 18.7</td><td>42.8</td><td>53.2</td><td>11.2</td><td>23.7</td><td>50.0</td><td>58.2</td><td>20.5</td><td>43.0</td><td>79.8 93.6</td><td>8.9</td><td>19.2</td><td>36.1</td><td>42.4</td></tr><tr><td>MotionMixer [4]</td><td>12.0</td><td>31.4</td><td>61.4 74.5</td><td></td><td>9.0 18.9</td><td>41.0</td><td>51.6</td><td>10.2</td><td>21.1</td><td>45.2</td><td>56.4</td><td>20.5</td><td>42.8 75.6</td><td>87.8</td><td>10.5</td><td>20.6</td><td>38.7</td><td>43.5</td></tr><tr><td>MotionMixer-FC</td><td>11.4</td><td>30.9</td><td>60.2</td><td>72.6</td><td>7.8</td><td>18.0 38.5</td><td>49.2</td><td>10.3</td><td>20.2</td><td>44.1</td><td>55.2</td><td>18.4</td><td>40.1</td><td>73.0 84.2</td><td>8.9</td><td>18.3</td><td>36.2</td><td>40.9</td></tr><tr><td>MotionMixer-GC</td><td>12.8</td><td>31.2</td><td>60.8</td><td>72.7</td><td>8.1</td><td>18.3 38.8</td><td>48.8</td><td>11.1</td><td>20.6</td><td>45.0</td><td>56.9</td><td>19.7</td><td>41.1</td><td>73.3 85.0</td><td>9.6</td><td>18.7</td><td>36.9</td><td>41.4</td></tr><tr><td>SPGSN [26]</td><td>14.2</td><td>27.7</td><td>56.8</td><td>70.7</td><td>8.8 18.9</td><td>41.5</td><td>52.7</td><td>9.2</td><td>19.8</td><td>43.1</td><td>54.1</td><td>18.2</td><td>37.3</td><td>71.3 84.2</td><td>8.9</td><td>18.2</td><td>33.8</td><td>40.9</td></tr><tr><td>SPGSN-FC</td><td>14.1</td><td>26.9 27.1</td><td>55.2</td><td>68.3</td><td>7.7 18.2</td><td>39.2</td><td>50.6</td><td>9.5</td><td>19.4</td><td>42.2</td><td>53.3</td><td>16.8</td><td>35.8</td><td>68.5 82.0</td><td>8.1</td><td>16.9</td><td>32.0</td><td>38.9</td></tr><tr><td>SPGSN-GC</td><td>14.1</td><td></td><td>55.4</td><td>68.2</td><td>7.5</td><td>17.8 38.7</td><td>48.9</td><td>9.6</td><td>20.5</td><td>42.4</td><td>52.8</td><td>17.1</td><td>36.0</td><td>68.0 81.3</td><td>8.2</td><td>16.5</td><td>31.6</td><td>38.5</td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></table>",
+        "bbox": [
+            106,
+            88,
+            869,
+            348
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "image",
+        "img_path": "images/63cc3fdc590fa3e8b8f8bb1d0e5e66795cd0f28dbe81cb838c99fda49e72a804.jpg",
+        "image_caption": [
+            "Table 2. Comparisons of MPJPE errors of remaining activities in Human3.6M between baselines without/with our MoML approach.",
+            "Figure 4. Two visualized cases on discussion (top) and walking dog (bottom). We choose LTD [30] and SPGSN [26] as baselines for comparison. In each case, we draw motion contents in eight seconds. With the online adaptation operation by MoML, we can produc predictions with higher accuracy, indicated by the improved performance marked in green boxes."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            93,
+            388,
+            877,
+            604
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            685,
+            470,
+            746
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "CMU and 3DPW. We also provide experimental results on this two datasets in Table 3, where the average performance of MoML-trained models also surpasses baselines. As the results of MotionMixer [4] are not available here, we only leave LTD [30] and SPGSN [26] for comparison.",
+        "bbox": [
+            75,
+            747,
+            470,
+            824
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Fast-MoML. Considering the practical needs of predicting motions instantly, we present the predictive errors of our Fast-MoML on Human3.6M in Figure 5, and compare them with the average performance of FC/GC-based MoML. We choose the 400ms timestamp in each sub-task as testpoint.",
+        "bbox": [
+            75,
+            825,
+            470,
+            901
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "From the figure, Fast-MoML indeed obtains a certain degree of adaptability, but the expressions of single-layer embedding are limited when faced with varied motions. Nevertheless, the time-saving property is still undeniable, and we leave the related experiments in supplementary.",
+        "bbox": [
+            496,
+            685,
+            893,
+            762
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "4.4. Ablation Study",
+        "text_level": 2,
+        "bbox": [
+            500,
+            771,
+            655,
+            787
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Performance on streaming sub-tasks. In Figure 6, we draw MPJPE error of each sub-task along the time, to evaluate the improvement brought by MoML, as well as the stability of such benefit. Notably, to let the original baselines to perform with streaming data, we just need to use these frozen models to predict every sub-task in turn and calculate the corresponding error. Both FC/GC-based MoML and Fast-MoML produce lower predictive errors, and can stably keep this improvement over a long horizon. Note that there exists no improvement for the first sub-task of prediction, as no recent errors can be used for adaptation.",
+        "bbox": [
+            496,
+            795,
+            895,
+            901
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "page_number",
+        "text": "1048",
+        "bbox": [
+            482,
+            945,
+            516,
+            957
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "chart",
+        "img_path": "images/aa20085e19f1d749cabced85e0bd0f94b013783b46819df1f6780f12f2f29c18.jpg",
+        "content": "",
+        "chart_caption": [],
+        "chart_footnote": [],
+        "bbox": [
+            511,
+            90,
+            880,
+            349
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "table",
+        "img_path": "images/6f717dce7fd64fd78bc8803012eaf442f96d211ffef4cec5fc48f14a83ab7604.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>millisecond (ms)</td><td>CMU-Mocap Average 80 160 320</td><td>400</td><td>3DPW Average 100 200 400</td></tr><tr><td>Res. Sup [32] DMGNN [25]</td><td>24.2 43.8 72.4 14.1 24.4 45.9</td><td>88.9 56.5</td><td>102.3 113 174 17.8 37.1</td></tr><tr><td>MSR [9]</td><td>8.7 15.8 30.6</td><td>38.1</td><td>70.4 15.7 33.5 65.0</td></tr><tr><td>LTD [30]</td><td>9.9 18.0 33.5</td><td>40.9</td><td>16.3 35.6 67.5</td></tr><tr><td>LTD-FC</td><td>9.6 16.9 32.4</td><td>38.7</td><td>15.5 33.8 66.1</td></tr><tr><td>LTD-GC</td><td>9.4 16.6 32.0</td><td>38.2</td><td>15.2 33.2 65.3</td></tr><tr><td>SPGSN [26]</td><td>8.3 14.8 28.8 37.0</td><td></td><td>15.4 32.964.5</td></tr><tr><td>SPGSN-FC</td><td>8.0 13.7 27.1</td><td>35.1</td><td>14.3 30.6 61.2</td></tr><tr><td>SPGSN-GC</td><td>7.8 13.9</td><td>27.4 35.2</td><td>14.7 30.5 61.6</td></tr></table>",
+        "bbox": [
+            98,
+            88,
+            452,
+            228
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "chart",
+        "img_path": "images/1236c50078e30ebc8eb4700beb83ec222fb72c64085d502d6f252abbce2bb8db.jpg",
+        "content": "",
+        "chart_caption": [
+            "Table 3. Comparisons of MPJPE average errors on CMU-Mocap and 3DPW without/with our MoML approach. With our approach, the prediction performance is improved.",
+            "Figure 5. Comparisons of predictive errors at 400ms testpoints among two types of MoML and Fast-MoML on Human3.6M."
+        ],
+        "chart_footnote": [],
+        "bbox": [
+            101,
+            296,
+            444,
+            426
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            492,
+            472,
+            553
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "MoML vs. MAML. As we conduct adaptation over selective parameters, rather than the entire model like vanilla MAML, we further investigate the performance of employing MAML in regard to our task. In Table 4, we present results of baselines with (1) baseline+MAML: using MAML to train the original baselines and update all parameters during inference; (2) baseline-FC/GC+MAML: integrating our FC/GC-MoAdapters into the main backbone, and operating MAML over the entire network; (3) baseline-LL+MAML: attaching the last-layer structure to baselines like Fast-MoML, but operating MAML over the entire network; (4) only-LL+grad: Using gradient-based optimization instead of closed-form solution as the inner loops of Fast-MoML.",
+        "bbox": [
+            75,
+            554,
+            472,
+            750
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "From the table, MAML also exhibits certain superiority compared to the offline-trained manner, but there is no obvious advantage compared to our MoML, as the instability brought by large number of parameter update may limit the adaptive performance. Moreover, MAML can be cumbersome and time-consuming when applied to existing predictors, making it less suitable to handle the streaming motion data. In our supplementary, we provide more discussion concerning inference time, along with hyperparameter settings and concrete meta design for each baseline in detail.",
+        "bbox": [
+            75,
+            750,
+            470,
+            901
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "table",
+        "img_path": "images/1ac5b545b3f8b46281c42d24d72d2b6b8eb4c7d8a16a4d3a5c7f024ab4796434.jpg",
+        "table_caption": [
+            "Figure 6. Performance on streaming sub-tasks on Human3.6M. We draw 60 sub-tasks of MPJPE errors at 400ms testpoints, where our three designs of MoML help improve the predictive accuracy of baselines constantly.",
+            "Table 4. Different networks trained with vanilla MAML-based approach, and gradient-based last-layer optimization."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=1 colspan=1>method</td><td rowspan=1 colspan=3>LTD [30]</td><td rowspan=1 colspan=1>MotionMixer [4]</td><td rowspan=1 colspan=1>SPGSN [26]</td></tr><tr><td rowspan=6 colspan=1>baselinebaseline+MAMLbaseline-FC+MAMLbaseline-GC+MAMLbaseline-LL+MAMLonly-LL+grad</td><td rowspan=1 colspan=3>63.52</td><td rowspan=1 colspan=1>59.33</td><td rowspan=1 colspan=1>58.22</td></tr><tr><td rowspan=2 colspan=3>61.9862.51</td><td rowspan=1 colspan=1>58.09</td><td rowspan=1 colspan=1>57.34</td></tr><tr><td rowspan=1 colspan=2>51</td><td rowspan=1 colspan=1>57.83</td><td rowspan=3 colspan=1>56.5957.2357.30</td></tr><tr><td rowspan=1 colspan=2>61.90</td><td rowspan=1 colspan=2>90</td><td rowspan=1 colspan=1>60.04</td></tr><tr><td rowspan=1 colspan=3>62.92</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>58.14</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=3>62.37</td><td rowspan=1 colspan=1>58.28</td><td rowspan=1 colspan=1>57.58</td></tr></table>",
+        "bbox": [
+            513,
+            430,
+            883,
+            508
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "5. Conclusion",
+        "text_level": 2,
+        "bbox": [
+            500,
+            571,
+            619,
+            589
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "In this paper, we address the problem of online adaptive human motion prediction with streaming motion data. We introduce an online meta adaptation approach named MoML, which cultivates model adaptability in the time direction, to suit the inherent complexity and ever-changing nature of human behaviors. We propose two types of MoAdapters that incorporate recent error information as guidance, to perform swift parameter adjustments towards a closer alignment with recent temporary motion context. The bilevel optimization structure is customized to learn “smart” initialization as the optimal starting point for online adaptation across various contexts. Fast-MoML is further developed, featuring a last-layer motion embedding with closed-form solution for time saving. Experiments show that our MoML can bring different existing offline-trained predictors online, and constantly benefit the predictive accuracy.",
+        "bbox": [
+            496,
+            598,
+            893,
+            842
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Acknowledgements. This work was supported in part by the National Natural Science Foundation of China (NO. 62176125, 61772272).",
+        "bbox": [
+            498,
+            854,
+            893,
+            901
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "page_number",
+        "text": "1049",
+        "bbox": [
+            482,
+            944,
+            516,
+            958
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "References",
+        "text_level": 2,
+        "bbox": [
+            78,
+            89,
+            176,
+            106
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "list",
+        "sub_type": "ref_text",
+        "list_items": [
+            "[1] Emre Aksan, Manuel Kaufmann, Peng Cao, and Otmar Hilliges. A spatio-temporal transformer for 3d human motion prediction. In International Conference on 3D Vision (3DV), pages 565–574. IEEE, 2021. 2",
+            "[2] Jimmy Lei Ba, Jamie Ryan Kiros, and Geoffrey E Hinton. Layer normalization. arXiv preprint arXiv:1607.06450, 2016. 4",
+            "[3] Luca Bertinetto, Joao F Henriques, Philip HS Torr, and Andrea Vedaldi. Meta-learning with differentiable closed-form solvers. In ICLR, 2019. 5",
+            "[4] Arij Bouazizi, Adrian Holzbock, Ulrich Kressel, Klaus Dietmayer, and Vasileios Belagiannis. Motionmixer: Mlp-based 3d human body pose forecasting. In IJCAI, 2022. 2, 5, 6, 7, 8",
+            "[5] Yujun Cai, Lin Huang, Yiwei Wang, Tat-Jen Cham, Jianfei Cai, Junsong Yuan, Jun Liu, Xu Yang, Yiheng Zhu, Xiaohui Shen, et al. Learning progressive joint propagation for human motion prediction. In ECCV, pages 226–242. Springer, 2020. 2",
+            "[6] Fanta Camara, Nicola Bellotto, Serhan Cosar, Florian Weber, Dimitris Nathanael, Matthias Althoff, Jingyuan Wu, Johannes Ruenz, Andre Dietrich, Gustav Markkula, et al.´ Pedestrian models for autonomous driving part ii: high-level models of human behavior. IEEE Transactions on Intelligent Transportation Systems, 22(9):5453–5472, 2020. 1",
+            "[7] Enric Corona, Albert Pumarola, Guillem Alenya, and\\` Francesc Moreno-Noguer. Context-aware human motion prediction. In CVPR, pages 6992–7001, 2020. 2",
+            "[8] Qiongjie Cui, Huaijiang Sun, Jianfeng Lu, Bin Li, and Weiqing Li. Meta-auxiliary learning for adaptive human pose prediction. In AAAI, 2023. 3",
+            "[9] Lingwei Dang, Yongwei Nie, Chengjiang Long, Qing Zhang, and Guiqing Li. Msr-gcn: Multi-scale residual graph convolution networks for human motion prediction. In ICCV, pages 11467–11476, 2021. 1, 2, 6, 8",
+            "[10] Rafael Rego Drumond, Lukas Brinkmeyer, and Lars Schmidt-Thieme. Few-shot human motion prediction for heterogeneous sensors. In Pacific-Asia Conference on Knowledge Discovery and Data Mining, pages 551–563. Springer, 2023. 2, 3",
+            "[11] Chelsea Finn, Pieter Abbeel, and Sergey Levine. Modelagnostic meta-learning for fast adaptation of deep networks. In ICML, pages 1126–1135. PMLR, 2017. 2",
+            "[12] Katerina Fragkiadaki, Sergey Levine, Panna Felsen, and Jitendra Malik. Recurrent network models for human dynamics. In ICCV, pages 4346–4354, 2015. 2",
+            "[13] Shanyan Guan, Jingwei Xu, Yunbo Wang, Bingbing Ni, and Xiaokang Yang. Bilevel online adaptation for out-of-domain human mesh reconstruction. In CVPR, pages 10472–10481, 2021. 3",
+            "[14] Liang-Yan Gui, Yu-Xiong Wang, Deva Ramanan, and Jose MF Moura. Few-shot human motion prediction via´ meta-learning. In ECCV, pages 432–450, 2018. 2, 3",
+            "[15] Junxian He, Chunting Zhou, Xuezhe Ma, Taylor Berg-Kirkpatrick, and Graham Neubig. Towards a unified view of parameter-efficient transfer learning. In ICLR, 2022. 3",
+            "[16] Dan Hendrycks and Kevin Gimpel. Gaussian error linear units (gelus). arXiv preprint arXiv:1606.08415, 2016. 4",
+            "[17] Neil Houlsby, Andrei Giurgiu, Stanislaw Jastrzebski, Bruna Morrone, Quentin De Laroussilhe, Andrea Gesmundo, Mona Attariyan, and Sylvain Gelly. Parameter-efficient transfer learning for nlp. In ICML, pages 2790–2799. PMLR, 2019. 3",
+            "[18] Jie Hu, Li Shen, and Gang Sun. Squeeze-and-excitation networks. In CVPR, pages 7132–7141, 2018. 6",
+            "[19] Sergey Ioffe and Christian Szegedy. Batch normalization: Accelerating deep network training by reducing internal covariate shift. In ICML, pages 448–456. PMLR, 2015. 4",
+            "[20] Catalin Ionescu, Dragos Papava, Vlad Olaru, and Cristian Sminchisescu. Human3.6m: Large scale datasets and predictive methods for 3d human sensing in natural environments. IEEE TPAMI, 36(7):1325–1339, 2013. 5",
+            "[21] Ashesh Jain, Amir R Zamir, Silvio Savarese, and Ashutosh Saxena. Structural-rnn: Deep learning on spatio-temporal graphs. In CVPR, pages 5308–5317, 2016. 2",
+            "[22] Diederik P Kingma and Jimmy Ba. Adam: A method for stochastic optimization. arXiv preprint arXiv:1412.6980, 2014. 6",
+            "[23] Thomas N Kipf and Max Welling. Semi-supervised classification with graph convolutional networks. In ICLR, 2017. 4",
+            "[24] Yevhen Kuznietsov, Marc Proesmans, and Luc Van Gool. Comoda: Continuous monocular depth adaptation using past experiences. In Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision (WACV), pages 2907–2917, 2021. 3",
+            "[25] Maosen Li, Siheng Chen, Yangheng Zhao, Ya Zhang, Yanfeng Wang, and Qi Tian. Dynamic multiscale graph neural networks for 3d skeleton based human motion prediction. In CVPR, pages 214–223, 2020. 2, 6, 8",
+            "[26] Maosen Li, Siheng Chen, Zijing Zhang, Lingxi Xie, Qi Tian, and Ya Zhang. Skeleton-parted graph scattering networks for 3d human motion prediction. In ECCV, pages 18–36. Springer, 2022. 1, 2, 3, 5, 6, 7, 8",
+            "[27] Hongyi Liu and Lihui Wang. Human motion prediction for human-robot collaboration. Journal of Manufacturing Systems, 44:287–294, 2017. 1",
+            "[28] Zhenguang Liu, Pengxiang Su, Shuang Wu, Xuanjing Shen, Haipeng Chen, Yanbin Hao, and Meng Wang. Motion prediction using trajectory cues. In ICCV, pages 13299–13308, 2021. 2",
+            "[29] Tiezheng Ma, Yongwei Nie, Chengjiang Long, Qing Zhang, and Guiqing Li. Progressively generating better initial guesses towards next stages for high-quality human motion prediction. In CVPR, pages 6437–6446, 2022. 3, 6",
+            "[30] Wei Mao, Miaomiao Liu, Mathieu Salzmann, and Hongdong Li. Learning trajectory dependencies for human motion prediction. In ICCV, pages 9489–9497, 2019. 1, 2, 3, 5, 6, 7, 8",
+            "[31] Wei Mao, Miaomiao Liu, and Mathieu Salzmann. History repeats itself: Human motion prediction via motion attention. In ECCV, pages 474–489. Springer, 2020. 2"
+        ],
+        "bbox": [
+            84,
+            114,
+            468,
+            170
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "page_number",
+        "text": "1050",
+        "bbox": [
+            482,
+            945,
+            516,
+            957
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "list",
+        "sub_type": "ref_text",
+        "list_items": [
+            "[32] Julieta Martinez, Michael J Black, and Javier Romero. On human motion prediction using recurrent neural networks. In CVPR, pages 2891–2900, 2017. 1, 2, 5, 6, 8",
+            "[33] Hee-Seung Moon and Jiwon Seo. Fast user adaptation for human motion prediction in physical human–robot interaction. IEEE Robotics and Automation Letters, 7(1):120–127, 2021. 3",
+            "[34] Mahyar Najibi, Jingwei Ji, Yin Zhou, Charles R Qi, Xinchen Yan, Scott Ettinger, and Dragomir Anguelov. Motion inspired unsupervised perception and prediction in autonomous driving. In ECCV, pages 424–443. Springer, 2022. 1",
+            "[35] Alex Nichol, Joshua Achiam, and John Schulman. On first-order meta-learning algorithms. arXiv preprint arXiv:1803.02999, 2018. 3",
+            "[36] Theodoros Panagiotakopoulos, Pier Luigi Dovesi, Linus Harenstam-Nielsen, and Matteo Poggi. Online domain adap-¨ tation for semantic segmentation in ever-changing conditions. In ECCV, pages 128–146. Springer, 2022. 3",
+            "[37] Adam Paszke, Sam Gross, Soumith Chintala, Gregory Chanan, Edward Yang, Zachary DeVito, Zeming Lin, Alban Desmaison, Luca Antiga, and Adam Lerer. Automatic differentiation in pytorch. 2017. 6",
+            "[38] Dario Pavllo, Christoph Feichtenhofer, Michael Auli, and David Grangier. Modeling human motion with quaternionbased neural networks. IJCV, 128(4):855–872, 2020. 1, 2",
+            "[39] Tim Salzmann, Marco Pavone, and Markus Ryll. Motron: Multimodal probabilistic human motion forecasting. In CVPR, pages 6457–6466, 2022. 2",
+            "[40] Alessio Sampieri, Guido Maria D’Amely di Melendugno, Andrea Avogaro, Federico Cunico, Francesco Setti, Geri Skenderi, Marco Cristani, and Fabio Galasso. Pose forecasting in industrial human-robot collaboration. In ECCV, pages 51– 69. Springer, 2022. 1",
+            "[41] Pekka Siirtola and Juha Roning. Feature relevance analy-¨ sis to explain concept drift-a case study in human activity recognition. In Adjunct Proceedings of the 2022 ACM International Joint Conference on Pervasive and Ubiquitous Computing and the 2022 ACM International Symposium on Wearable Computers, pages 386–391, 2022. 1",
+            "[42] Theodoros Sofianos, Alessio Sampieri, Luca Franco, and Fabio Galasso. Space-time-separable graph convolutional network for pose forecasting. In ICCV, pages 11209–11218, 2021. 2",
+            "[43] Xiaoning Sun, Huaijiang Sun, Bin Li, Dong Wei, Weiqing Li, and Jianfeng Lu. Defeenet: Consecutive 3d human motion prediction with deviation feedback. In CVPR, pages 5527–5536, 2023. 2",
+            "[44] Ilya O Tolstikhin, Neil Houlsby, Alexander Kolesnikov, Lucas Beyer, Xiaohua Zhai, Thomas Unterthiner, Jessica Yung, Andreas Steiner, Daniel Keysers, Jakob Uszkoreit, et al. Mlp-mixer: An all-mlp architecture for vision. NeurIPS, 34: 24261–24272, 2021. 6",
+            "[45] Petar Velickoviˇ c, Guillem Cucurull, Arantxa Casanova,´ Adriana Romero, Pietro Lio, and Yoshua Bengio. Graph at-\\` tention networks. In ICLR, 2018. 4",
+            "[46] Riccardo Volpi, Pau De Jorge, Diane Larlus, and Gabriela Csurka. On the road to online adaptation for semantic image segmentation. In CVPR, pages 19184–19195, 2022. 3",
+            "[47] Timo Von Marcard, Roberto Henschel, Michael J Black, Bodo Rosenhahn, and Gerard Pons-Moll. Recovering accurate 3d human pose in the wild using imus and a moving camera. In ECCV, pages 601–617, 2018. 5",
+            "[48] Dong Wei, Huaijiang Sun, Bin Li, Jianfeng Lu, Weiqing Li, Xiaoning Sun, and Shengxiang Hu. Human joint kinematics diffusion-refinement for stochastic motion prediction. In AAAI, pages 6110–6118, 2023. 2",
+            "[49] Dong Wei, Huaijiang Sun, Bin Li, Xiaoning Sun, Shengxiang Hu, Weiqing Li, and Jianfeng Lu. Nerm: Learning neural representations for high-framerate human motion synthesis. In ICLR, 2024. 2",
+            "[50] Gerald Woo, Chenghao Liu, Doyen Sahoo, Akshat Kumar, and Steven Hoi. Learning deep time-index models for time series forecasting. In International Conference on Machine Learning, pages 37217–37237. PMLR, 2023. 5",
+            "[51] Huaxin Xiao, Bingyi Kang, Yu Liu, Maojun Zhang, and Jiashi Feng. Online meta adaptation for fast video object segmentation. IEEE TPAMI, 42(5):1205–1217, 2019. 3",
+            "[52] Chenxin Xu, Robby T Tan, Yuhong Tan, Siheng Chen, Xinchao Wang, and Yanfeng Wang. Auxiliary tasks benefit 3d skeleton-based human motion prediction. In ICCV, pages 9509–9520, 2023. 2",
+            "[53] Chenxin Xu, Robby T Tan, Yuhong Tan, Siheng Chen, Yu Guang Wang, Xinchao Wang, and Yanfeng Wang. Eqmotion: Equivariant multi-agent motion prediction with invariant interaction reasoning. In CVPR, pages 1410–1420, 2023. 2",
+            "[54] Sijie Yan, Yuanjun Xiong, and Dahua Lin. Spatial temporal graph convolutional networks for skeleton-based action recognition. In AAAI, 2018. 1",
+            "[55] Chuanqi Zang, Mingtao Pei, and Yu Kong. Few-shot human motion prediction via learning novel motion dynamics. In IJCAI, pages 846–852, 2021. 2, 3",
+            "[56] Zhenyu Zhang, Stephane Lathuiliere, Andrea Pilzer, Nicu´ Sebe, Elisa Ricci, and Jian Yang. Online adaptation through meta-learning for stereo depth estimation. arXiv preprint arXiv:1904.08462, 2019. 3",
+            "[57] Zhenyu Zhang, Stephane Lathuiliere, Elisa Ricci, Nicu Sebe, Yan Yan, and Jian Yang. Online depth learning against forgetting in monocular videos. In CVPR, pages 4494–4503, 2020. 3",
+            "[58] Chongyang Zhong, Lei Hu, Zihao Zhang, Yongjing Ye, and Shihong Xia. Spatio-temporal gating-adjacency gcn for human motion prediction. In CVPR, pages 6447–6456, 2022. 2"
+        ],
+        "bbox": [
+            78,
+            93,
+            468,
+            133
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "page_number",
+        "text": "1051",
+        "bbox": [
+            482,
+            945,
+            514,
+            958
+        ],
+        "page_idx": 9
+    }
+]
