@@ -1,0 +1,4195 @@
+[
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "Mocap Everyone Everywhere: Lightweight Motion Capture With Smartwatches and a Head-Mounted Camera"
+                    }
+                ],
+                "level": 1
+            },
+            "bbox": [
+                81,
+                130,
+                887,
+                176
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Jiye Lee Seoul National University kay2353@snu.ac.kr"
+                    }
+                ]
+            },
+            "bbox": [
+                245,
+                204,
+                455,
+                257
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Hanbyul Joo Seoul National University hbjoo@snu.ac.kr"
+                    }
+                ]
+            },
+            "bbox": [
+                514,
+                204,
+                725,
+                257
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/13802213010cdbbccba116748867e50cf799e4722d1e5669d7c29040dfe7b175.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 1. We present a lightweight and affordable motion capture method based on two smartwatches and a head-mounted camera."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                91,
+                309,
+                879,
+                416
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "Abstract"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                233,
+                454,
+                313,
+                472
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We present a lightweight and affordable motion capture method based on two smartwatches and a head-mounted camera. In contrast to the existing approaches that use six or more expert-level IMU devices, our approach is much more cost-effective and convenient. Our method can make wearable motion capture accessible to everyone everywhere, enabling 3Dfull-body motion capture in diverse environments. As a key idea to overcome the extreme sparsity and ambiguities of sensor inputs with different modalities, we integrate 6D head poses obtained from the headmounted cameras for motion estimation. To enable capture in expansive indoor and outdoor scenes, we propose an algorithm to track and update floor level changes to define head poses, coupled with a multi-stage Transformerbased regression module. We also introduce novel strategies leveraging visual cues of egocentric images to further enhance the motion capture quality while reducing ambiguities. We demonstrate the performance of our method on various challenging scenarios, including complex outdoor environments and everyday motions including object interactions and social interactions among multiple individuals."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                486,
+                472,
+                806
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "1. Introduction"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                823,
+                209,
+                840
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Human motion encapsulates the diverse and rich stories of human life in real-world situations. Thus, it is essential for machines not only to decipher the subtle nuances within these movements but also to authentically mimic them for seamless interaction and assistance with humans. However, the advancement in the research to make machines fully understand human motions lags considerably behind other AI domains focused on images or languages. The primary obstacle lies in the fact that 3D human motion datasets that reflect real-world scenarios remain exceedingly scarce, compared to the abundance of massive image or language datasets that capture diverse aspects of human life. This scarcity stems from the inherent challenge of acquiring motion capture data, necessitating specialized equipment and tools that are not readily available to the public. Despite notable efforts in collecting and refining motion capture datasets that are actively used in learning-based approaches (e.g., [33, 45]), the scale of these datasets remains in orders of magnitude smaller than the vast repositories of Internet images and language datasets."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                849,
+                470,
+                881
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                457,
+                893,
+                731
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In our endeavor to democratize motion capture for the general public free from the constraints of expert-level equipment and intricate settings, we present a lightweight and affordable motion capture method that utilizes Inertial Measurement Unit (IMU) sensors of smartwatches on wrists and a head-mounted camera. Our method can make wearable motion capture accessible to everyone, given the widespread availability and popularity of smartwatches, as well as the existence of action cameras and camera glasses (e.g., GoPro or Smart Glasses [2, 3] equipped with cameras). Our system can be applied for large-scale and long term motion captures without location constraints (indoors or outdoors). To this end, our method can enable the exploration of new research areas, such as social interaction scenarios involving multiple participants, each equipped with our lightweight capture setup."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                736,
+                895,
+                904
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": []
+            },
+            "bbox": [
+                104,
+                2,
+                181,
+                41
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": [
+                    {
+                        "type": "text",
+                        "content": "This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore."
+                    }
+                ]
+            },
+            "bbox": [
+                235,
+                0,
+                810,
+                46
+            ]
+        },
+        {
+            "type": "page_footnote",
+            "content": {
+                "page_footnote_content": [
+                    {
+                        "type": "text",
+                        "content": "Project Page: https://jiyewise.github.io/projects/MocapEvery"
+                    }
+                ]
+            },
+            "bbox": [
+                99,
+                888,
+                423,
+                902
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1091"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                92,
+                470,
+                167
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Going beyond the traditional optical motion capture methods [5, 24], primarily feasible in well-set lab environments with limited scope and accessibility, there have been explorations to capture human motions with wearable sensors. Existing commercial solutions [4, 6] require attaching IMU sensors to all major body segments (17 to 19) using specialized suits or straps. While recent start-of-the-art approaches [23,55,56] have reduced the necessity to 6 sensors, it is still challenging for the public to equip themselves with 6 expert-level IMU sensors. Moreover, attaching sensors to the pelvis and legs may compromise usability. Due to the rise of VR/AR technologies and hardware, another research direction [9, 12, 22, 28, 51] utilize head-mounted displays (HMDs) [1] and hand-held controllers, which provide 6DoF (3D rotation and translation) information of the head and wrist movements, to reconstruct full-body motions. Using only three upper body sensors may improve usability, but this reliance on specialized devices restricts motion capture to indoor settings optimized for VR/AR equipment, thus limiting its broader applicability."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                170,
+                472,
+                473
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In this paper, we present a motion capture method that utilizes IMU sensors of smartwatches on wrists and a headmounted monocular camera. We overcome the sparsity of using only 2 sensors and the intrinsic ambiguities of IMU sensors (orientation, acceleration) by integrating head 6DoF poses obtained from the head-mounted camera into the motion estimation pipeline. In contrast to VR settings (e.g., HMDs) where head poses are given in a fixed world coordinate in a small indoor environment [9,12,22,28,51], it is not trivial to define head poses in expansive outdoor settings. Through an algorithm that automatically tracks and adjusts floor levels, our approach can robustly capture motion in “in-the-wild” scenarios in challenging locations with nonflat grounds such as hilly areas or stairs. Furthermore, we also present a motion optimization approach for enhancing capture quality in complex everyday motions, such as object interactions, by leveraging observed body part cues through the head-mounted camera. As our system can be conveniently equipped by multiple users, we also explore scenarios where the signals among the individuals are shared and the egocentric observations from one person can be used as sparse third-person views for the others, which can be additionally used for our motion optimization module."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                474,
+                472,
+                823
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Our contribution can be summarized as follows: (1) the first method to capture high-quality 3D full-body motion from a head-mounted camera and two smartwatches on wrists. Notably, we demonstrate our method on commonly available smartwatches rather than expert-level IMU sensors; (2) a novel algorithm to track and update floor levels coupled with a multi-stage Transformer-based motion estimation module, which enables capture in expansive indoor and outdoor settings; (3) a novel motion optimization module that utilizes visual information captured by monocular egocentric cameras."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                824,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                90,
+                895,
+                183
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2. Related Work"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                498,
+                195,
+                643,
+                212
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Motion Capture with IMU Sensors. Traditional motion capture mainly relied on optical methodologies such as optical markers [5] or markerless capture in a multi-view camera setup [24, 30, 59]. Although such methods demonstrate high-quality capture, they suffer from occlusions and are only applicable in specific settings with cameras. To mitigate such limitations there have been methods to fuse inertial sensor data to optical motion capture [14, 17, 25, 26, 34, 35, 39, 44, 46, 47]. Wearable motion capture with IMU sensors offers the advantage of freedom from location constraints and occlusions. Commercial methods [4, 6] leverage 17 to 19 IMU sensors, necessitating tight suits or straps with densely packed sensors. More recent approaches introduce more lightweight solutions by reducing the number of sensors up to 6, posed on the pelvis, wrists, legs, and head [19,23,48,54–56]. SIP [48] introduces an optimization-based approach and DIP [19] presents a deep learning-based method from 6 sensors using bidirectional RNNs. TransPose [56] extends this work by including global root translation estimation based on foot contact detection. More recently, PIP [55] and TIP [23] demonstrate state-of-the-art performance by combining physics-based optimization with an RNN-based kinematic approach [55] or combining body contact estimation and terrain generation with Transformer decoders [23]. To address the inher ent root drift issue in IMU-based methods, there have been approaches that additionally utilize camera positions from head-mounted cameras to enhance the accuracy of root translations [16, 54]. In these methods, the camera poses are often used as auxiliary cues to post-process root translation, while human pose estimation is still based on fullbody IMU sensor setup (17 for [16] or 6 for [54]). Typically, previous methods are demonstrated using expert-level devices [6]. Different from previous approaches, our method uses two smartwatches and integrates a head-mounted cam era into the body pose estimation pipeline."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                220,
+                895,
+                765
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Motion Capture with Egocentric Videos. Pose estimation from egocentric videos is receiving increased attention in recent studies. Several methods exploit fish-eye cameras by leveraging their advantages in visibility for egocentricpose estimation [21, 42, 43, 49, 50, 52]. Cha et al. [10] extend these methods by fusing full-body IMU sensors with fish-eye camera input. A few approaches pursue more challenging scenarios by estimating human pose with bodymounted cameras without other sensors. Shiratori et al. [40] use structure-from-motion (SfM) to determine body poses from body-mounted cameras, and Jiang et al. [20] exploit motion graphs for estimation from a single chest-mounted camera. Other methods [57, 58] combine kinematics and physics-based approaches to estimate physically plausible poses, which is extended by [32, 36] to simple scene interactions. You2Me [38] estimates pose under social interaction scenarios where the interaction target’s pose is visible in the egocentric video. Apart from these methods that directly learn from image inputs, EgoEgo [29] estimates motions from an egocentric video alone by introducing head poses as intermediate representations."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                765,
+                895,
+                902
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1092"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                92,
+                470,
+                272
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Motion Capture with VR-Based Upper Body Sensors. Recent advances in VR/AR technologies have led to the emergence of new devices that provide 6DoF information on head and wrist movements. Consequently, research has been done on controlling virtual avatars through such devices [7–9, 11, 12, 22, 28, 51, 53]. As determining full body motion from upper body sensors is challenging, earlier methods [11, 53] use root information explicitly by adding sensors on the pelvis [53] or implicitly by root-relative data representations [11]. CoolMoves [7] suggests kNNbased search which is limited to specific action types. More recent approaches demonstrate increased performance by exploiting various neural network structures such as flow models [8], Transformers [22], and diffusion models [12]. QuestSim [51] utilizes physics-based character control using deep reinforcement learning (DRL) to generate physically plausible full-body motions, which is extended by [28] to environment interactions. It is important to note that motion estimation with VR devices fundamentally differs from ours, as the 6DoF cues from the head and wrists are directly provided by the system and thus rely on a specified setting."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                272,
+                470,
+                592
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3. Method"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                602,
+                168,
+                618
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.1. Overview"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                626,
+                187,
+                642
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Our method reconstructs 3D full-body human motion "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { M } = \\{ \\mathbf { m } _ { t } \\} _ { t = 0 } ^ { T }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by taking, as inputs, an egocentric video I and IMU sensor signals "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { S } _ { I M U } = \\{ \\mathbf { R } , \\mathbf { A } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "(orientation, acceleration) from two smartwatches on wrists. We denote our system as a function "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal F } ."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                650,
+                470,
+                727
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbf { M } = \\mathcal { F } ( \\mathbf { I } , \\mathbf { S } _ { I M U } )\\tag{1}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/8dcd9783aac36702be94b0c61bd9c19338401738f165a671e7516d833cfae8b6.jpg"
+                }
+            },
+            "bbox": [
+                209,
+                736,
+                336,
+                752
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is composed of two modules "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { e s t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { o p t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", as shown in Fig. 2. The egocentric video from a head-mounted camera is a sequence of images, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathbf { I } } = \\{ { \\mathbf { I } } _ { t } \\} _ { t = 0 } ^ { T }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "T"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the sequence length, and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { I } _ { t } \\in \\mathbb { R } ^ { h \\times w \\times 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "indicates an image at time t. "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { S } _ { I M U } = \\{ \\mathbf { R } , \\mathbf { A } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is a set of IMU signal sequences for both the left and right wrist. "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathbf { R } } = \\{ { \\mathbf { R } } _ { t } \\} _ { t = 0 } ^ { T } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { R } _ { t } ~ = ~ ( \\mathbf { r } _ { t } ^ { l e f t } , \\mathbf { r } _ { t } ^ { r i g h t } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", indicates the orientation signal for each sensor at time t in angle axis, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { r } _ { t } ~ \\in ~ s o ( 3 )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Similarly, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\textbf { A } = \\{ \\mathbf { A } _ { t } \\} _ { t = 0 } ^ { T } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ", where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { A } _ { t } ~ = ~ ( \\mathbf { a } _ { t } ^ { l e f t } , \\mathbf { a } _ { t } ^ { r i g h t } )"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                761,
+                470,
+                902
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "represents the acceleration signals. The human motion output "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { M } = \\{ \\mathbf { m } _ { t } \\} _ { t = 0 } ^ { T }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is a sequence of pose "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { m } _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { m } _ { t } ~ ="
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\left( \\mathbf { p } _ { t } ^ { 0 } , \\mathbf { q } _ { t } ^ { 0 } , \\mathbf { q } _ { t } ^ { 1 } , . . . , \\mathbf { q } _ { t } ^ { J } \\right) \\in \\mathbb { R } ^ { 3 J + 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is a concatenated vector of root translation "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathbf { p } } ^ { 0 } \\in \\mathbb { R } ^ { 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "defined in a world coordinate and local joint rotations of J joints where the rotation of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "j \\cdot"
+                    },
+                    {
+                        "type": "text",
+                        "content": "-th joint is represented as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { q } ^ { j } \\in s o ( 3 )"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                92,
+                892,
+                183
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We first apply an off-the-shelf monocular SLAM [41] with the egocentric video I. Given the original world coordinate arbitrarily defined from the SLAM model, we redefine the world coordinate via an alignment procedure described in Sec. 3.2, such that the scale of the world coordinate reflects the metric scale (in meter) and the negative zaxis is aligned to the gravity direction. From the SLAM, we obtain the 3D pointcloud W of the environment and camera pose at each time "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { C } = \\{ \\mathbf { C } _ { t } \\} _ { t = 0 } ^ { T } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "defined in the world coordinate. Then, given the camera poses "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { C } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", we compute the head pose "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathbf H } = \\{ { \\mathbf H } _ { t } \\} _ { t = 0 } ^ { T } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { H } _ { t } \\in S E ( 3 )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the location and orientation of the head joint. The head poses are directly leveraged into the estimation pipeline with sensor inputs, playing a key role in disambiguating motions during estimation. Notably, in non-flat spaces as in Fig. 3, the z-directional component of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { H } _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "defined in the world coordinate does not necessarily reflect the metric height of the person because the height should be defined from the actual floor the person is currently standing. Thus, we compute the height of the head H<sub>t</sub> by tracking and updating the floor level "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f _ { t } \\in \\mathbb { R }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "at time t accordingly."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                185,
+                893,
+                506
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We build a transformer-based regression model coupled with a floor-level update module to estimate the full-body human motion from the cues of estimated head pose and wrist IMU signals: "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { M } _ { r e g } = \\mathcal { F } _ { e s t } \\big ( \\mathbf { H } , \\mathbf { W } , \\mathbf { S } _ { I M U } \\big )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". While our initial full-body estimation "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ { \\bf { M } } _ { r e g } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is already compelling, there exist fundamental ambiguities due to the extreme sparsity of our input signals. To address this issue, we leverage the visual cues captured by the head-mounted view I, where the hand position and the interactions with the environments are observed. While available only occasionally, we demonstrate the use of such visual cues can enhance the motion capture quality. Going one step further, we also consider multi-people capture scenarios where each individual wears our lightweight system. Assuming the visual signals among people can be shared, we can additionally leverage the occasional “third-person” views from other people for the target person’s motion capture. To fuse all of these available signals for more accurate motion estimation, we build a motion optimizer module "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { o p t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\textbf { M } = \\mathcal { F } _ { o p t } ( \\textbf M _ { r e g } , \\boldsymbol { \\Phi } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Optimizing the human motion is done in aspatiotemporal manifold space [18], where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ { \\bf { M } } _ { r e g } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the initial output from our motion regressor module and Φ is the visual cues extracted from head-mounted camera or third-person views from other users’ cameras. For "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\Phi"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", we mainly use the 2D keypoint cues estimated from images in egocentric scenarios and 3D pose estimation results in multi-person scenar-"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                507,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1093"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/af30e0dac1fd1927f5338d4e63ec474a472a3373f7a54c87a7d680f9e76ca619.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 2. System Overview"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                104,
+                90,
+                867,
+                207
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "ios."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                231,
+                106,
+                244
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.2. Pre-processing Sensor Inputs"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                255,
+                339,
+                272
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Head Trajectory from Monocular SLAM. From egocentric video I, we first apply DROID-SLAM [41], noted for its accuracy and robustness compared to classical SLAM systems, to estimate camera trajectory C and reconstruct the 3D pointcloud W. In some cases, however, outliers may exist in camera pose estimation due to insufficient textures in the scenes or blurs, which may negatively affect our body pose estimation quality. As a way to filter out outliers, we compute the temporal acceleration between camera movements and detect erroneous camera pose estimation when the acceleration values are over a certain threshold. We fill in the missing camera poses via linear interpolation."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                279,
+                470,
+                459
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Aligning the Coordinate for Camera and IMU Sensors. For preprocessing, we align the arbitrarily defined original coordinate from SLAM into our desired real-world coordinate with metric scale and the negative z-axis to be aligned to the gravity direction. Additionally, we also calibrate the orientation of IMUs to have the common orientation axes aligned to the gravity direction. This is done via two steps: (1) aligning IMU sensors to real-world coordinates, and (2) aligning the coordinate from SLAM to IMU coordinates."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                460,
+                470,
+                595
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Because the camera center C may not be necessarily the same as the head joint location, we compute the fixed transformation "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "T _ { h e a d } ^ { c a m }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to transform the camera pose into the head is computed by approximating the camera location in a surface point of SMPL mesh. Refer to the supp. mat. for the details of the alignment protocol and time synchronization."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                595,
+                470,
+                703
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.3. Motion Estimation"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                710,
+                258,
+                727
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Pre-Processing Input Signals. The motion estimator module "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { e s t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is a transformer-based network to estimate motion and foot contacts from head trajectory "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathbf { H } } = \\{ { \\mathbf { H } } _ { t } \\} _ { t = 0 } ^ { T }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and IMU sensor signals "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\bf S } _ { I M U } = \\{ { \\bf R } , { \\bf A } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". We input the data into the network in a sliding temporal window manner with length N. For every window, we normalize the input to be local to the head coordinate H at "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\tau \\ = \\ 0"
+                    },
+                    {
+                        "type": "text",
+                        "content": "which is the first frame of the current window by applying a transformation matrix "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "T _ { \\mathbf { H } _ { \\tau } } ^ { w }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "that transforms the world coordinate to the coordinate of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\stackrel { \\cdot } { \\mathbf { H } } _ { \\tau = 0 } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ". The normalized cues are denoted with the hat symbol: "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { H } } = \\{ \\hat { \\mathbf { H } } _ { \\tau } \\} _ { \\tau = 0 } ^ { N } , \\hat { \\mathbf { R } } = \\{ \\hat { \\mathbf { R } } _ { \\tau } \\} _ { \\tau = 0 } ^ { N } ,"
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { A } } = \\{ \\hat { \\mathbf { A } } _ { \\tau } \\} _ { \\tau = 0 } ^ { N } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\bf m } _ { \\tau } = \\{ { \\hat { \\bf p } } _ { \\tau } ^ { 0 } , { \\hat { \\bf q } } _ { \\tau } ^ { 0 } , { \\bf q } _ { \\tau } ^ { 1 } , . . . { \\bf q } _ { \\tau } ^ { J } \\} ^ { 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". The normalized output motion is recovered by applying "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "T _ { w } ^ { \\mathbf { H } _ { \\tau } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", or "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( T _ { \\mathbf { H } _ { \\tau } } ^ { w } ) ^ { - 1 }"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                734,
+                470,
+                904
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                498,
+                228,
+                892,
+                276
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Normalizing every cue to the first frame head coordinates may miss out on important absolute cues critical to defining human motions. For example, a person standing still and sitting still would have identical input when normalized. Thus, we furthermore include absolute head height (z-axis value) "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "h _ { t } \\in \\mathbb { R }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and the head up-vector "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\theta _ { t } ^ { u p } \\in \\mathbb { R } ^ { 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "defined in world coordinate. To accurately define head height "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "h ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "we introduce an algorithm to update floor level "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "at time t based on network output (motion and foot contact) obtained until time "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "t - 1"
+                    },
+                    {
+                        "type": "text",
+                        "content": "with 3D pointcloud W. Once the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is estimated, as described in Fig. 3, the head height "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "h _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is computed based on the floor level, or "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "h _ { t } = \\mathbf { H } _ { z } - f _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "The input components are concatenated into "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\mathbf { x } _ { \\tau } \\} _ { \\tau = 0 } ^ { N } ="
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\hat { \\mathbf { H } } , \\hat { \\mathbf { R } } , \\hat { \\mathbf { A } } , h _ { \\tau } , \\dot { \\theta } _ { \\tau } ^ { u p } \\} \\in \\mathbb { R } ^ { N \\times 3 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Before concatenating, rotations are converted into 6D representations [60]."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                276,
+                893,
+                502
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Network Architecture. We formulate the estimation as a sequence-to-sequence (seq2seq) problem to effectively incorporate temporal information to address the ambiguities arising from the sparsity of sensor inputs. Following the previous work [22], we utilize Transformer encoder models and their self-attention mechanism to efficiently capture intricate relationships in the time-series data."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                503,
+                893,
+                609
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Different from the previous work [22] that directly maps input sequence "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\mathbf { x } _ { \\tau } \\} _ { \\tau = 0 } ^ { \\bar { N } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to the output motion ˆm<sub>τ</sub>, we adopt a multi-stage method as in [56] by introducing endeffector positions as intermediate representations. Specifically, we separate the system "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { e s t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "into two submodules "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } ^ { e n \\bar { d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } ^ { b o d y }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "(we drop the subscript "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\cdot _ { e s t } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "on these submodule names for brevity). The first submodule F<sup>end</sup> takes "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\mathbf { x } _ { \\tau } \\} _ { \\tau = 0 } ^ { N }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "as input and generates end-effector positions (hands and feet) "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\mathbf { x } _ { \\tau } ^ { m i d } \\} _ { \\tau = 0 } ^ { N } \\in \\mathbb { R } ^ { N \\times 1 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". The input "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\left\\{ { \\bf x } _ { \\tau } \\right\\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\mathbf { x } _ { \\tau } ^ { m i d } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are fed into submodule "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { F } } ^ { b o d y }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". The "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { F } } ^ { \\bar { b o d y } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "regresses the output motion "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\hat { \\mathbf { m } } _ { \\tau } \\} _ { \\tau = 0 } ^ { N }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and also foot contact "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\mathbf { c } _ { \\tau } \\} _ { \\tau = 0 } ^ { N }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\bf c } _ { \\tau } ~ = ~ \\{ c _ { \\tau } ^ { l f } , c _ { \\tau } ^ { r f } \\} . ~ c _ { \\tau } ^ { l f }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "c _ { \\tau } ^ { r f }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "indicate the contact probability of the left and right foot at time τ."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                609,
+                893,
+                806
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Both submodules are based on Transformer encoder models with linear embedding layers to project the input vector into continuous embeddings in the first part of the networks. For "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { F } } ^ { b o d y }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\mathbf { x } _ { \\tau } ^ { i } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\mathbf { x } _ { \\tau } ^ { m i d } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are concatenated as input, there are two separate linear layers and the linear embeddings are concatenated and fed into the Transformer encoder. In submodule "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { F } } ^ { e n d }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", the features generated by the Transformer encoder are converted into midrepresentations "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\mathbf { x } _ { \\tau } ^ { m i d } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by a 2-layer MLP. In submodule "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } ^ { \\bar { b } o d y }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", the output of the Transformer encoder is first converted into foot contact probabilities "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\left\\{ \\mathbf { c } _ { \\tau } \\right\\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". The contact probability and Transformer encoder output are concatenated and converted to output motion "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\left\\{ \\hat { \\mathbf { m } } _ { \\tau } \\right\\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". The network architecture for both submodules are in Fig. 4."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                806,
+                893,
+                852
+            ]
+        },
+        {
+            "type": "page_footnote",
+            "content": {
+                "page_footnote_content": [
+                    {
+                        "type": "text",
+                        "content": "<sup>1</sup>In the normalized output pose, the local joint rotations q<sup>1</sup>, ..., q<sup>J</sup> is identical to the original pose m<sub>t</sub> as local joint rotations are coordinate invariant, while the root orientation q<sup>0</sup> is changed."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                862,
+                892,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1094"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/4321e9e3af7659ec0a0c49317332376c92175fb2f9bf317fe12a22665c0cae99.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 3. (a) Visualization of input signals. (b) Visualization of the updated floor levels "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f _ { t }"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                102,
+                89,
+                434,
+                223
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                266,
+                470,
+                435
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Updating Floor Levels. Among the input "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\left\\{ \\mathbf { x } _ { \\tau } ^ { i } \\right\\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", the height cue h represents the metric height of the person’s head joint, which should be computed from the actual floor the character stands on. Assuming large-scale indoor and outdoor environments (e.g., multiple floors with stairs, and uphills), the actual floor the character stands on is not necessarily the same as the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "z = 0"
+                    },
+                    {
+                        "type": "text",
+                        "content": "plane in the world coordinate defined in the alignment procedure (Sec. 3.2). Therefore, the floor level should be updated based on the current character status and the environment."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                440,
+                470,
+                592
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The key idea of updating floor levels is to track the foot contact "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\mathbf { \\bar { c } } _ { t } \\} _ { t = 0 } ^ { t - 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". As foot contact is a form of interaction between the human and the floor, the foot position during contact can be considered as the floor level. From the contact estimation "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\mathbf { c } _ { t } \\} _ { t = 0 } ^ { t - 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "obtained by "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { F } } ^ { b o d y }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", we find the latest time frame "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "t _ { m }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "where the foot contact occurs in either foot with a confidence value above a certain fixed threshold, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "c _ { t _ { m } } ^ { f } > \\lambda"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Given the corresponding foot joint location "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { p } _ { t _ { m } } ^ { f }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in contact, the floor point can be obtained by projecting "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { p } _ { t _ { m } } ^ { f }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to the 3D scene pointcloud W, where we simply find nearby points and take the mean of their z values as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "f _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Visual examples of updated floors are shown in Fig. "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "3 ( \\mathbf { b } ) ^ { 2 }"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                598,
+                470,
+                786
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Training. The submodules "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { F } } ^ { e n d }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { F } } ^ { b o d y }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are trained endto-end, with the following loss terms "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { p o s } , \\mathcal { L } _ { r o t } , \\mathcal { L } _ { r o o t } ."
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { m i d } , \\mathcal { L } _ { c o n t a c t } , \\mathcal { L } _ { f o o t v e l }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { c o n s }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". The loss term "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { r o o t }"
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                791,
+                468,
+                839
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/cdd305d4ce7227f3ab9bb81210e0be76341fece05fd0328fdbd4b80bbc2c8b90.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 4. Network architecture of submodules "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { F } } ^ { e n d }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "(left) and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { F } } ^ { \\sim d y }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "(right) of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { e s t }"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                511,
+                89,
+                877,
+                238
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { \\boldsymbol { r o t } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are:"
+                    }
+                ]
+            },
+            "bbox": [
+                500,
+                276,
+                593,
+                291
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { l } { { \\displaystyle { \\mathcal { L } } _ { r o o t } = \\| \\hat { \\mathbf { p } } ^ { 0 } - \\hat { \\mathbf { p } } _ { G T } ^ { 0 } \\| + \\| \\hat { \\mathbf { q } } ^ { 0 } - \\hat { \\mathbf { q } } _ { G T } ^ { 0 } \\| } } \\\\ { { \\displaystyle { \\mathcal { L } } _ { r o t } = \\sum _ { j \\in J } \\| \\mathbf { q } ^ { j } - \\mathbf { q } _ { G T } ^ { j } \\| } . } \\end{array}\\tag{2}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/87218e0a1dde14abeb3993e5c42b63be0dfb18496f0b99935929d95ad30b8b9b.jpg"
+                }
+            },
+            "bbox": [
+                570,
+                296,
+                821,
+                351
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The terms "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { r o o t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { \\mathit { r o t } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "enforces the output motion "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { m } } _ { t } ="
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\hat { \\mathbf p } _ { t } ^ { 0 } , \\hat { \\mathbf q } _ { t } ^ { 0 } , . . . , \\mathbf q _ { t } ^ { J } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to follow the given ground truth data."
+                    }
+                ]
+            },
+            "bbox": [
+                500,
+                358,
+                890,
+                390
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The loss term "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { p o s }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "penalizes the error accumulating along the kinematic chain by considering position values of each joint, and is measured by the weighted difference of joint positions."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                388,
+                893,
+                449
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathcal { L } _ { p o s } = \\sum _ { j \\in J } w _ { j } \\| \\hat { \\mathbf { p } } ^ { j } - \\hat { \\mathbf { p } } _ { G T } ^ { j } \\|\\tag{3}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/337e010152d98f0334e1a6c1b61c5edb0d0b682c48abdefed2f807f8ee828010.jpg"
+                }
+            },
+            "bbox": [
+                601,
+                455,
+                789,
+                489
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { p } } ^ { j }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "indicates position of joint "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "j ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "which is obtained by forward kinematics operation. In case of foot joints, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\dot { \\mathcal { L } } _ { f o o t v e l } = \\| \\hat { \\mathbf { v } } ^ { f o o t } - \\hat { \\mathbf { v } } _ { G T } ^ { \\hat { f o o t } } \\|"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is additionally computed to penalize foot slip artifacts and unnatural foot movements. "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { v } } ^ { j }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "indicates velocity of joint "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "j ."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                497,
+                892,
+                574
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { L } } _ { m i d }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { c o n s }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are terms to jointly train the submodule "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { F } } ^ { e n d }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { F } } ^ { b o d y }"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                574,
+                892,
+                603
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { l } { { \\mathcal { L } _ { m i d } = \\displaystyle \\sum _ { j \\in e n d } \\| \\hat { \\bf p } _ { m i d } ^ { j } - \\hat { \\bf p } _ { G T } ^ { j } \\| } } \\\\ { { \\mathcal { L } _ { c o n s } = \\displaystyle \\sum _ { j \\in e n d } \\| \\hat { \\bf p } ^ { j } - \\hat { \\bf p } _ { m i d } ^ { j } \\| } } \\end{array}\\tag{4}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/0460b87b9f5913d61739ff2f4fc4e5a440b8e0c92fe5837f0426869535e22a55.jpg"
+                }
+            },
+            "bbox": [
+                593,
+                609,
+                799,
+                679
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { p } } _ { m i d } ^ { j }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "indicates the output of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { F } } ^ { e n d }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "(end-effector positions). "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { L } } _ { m i d }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "directly trains the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { F } } ^ { e n d }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "module to generate accurate intermediate representations "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\tau } ^ { m i d }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". The consistency loss "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { c o n s }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "enforces the consistency between midrepresentations and the output motion. Intuitively, the endeffector joint positions derived from the output motion "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { m } } _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "should be consistent with the intermediate output "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\tau } ^ { m i d }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "which is also the positions of end-effector joints. The two loss terms enforce "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { F } } ^ { e n d }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to provide reliable additional information to submodule "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { F } } ^ { b o d y }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and enforce "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { F } } ^ { b o d y }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to reflect the provided mid-representation to the final output."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                688,
+                893,
+                854
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { c o n t a c t } = B C E L o s s ( \\mathbf { c } , \\mathbf { c } _ { G T } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is to train the model to estimate contact probabilities c. Here the subscript GT indicates ground truth while time τ is omitted for convenience."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                854,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_footnote",
+            "content": {
+                "page_footnote_content": [
+                    {
+                        "type": "text",
+                        "content": "<sup>2</sup>While we only keep the floor height f<sub>t</sub>, the 3D floor planes in Fig. 3 are shown for visualization purposes using root’s xy positions at time t."
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                875,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1095"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3.4. Motion Optimization With Visual Cues"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                90,
+                415,
+                107
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Generating Visual Cues From Images. Since we only use upper body sensors, fundamental ambiguities exist on the lower body joints. For example, sitting and crossing one’s legs cannot be easily distinguishable from other sitting postures. Also, different from VR-based systems, the absence of explicit positional data in raw IMU sensors can lead to uncertainties in determining hand positions. Although such ambiguities can be resolved in dynamic body movements (e.g., locomotion) by taking the dynamics into account via temporal information, our daily activities (e.g., manipulation) may often contain subtle and sophisticated motions with minimum movements. As a solution to enhance the motion capture accuracy, we present a method to leverage the visual cues from the head-mounted camera, based on the observation that it is common to look at one’s hands and the object during typical hand-involved interactions. The idea can be extended into multi-people scenarios, where we can assume multiple people wear our motion capture systems and their visual cues are shared with each other. As demonstrated in our experiments, a person’s egocentric view can be treated as occasionally available sparse 3rd person views which can be used as informative additional visual cues. Motivated by this idea, we leverage the RGB information of the egocentric video I. The visual cues "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\displaystyle \\Phi = [ \\phi _ { E } , \\phi _ { T } ]"
+                    },
+                    {
+                        "type": "text",
+                        "content": "represent additional information of the human pose. In singleperson egocentric setting, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\phi _ { E } = \\{ \\mu _ { t } ^ { j } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\boldsymbol { \\mu } _ { t } ^ { j } \\in \\mathbb { R } ^ { 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", indicates the 2D location of joint "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "j"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in 2D image coordinates. Joint "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "j"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is either left or right wrist, or both in practice. In the case of multi-person capture scenarios, we can leverage a monocular 3D human pose estimation approach from 3rd person views of other individuals, which can be used during our motion optimization. The estimated 3D pose is denoted as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\phi _ { T } = \\{ \\tau _ { t } ^ { \\overrightarrow { B A } } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\pmb { \\tau } _ { t } ^ { \\overrightarrow { B A } } = ( \\mathbf { q } _ { t } ^ { 1 } . . . \\mathbf { q } _ { t } ^ { j } ) ^ { A }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "indicates local joint rotations (excluding the root) of person A estimated via "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { I } _ { t } ^ { B }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", or image taken by person B at time t. We use offthe-shelf models [15, 31] to obtain visual cues "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\phi _ { E }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and ϕ ."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                118,
+                472,
+                665
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Manifold-Based Motion Optimization. The optimized motion M should not only fulfill the occasionally detected cues Φ, but it should maintain the semantics and naturalness of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { M } _ { r e g } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "preserving spatiotemporal coherency. Instead of directly optimizing the motion output from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ { \\bf { M } } _ { r e g } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to Φ, we utilize the motion manifold-based method demonstrated in [18, 27]. As the motion manifold is learned to preserve spatio-temporal correlation of human movements, optimizing within this manifold space can enforce the optimized motion M to maintain its naturalness while fulfilling the target cues Φ. Especially in the case of egocentric visual cue "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\phi _ { E }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "where only 2D joint cues are available, optimizing within this manifold space helps to maintain naturalness in the optimized motion despite the ambiguity of the cue."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                669,
+                470,
+                882
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To build motion manifolds we use convolutional autoencoders [18], compressing motion sequences into corresponding latent vectors. For training, the motion sequence "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { \\mathbf { X } } \\in \\bar { \\mathbb { R } ^ { T \\times 1 3 7 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is represented as a concatenated vector of foot contact, root translation, and joint rotations. The root translation and orientation are normalized based on the first frame of the motion sequence. The rotation values are converted into 6D representations [60] for network learning. The encoder E and decoder module "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "E ^ { - 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are trained based on reconstruction loss, or "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { r e c o n } = | | \\mathbf { X } - E ^ { - 1 } ( E \\left( \\mathbf { X } \\right) ) | | ^ { 2 }"
+                    }
+                ]
+            },
+            "bbox": [
+                96,
+                885,
+                468,
+                900
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                90,
+                893,
+                228
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Motion optimization is done by searching an optimal latent vector among the manifold. From the initial latent vector "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\textbf { z } } = \\ E ( \\mathbf { X } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", where X is computed from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { M } _ { r e g } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "the optimal latent vector "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } ^ { \\ast }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is found by minimizing loss "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } = \\mathcal { L } _ { v i s } + \\mathcal { L } _ { r e g } + \\mathcal { L } _ { c o n t a c t } . ^ { 3 } \\mathcal { L } _ { v i s }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "enforces to meet the provided visual cues:"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                228,
+                893,
+                319
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { r } { \\mathcal { L } _ { v i s } = \\left\\{ \\begin{array} { l l } { | | \\pmb { \\mu } _ { t } ^ { j } - \\pi ( \\mathbf { C } _ { t } , \\mathbf { p } _ { t } ^ { j } ) | | } & { \\pmb { \\mu } _ { t } ^ { j } \\in \\phi _ { E } } \\\\ { \\sum _ { j } w _ { j } | | \\pmb { \\tau } _ { t } ^ { j } - \\mathbf { q } _ { t } ^ { j } | | } & { \\pmb { \\tau } _ { t } ^ { j } \\in \\phi _ { T } . } \\end{array} \\right. } \\end{array}\\tag{5}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/cae6ee86d94eea8906ade6b2f31cb3c84b47c787b2d0ebb8e72ab975cff35239.jpg"
+                }
+            },
+            "bbox": [
+                558,
+                327,
+                831,
+                366
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The function "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\pi ( \\mathbf { C } _ { t } , \\mathbf { p } _ { t } ^ { j } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "indicates the projection of 3D joint position "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { p } _ { t } ^ { j }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "with camera "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { C } _ { t } . ~ \\mathcal { L } _ { r e g }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is for regularization and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { c o n t a c t } = \\mathbf { c } _ { t } \\cdot \\| \\dot { \\mathbf { p } } _ { t } ^ { f o o t } \\|"
+                    },
+                    {
+                        "type": "text",
+                        "content": "penalizes foot slip when the foot is in contact. Finally, the optimized motion M is derived from the optimized latent vector "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } ^ { \\ast }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "E ^ { - 1 } ( \\mathbf { z } ^ { * } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                376,
+                893,
+                455
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4. Experiments"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                467,
+                633,
+                483
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.1. Experimental Setup"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                491,
+                691,
+                508
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Synthesizing IMU Data from Mocap. To build training data from motion datasets, we synthesize IMU signals using wrist poses, following the protocol in [23, 55, 56]."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                513,
+                892,
+                560
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Processing IMU Signals from Smartwatches. For demonstrations with real-world IMU data using smartwatches, we apply filtering to reduce noise as in [23] beforehand."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                560,
+                892,
+                604
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Evaluation Metrics. We adopt the following metrics for quantitative experiments."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                604,
+                892,
+                635
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• Mean Per Joint Position Error (MPJPE): MPJPE represents the average position error per joint. (cm)"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                635,
+                892,
+                665
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• Mean Per Joint Velocity Error (MPJVE): MPJVE measures the average velocity error across joints. "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( c m / s )"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                665,
+                892,
+                696
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• Jitter: Jitter indicates how smooth the motion "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathrm { i s } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and is measured by acceleration changes over time averaged by body joints. Here we present the relative ratio between the jitter of the predicted motion and the ground truth."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                696,
+                893,
+                756
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Baselines. Since we are the first to estimate full body motion from a head-mounted camera and two IMU sensors, no direct baselines exist. Thus, we compare our estimation module "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { e s t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "with previous SOTAs based on (1) 6 IMUs (full body) [23, 55], and (2) VR devices (upper body, 6 DoF) [12], which pursue similar goals with more information than our setup through additional sensors or 6DoF hand measurements. In the context of wearable and outdoor motion capture, we consider IMU-based methods as our main competitors. However, for completeness, we additionally compare with the VR device-based methods due to their technical similarity to our approach of estimating motion from upper body sensors. Note that in this comparison we assume fixed flat floor planes since previous approaches cannot handle varying floor levels."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                756,
+                893,
+                863
+            ]
+        },
+        {
+            "type": "page_footnote",
+            "content": {
+                "page_footnote_content": [
+                    {
+                        "type": "text",
+                        "content": "<sup>3</sup>Here the superscript "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\overrightarrow { B A }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and A indicating humans in τ is omitted for convenience, and is replaced with joint indicators. τ<sup>j</sup><sub>t</sub> 2 = τ −−→<sub>BA</sub> of joint j."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                869,
+                892,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1096"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                92,
+                470,
+                212
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• IMU Baselines (Full Body): We compare ours with PIP [55] and TIP [23]. Both estimate motion from 6 IMU sensors on the full body; head, wrists, pelvis, and legs. In the supp. mat. we also compare with EgoLocate [54] which leverages an additional head-mounted camera on top of the full-body IMU sensors for global translation correction."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                213,
+                470,
+                303
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "VR Baselines (Upper Body): We consider AGRoL [12], the state-of-the-art method for tracking full body motion from 3 6DoF (position and orientation) sensor signals from the head and both wrists, as a baseline. We compare with two versions of AGRoL, the original version where the 6DoF values are given for all 3 sensors and a modified version where the position values of the wrist are replaced with acceleration as in IMU sensors."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                304,
+                470,
+                425
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• Ablative Baselines: We perform ablation studies on the floor level update in "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { e s t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to present the contribution of the algorithm on scenarios with large areas with drastic floor changes such as walking down the stairs from the third to the second floor of a building. We furthermore compare the output of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { e s t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "only and with "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { o p t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to demonstrate the contribution of egocentric video to enhance motion estimation."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                425,
+                470,
+                532
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.2. Comparison with IMU-Based Baselines"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                542,
+                416,
+                558
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Dataset. We follow the previous approaches [23, 55] by training the models on AMASS [33] dataset and evaluating on the TotalCapture [44] dataset with real IMU data. 4"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                566,
+                470,
+                612
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Results. As shown in Table 1, despite only utilizing sensors on the upper body, our method shows comparable or better performances compared to 6 IMU-based setups. In the root-relative position errors (r.MPJPE) which compare pose estimation quality ignoring root drifts, our approach outperforms the baselines. Notably, although PIP [55] explicitly correct pose with physics-based optimization, the performance of ours is comparable without such explicit corrections. In other metrics where root drift errors are also considered (MPJPE, Root PE), our method shows much better performance with significant decreases in root drift compared to baselines (MPJPE decreases by 87.7% for PIP and 89.8% for TIP; Root PE by 90.5% and 92.1%, respectively). For comparison with EgoLocate, results in supp. Table 2 shows our superior performance, especially in root-related position error terms (MPJPE, Root PE), despite the reduced number of sensors. These results demonstrate that incorporating head pose directly in estimation can improve performance and mitigate root drift issues without any additional localization or correction as done in previous approaches."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                613,
+                472,
+                840
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/fb41521e40d252c21fc2b198ffae767a0fc7e4416eaa4c602b952af348982e0d.jpg"
+                },
+                "table_caption": [],
+                "table_footnote": [],
+                "html": "<table><tr><td>Method</td><td>r.MPJPE</td><td>MPJPE</td><td>MPJVE</td><td>Root PE</td><td>Jitter</td></tr><tr><td>PIP [55]</td><td>4.40</td><td>34.69</td><td>19.51</td><td>34.15</td><td>0.95</td></tr><tr><td>TIP [23]</td><td>4.88</td><td>41.79</td><td>36.26</td><td>41.18</td><td>16.52</td></tr><tr><td>Ours  $( \\mathcal { F } _ { e s t } )$ </td><td>3.77</td><td>4.27</td><td>19.56</td><td>3.25</td><td>5.23</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                503,
+                89,
+                890,
+                150
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/b1e85a50778c970ed07000ee8af951e1cf7ed258ca4a0e96816cb88c8524e020.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 1. Comparison with full body IMU-based methods on the TotalCapture dataset."
+                    },
+                    {
+                        "type": "text",
+                        "content": "Table 2. Comparison with upper body VR-based methods on AMASS and HPS datasets. AGRoL with an asterisk is the modified version where wrist position are replaced with accelerations. (r.) indicates root-relative position errors."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td rowspan=1 colspan=1>Dataset</td><td rowspan=1 colspan=1>Method</td><td rowspan=1 colspan=1>MPJPE (r.)</td><td rowspan=1 colspan=3>MPJVE  Root PE  Jitter</td></tr><tr><td rowspan=1 colspan=1>AMASS</td><td rowspan=1 colspan=1>AGRoL [12] $\\mathbf { A G R o L } ^ { * }$ Ours $( \\mathcal { F } _ { e s t } )$ </td><td rowspan=1 colspan=1>4.58 (4.89)6.53 (6.18)5.20 (4.95)</td><td rowspan=1 colspan=1>19.3124.9917.00</td><td rowspan=1 colspan=1>4.155.334.36</td><td rowspan=1 colspan=1>2.603.491.64</td></tr><tr><td rowspan=1 colspan=1>HPS</td><td rowspan=1 colspan=1>AGRoL [12]AGRoL*Ours $( \\mathcal { F } _ { e s t } )$ </td><td rowspan=1 colspan=1>31.47 (27.64)33.46 (27.69)8.65 (8.24)</td><td rowspan=1 colspan=1>258.92389.8321.42</td><td rowspan=1 colspan=1>25.7628.226.97</td><td rowspan=1 colspan=1>40.8362.061.84</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                501,
+                190,
+                921,
+                294
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                361,
+                893,
+                438
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.3. Comparison with VR-Based Baselines"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                446,
+                828,
+                463
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Dataset. For quantitative comparison, we generate train/test/validation split from a subset of AMASS dataset (CMU [45], HDM05 [37], BMLMovi [13]). We first evaluate our motion estimation module and AGRoL on the testing split of the AMASS dataset. Additionally, we also demonstrate the generalization ability of the modules by testing on the HPS [16] dataset. Regarding HPS dataset, we use the motion optimization result [16] as ground truth. We randomly select 10 sequences in 6 scenes for comparison. Results. As demonstrated in Table 2, our method shows on-par performance with the original AGRoL, even though in AGRoL the positions of both hands are provided. Compared with the modified AGRoL where wrist positions are replaced with accelerations, our module "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { e s t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "outperforms it in all of the metrics. Furthermore, our module "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { e s t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "shows a notable performance gap compared to AGRoL on the HPS dataset which includes motions in large-scale scenes. This is expected as AGRoL focuses on full body motion estimation in a VR-optimized setting, not in large-scale scenes."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                472,
+                893,
+                761
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.4. Ablation Studies"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                770,
+                666,
+                786
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Setup. For quantitative evaluation, we capture with our setup and with XSens MVN Link [6] together, where we use XSens as ground truth. More details are in supp. mat. Ablation on Motion Estimation. We demonstrate the contribution of the floor-level updating algorithm by capturing a sequence of walking downstairs. As seen in Table 3 and Fig. 5, without floor update (left) the head height is misleading and consequently, the module generates inaccurate poses. However, by accordingly updating the floor levels (right) the head height is adjusted so the network accurately estimates the motion of walking down the stairs."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                794,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_footnote",
+            "content": {
+                "page_footnote_content": [
+                    {
+                        "type": "text",
+                        "content": "<sup>4</sup>While previous approaches use DIP dataset [19] as well, we exclude this in our test, because DIP does not include global translations and we cannot generate head positions from the dataset. DIP is much smaller than AMASS and consists of less than 5% of the whole training dataset."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                851,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1097"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/aa1d1f439b1d6d66605c5449739a3d0e80f1575674a2bdc58b5a9348691e0d52.jpg"
+                },
+                "table_caption": [],
+                "table_footnote": [],
+                "html": "<table><tr><td>Method</td><td>Upper PE</td><td>Lower PE</td><td>Full PE</td></tr><tr><td> $\\mathcal { F } _ { e s t }$  w/o Floor Update</td><td>9.19</td><td>16.58</td><td>12.35</td></tr><tr><td> $\\mathcal { F } _ { e s t }$  w/ Floor Update (Ours)</td><td>6.04</td><td>7.19</td><td>6.53</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                83,
+                89,
+                460,
+                138
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/d958b873a8fa2bc1404b443c570519442221bea6786dda9209626f7572668eab.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 3. Quantitative comparison with and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { e s t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "without floor level update."
+                    },
+                    {
+                        "type": "text",
+                        "content": "Fest w/o Floor Update"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                88,
+                176,
+                214,
+                276
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/d83aff9545e44f5f1ed3ff5a9fa978c8e835a2526181525a42a4baa884a8667f.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Fest w/ Floor Update (Ours)"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                215,
+                178,
+                341,
+                286
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/53a500b9bbe2eb4f985496dacc378f3d7fdd267cac19b769d15336c090d74757.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "GT"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                339,
+                181,
+                460,
+                276
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/51d698fb737144552a6c41664b26787afbebbfbc92bead4086f385a87572d377.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 5. Comparison with "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { e s t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "without floor update (left) and with floor update (right). The floor update algorithm corrects head height for estimating accurate poses."
+                    },
+                    {
+                        "type": "text",
+                        "content": "Table 4. Quantitative comparison with "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { e s t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { e s t } + \\mathcal { F } _ { o p t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "optimized with egocentric-view visual cues."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td>Method</td><td></td><td>Right Hand PE | Right Arm PE | Upper PE</td><td></td></tr><tr><td> $\\mathcal { F } _ { e s t }$ </td><td>11.91</td><td>9.72</td><td>8.04</td></tr><tr><td> $\\mathcal { F } _ { e s t } + \\mathcal { F } _ { o p t } \\ : ( \\mathrm { O u r s } )$ </td><td>5.55</td><td>5.97</td><td>6.65</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                78,
+                352,
+                472,
+                400
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                449,
+                470,
+                510
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Ablation on Motion Optimization. We first demonstrate the contribution of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { o p t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in hand-based everyday interaction scenarios. For quantitative comparison, we compare the initial motion output "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ { \\bf { M } } _ { r e g } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and optimized final output M to ground-truth. As shown in Table 4, right arm PE and both arm PE both decreased in the final motion output M compared to the initial regression-based output "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ { \\bf { M } } _ { r e g } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Example results are shown in Fig. 6. We also demonstrate motion optimization results from visual cues in multi-person scenarios. As seen in Fig. 7, the egocentric image of person B serves as a “third-person view” of person A. Using this information can resolve the fundamental ambiguities of the legs that stem from upper-body sensor setups. Although the legs of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { e s t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "(red) in Fig. 7 (a) are plausible, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { o p t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "(blue) further captures the slight nuances of leg movements by leveraging visual cues "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\tau _ { t } ^ { \\overrightarrow { B A } }"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                511,
+                470,
+                756
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5. Discussion"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                768,
+                191,
+                785
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We present a novel, easy-to-use, and affordable motion capture system with smartwatches on wrists and a headmounted camera. We overcome the sparsity and ambiguity of sensor inputs with different modalities by integrating head poses in the motion estimation pipeline. By tracking and updating floor levels to define head poses and incorporating into multi-stage Transformer-based estimation module our method can robustly capture motion in challenging locations with non-flat grounds. We further present a motion optimization approach by using visual cues through the camera. As multi-users can conveniently equip our setup, we also explore the scenarios when user signals are shared."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                795,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/aa4fe0c8f6a1a70083cdd75179e40f49aed22d744aea0377acf779aa303dfbde.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                521,
+                85,
+                602,
+                161
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/7ead7ffa6aedafc06b01b9ab5de79b4dd0587ab098809efff1f230d9b129cbde.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                606,
+                87,
+                687,
+                162
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/ab707b35f9caf862b18dc6a2d9cdc8ac8cad2f08f53610e3a0eb2f1af20f0e82.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                522,
+                162,
+                609,
+                238
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/945a9895737e9764186b6027e0ed0a9cc2e03de3f6e28c902eeb8e119e5b187d.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "(Ours)"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                611,
+                162,
+                694,
+                239
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/d53a6d009bdd14ec2ed31cb4f074d6d9c1b20f9e0f2f262adddefe3dc564ccf1.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                790,
+                87,
+                872,
+                143
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/91b93572e2771b981e7ee8a303bbf5b2b5d2c8423b3f2c2ed306284cbf989b37.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "GT"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                696,
+                85,
+                789,
+                229
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/5edf5523ddb3655cf11bd590f6d018f94df34a714008661afea4bf2359da3bf3.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Egocentric Image"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                790,
+                166,
+                872,
+                222
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/fd3e7e45ee34b8aa4912fac819de434877177318810fe662fb42f49c50518eb6.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 6. Comparison with "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { e s t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "(left) and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { e s t } + \\mathcal { F } _ { o p t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "(right). The optimization module "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { o p t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "corrects the arm and hand pose based on the 2D hand keypoint detected in the egocentric image."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                630,
+                304,
+                745,
+                381
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/4dbe59ac7d9a343817dbe7b7c2217905feb9f9d46416f950a292f343cc561f01.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                521,
+                304,
+                627,
+                470
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/6fb088dd80c775997d0700d67a5e775b23a67e0e73dbed040e258332a19a5a15.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                746,
+                305,
+                864,
+                382
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/1e3d6e44fc6cb0104faa706f989ed9988603c20f22e0c80c9663b18a1a5ab1c5.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Person A"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                632,
+                385,
+                745,
+                469
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/63bc07bda877ec0247d6c1d1110d51df806be1435ae2fd6f979d0e58d113f9e1.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Image IB of Person B"
+                    },
+                    {
+                        "type": "text",
+                        "content": "3rd Person View"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Figure 7. Results of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { e s t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { e s t } + \\mathcal { F } _ { o p t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in multi-person scenarios. (a) Comparison with "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { e s t } ( \\mathrm { r e d } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { e s t } + \\mathcal { F } _ { o p }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "(blue) of person A with visual cue "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\tau _ { t } ^ { \\overrightarrow { B A } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "(Sec. 3.4). (b) Image "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { I } _ { t } ^ { B }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "with person A. (c) 3rd person view of person A, B, and C."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                746,
+                386,
+                864,
+                469
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                498,
+                554,
+                892,
+                630
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Although the off-the-shelf models (e.g., DROID-SLAM) in our method are robust and show reliable results in most cases, our method does not work in rare catastrophic failures of the off-the-shelf models. Moreover, the networks in our module are trained with mean body shape, and head poses in real-world demonstrations are adjusted by scaling. Explicitly handling body shape variations in the module would be more promising which we leave as future work."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                631,
+                893,
+                752
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Acknowledgements. We thank Inhee Lee for supporting the system setup and thank Jiwon Song, Sumin Lee, and Hakjean Kim for assisting multi-person capture. This work was supported by SNU Creative-Pioneering Researchers Program, NRF grant funded by the Korea government (MSIT) (No.2022R1A2C2092724 and No. RS-2023- 00218601), and IITP grant funded by the Korean government (MSIT) (No.2021-0-01343). H. Joo is the corresponding author."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                765,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1098"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "References"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                78,
+                89,
+                176,
+                106
+            ]
+        },
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[1] Meta quest vr headsets. https://www.meta.com/ quest/. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[2] Project aria. https://www.projectaria.com/. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[3] Ray-ban meta smart glasses. https://www.meta.com/ smart-glasses. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[4] Rokoko smartsuit pro. https://www.rokoko.com/ products/smartsuit-pro. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[5] Vicon motion capture system. https://www.vicon. com/motion-capture. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[6] Xsens mvn link. https://www.movella.com/ products/motion-capture/xsens-mvn-link. 2, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[7] Karan Ahuja, Eyal Ofek, Mar Gonzalez-Franco, Christian Holz, and Andrew D Wilson. Coolmoves: User motion accentuation in virtual reality. ACM IMWUT, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[8] Sadegh Aliakbarian, Pashmina Cameron, Federica Bogo, Andrew Fitzgibbon, and Thomas J Cashman. Flag: Flowbased 3d avatar generation from sparse observations. In CVPR, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[9] Sadegh Aliakbarian, Fatemeh Saleh, David Collier, Pashmina Cameron, and Darren Cosker. Hmd-nemo: Online 3d avatar motion generation from sparse observations. In ICCV, 2023. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[10] Young-Woon Cha, Husam Shaik, Qian Zhang, Fan Feng, Andrei State, Adrian Ilie, and Henry Fuchs. Mobile. egocentric human body motion reconstruction using only eyeglassesmounted cameras and a few body-worn inertial sensors. In IEEE VR, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[11] Andrea Dittadi, Sebastian Dziadzio, Darren Cosker, Ben Lundell, Thomas J Cashman, and Jamie Shotton. Full-body motion from a single head-mounted device: Generating smpl poses from partial observations. In ICCV, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[12] Yuming Du, Robin Kips, Albert Pumarola, Sebastian Starke, Ali Thabet, and Artsiom Sanakoyeu. Avatars grow legs: Generating smooth human motion from sparse tracking inputs with diffusion model. In CVPR, 2023. 2, 3, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[13] Saeed Ghorbani, Kimia Mahdaviani, Anne Thaler, Konrad Kording, Douglas James Cook, Gunnar Blohm, and Nikolaus F. Troje. MoVi: A Large Multipurpose Motion and Video Dataset, 2020. 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[14] Andrew Gilbert, Matthew Trumble, Charles Malleson, Adrian Hilton, and John Collomosse. Fusing visual and inertial sensors with semantics for 3d human pose estimation. IJCV, 127, 2019. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[15] Shubham Goel, Georgios Pavlakos, Jathushan Rajasegaran, Angjoo Kanazawa, and Jitendra Malik. Humans in 4d: Reconstructing and tracking humans with transformers. In ICCV, 2023. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[16] Vladimir Guzov, Aymen Mir, Torsten Sattler, and Gerard Pons-Moll. Human poseitioning system (hps): 3d human pose estimation and self-localization in large scenes from body-mounted sensors. In CVPR, 2021. 2, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[17] Thomas Helten, Meinard Muller, Hans-Peter Seidel, and Christian Theobalt. Real-time body tracking with one depth camera and inertial sensors. In ICCV, 2013. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[18] Daniel Holden, Jun Saito, and Taku Komura. A deep learning framework for character motion synthesis and editing. ACM TOG, 35(4), 2016. 3, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[19] Yinghao Huang, Manuel Kaufmann, Emre Aksan, Michael J. Black, Otmar Hilliges, and Gerard Pons-Moll. Deep inertial poser learning to reconstruct human pose from sparse inertial measurements in real time. ACM TOG, 37(6), 2018. 2, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[20] Hao Jiang and Kristen Grauman. Seeing invisible poses: Estimating 3d body pose from egocentric video. In CVPR, 2017. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[21] Hao Jiang and Vamsi Krishna Ithapu. Egocentric pose estimation from human vision span. In ICCV, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[22] Jiaxi Jiang, Paul Streli, Huajian Qiu, Andreas Fender, Larissa Laich, Patrick Snape, and Christian Holz. Avatarposer: Articulated full-body pose tracking from sparse motion sensing. In ECCV, 2022. 2, 3, 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[23] Yifeng Jiang, Yuting Ye, Deepak Gopinath, Jungdam Won, Alexander W Winkler, and C Karen Liu. Transformer inertial poser: Real-time human motion reconstruction from sparse imus with simultaneous terrain generation. In SIGGRAPH Asia, 2022. 2, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[24] Hanbyul Joo, Hao Liu, Lei Tan, Lin Gui, Bart Nabbe, Iain Matthews, Takeo Kanade, Shohei Nobuhara, and Yaser Sheikh. Panoptic studio: A massively multiview system for social motion capture. In ICCV, 2015. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[25] Tomoya Kaichi, Tsubasa Maruyama, Mitsunori Tada, and Hideo Saito. Resolving position ambiguity of imu-based human pose with a single rgb camera. Sensors, 20(19), 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[26] Christoph Kalkbrenner, Steffen Hacker, Maria-Elena Algorri, and Ronald Blechschmidt-Trapp. Motion capturing with inertial measurement units and kinect. In BIOSTEC, 2014. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[27] Jiye Lee and Hanbyul Joo. Locomotion-actionmanipulation: Synthesizing human-scene interactions in complex 3d environments. In ICCV, 2023. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[28] Sunmin Lee, Sebastian Starke, Yuting Ye, Jungdam Won, and Alexander Winkler. Questenvsim: Environment-aware simulated motion tracking from sparse sensors. In SIG-GRAPH, 2023. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[29] Jiaman Li, Karen Liu, and Jiajun Wu. Ego-body pose estimation via ego-head pose estimation. In CVPR, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[30] Yebin Liu, Juergen Gall, Carsten Stoll, Qionghai Dai, Hans-Peter Seidel, and Christian Theobalt. Markerless motion capture of multiple characters using multiview image segmentation. IEEE TPAMI, 35(11), 2013. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[31] Camillo Lugaresi, Jiuqiang Tang, Hadon Nash, Chris Mc-Clanahan, Esha Uboweja, Michael Hays, Fan Zhang, Chuo-Ling Chang, Ming Guang Yong, Juhyun Lee, et al. Mediapipe: A framework for building perception pipelines. arXiv preprint arXiv:1906.08172, 2019. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[32] Zhengyi Luo, Ryo Hachiuma, Ye Yuan, and Kris Kitani. Dynamics-regulated kinematic policy for egocentric pose estimation. 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[33] Naureen Mahmood, Nima Ghorbani, Nikolaus F Troje, Gerard Pons-Moll, and Michael J Black. Amass: Archive of motion capture as surface shapes. In ICCV, 2019. 1, 7"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                84,
+                114,
+                467,
+                142
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1099"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[34] Charles Malleson, John Collomosse, and Adrian Hilton. Real-time multi-person motion capture from multi-view video and imus. IJCV, 128, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[35] Charles Malleson, Andrew Gilbert, Matthew Trumble, John Collomosse, Adrian Hilton, and Marco Volino. Real-time full-body motion capture from video and imus. In 3DV, 2017. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[36] Josh Merel, Saran Tunyasuvunakool, Arun Ahuja, Yuval Tassa, Leonard Hasenclever, Vu Pham, Tom Erez, Greg Wayne, and Nicolas Heess. Catch & carry: reusable neural controllers for vision-guided whole-body tasks. ACM TOG, 39(4), 2020. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[37] Meinard Muller, Tido R¨ oder, Michael Clausen, Bernhard¨ Eberhardt, Bjorn Kr ¨ uger, and Andreas Weber. Documenta-¨ tion mocap database hdm05. Computer Graphics Technical Report CG-2007-2, Universitat Bonn¨ , 2007. 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[38] Evonne Ng, Donglai Xiang, Hanbyul Joo, and Kristen Grauman. You2me: Inferring body pose in egocentric video via first and second person interactions. In CVPR, 2020. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[39] Gerard Pons-Moll, Andreas Baak, Thomas Helten, Meinard Muller, Hans-Peter Seidel, and Bodo Rosen-¨ hahn. Multisensor-fusion for 3d full-body human motion capture. In CVPR, 2010. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[40] Takaaki Shiratori, Hyun Soo Park, Leonid Sigal, Yaser Sheikh, and Jessica K. Hodgins. Motion capture from bodymounted cameras. In SIGGRAPH, 2011. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[41] Zachary Teed and Jia Deng. DROID-SLAM: Deep Visual SLAM for Monocular, Stereo, and RGB-D Cameras. In NeurIPS, 2021. 3, 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[42] Denis Tome, Thiemo Alldieck, Patrick Peluse, Gerard Pons-Moll, Lourdes Agapito, Hernan Badino, and Fernando De la Torre. Selfpose: 3d egocentric pose estimation from a headset mounted camera. IEEE TPAMI, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[43] Denis Tome, Patrick Peluse, Lourdes Agapito, and Hernan Badino. xr-egopose: Egocentric 3d human pose from an hmd camera. In ICCV, 2019. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[44] Matthew Trumble, Andrew Gilbert, Charles Malleson, Adrian Hilton, and John Collomosse. Total capture: 3d human pose estimation fusing video and inertial sensors. In BMVC, 2017. 2, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[45] Carnegie Mellon University. Cmu mocap dataset. 1, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[46] Timo Von Marcard, Roberto Henschel, Michael J Black, Bodo Rosenhahn, and Gerard Pons-Moll. Recovering accurate 3d human pose in the wild using imus and a moving camera. In ECCV, 2018. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[47] Timo Von Marcard, Gerard Pons-Moll, and Bodo Rosenhahn. Human pose estimation from video and imus. IEEE TPAMI, 38(8), 2016. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[48] Timo Von Marcard, Bodo Rosenhahn, Michael J Black, and Gerard Pons-Moll. Sparse inertial poser: Automatic 3d human pose estimation from sparse imus. In Comput. Graph. Forum, 2017. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[49] Jian Wang, Lingjie Liu, Weipeng Xu, Kripasindhu Sarkar, and Christian Theobalt. Estimating egocentric 3d human pose in global space. In ICCV, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[50] Jian Wang, Diogo Luvizon, Weipeng Xu, Lingjie Liu, Kripasindhu Sarkar, and Christian Theobalt. Scene-aware egocentric 3d human pose estimation. In CVPR, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[51] Alexander Winkler, Jungdam Won, and Yuting Ye. Questsim: Human motion tracking from sparse sensors with simulated avatars. In SIGGRAPH Asia, 2022. 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[52] Weipeng Xu, Avishek Chatterjee, Michael Zollhoefer, Helge Rhodin, Pascal Fua, Hans-Peter Seidel, and Christian Theobalt. Mo 2 cap 2: Real-time mobile 3d motion capture with a cap-mounted fisheye camera. IEEE TVCG, 25(5), 2019. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[53] Dongseok Yang, Doyeon Kim, and Sung-Hee Lee. Lobstr: Real-time lower-body pose prediction from sparse upperbody tracking signals. In Comput. Graph. Forum, 2021. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[54] Xinyu Yi, Yuxiao Zhou, Marc Habermann, Vladislav Golyanik, Shaohua Pan, Christian Theobalt, and Feng Xu. Egolocate: Real-time motion capture, localization, and mapping with sparse body-mounted sensors. ACM TOG, 42(4), 2023. 2, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[55] Xinyu Yi, Yuxiao Zhou, Marc Habermann, Soshi Shimada, Vladislav Golyanik, Christian Theobalt, and Feng Xu. Physical inertial poser (pip): Physics-aware real-time human motion tracking from sparse inertial sensors. In CVPR, 2022. 2, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[56] Xinyu Yi, Yuxiao Zhou, and Feng Xu. Transpose: Real-time 3d human translation and pose estimation with six inertial sensors. ACM TOG, 40(4), 2021. 2, 4, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[57] Ye Yuan and Kris Kitani. 3d ego-pose estimation via imitation learning. In ECCV, 2018. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[58] Ye Yuan and Kris Kitani. Ego-pose estimation and forecasting as real-time pd control. In ICCV, 2019. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[59] Yuxiang Zhang, Zhe Li, Liang An, Mengcheng Li, Tao Yu, and Yebin Liu. Lightweight multi-person total motion capture using sparse multi-view cameras. In ICCV, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[60] Yi Zhou, Connelly Barnes, Lu Jingwan, Yang Jimei, and Li Hao. On the continuity of rotation representations in neural networks. In CVPR, 2019. 4, 6"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                78,
+                93,
+                467,
+                133
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "1100"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ]
+]

@@ -1,0 +1,1595 @@
+[
+    {
+        "type": "text",
+        "text": "Capturing Closely Interacted Two-Person Motions with Reaction Priors",
+        "text_level": 1,
+        "bbox": [
+            122,
+            128,
+            848,
+            152
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Qi Fang<sup>1</sup> Yinghui Fan<sup>1</sup> Yanjun Li<sup>1</sup> Junting Dong<sup>2</sup> Dingwei Wu<sup>1</sup> Weidong Zhang<sup>1</sup> Kang Chen<sup>1</sup> <sup>1</sup>NetEase Games AI Lab <sup>2</sup>Shanghai AI Lab",
+        "bbox": [
+            200,
+            179,
+            767,
+            239
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Abstract",
+        "text_level": 2,
+        "bbox": [
+            233,
+            273,
+            313,
+            290
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "In this paper, we focus on capturing closely interacted two-person motions from monocular videos, an important yet understudied topic. Unlike less-interacted motions, closely interacted motions contain frequently occurring inter-human occlusions, which pose significant challenges to existing capturing algorithms. To address this problem, our key observation is that close physical interactions between two subjects typically happen under very specific situations (e.g., handshake, hug, etc.), and such situational contexts contain strong prior semantics to help infer the poses of occluded joints. In this spirit, we introduce reaction priors, which are invertible neural networks that bi-directionally model the pose probability distributions of one person given the pose of the other. The learned reaction priors are then incorporated into a querybased pose estimator, which is a decoder-only Transformer with self-attentions on both intra-joint and inter-joint relationships. We demonstrate that our design achieves considerably higher performance than previous methods on multiple benchmarks. What’s more, as existing datasets lack sufficient cases of close human-human interactions, we also build a new dataset called Dual-Human to better evaluate different methods. Dual-Human contains around 2k sequences of closely interacted two-person motions, each with synthetic multi-view renderings, contact annotations, and text descriptions. We believe that this new public dataset can significantly promote further research in this area. Our project page is at https://neteasegameai.github.io/Dual-Human/.",
+        "bbox": [
+            75,
+            308,
+            472,
+            747
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "1. Introduction",
+        "text_level": 2,
+        "bbox": [
+            76,
+            781,
+            209,
+            799
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Despite the profound progress achieved in recovering human motions from monocular videos, two-person motion capture (MoCap), especially under close interactions, has rarely been addressed in the computer vision community. Currently, to tackle this task, one can either use singleperson methods [11, 28, 32, 50] to separately obtain the motions of two actors, or use multi-person methods [39, 54, 55, 71] to simultaneously recover the poses of all seen people in the scene. Unfortunately, neither solution can robustly yield the desired results. Specifically, existing single-person methods are vulnerable to heavy occlusions since they do not take any interpersonal information into account, while multi-person methods concentrate much more on the correctness of the relative inter-person joint positions (i.e., ordinal depth) than the precise pose interactions, though they typically exploit the situational contexts in some sense.",
+        "bbox": [
+            75,
+            809,
+            470,
+            901
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/5baf40d724c4f77041f89bdfa4352aa12251aaad6b269c6d68bd08177b87e954.jpg",
+        "image_caption": [
+            "Figure 1. The proposed reaction priors can optimize the human motions from pose estimators for both less-occluded cases (blue box) and severely occluded cases (orange box)."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            506,
+            275,
+            885,
+            579
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            670,
+            893,
+            821
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Fortunately, recent research has proven that humanobject interaction semantics show great success in assisting the pose prediction for both the occluded human and the occluded object [44, 62]. Likewise, prior information (e.g., the actions and reactions between two closely interacted persons) should also have the potential to be leveraged for inferring the poses of occluded joints based on observed ones. Very recently, BUDDI [40] took the first step in this direction by learning static proxemic priors for 3D social interactions of two people from images via a diffusion model and illustrated the effectiveness of the priors in the downstream image-based human mesh recovery task.",
+        "bbox": [
+            496,
+            825,
+            893,
+            901
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "",
+        "bbox": [
+            104,
+            2,
+            181,
+            41
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore.",
+        "bbox": [
+            235,
+            1,
+            810,
+            46
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "page_number",
+        "text": "655",
+        "bbox": [
+            485,
+            945,
+            511,
+            957
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            92,
+            472,
+            196
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "In the same spirit, we also take advantage of priors, which we call reaction priors, to mitigate the ambiguity caused by occlusions (see Fig. 1). However, different from the diffusion-based single-frame proxemic priors in [40], which only depict the spatial relationships of two static poses, we build our reaction priors upon motion Variational AutoEncoder (VAE) and invertible neural networks (INN). Motion VAE is able to capture both the spatial and temporal information about the motion clips by mapping them into a unified latent space, while INN bi-directionally models the pose probability distributions of one person given the pose of the other. Note that the invertible design can elegantly address the interchangeable nature of two-person interactions. The reaction priors can be injected into pose estimators both as a training regularizer and an optimization guidance. We demonstrate that facilitated by the learned reaction priors, a simple query-based pose estimator (i.e., a decoder-only Transformer network with self-attentions on both intra-joint and inter-joint relationships) is enough to outperform previous baselines on multiple benchmarks.",
+        "bbox": [
+            75,
+            196,
+            472,
+            500
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "In addition, despite some recent advances in interacted motion datasets [12, 33, 65], a sizeable high-quality benchmark dataset dedicated to closely interacted motion capture remains absent in the community. To better evaluate the performance of various methods and to promote further research in this area, we build Dual-Human, a large-scale dataset containing around 2k sequences of closely interacted two-person motions, each with synthetic multi-view renderings, contact annotations, and text descriptions.",
+        "bbox": [
+            75,
+            500,
+            472,
+            635
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "In summary, our key contributions are as follows:",
+        "bbox": [
+            94,
+            636,
+            426,
+            650
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• We introduce reaction priors to effectively model the pose probability distributions of one person given the pose of the interacted counterpart.",
+        "bbox": [
+            76,
+            650,
+            470,
+            695
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• We propose a new framework for capturing closely interacted two-person motions and demonstrate that by utilizing the learned reaction priors, this framework outperforms previous baselines on multiple benchmarks.",
+        "bbox": [
+            76,
+            695,
+            470,
+            756
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• We build Dual-Human, a large public dataset of closely interacted two-person motions with synthetic multi-view renderings, contact annotations, and text descriptions, which we believe will significantly promote further research in this area.",
+        "bbox": [
+            76,
+            756,
+            472,
+            832
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "2. Related Work",
+        "text_level": 2,
+        "bbox": [
+            76,
+            844,
+            220,
+            861
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "In this section, we discuss related studies on human motion capture, reaction generation, and interacted human datasets.",
+        "bbox": [
+            75,
+            869,
+            470,
+            901
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Motion Capture: Though substantial progress has been made in MoCap from multi-view cameras [9, 10, 59, 70] or IMUs [14, 64], monocular methods cannot achieve stable performance due to depth ambiguity and occlusion. We discuss recent advances in three aspects: single-frame inputs, temporal inputs, and human priors.",
+        "bbox": [
+            496,
+            90,
+            893,
+            183
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "For multi-person cases, single-frame methods can be divided into top-down and bottom-up. Top-down methods [39, 48] detect each person first and inherit singleperson frameworks to estimate 3D poses. Bottom-up methods [13, 37, 71] infer intermediate representations from the whole image and group them into individuals. To simplify the multi-stage setting, one-stage works [53, 54, 60] leverage center and offset maps to perform one-shot inference.",
+        "bbox": [
+            496,
+            183,
+            893,
+            303
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Additionally, the temporal estimation task is also investigated. VIBE [27] uses GRUs and a discriminator to incorporate temporal information. Several recent approaches utilize Transformer-based structures to enhance temporal features [1, 41, 58]. 4D-Humans [16] adopts a vanilla Transformer decoder for each frame with an extra tracking module. Meanwhile, some other recent methods [55, 63, 66] focus more on the human global trajectory.",
+        "bbox": [
+            496,
+            303,
+            893,
+            424
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Another line of work explores human priors for optimization [4, 19, 43, 69]. VPoser [43] adopts the VAE structure with several regularization losses. ProHMR [29] uses the normalizing flow to construct image-conditioned priors. HuMoR [46] proposes the conditional prior via a conditional VAE. However, existing human priors are all relevant to a single person, while two-person priors also deserve explorations, especially in close interactions. InterPrior [73] is a recent work but only considers interacted hands. BUDDI [40] learns 3D proxemics priors via diffusion models for a static image. In contrast, we concentrate on the applications of the reaction priors in MoCap tasks.",
+        "bbox": [
+            496,
+            424,
+            895,
+            607
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Reaction Generation: Compared with other control signals [20, 21], reaction generation is to infer the reaction of one person from the action of the other person in interactions. Only a few works have been proposed until recently. Several papers approach this problem via various structural designs, e.g., RNN-based [30] or Transformerbased [7] encoder-decoder. To prevent the decoder from creating monotonous reactions for all input actions, some researchers leverage the generative adversary network as a discriminator [15, 38]. However, these previous methods rely on accurate action conditions but MoCap estimations are usually noisy, making it difficult to apply these methods to MoCap directly.",
+        "bbox": [
+            496,
+            625,
+            895,
+            821
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Interacted Human Dataset: Most existing 3D multiperson datasets [2, 24, 36, 42] lack interacted motions because of the collection difficulty caused by close humanhuman distances. Early works use Kinect sensors [22,",
+        "bbox": [
+            496,
+            839,
+            895,
+            901
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "page_number",
+        "text": "656",
+        "bbox": [
+            485,
+            945,
+            513,
+            957
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "image",
+        "img_path": "images/120f3b51f27e9715b747a5634ae475c6c0b8fb8bc7ecb0ef221d7c7d28e010c1.jpg",
+        "image_caption": [
+            "Figure 2. Overview of Our Framework. We build a large-scale richly annotated interacted human dataset, Dual-Human. Based on this dataset, we learn reaction priors composed of motion VAE and reaction INN, which bi-directionally model the pose probability distributions of one person given the pose of the other. The learned reaction priors are then incorporated into a query-based pose estimator with interaction-aware self-attention to optimize the motions."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            88,
+            90,
+            883,
+            430
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "26, 35, 56, 67] and thus have limited motion accuracy disturbed by sensor noises. 3DPW [57] is captured by IMUs but places more emphasis on single-person or lessinteracted two-person motions. MultiHuman [72] is captured by sparse multi-view cameras, which hinder the accuracy in close interactions. CHI3D [12] provides additional contact annotations, but the types of interactions are relatively not enough. ExPI [18] is a more accurate dataset of extreme poses and does not cover daily interactions. Hi4D [65] is a very relevant dataset to us with high precision. However, Hi4D only has 100 motions because of the expensive collection manner. Inter-Human [33] is a recent dataset containing large-scale motions for text-to-motion tasks, but lacks images for MoCap. More importantly, its accuracy is influenced by the inability of multi-view RGB systems to solve severe occlusion issues. In contrast to them, our dataset tries to take accuracy, diversity, scale, and annotation completeness into consideration simultaneously.",
+        "bbox": [
+            75,
+            527,
+            472,
+            803
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "3. Methods",
+        "text_level": 2,
+        "bbox": [
+            76,
+            814,
+            176,
+            830
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "In this section, we explain the pipeline of our work in detail, as shown in Fig. 2. We first discuss the concept of reaction priors and introduce how we statistically model the reaction priors using motion VAE and INN (Sec. 3.1). Then, we present our two-person MoCap framework which is built upon a simple Transformer-based pose estimator and the learned reaction priors (Sec. 3.2). After that, we give details of our Dual-Human dataset and its advantages over existing datasets (Sec. 3.3). Finally, we respectively describe the loss functions (Sec. 3.4) as well as implementation details (Sec. 3.5).",
+        "bbox": [
+            75,
+            839,
+            470,
+            901
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            527,
+            893,
+            635
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "3.1. Reaction Priors",
+        "text_level": 2,
+        "bbox": [
+            500,
+            648,
+            658,
+            665
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "The reaction priors aim to infer the motion of the occluded person (i.e., reaction) from the motion of the lessoccluded person (i.e., action), capturing the underlying dynamic rhythm and semantics in interactions, which is a kind of motion matching [5] in a sense. Normally, the motion is represented by 3D joint positions, rotations, and velocities. However, learning the motion directly may ignore the constraints of joint angle limits, thus producing unreasonable motions. Therefore, inspired by single-person priors [43, 46], we adopt the encoder-decoder structure. The initial step involves encoding the action into a compact latent representation in the form of mean and variance. This action latent representation is then utilized to generate the reaction latent representation. Since exchanging the action and reaction does not change the semantics of motions, we leverage INN to construct our reaction generator to model the symmetry of human interactions. The invertibility of INN ensures that actions generate reactions and vice versa [31]. Finally, the reaction latent representation is decoded to the reaction.",
+        "bbox": [
+            496,
+            674,
+            895,
+            902
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "page_number",
+        "text": "657",
+        "bbox": [
+            485,
+            945,
+            511,
+            957
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "image",
+        "img_path": "images/e758635592d1680307d47789f49654dc410f0aa80611a2bcf30e1f793862cb55.jpg",
+        "image_caption": [
+            "Figure 3. Reaction Priors. The reaction priors are composed of a VAE encoder, a reaction generator, and a VAE decoder. Initially, the VAE encoder maps the motion to the latent distribution. After that, the action distribution $\\mathcal { N } ( \\mu _ { a } , \\sigma _ { a } )$ is fed to the reaction generator and converted to the reaction distribution $\\mathcal { N } ( \\tilde { \\pmb { \\mu } } _ { r } , \\tilde { \\pmb { \\sigma } } _ { r } )$ , which are then recovered to the generated reaction."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            81,
+            90,
+            890,
+            268
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            349,
+            470,
+            426
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Latent Motion Representation: We adopt the 269-dim motion representation for a person and the first 263-dim is the same as [17] including angular velocity, linear velocity, and height of root, as well as local joint positions, joint velocity, joint rotations, and foot contact. The last 6-dim includes initial direction and translation, which are only used to recover the camera-view motions. To make the motion representation compact, we leverage the VAE structure following [6, 45], as shown in Fig. 3. Specifically, the input motion x is mapped to the latent features, which together with distribution tokens, are fed to the Transformer encoder for predicting latent distribution parameters. The parameters include mean ${ \\pmb \\mu } ,$ log variance log $\\sigma ^ { 2 }$ of the normal distribution. After that, a code z is sampled from the distribution and fed to the Transformer decoder to reconstruct the motion. The ELBO of VAE for optimization is as follows:",
+        "bbox": [
+            75,
+            445,
+            472,
+            688
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/9c77cfd1208cee9939aba6410a073c4818331bb74c3e1640cf60cc1b868f0837.jpg",
+        "text": "$$\n\\begin{array} { r } { \\log p ( \\pmb { x } ) \\geq \\mathbb { E } _ { z \\sim q } [ \\log p ( \\pmb { x } | z ) ] - \\mathcal { D } _ { K L } [ q ( z | \\pmb { x } ) | | p ( z ) ] . } \\end{array}\\tag{1}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            86,
+            699,
+            436,
+            717
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Reaction Generator: We utilize the reaction generator to infer the reaction latent distribution from the action latent distribution. Note that the subscripts $\\mathbf { \\dot { a } } _ { } ^ { }$ and $\\cdot _ { \\mathrm { { r } } } ,$ denote ‘action’ and ‘reaction’, respectively, and the tilde symbol indicates the corresponding generated variables. Suppose the joint distribution of two latent codes $p ( z _ { a } , z _ { r } )$ follows the normal distribution. According to the properties of the normal distribution, the conditional probability $p ( z _ { r } | z _ { a } )$ also follows the normal distribution. The probability of the generated reaction $\\tilde { \\mathbf { x } } _ { r }$ conditioned on the action $\\scriptstyle { \\mathbf { \\mathcal { x } } } _ { a }$ can be approximated as follows via eliminating the direct dependence of $\\tilde { z } _ { r }$ and $\\tilde { \\mathbfit { x } } _ { r }$ on the action $\\scriptstyle { \\mathbf { { \\vec { x } } } } _ { a }$ in that the action latent code $z _ { a }$ is in the underlying semantic space of $\\scriptstyle { \\mathbf { { \\vec { x } } } } _ { a }$ :",
+        "bbox": [
+            75,
+            734,
+            470,
+            901
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            498,
+            349,
+            892,
+            382
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/6e9f463422bb84de1fd6e46b16cb06de478d123614cb5ac231c3071e6de17adb.jpg",
+        "text": "$$\np ( \\tilde { { \\pmb x } } _ { r } | { \\pmb x } _ { a } ) \\approx \\iint \\underbrace { p ( { \\boldsymbol z } _ { a } | { \\pmb x } _ { a } ) \\cdot p ( \\tilde { { \\boldsymbol z } } _ { r } | { \\boldsymbol z } _ { a } ) } _ { \\mathcal { N } ( \\tilde { \\mu } _ { r } , \\tilde { { \\boldsymbol \\sigma } } _ { r } ) } \\cdot p ( \\tilde { { \\pmb x } } _ { r } | \\tilde { { \\boldsymbol z } } _ { r } ) \\mathrm { d } { \\boldsymbol z } _ { a } \\mathrm { d } \\tilde { { \\boldsymbol z } } _ { r } ,\\tag{2}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            506,
+            388,
+            882,
+            433
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "where $p ( \\tilde { \\pmb { x } } _ { r } | \\tilde { \\pmb { z } } _ { r } )$ is the decoder. $p ( z _ { a } | \\mathbf { x } _ { a } )$ and $p ( \\tilde { z } _ { r } | z _ { a } )$ denote the encoder and the generator, respectively, and both of them follow the normal distribution, therefore their product also follows the normal distribution $\\mathcal { N } ( \\tilde { \\pmb { \\mu } } _ { r } , \\tilde { \\pmb { \\sigma } } _ { r } )$ , which can be regarded as a learned Gaussian conditional prior.",
+        "bbox": [
+            498,
+            455,
+            893,
+            532
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Furthermore, to model the interchangeable nature of two-person interactions, we adopt the invertible neural network as the generator, which enables the seamless role switching of two people:",
+        "bbox": [
+            498,
+            532,
+            893,
+            593
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/3c560b72eedc7a54aa83a325815f3f4bc991a4a76991c13b82bf64bea3c70929.jpg",
+        "text": "$$\np ( \\tilde { z } _ { r } | \\mathbf { x } _ { a } ) = p ( z _ { a } | \\mathbf { x } _ { a } ) \\cdot \\prod _ { k } | \\operatorname* { d e t } ( \\frac { \\partial f _ { k } } { \\partial z _ { k } } ) | ^ { - 1 } ,\\tag{3}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            552,
+            599,
+            838,
+            635
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "where $f _ { k }$ is the k-th invertible layer in INN.",
+        "bbox": [
+            500,
+            643,
+            790,
+            659
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Additionally, INN is also scalable for a relaxation of the assumption that the conditional probability $p ( \\tilde { z } _ { r } | z _ { a } )$ follows a more complex distribution rather than the normal distribution since its normalizing flow extension [8, 25] has been proven to be a powerful tool for modeling complex distributions with the Monte Carlo approximation for the calculation of KL divergence [47, 49].",
+        "bbox": [
+            496,
+            659,
+            893,
+            765
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "In practice, instead of sampling $z _ { a }$ and $\\tilde { z } _ { r }$ from the distribution, we perform inference directly between explicit distribution parameters $( \\mu _ { a } , \\sigma _ { a } )$ and $\\left( \\tilde { \\mu } _ { r } , \\tilde { \\sigma } _ { r } \\right)$ . Specifically, the procedure of reaction priors is shown in Fig. 3. The encoder and decoder are trained in advance and frozen, while the INN is trained on our Dual-Human dataset. The separate training of the latent motion representation and reaction generator enables the former to leverage the largescale single-person motion data.",
+        "bbox": [
+            496,
+            765,
+            893,
+            901
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "page_number",
+        "text": "658",
+        "bbox": [
+            485,
+            945,
+            511,
+            957
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Applications of Reaction Priors: The proposed reaction priors can be applied to both training regularization and testtime optimization. During the training of a motion estimator, $L _ { 1 }$ or $L _ { 2 }$ loss is generally adopted to supervise the motion estimation. However, they have no guarantee of structural constraints since a reverse-bent arm may also have small errors. Fortunately, the reaction priors can regularize the estimations via the following prior loss:",
+        "bbox": [
+            75,
+            92,
+            470,
+            213
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "img_path": "images/25c12b01571fb0901f3c053d7ee7952707b9a1500154d2bbff903de665242aa2.jpg",
+        "text": "$$\n\\mathcal { L } _ { p r i o r } = \\mathcal { D } _ { K L } [ p ( z _ { r } | \\hat { \\pmb x } _ { r } ) \\ | | \\ p ( \\tilde { z } _ { r } | \\hat { \\pmb x } _ { a } ) ] ,\\tag{4}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            145,
+            223,
+            400,
+            241
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "where $p ( z _ { r } | \\hat { \\boldsymbol { x } } _ { r } )$ is the latent distribution from the reaction input, while $p ( \\tilde { z } _ { r } | \\hat { x } _ { a } )$ is the latent distribution inferred from the action input through the reaction generator.",
+        "bbox": [
+            75,
+            251,
+            470,
+            296
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "During test-time, the reaction latent distribution parameters $( \\mu _ { r } ^ { o p t } , \\pmb { \\sigma } _ { r } ^ { o p t } )$ can be the variables to be optimized. The objective functions include a data term and a prior term:",
+        "bbox": [
+            75,
+            296,
+            470,
+            342
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "img_path": "images/87982c2dbab349a8a178a75eb7aee43b065142c794f6cf6033c341044c64ed16.jpg",
+        "text": "$$\n\\begin{array} { r l } & { \\mathcal { L } ( \\pmb { \\mu } _ { r } ^ { o p t } , \\pmb { \\sigma } _ { r } ^ { o p t } ) = | | \\mathcal { D } ( \\pmb { \\mu } _ { r } ^ { o p t } , \\pmb { \\sigma } _ { r } ^ { o p t } ) - \\hat { \\pmb { x } } _ { r } | | _ { 2 } ^ { 2 } } \\\\ & { \\qquad + \\lambda _ { p r i o r } \\cdot \\mathcal { D } _ { K L } [ \\mathcal { N } ( \\pmb { \\mu } _ { r } ^ { o p t } , \\pmb { \\sigma } _ { r } ^ { o p t } ) \\mid | \\ p ( \\tilde { z } _ { r } | \\hat { \\pmb { x } } _ { a } ) ] , } \\end{array}\\tag{5}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            84,
+            351,
+            437,
+            390
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "where D denotes the decoder. $\\lambda _ { p r i o r }$ is a weight scalar. The data term aligns the output motions to the noisy observations and can also be applied to other forms of observations like 2D poses or partial 3D poses, while the prior term pushes the optimization variables towards the distribution produced by reaction priors.",
+        "bbox": [
+            75,
+            400,
+            470,
+            491
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Importantly, it is inevitable that the estimations from the MoCap framework are noisy, therefore we cannot train the reaction priors directly with accurate motions as it may cause limited generalization performance. To simulate the MoCap errors, we sample several camera views in a circle around the two performers and calculate the joint visibility in the corresponding view. This allows us to quantitatively assess the probability of each joint being visible under certain motions. Consequently, we add random noises to human poses in the training according to the probability to augment the data.",
+        "bbox": [
+            75,
+            491,
+            472,
+            659
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "3.2. Pose Estimator",
+        "text_level": 2,
+        "bbox": [
+            76,
+            665,
+            230,
+            681
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "The learned reaction priors can be incorporated into a pose estimator framework for Monocular MoCap. Currently, mainstream methods of monocular multi-person 3D pose estimation are indirect, including top-down and bottom-up. However, the former discards the interacted spatial context caused by cropping, while the latter may fail to produce structured estimations since the prior on the number of people has not been used. Therefore, we turn to an end-to-end query-based decoder-only Transformer structure, encouraged by its success on 2D [34, 61] and 3D pose estimation [16, 59] tasks.",
+        "bbox": [
+            75,
+            689,
+            470,
+            856
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Generally, the query-based paradigm constructs the same number of queries as the variables to be estimated and adopts the Transformer decoder to output the estimations after fusing image features. Fig. 4 shows the pipeline of the proposed 3D pose estimator for two people. Given an input image, the feature extractor outputs image features via a common backbone network [51]. The features, as well as different types of queries (‘Pose’, ‘Transl’ and ‘Prob for 3D human poses, translation, and human probability, respectively), are fed to a decoder-only Transformer structure with self-attention, cross-attention, and feed-forward network, followed by multilayer perceptrons (MLPs) to regress the corresponding variables. Furthermore, our two-person assumption enables us to set the number of each type of query to 2. Besides, to eliminate the influence of image size and focal length, we normalize the depth in the translation representation by the field of view (FOV). As for the human probability, it can be understood as the salience score, indicating the possibility of how conspicuous a person is. We will use this variable to determine the more visible person. By now, although feasible, such a vanilla structure still faces the problem of low attention efficiency.",
+        "bbox": [
+            75,
+            856,
+            470,
+            901
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "image",
+        "img_path": "images/6e944018446ad6124be50bcce92d3ba89b07a1395aa3a8e1861e66a3c4599bf6.jpg",
+        "image_caption": [
+            "Figure 4. 3D Pose Estimator for Two People."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            508,
+            90,
+            882,
+            219
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            279,
+            893,
+            565
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Interaction-Aware Self-Attention: To improve the attention efficiency of the decoder, inspired by [7, 34], we propose an interaction-aware self-attention, which consists of intra-human self-attention and inter-human self-attention sequentially, as shown in Fig. 2. The queries of two people are separately attended in intra-human self-attention, whereas the ‘Pose’ queries only focus on their ancestors and children on the skeleton. For inter-human self-attention, ‘Pose’ and ‘Transl’ queries are attended mutually since any two joints of two people may interact. Besides, two ‘Prob queries are restricted to relating only to each other.",
+        "bbox": [
+            496,
+            566,
+            893,
+            733
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Furthermore, instead of requiring an additional tracking module for temporal inputs in common practice [16], we try to implement the tracking mechanism using queries [52].",
+        "bbox": [
+            498,
+            733,
+            893,
+            779
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Query-Based Tracking: Specifically, the translation estimations (root positions) of the previous frame can serve as the tracking information to guide the attention in the current frame to distinguish two people, thus a certain query will always focus on the same person. We concatenate these ‘Track’ queries with other queries as additional inputs.",
+        "bbox": [
+            498,
+            779,
+            893,
+            869
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "After obtaining the tracked motions, we impose temporal smoothness and consistency via SmoothNet [68]. Then we further improve the performance through the proposed reaction priors. Specifically, we adopt a sliding window of length L with an overlap of $L / 2$ to split the videos with various lengths. Within each window, we leverage reaction priors to optimize the estimations as mentioned before.",
+        "bbox": [
+            498,
+            871,
+            893,
+            901
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "page_number",
+        "text": "659",
+        "bbox": [
+            485,
+            945,
+            511,
+            957
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "table",
+        "img_path": "images/f23b61411a51edb157186206bb3a658db36a59f1f0f2603a95612b6368518125.jpg",
+        "table_caption": [
+            "Table 1. Comparison of Human Interacted Datasets. Only twoperson motions are counted. ‘MV’ is multi-view. Inter-Human [33] is a very recent work for motion generation rather than capture, thus has limited accuracy, which is listed for completeness."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=\"2\">Datasets</td><td rowspan=\"2\">Sources</td><td rowspan=\"2\">Motions</td><td rowspan=\"2\">Subjects</td><td colspan=\"3\">Other Annotations</td></tr><tr><td>Image</td><td>Contact</td><td>Text</td></tr><tr><td>3DPW [57]</td><td>RGB+IMUs</td><td>29</td><td>8</td><td></td><td></td><td></td></tr><tr><td>CHI3D [12]</td><td>MV+Optical</td><td>626</td><td>5</td><td></td><td></td><td></td></tr><tr><td>ExPI [18]</td><td>MV+Optical</td><td>115</td><td>2</td><td></td><td></td><td></td></tr><tr><td>Hi4D [65]</td><td>MV RGB+IR</td><td>100</td><td>40</td><td></td><td>1</td><td></td></tr><tr><td>Inter-Human [33]</td><td>MV RGB</td><td>6022</td><td>-</td><td></td><td></td><td></td></tr><tr><td>Dual-Human</td><td>IMUs+VIVE</td><td>2019</td><td>40</td><td>L</td><td>V</td><td></td></tr></table>",
+        "bbox": [
+            81,
+            88,
+            467,
+            178
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            284,
+            470,
+            361
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "3.3. Dual-Human",
+        "text_level": 2,
+        "bbox": [
+            76,
+            368,
+            215,
+            383
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Existing prevailing datasets for interacted people face the problems of being small in scale and limited diversity. Inter-Human [33] is large but is not designed for interacted Mo-Cap because its covered motions have issues such as being interpenetrated, less-interacted, and relatively insufficient accuracy for MoCap. To address this problem, we build a large and easily scalable dataset called Dual-Human for learning the interactive situational contexts of two people. The comparison between Dual-Human and existing datasets is shown in Table 1. Our Dual-Human dataset has around 2k self-collected two-person motions, which is much more than previous relevant datasets for MoCap. Apart from human motions, we also provide synthetic multi-view images (see samples in Fig. 5), body contact, and text descriptions, supporting other tasks like text-to-motion. More details can be found in Sec. 4 and the supplementary material.",
+        "bbox": [
+            75,
+            391,
+            472,
+            635
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "3.4. Objective Functions",
+        "text_level": 2,
+        "bbox": [
+            76,
+            642,
+            269,
+            659
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "To train our framework, multi-stage training strategies are adopted to take advantage of the properties of each module. Pose Estimator: The pose estimator is supervised by three losses: $\\mathcal { L } _ { p o s e } , \\mathcal { L } _ { t r a n s l } .$ , and $\\mathcal { L } _ { p r o b }$ . The smooth $L _ { 1 }$ loss is applied to the 3D human poses. For the case without the tracking information, we use the Hungarian matching algorithm to match the estimations and the ground-truths. Besides, the $L _ { 2 }$ loss is utilized for the translation while the cross-entropy loss is used for the human saliency probability.",
+        "bbox": [
+            75,
+            666,
+            470,
+            801
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Motion VAE: To train the motion VAE for latent representations, we adopt the common loss according to ELBO (Eq. 1) as follows:",
+        "bbox": [
+            76,
+            801,
+            470,
+            847
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "equation",
+        "img_path": "images/b35cfba42bcfbcc116c99acbf7e96188bc86f96ad96456d313db248cdc492c8a.jpg",
+        "text": "$$\n\\mathcal { L } _ { v a e } = | | \\hat { \\boldsymbol { x } } - \\boldsymbol { x } | | _ { 1 } + \\lambda _ { d i s t } \\cdot \\mathcal { D } _ { K L } [ p ( z | \\boldsymbol { x } ) | | \\mathcal { N } ( \\mathbf { 0 } , I ) ] ,\\tag{6}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            84,
+            858,
+            437,
+            875
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "where $\\lambda _ { d i s t }$ is a weight scalar.",
+        "bbox": [
+            76,
+            885,
+            279,
+            901
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "image",
+        "img_path": "images/67987d7d4e53f4dc09c44d1c0d13ab43649e8d324933176833afc028493c3e74.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            501,
+            88,
+            890,
+            257
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "image",
+        "img_path": "images/56ac5d1b28c23e575401fa5d531b8ea477fe8738963846b95b6a4ba7f7bd9a81.jpg",
+        "image_caption": [
+            "Figure 5. Sample Images in Dual-Human.",
+            "Figure 6. System Configurations of Dual-Human."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            500,
+            299,
+            883,
+            409
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Reaction INN: With the frozen motion encoder and decoder, we train the reaction INN by supervising the generated reaction latent distribution in the same form as $\\mathcal { L } _ { p r i o r }$ (Eq. 4), except that we use ground-truth actions and reactions with noise augmentation here.",
+        "bbox": [
+            498,
+            462,
+            892,
+            537
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "SmoothNet: After transforming the estimated 3D poses to our 269-dim motion representation, we train SmoothNet with the $L _ { 1 }$ motion loss.",
+        "bbox": [
+            498,
+            537,
+            892,
+            583
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "3.5. Implementation Details",
+        "text_level": 2,
+        "bbox": [
+            500,
+            593,
+            718,
+            609
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "The input image of two people has a resolution of $5 1 2 \\times 5 1 2$ We adopt HRNet-W48 [51] as the backbone of our pose estimator, which is trained for 300 epochs with an initial learning rate of $1 \\times 1 0 ^ { - 5 }$ , decayed with a factor of 5. The motion VAE, reaction INN, and SmoothNet are trained for 4000, 500, and 2000 epochs, respectively, with a learning rate of $1 \\times 1 0 ^ { - 4 }$ . The AdamW optimizer is applied to all networks with a weight decay of $5 \\times 1 0 ^ { - 4 }$ . The weight scalars are set as follows: $\\lambda _ { p o s e } = 1 0 , \\lambda _ { t r a n s l } = 1 , \\lambda _ { p r o b } =$ 1, $\\lambda _ { d i s t } = 0 . 0 0 0 1$ . Besides, $\\lambda _ { p r i o r }$ is adjusted flexibly in training or test-time optimization, and we set it to 0.01 after comparisons. The window size L is set to 64.",
+        "bbox": [
+            496,
+            617,
+            893,
+            800
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "4. Constructing Dual-Human Dataset",
+        "text_level": 2,
+        "bbox": [
+            500,
+            814,
+            818,
+            832
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "In this section, we introduce how to construct our Dual-Human dataset. Specifically, we adopt an inertial MoCap system, consisting of Xsens suits and several HTC Vive devices that can alleviate drift issues and improve the positioning ability, as shown in Fig. 6. This system can capture large-scale relatively accurate interacted human motions.",
+        "bbox": [
+            496,
+            839,
+            893,
+            901
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "page_number",
+        "text": "660",
+        "bbox": [
+            485,
+            945,
+            511,
+            957
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "table",
+        "img_path": "images/863f465551ae2d9bb1f9438d16c80ad9e1918581059a43e18fc366f752983188.jpg",
+        "table_caption": [
+            "Table 2. Results on Interacted Human Benchmarks. ‘PA’ is PA-MPJPE."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=\"2\">Methods</td><td colspan=\"3\">Hi4D</td><td colspan=\"3\">CHI3D</td><td colspan=\"3\">Dual-Human</td></tr><tr><td>MPJPE↓</td><td>PA↓</td><td>Transl ↓</td><td>MPJPE↓</td><td>PA↓</td><td>Transl ↓</td><td>MPJPE↓</td><td>PA↓</td><td>Transl ↓</td></tr><tr><td>CLIFF [32] (Top-Down)</td><td>77.9</td><td>60.4</td><td>285.8</td><td>76.4</td><td>45.9</td><td>375.9</td><td>73.3</td><td>53.1</td><td>275.2</td></tr><tr><td>4D-Humans [16] (Transformer)</td><td>80.7</td><td>62.2</td><td></td><td>73.1</td><td>48.6</td><td></td><td>66.9</td><td>51.3</td><td></td></tr><tr><td>BEV [54] (Bottom-Up)</td><td>89.2</td><td>59.3</td><td>212.0</td><td>89.1</td><td>54.6</td><td>314.1</td><td>83.1</td><td>56.8</td><td>263.2</td></tr><tr><td>TRACE [55] (Temporal)</td><td>83.8</td><td>60.4</td><td>179.9</td><td>75.9</td><td>49.7</td><td>236.3</td><td>67.8</td><td>53.9</td><td>120.9</td></tr><tr><td>Ours</td><td>75.0</td><td>59.7</td><td>106.7</td><td>71.9</td><td>47.8</td><td>228.5</td><td>63.4</td><td>51.2</td><td>112.1</td></tr></table>",
+        "bbox": [
+            91,
+            88,
+            877,
+            195
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            247,
+            470,
+            277
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "After collecting original motions, we fit the parametric human model SMPL-X [43] for a unified representation, which can be formulated as an energy minimization problem over body shape, pose, and translation parameters. However, penetration is inevitable since the inertial Mo-Cap system cannot capture the surface of the human body. Therefore, we add a collision loss based on Signed Distance Field (SDF) following [23] and jointly optimize the parameters of interacted people. Besides, We determine a vertex is in contact if its SDF value is below a certain threshold and automatically extract vertex-level contact annotations, which are crucial for exploring close human interactions.",
+        "bbox": [
+            75,
+            279,
+            472,
+            459
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "As for the corresponding RGB images, we follow the procedure of BEDLAM [3] to render realistic multi-view images with various textures and cloth simulation. Apart from these, the text descriptions are manually annotated and provided, which can be utilized in generative tasks.",
+        "bbox": [
+            75,
+            460,
+            470,
+            536
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "5. Experiments",
+        "text_level": 2,
+        "bbox": [
+            76,
+            550,
+            210,
+            568
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "In this section, we validate the effectiveness of our framework on several benchmarks compared with previous approaches, demonstrate key designs via an ablation study, and discuss the limitations and future work.",
+        "bbox": [
+            75,
+            575,
+            470,
+            637
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "5.1. Experimental Setup",
+        "text_level": 2,
+        "bbox": [
+            76,
+            647,
+            269,
+            665
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "We perform experiments on the following datasets:",
+        "bbox": [
+            76,
+            671,
+            416,
+            686
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Hi4D [65] is an indoor dataset with a small amount of but accurate motions. We pick 1/8 of all sequences as the test set covering different types of interactions and the remaining as the training set.",
+        "bbox": [
+            75,
+            688,
+            470,
+            747
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "CHI3D [12] is an indoor dataset with 8 interaction types. We use subjects (02, 04) as the training set and evaluate on subject 03 since the former two have the same performer, which can prevent overfitting to a single appearance.",
+        "bbox": [
+            75,
+            748,
+            470,
+            809
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Dual-Human covers both indoor and outdoor scenes with various interactions and textures. We split the dataset into a training set and a test set with a ratio of 3 : 1.",
+        "bbox": [
+            75,
+            810,
+            470,
+            854
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Metrics include MPJPE (mm), PA-MPJPE (mm), and Translation Error (mm). MPJPE measures the accuracy of the 3D root-relative pose. It calculates the distance between the predicted and the ground-truth joint locations averaged over all joints. PA-MPJPE is similar but performs a rigid alignment before MPJPE. Translation Error is defined as the root joint error measured by Euclidean distance.",
+        "bbox": [
+            75,
+            856,
+            472,
+            901
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "table",
+        "img_path": "images/99a3bccca81c052cd78886e428080a30d5d1fe7ccece00366f394fc4764e37b6.jpg",
+        "table_caption": [
+            "Table 3. Comparisons of Two-Person Priors."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Priors</td><td>MPJPE↓</td><td>PA↓</td><td>Transl ↓</td></tr><tr><td>Proxemics Priors (BUDDI) [40]</td><td>67.3</td><td>53.4</td><td>126.1</td></tr><tr><td>Reaction Priors (Ours)</td><td>64.1</td><td>50.3</td><td>115.2</td></tr></table>",
+        "bbox": [
+            504,
+            244,
+            887,
+            287
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            338,
+            893,
+            400
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "5.2. Comparison with Previous Methods",
+        "text_level": 2,
+        "bbox": [
+            500,
+            407,
+            813,
+            422
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "We perform thorough experiments comparing our method to baselines using the same setting on several benchmarks. The baseline methods include the top-down method CLIFF [32], the bottom-up method BEV [54], the transformerbased method 4D-Humans [16], and the temporal method TRACE [55]. Table 2 shows that our method outperforms these baselines in most metrics on three benchmarks. Besides, we also compare the effectiveness of priors in Table 3. We use the same pose estimator and optimize the results through BUDDI [40] and our reaction priors, respectively. As the optimization of BUDDI is time-consuming, we only evaluate on a 10% randomly picked test set. The comparisons show that our priors achieve better performance. Fig. 7 shows the qualitative comparisons, revealing that existing algorithms may produce inaccurate human positions, unreasonable interaction poses, and missing people when severe occlusions or close interactions occur, while our method can alleviate these problems to some extent.",
+        "bbox": [
+            496,
+            430,
+            895,
+            704
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "5.3. Ablation Study",
+        "text_level": 2,
+        "bbox": [
+            498,
+            710,
+            655,
+            727
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "To validate our key designs, we conduct comparative experiments on reaction priors and MoCap, respectively, as shown in Table 4.",
+        "bbox": [
+            496,
+            734,
+            893,
+            780
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "For reaction priors, we design the following baselines: (a) mapping actions to reactions directly without using motion VAE; (b) replacing the INN with MLPs; (c) using clean actions without noise augmentation in training. It can be observed that these changes will degrade the performance. First, if motion VAE is discarded, the errors will increase possibly due to unreasonable motions. Second, INN will converge faster and better than MLPs due to its bi-directional nature, as shown in Fig. 8. Third, if we do not add noises during training, significant degradation will occur in testing, because the priors cannot generalize to the noisy raw estimations from the pose estimator well.",
+        "bbox": [
+            496,
+            780,
+            895,
+            901
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "page_number",
+        "text": "661",
+        "bbox": [
+            485,
+            945,
+            511,
+            957
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "image",
+        "img_path": "images/9b2b775ba91c181ff46535dd1839b59ad2b797dddece466c28a364e13ae953b8.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            84,
+            93,
+            176,
+            188
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "image",
+        "img_path": "images/addd06e9a4a7b212f813ef6bd542961721a3e773e3e12ede08e5545de6755696.jpg",
+        "image_caption": [],
+        "image_footnote": [
+            "Image"
+        ],
+        "bbox": [
+            84,
+            196,
+            178,
+            291
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "image",
+        "img_path": "images/01993a6ce0e8e8140dc6ab374d582354ca79c9dde0384fe301cf5c3888d19211.jpg",
+        "image_caption": [],
+        "image_footnote": [
+            "Ground-Truth",
+            "BEV",
+            "BUDDI",
+            "Ours"
+        ],
+        "bbox": [
+            179,
+            92,
+            462,
+            291
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "image",
+        "img_path": "images/dc84e526df161aad73cb8129b85c0e38023f5b65f85ea656e0ef7074b9b6827a.jpg",
+        "image_caption": [],
+        "image_footnote": [
+            "Image"
+        ],
+        "bbox": [
+            472,
+            90,
+            566,
+            295
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "image",
+        "img_path": "images/f053352a78aaf3544b46fa319bf4745b6f09c68442405101f423812bf4e6e0f9.jpg",
+        "image_caption": [],
+        "image_footnote": [
+            "Ground-Truth",
+            "BEV",
+            "CLIFF",
+            "Ours"
+        ],
+        "bbox": [
+            568,
+            92,
+            887,
+            291
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "table",
+        "img_path": "images/fafd3f57c6c7c39ceb0af356376fc411d355c5a58134a52945665927cb02ead3.jpg",
+        "table_caption": [
+            "Figure 7. Qualitative Comparisons. We compare our approach with previous methods including BEV [54], BUDDI [40] and CLIFF [32] on Dual-Human and Hi4D. The best view that can show the differences is chosen for rendering.",
+            "Table 4. Ablation Study of Reaction Generation and MoCap."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=\"2\">Designs</td><td rowspan=\"2\"></td><td colspan=\"3\">Dual-Human</td></tr><tr><td>MPJPE↓</td><td>PA↓</td><td>Transl ↓</td></tr><tr><td rowspan=\"3\">Reaction Generation</td><td>(a) W/o motion VAE</td><td>64.4</td><td>52.8</td><td>115.7</td></tr><tr><td>(b) Replace INN with MLPs</td><td>66.2</td><td>53.1</td><td>127.5</td></tr><tr><td>(c) W/o noise augmentation</td><td>77.4</td><td>60.5</td><td>141.3</td></tr><tr><td rowspan=\"4\">MoCap</td><td>(a) W/o interaction attention</td><td>70.3</td><td>55.9</td><td>125.5</td></tr><tr><td>(b) W/o reaction priors</td><td>67.9</td><td>54.2</td><td>118.2</td></tr><tr><td>(c) W/o temporal network</td><td>63.6</td><td>51.8</td><td>128.3</td></tr><tr><td>(d) Ours (full model)</td><td>63.4</td><td>51.2</td><td>112.1</td></tr></table>",
+        "bbox": [
+            81,
+            372,
+            464,
+            484
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            535,
+            470,
+            595
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "For the MoCap framework, we validate the effectiveness of three components: interaction-aware self-attention, reaction priors, and temporal network. The interaction-aware self-attention is crucial for the pose estimator as it not only enhance the performance but also accelerates the convergence, as shown in Fig. 8. It can also be observed that the reaction priors improve both the pose and translation accuracy, and the improvement is more significant for motions that have severe occlusions. Besides, the temporal network (SmoothNet we used) mainly reduces the translation error.",
+        "bbox": [
+            75,
+            595,
+            470,
+            747
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "5.4. Limitation and Future Work",
+        "text_level": 2,
+        "bbox": [
+            76,
+            756,
+            334,
+            771
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Our method still has several limitations. First, our reaction priors cannot handle interactions that are very different from the motions in our dataset. Furthermore, for input cases with no interactions, very large values of $\\lambda _ { p r i o r }$ are likely to produce false interaction motions. Second, despite that we focus on two-person close interactions, our assumption that a scene must have two people is relatively limited, requiring additional processes for more than two people.",
+        "bbox": [
+            75,
+            780,
+            470,
+            901
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "chart",
+        "img_path": "images/856887c310dba1b1a1a73e0a0ea6a7a96d648d9fa62a41fb1998b2ebd9cb5353.jpg",
+        "content": "",
+        "chart_caption": [],
+        "chart_footnote": [],
+        "bbox": [
+            500,
+            375,
+            699,
+            468
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "chart",
+        "img_path": "images/81bd1dfa74fc7e0846f5e148f1d034772b3101b7893b05f9b37aee45bd29e2fd.jpg",
+        "content": "",
+        "chart_caption": [
+            "Figure 8. Convergence Comparisons. Left: interaction-aware self-attention v.s. the vanilla attention for the pose estimator. Right: INN v.s. MLPs for the reaction generator."
+        ],
+        "chart_footnote": [],
+        "bbox": [
+            702,
+            375,
+            890,
+            468
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "For future work, we will further expand the scale and variety of Dual-Human to cover more interactions. Notice that we also provide text descriptions for the motions in Dual-Human, which means this dataset may also be potentially used for research on multi-modal (e.g., text, image, etc.) interacted motion generation.",
+        "bbox": [
+            496,
+            549,
+            893,
+            641
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "6. Conclusion",
+        "text_level": 2,
+        "bbox": [
+            500,
+            654,
+            619,
+            670
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "In this work, we attack a challenging problem, i.e., capturing closely interacted two-person motions from monocular videos. Specifically, we introduce reaction priors to quantitatively describe the probability distribution of one person’s pose conditioned on the other’s, and propose an effective two-person MoCap framework by incorporating the learned reaction priors with a decoder-only Transformer-based human pose estimator. Apart from the technical contributions, we also build Dual-Human, a large-scale high-quality dataset on closely interacted two-person motions that contains 2k richly annotated (multi-view renderings, contact annotations, and text descriptions) motions. We believe our work provides a sound foundation for further research on human-human interaction capture.",
+        "bbox": [
+            496,
+            679,
+            895,
+            891
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "page_number",
+        "text": "662",
+        "bbox": [
+            485,
+            945,
+            511,
+            957
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "References",
+        "text_level": 2,
+        "bbox": [
+            78,
+            89,
+            176,
+            106
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "list",
+        "sub_type": "ref_text",
+        "list_items": [
+            "[1] Fabien Baradel, Romain Bregier, Thibault Groueix, Philippe´ Weinzaepfel, Yannis Kalantidis, and Gregory Rogez. Pose-´ bert: A generic transformer module for temporal 3d human modeling. IEEE TPAMI, 2022. 2",
+            "[2] Vasileios Belagiannis, Sikandar Amin, Mykhaylo Andriluka, Bernt Schiele, Nassir Navab, and Slobodan Ilic. 3d pictorial structures for multiple human pose estimation. In CVPR, pages 1669–1676, 2014. 2",
+            "[3] Michael J Black, Priyanka Patel, Joachim Tesch, and Jinlong Yang. Bedlam: A synthetic dataset of bodies exhibiting detailed lifelike animated motion. In CVPR, pages 8726–8737, 2023. 7",
+            "[4] Federica Bogo, Angjoo Kanazawa, Christoph Lassner, Peter Gehler, Javier Romero, and Michael J Black. Keep it smpl: Automatic estimation of 3d human pose and shape from a single image. In ECCV, pages 561–578, 2016. 2",
+            "[5] Michael Buttner and Simon Clavet. Motion matching and¨ the road to next-gen animation, 2015. 3",
+            "[6] Xin Chen, Biao Jiang, Wen Liu, Zilong Huang, Bin Fu, Tao Chen, and Gang Yu. Executing your commands via motion diffusion in latent space. In CVPR, pages 18000–18010, 2023. 4",
+            "[7] Baptiste Chopin, Hao Tang, Naima Otberdout, Mohamed Daoudi, and Nicu Sebe. Interaction transformer for human reaction generation. IEEE TMM, 2023. 2, 5",
+            "[8] Laurent Dinh, Jascha Sohl-Dickstein, and Samy Bengio. Density estimation using real nvp. In ICLR, 2016. 4",
+            "[9] Junting Dong, Qi Fang, Wen Jiang, Yurou Yang, Qixing Huang, Hujun Bao, and Xiaowei Zhou. Fast and robust multi-person 3d pose estimation and tracking from multiple views. IEEE TPAMI, 44(10):6981–6992, 2021. 2",
+            "[10] Qi Fang, Qing Shuai, Junting Dong, Hujun Bao, and Xiaowei Zhou. Reconstructing 3d human pose by watching humans in the mirror. In CVPR, pages 12814–12823, 2021. 2",
+            "[11] Qi Fang, Kang Chen, Yinghui Fan, Qing Shuai, Jiefeng Li, and Weidong Zhang. Learning analytical posterior probability for human mesh recovery. In CVPR, pages 8781–8791, 2023. 1",
+            "[12] Mihai Fieraru, Mihai Zanfir, Elisabeta Oneata, Alin-Ionut Popa, Vlad Olaru, and Cristian Sminchisescu. Threedimensional reconstruction of human interactions. In CVPR, pages 7214–7223, 2020. 2, 3, 6, 7",
+            "[13] Mihai Fieraru, Mihai Zanfir, Teodor Szente, Eduard Bazavan, Vlad Olaru, and Cristian Sminchisescu. Remips: Physically consistent 3d reconstruction of multiple interacting people under weak supervision. NeurIPS, 34:19385–19397, 2021. 2",
+            "[14] Andrew Gilbert, Matthew Trumble, Charles Malleson, Adrian Hilton, and John Collomosse. Fusing visual and inertial sensors with semantics for 3d human pose estimation. IJCV, 127(4):381–397, 2019. 2",
+            "[15] Aman Goel, Qianhui Men, and Edmond SL Ho. Interaction mix and match: Synthesizing close interaction using conditional hierarchical gan with multi-hot class embedding. In Comput. Graph. Forum, pages 327–338, 2022. 2",
+            "[16] Shubham Goel, Georgios Pavlakos, Jathushan Rajasegaran, Angjoo Kanazawa, and Jitendra Malik. Humans in 4D: Reconstructing and tracking humans with transformers. In ICCV, 2023. 2, 5, 7",
+            "[17] Chuan Guo, Shihao Zou, Xinxin Zuo, Sen Wang, Wei Ji, Xingyu Li, and Li Cheng. Generating diverse and natural 3d human motions from text. In CVPR, 2022. 4",
+            "[18] Wen Guo, Xiaoyu Bie, Xavier Alameda-Pineda, and Francesc Moreno-Noguer. Multi-person extreme motion prediction. In CVPR, pages 13053–13064, 2022. 3, 6",
+            "[19] Mohamed Hassan, Vasileios Choutas, Dimitrios Tzionas, and Michael J Black. Resolving 3d human pose ambiguities with 3d scene constraints. In ICCV, pages 2282–2292, 2019. 2",
+            "[20] Gustav Eje Henter, Simon Alexanderson, and Jonas Beskow. Moglow: Probabilistic and controllable motion synthesis using normalising flows. ACM TOG, 39(6):1–14, 2020. 2",
+            "[21] Daniel Holden, Oussama Kanoun, Maksym Perepichka, and Tiberiu Popa. Learned motion matching. ACM TOG, 39(4): 53–1, 2020. 2",
+            "[22] Tao Hu, Xinyan Zhu, Wei Guo, Kehua Su, et al. Efficient interaction recognition through positive action representation. Mathematical Problems in Engineering, 2013, 2013. 2",
+            "[23] Wen Jiang, Nikos Kolotouros, Georgios Pavlakos, Xiaowei Zhou, and Kostas Daniilidis. Coherent reconstruction of multiple humans from a single image. In CVPR, pages 5579– 5588, 2020. 7",
+            "[24] Hanbyul Joo, Tomas Simon, Xulong Li, Hao Liu, Lei Tan, Lin Gui, Sean Banerjee, Timothy Scott Godisart, Bart Nabbe, Iain Matthews, Takeo Kanade, Shohei Nobuhara, and Yaser Sheikh. Panoptic studio: A massively multiview system for social interaction capture. IEEE TPAMI, 2017. 2",
+            "[25] Durk P Kingma and Prafulla Dhariwal. Glow: Generative flow with invertible 1x1 convolutions. NeurIPS, 31, 2018. 4",
+            "[26] Woo-Ri Ko, Minsu Jang, Jaeyeon Lee, and Jaehong Kim. Air-act2act: Human–human interaction dataset for teaching non-verbal social behaviors to robots. IJRR, 40(4-5):691– 697, 2021. 3",
+            "[27] Muhammed Kocabas, Nikos Athanasiou, and Michael J Black. Vibe: Video inference for human body pose and shape estimation. In CVPR, pages 5253–5263, 2020. 2",
+            "[28] Muhammed Kocabas, Chun-Hao P Huang, Otmar Hilliges, and Michael J Black. Pare: Part attention regressor for 3d human body estimation. In ICCV, pages 11127–11137, 2021. 1",
+            "[29] Nikos Kolotouros, Georgios Pavlakos, Dinesh Jayaraman, and Kostas Daniilidis. Probabilistic modeling for human mesh recovery. In ICCV, pages 11605–11614, 2021. 2",
+            "[30] Jogendra Nath Kundu, Himanshu Buckchash, Priyanka Mandikal, Anirudh Jamkhandi, Venkatesh Babu Radhakrishnan, et al. Cross-conditioned recurrent networks for longterm synthesis of inter-person human motion interactions. In WACV, pages 2724–2733, 2020. 2",
+            "[31] Jiefeng Li, Siyuan Bian, Qi Liu, Jiasheng Tang, Fan Wang, and Cewu Lu. Niki: Neural inverse kinematics with invertible neural networks for 3d human pose and shape estimation. In CVPR, pages 12933–12942, 2023. 4"
+        ],
+        "bbox": [
+            84,
+            114,
+            468,
+            170
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "page_number",
+        "text": "663",
+        "bbox": [
+            485,
+            945,
+            511,
+            957
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "list",
+        "sub_type": "ref_text",
+        "list_items": [
+            "[32] Zhihao Li, Jianzhuang Liu, Zhensong Zhang, Songcen Xu, and Youliang Yan. Cliff: Carrying location information in full frames into human pose and shape estimation. In ECCV, pages 590–606, 2022. 1, 7, 8",
+            "[33] Han Liang, Wenqian Zhang, Wenxuan Li, Jingyi Yu, and Lan Xu. Intergen: Diffusion-based multi-human motion generation under complex interactions. arXiv, 2023. 2, 3, 6",
+            "[34] Huan Liu, Qiang Chen, Zichang Tan, Jiangjiang Liu, Jian Wang, Xiangbo Su, Xiaolong Li, Kun Yao, Junyu Han, Errui Ding, Yao Zhao, and Jingdong Wang. Group pose: A simple baseline for end-to-end multi-person pose estimation. In ICCV, 2023. 5",
+            "[35] Jun Liu, Amir Shahroudy, Mauricio Perez, Gang Wang, Ling-Yu Duan, and Alex C Kot. Ntu rgb+ d 120: A largescale benchmark for 3d human activity understanding. IEEE TPAMI, 42(10):2684–2701, 2019. 3",
+            "[36] Dushyant Mehta, Oleksandr Sotnychenko, Franziska Mueller, Weipeng Xu, Srinath Sridhar, Gerard Pons-Moll, and Christian Theobalt. Single-shot multi-person 3d pose estimation from monocular rgb. In 3DV, 2018. 2",
+            "[37] Dushyant Mehta, Oleksandr Sotnychenko, Franziska Mueller, Weipeng Xu, Mohamed Elgharib, Pascal Fua, Hans-Peter Seidel, Helge Rhodin, Gerard Pons-Moll, and Christian Theobalt. Xnect: Real-time multi-person 3d motion capture with a single rgb camera. ACM TOG, 39(4): 82–1, 2020. 2",
+            "[38] Qianhui Men, Hubert PH Shum, Edmond SL Ho, and Howard Leung. Gan-based reactive motion synthesis with class-aware discriminators for human–human interaction. Computers & Graphics, 102:634–645, 2022. 2",
+            "[39] Gyeongsik Moon, Ju Yong Chang, and Kyoung Mu Lee. Camera distance-aware top-down approach for 3d multiperson pose estimation from a single rgb image. In ICCV, pages 10133–10142, 2019. 1, 2",
+            "[40] Lea Muller, Vickie Ye, Georgios Pavlakos, Michael Black,¨ and Angjoo Kanazawa. Generative proxemics: A prior for 3d social interaction from images. arXiv preprint arXiv:2306.09337, 2023. 2, 7, 8",
+            "[41] Sungchan Park, Eunyi You, Inhoe Lee, and Joonseok Lee. Towards robust and smooth 3d multi-person pose estimation from monocular videos in the wild. In ICCV, pages 14772– 14782, 2023. 2",
+            "[42] Priyanka Patel, Chun-Hao P Huang, Joachim Tesch, David T Hoffmann, Shashank Tripathi, and Michael J Black. Agora: Avatars in geography optimized for regression analysis. In CVPR, pages 13468–13478, 2021. 2",
+            "[43] Georgios Pavlakos, Vasileios Choutas, Nima Ghorbani, Timo Bolkart, Ahmed AA Osman, Dimitrios Tzionas, and Michael J Black. Expressive body capture: 3d hands, face, and body from a single image. In CVPR, pages 10975– 10985, 2019. 2, 3, 7",
+            "[44] Ilya A Petrov, Riccardo Marin, Julian Chibane, and Gerard Pons-Moll. Object pop-up: Can we infer 3d objects and their poses from human interactions alone? In CVPR, pages 4726–4736, 2023. 1",
+            "[45] Mathis Petrovich, Michael J Black, and Gul Varol. Action-¨ conditioned 3d human motion synthesis with transformer vae. In ICCV, pages 10985–10995, 2021. 4",
+            "[46] Davis Rempe, Tolga Birdal, Aaron Hertzmann, Jimei Yang, Srinath Sridhar, and Leonidas J Guibas. Humor: 3d human motion model for robust pose estimation. In ICCV, pages 11488–11499, 2021. 2, 3",
+            "[47] Danilo Rezende and Shakir Mohamed. Variational inference with normalizing flows. In ICML, pages 1530–1538, 2015. 4",
+            "[48] Gregory Rogez, Philippe Weinzaepfel, and Cordelia Schmid. Lcr-net++: Multi-person 2d and 3d pose detection in natural images. IEEE TPAMI, 2019. 2",
+            "[49] Hendra Setiawan, Matthias Sperber, Udhay Nallasamy, and Matthias Paulik. Variational neural machine translation with normalizing flows. In ACL, 2020. 4",
+            "[50] Karthik Shetty, Annette Birkhold, Srikrishna Jaganathan, Norbert Strobel, Markus Kowarschik, Andreas Maier, and Bernhard Egger. Pliks: A pseudo-linear inverse kinematic solver for 3d human body estimation. In CVPR, pages 574– 584, 2023. 1",
+            "[51] Ke Sun, Bin Xiao, Dong Liu, and Jingdong Wang. Deep high-resolution representation learning for human pose estimation. In CVPR, pages 5693–5703, 2019. 5, 6",
+            "[52] Peize Sun, Jinkun Cao, Yi Jiang, Rufeng Zhang, Enze Xie, Zehuan Yuan, Changhu Wang, and Ping Luo. Transtrack: Multiple object tracking with transformer. arXiv, 2020. 5",
+            "[53] Yu Sun, Qian Bao, Wu Liu, Yili Fu, Michael J Black, and Tao Mei. Monocular, one-stage, regression of multiple 3d people. In ICCV, pages 11179–11188, 2021. 2",
+            "[54] Yu Sun, Wu Liu, Qian Bao, Yili Fu, Tao Mei, and Michael J Black. Putting people in their place: Monocular regression of 3d people in depth. In CVPR, pages 13243–13252, 2022. 1, 2, 7, 8",
+            "[55] Yu Sun, Qian Bao, Wu Liu, Tao Mei, and Michael J Black. Trace: 5d temporal regression of avatars with dynamic cameras in 3d environments. In CVPR, pages 8856–8866, 2023. 1, 2, 7",
+            "[56] Coert Van Gemeren, Ronald Poppe, and Remco C Veltkamp. Spatio-temporal detection of fine-grained dyadic human interactions. In International Workshop on Human Behavior Understanding, pages 116–133, 2016. 3",
+            "[57] Timo Von Marcard, Roberto Henschel, Michael J Black, Bodo Rosenhahn, and Gerard Pons-Moll. Recovering accurate 3d human pose in the wild using imus and a moving camera. In ECCV, pages 601–617, 2018. 3, 6",
+            "[58] Ziniu Wan, Zhengjia Li, Maoqing Tian, Jianbo Liu, Shuai Yi, and Hongsheng Li. Encoder-decoder with multi-level attention for 3d human shape and pose estimation. In ICCV, pages 13033–13042, 2021. 2",
+            "[59] Tao Wang, Jianfeng Zhang, Yujun Cai, Shuicheng Yan, and Jiashi Feng. Direct multi-view multi-person 3d pose estimation. NeurIPS, 34:13153–13164, 2021. 2, 5",
+            "[60] Zitian Wang, Xuecheng Nie, Xiaochao Qu, Yunpeng Chen, and Si Liu. Distribution-aware single-stage models for multiperson 3d pose estimation. In CVPR, pages 13096–13105, 2022. 2",
+            "[61] Yabo Xiao, Kai Su, Xiaojuan Wang, Dongdong Yu, Lei Jin, Mingshu He, and Zehuan Yuan. Querypose: Sparse multiperson pose regression via spatial-aware part-level query. NeurIPS, 35:12464–12477, 2022. 5"
+        ],
+        "bbox": [
+            78,
+            93,
+            468,
+            147
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "page_number",
+        "text": "664",
+        "bbox": [
+            485,
+            945,
+            511,
+            957
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "list",
+        "sub_type": "ref_text",
+        "list_items": [
+            "[62] Xianghui Xie, Bharat Lal Bhatnagar, and Gerard Pons-Moll. Visibility aware human-object interaction tracking from single rgb camera. In CVPR, pages 4757–4768, 2023. 1",
+            "[63] Vickie Ye, Georgios Pavlakos, Jitendra Malik, and Angjoo Kanazawa. Decoupling human and camera motion from videos in the wild. In CVPR, pages 21222–21232, 2023. 2",
+            "[64] Xinyu Yi, Yuxiao Zhou, Marc Habermann, Soshi Shimada, Vladislav Golyanik, Christian Theobalt, and Feng Xu. Physical inertial poser (pip): Physics-aware real-time human motion tracking from sparse inertial sensors. In CVPR, pages 13167–13178, 2022. 2",
+            "[65] Yifei Yin, Chen Guo, Manuel Kaufmann, Juan Jose Zarate, Jie Song, and Otmar Hilliges. Hi4d: 4d instance segmentation of close human interaction. In CVPR, pages 17016– 17027, 2023. 2, 3, 6, 7",
+            "[66] Ye Yuan, Umar Iqbal, Pavlo Molchanov, Kris Kitani, and Jan Kautz. Glamr: Global occlusion-aware human mesh recovery with dynamic cameras. In CVPR, pages 11038–11049, 2022. 2",
+            "[67] Kiwon Yun, Jean Honorio, Debaleena Chattopadhyay, Tamara L Berg, and Dimitris Samaras. Two-person interaction detection using body-pose features and multiple instance learning. In CVPRW, pages 28–35, 2012. 3",
+            "[68] Ailing Zeng, Lei Yang, Xuan Ju, Jiefeng Li, Jianyi Wang, and Qiang Xu. Smoothnet: A plug-and-play network for refining human poses in videos. In ECCV, pages 625–642. Springer, 2022. 5",
+            "[69] Siwei Zhang, Yan Zhang, Federica Bogo, Marc Pollefeys, and Siyu Tang. Learning motion priors for 4d human body capture in 3d scenes. In Proceedings of the IEEE/CVF International Conference on Computer Vision, pages 11343– 11353, 2021. 2",
+            "[70] Yuxiang Zhang, Liang An, Tao Yu, Xiu Li, Kun Li, and Yebin Liu. 4d association graph for realtime multi-person motion capture using multiple video cameras. In CVPR, pages 1324–1333, 2020. 2",
+            "[71] Jianan Zhen, Qi Fang, Jiaming Sun, Wentao Liu, Wei Jiang, Hujun Bao, and Xiaowei Zhou. Smap: Single-shot multiperson absolute 3d pose estimation. In ECCV, pages 550– 566, 2020. 1, 2",
+            "[72] Yang Zheng, Ruizhi Shao, Yuxiang Zhang, Tao Yu, Zerong Zheng, Qionghai Dai, and Yebin Liu. Deepmulticap: Performance capture of multiple characters using sparse multiview cameras. In ICCV, pages 6239–6249, 2021. 3",
+            "[73] Binghui Zuo, Zimeng Zhao, Wenqian Sun, Wei Xie, Zhou Xue, and Yangang Wang. Reconstructing interacting hands with interaction prior from monocular images. In ICCV, pages 9054–9064, 2023. 2"
+        ],
+        "bbox": [
+            78,
+            93,
+            468,
+            133
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "page_number",
+        "text": "665",
+        "bbox": [
+            485,
+            945,
+            511,
+            957
+        ],
+        "page_idx": 10
+    }
+]

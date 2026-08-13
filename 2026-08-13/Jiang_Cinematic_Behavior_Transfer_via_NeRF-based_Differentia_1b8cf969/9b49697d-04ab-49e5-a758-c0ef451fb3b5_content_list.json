@@ -1,0 +1,1365 @@
+[
+    {
+        "type": "text",
+        "text": "Cinematic Behavior Transfer via NeRF-based Differentiable Filming",
+        "text_level": 1,
+        "bbox": [
+            138,
+            128,
+            831,
+            151
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Xuekun Jiang<sup>1\\*</sup> Anyi Rao<sup>2\\*</sup> Jingbo Wang<sup>1</sup> Dahua Lin<sup>1,3</sup> Bo Dai<sup>1</sup> <sup>1</sup>Shanghai AI Lab <sup>2</sup>Stanford University <sup>3</sup>Chinese University of Hong Kong \\* denotes equal contribution",
+        "bbox": [
+            181,
+            180,
+            790,
+            233
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "anyirao@stanford.edu {jiangxuekun, wangjingbo, daibo}@pjlab.org.cn",
+        "bbox": [
+            191,
+            236,
+            774,
+            252
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/0a8d85ff59711277809967c69469607e950f4819ab23aed446e649ee105fa25d.jpg",
+        "image_caption": [
+            "Figure 1. Given a film shot, a series of visual continuous frames, containing complex camera movement and character motion, we present an approach that estimates the camera trajectory and character motion in world coordinates. The extracted camera and characters’ behavior can be applied to new 2D/3D content through our cinematic transfer pipeline. 2D cinematic transfer aims to substitute the characters in the original shot with new 3D characters while preserving the identical character motion and camera movements. 3D cinematic transfer can apply the movements of characters and cameras to new characters and scenes, providing more flexibility to modify various properties, such as lighting, character motion, and camera trajectory."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            78,
+            281,
+            890,
+            484
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Abstract",
+        "text_level": 2,
+        "bbox": [
+            233,
+            587,
+            313,
+            602
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "In the evolving landscape ofdigital media and video pro duction, the precise manipulation and reproduction ofvisual elements like camera movements and character actions are highly desired. Existing SLAM methodsface limitations in dynamic scenes and human pose estimation oftenfocuses on 2D projections, neglecting 3D statuses. To address these issues, we first introduce a reverse filming behavior estimation technique. It optimizes camera trajectories by leveraging NeRF as a differentiable renderer and refining SMPL tracks. We then introduce a cinematic transfer pipeline that is able to transfer various shot types to a new 2D video or a 3D virtual environment. The incorporation of 3D engine workflow enables superior rendering and control abilities, which also achieves a higher rating in the user study.",
+        "bbox": [
+            75,
+            617,
+            472,
+            832
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "1. Introduction",
+        "text_level": 2,
+        "bbox": [
+            76,
+            844,
+            209,
+            861
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "With the ongoing increase in media consumption, creators are consistently exploring innovative techniques to enhance the viewing experience, reduce production costs, and create compelling narratives. Thus, the ability to manipulate and reproduce specific visual elements, such as camera movements and character behaviors, has long been a sought-after capability in the realm of digital media and video production, as it helps maintain continuity and transfer a particular style or a unique mood from one scene to another.",
+        "bbox": [
+            75,
+            869,
+            470,
+            901
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            588,
+            893,
+            695
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "It is challenging to replicate specific camera and character behaviors across different video clips. Manually achieving it can be both time-consuming and prone to inconsistencies. Alternatively, one can adopt SLAM [4, 23, 24] and SMPL estimation [13] to respectively recover camera poses and human poses, yet they struggle to handle complex scenarios with both camera and character behaviors. Although SLAM and SMPL estimation can be used together [7, 18, 31] to infer both camera and character behaviors, it still has problems of mismatch with the original shot due to the noise caused by dynamic content. Recently, some researchers [28, 32] took advantage of NeRF [15] to inverse-optimize camera poses with fewer effects from dynamic content. Nevertheless, they required manual preparation of a similar scene as NeRF training data, which significantly diminishes their flexibility and scalability.",
+        "bbox": [
+            496,
+            704,
+            895,
+            901
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "",
+        "bbox": [
+            104,
+            2,
+            181,
+            41
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore.",
+        "bbox": [
+            235,
+            1,
+            810,
+            46
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "page_number",
+        "text": "6723",
+        "bbox": [
+            482,
+            944,
+            516,
+            958
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            90,
+            470,
+            136
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "To address the above challenges, we propose a filming behavior transfer pipeline, that estimates SMPL tracks and camera trajectory of a film shot. The SMPL track is a sequence of human pose. We detect the character motion in reference shot and approximate it by predicting SMPL tracks. While SMPL tracks can be estimated as in previous methods [31], we train a dynamic NeRF [19] to represent the 3D SMPL tracks. We then take NeRF as a differentiable renderer to provide image-level matching supervision for camera trajectory optimization. The optimized camera trajectory can further refine the SMPL tracks, leading to a more accurate estimation of character and camera behaviors. As the above SMPL tracks do not have textures, to meet the artist’s work flow needs, we further develop a 3D engine-based workflow to adapt the SMPL track and camera to new virtual characters, enabling a higher level of control and precision in the creative process, such as changing the lighting or adjusting the speed of the camera movement. With this, we can transfer a variety of shot types, including different shot scales, angles, complex camera movements, and various character numbers, which helps artists create new content with similar cinematic behavior.",
+        "bbox": [
+            75,
+            136,
+            472,
+            468
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Extensive experiments show the capacity of our method to extract reasonable character motions and camera trajectory from a given well-known movie shot and generate new content with a similar cinematic style through a 3D engine workflow.",
+        "bbox": [
+            75,
+            468,
+            472,
+            545
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "2. Related Work",
+        "text_level": 2,
+        "bbox": [
+            76,
+            558,
+            220,
+            574
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Human and Camera Motion Estimation. Extracting human and camera motion from video has attracted increasing attention from researchers in recent years. Most recent methods [3, 6] were just focused on how to estimate the human pose in 3D because of the fixed camera. For dynamic camera trajectory, some approaches [9, 34, 35] have tried to circumvent the issue of camera motion by recovering the human trajectories in global coordinates from the per-frame local human poses. Other researchers [5, 7, 12, 18, 31] have introduced SLAM system into human pose estimation to reconstruct the 4D human pose. Pavlakos et al. [18] proposed a method to reconstructed 3D humans and environments in TV shows. They used COLMAP and NeRF to reconstruct the cameras and dense scene and use this information to recover accurate 3D pose and location of people over shot boundaries and on monocular frames. Ye et al. [31] proposed a method to reconstruct global human trajectories from videos in the wild. They showed that relative camera estimates along with data-driven human motion priors can resolve the scene scale ambiguity and recover global human trajectories. Kocabas et al. [7] proposed to tightly integrate",
+        "bbox": [
+            75,
+            583,
+            472,
+            902
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "SLAM and human motion priors in an optimization that is inspired by bundle adjustment. Unlike the above methods that used SLAM as initialization, our method optimizes camera trajectories by leveraging NeRF as a differentiable renderer. NeRF-based Camera Pose Estimation. NeRF [16] is a popular representation of 3D scenes, which uses a multilayer perceptron (MLP) that evaluates a 5D implicit function estimating the density and radiance emanating from any position in any direction. Yen et al. [32] first proposed to estimate mesh-free camera pose by “inverting” a NeRF. A lot of recent work [1, 2, 8, 10, 14, 25] focused on how to get camera parameters without using SFM, and instead train both camera parameters and NeRF during training using only pictures. Most of them cared more about the quality of the NeRF than the quality of the camera. And iNeRF [32] is limited to its slow inference speed and it’s very sensitive to the initial parameters of the camera. To address these problems, Lin et al. [11] improved it via 1) using Instant NGP to replace the native NeRF [17]; 2) introducing parallel Monte Carlo sampling to overcome local minima and improved efficiency in a more extensive search space of camera parameters. Wang et al. [33] proposed a feature-driven cinematic motion transfer technique. It replicated the camera sequences from movies to a trained NeRF to let the generated video clip maximize the similarity with the reference clip through a designed cinematic loss. Most recent works required manual preparation of a similar scene as NeRF training data. Our approach predict the SMPL tracks from original shot and use a dynamic NeRF to represent it. Hence, our approach eliminates the need for manual scene construction.",
+        "bbox": [
+            496,
+            90,
+            897,
+            547
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "3. Method",
+        "text_level": 2,
+        "bbox": [
+            500,
+            558,
+            591,
+            574
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "In this paper, we propose a method to transfer character and camera behavior from a given single shot to new 2D/3D content. For each shot, we extract its SMPL tracks represent ing the sequence of characters’ motion in world coordinates, and then optimize the camera trajectory based on the SMPL tracks, as detailed in Sec. 3.1 and Sec. 3.2. Finally, we used the SMPL tracks and the camera trajectory to create new content through a full 3D engine workflow in Sec. 3.3.",
+        "bbox": [
+            496,
+            583,
+            895,
+            705
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "3.1. Human Pose and Camera Estimation",
+        "text_level": 2,
+        "bbox": [
+            500,
+            710,
+            823,
+            727
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Due to the coupling of character and camera movement in a video, it is hard to obtain accurate human motions in world coordinates. We need to estimate a camera trajectory in the world coordinates to decouple the human and camera motions to eliminate the ambiguity of scene scale in camera space. Typically, we utilize SLAM (simultaneous localization and mapping) to extract the camera trajectory. Given a single shot V with T frames, $V ~ = ~ \\{ I _ { 1 } , \\ldots , I _ { T } \\}$ with N characters, we first predict a starting camera trajectory $\\hat { C } = \\{ \\hat { c } _ { t } \\} _ { t = 1 } ^ { T }$ in world coordinates with SLAM method. And then we predict N SMPL tracks $S _ { c } = \\{ S _ { c , n } \\} _ { n = 1 } ^ { N }$ in camera coordinates. $N$ means the number of people in video. With $S _ { c }$ and ${ \\hat { C } } ,$ , we can compute the SMPL tracks $S _ { w }$ in world coordinates with a 4D human reconstruction method $f _ { \\mathcal { H } }$",
+        "bbox": [
+            496,
+            734,
+            895,
+            902
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "page_number",
+        "text": "6724",
+        "bbox": [
+            482,
+            944,
+            516,
+            958
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "image",
+        "img_path": "images/2c67b3d06aeb299f2bfd44441292f39aaa4282031dac7880769858ec077daeb8.jpg",
+        "image_caption": [
+            "Figure 2. The overview of our differentiable pipeline of characters’ motion and camera trajectory estimation. Given a shot video, we first extract SMPL tracks in camera coordinates and a camera trajectory in world coordinates. Then, we reconstruct the motions of all characters in world coordinates by a 4D human reconstruction method. Finally, we optimize camera trajectories by leveraging NeRF as a differentiable renderer and refine SMPL tracks."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            88,
+            88,
+            892,
+            250
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            320,
+            470,
+            367
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "equation",
+        "img_path": "images/c972fbdec6d7d9cc089e0c7b55d305577a1ed600b5a4f1956f2397404daf529d.jpg",
+        "text": "$$\nS _ { w } = f _ { \\mathcal { H } } ( S _ { c } , \\hat { C } ) .\\tag{1}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            210,
+            376,
+            333,
+            392
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Although the starting camera trajectory $\\hat { C }$ predicted from V can resolve the scene scale ambiguity and help us to recover the human motions in world coordinates, $\\hat { \\hat { C } }$ suffers from the errors caused by the dynamic content in V . We propose to optimize a new camera trajectory $C ^ { * } = \\{ c _ { t } ^ { * } \\} _ { t = 1 } ^ { T }$ based on $S _ { w }$ via a differential render NeRF to add image-level supervision.",
+        "bbox": [
+            75,
+            401,
+            470,
+            507
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "NeRF represents a 3D scene in a differentiable way that can render an image with a given camera pose. This also means that, for a trained NeRF, we can figure out an optimal camera pose that renders frames that match our reference shot V. Towards this goal, we train a dynamic NeRF $f _ { \\mathcal { D } } ( \\Theta , t )$ to capture the character motion tracks $S _ { w } .$ . Hence, the camera trajectory optimization can be treated as an inverted optimization, which takes a trained NeRF as a differentiable render and uses the NeRF backpass gradients to find the optimal camera parameters.",
+        "bbox": [
+            75,
+            507,
+            472,
+            660
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "equation",
+        "img_path": "images/c21f07374bc444a6b3c335abaf7bf1a189fa094b6caa9f5aa090500f9ccb808a.jpg",
+        "text": "$$\nc _ { t } ^ { * } = \\underset { c _ { t } \\in \\mathrm { S E } ( 3 ) } { \\mathrm { a r g m i n } } \\mathcal { L } ( c _ { t } \\mid I _ { t } , \\Theta ) ,\\tag{2}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            181,
+            669,
+            362,
+            695
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "where Θ is the parameters of NeRF, $I _ { t }$ is the reference shot frame image in time t. Due to the lack of background and details of the approximation scene of SMPL, our method can not compute the loss directly from the RGB images like iNeRF [32], and optical flow or human pose like JAWS [28]. To tackle the above issues, we introduce two losses: a composition loss $\\mathcal { L } _ { c }$ and a joint loss ${ \\mathcal { L } } _ { j } .$ i) The composition loss $\\mathcal { L } _ { c }$ is calculated by an instant mask image for the original image and the NeRF rendered image. For the mask images, We color the pixels of each human mask to match the vertex color of the corresponding SMPL model and color the rest of pixels white. Due to the lack of detail in SMPL, the clothes of the people will affect the results, especially some special clothing styles such as ornate gowns. To solve this problem, we introduce the second loss. ii) The joint loss $\\mathcal { L } _ { j }$ is calculated by the joint distances between the original image and the rendered image. For the original image, we predict the joints 2D coordinates of each character as the ground truth by ViTPose [30]. For the rendered image, we reproject the SMPL joints in 3D to 2D by optimized camera pose. The final loss is a weighted sum of $\\mathcal { L } _ { c }$ and $\\mathcal { L } _ { j }$",
+        "bbox": [
+            75,
+            704,
+            472,
+            902
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            320,
+            893,
+            443
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "After the optimization, we obtain a more accurate camera trajectory $C ^ { * }$ . Compared to the starting camera trajectory $\\hat { C }$ predicted solely by SMPL, it can better align the reconstructed image framing with the original shot by using NeRF as the differentiable renderer with two image-level losses. Since a more reasonable camera trajectory leads to better SMPL tracks in world coordinates, we can update Eq. (1) and compute more accurate SMPL tracks,",
+        "bbox": [
+            496,
+            441,
+            895,
+            563
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "equation",
+        "img_path": "images/32afdf8d5935a81ffea67755bb59430491992c82ab4046f86312efecc8536244.jpg",
+        "text": "$$\nS _ { w } ^ { * } = f _ { \\mathcal { H } } ( S _ { c } , C ^ { * } ) .\n$$",
+        "text_format": "latex",
+        "bbox": [
+            630,
+            568,
+            759,
+            585
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "3.2. Camera Trajectory Optimization",
+        "text_level": 2,
+        "bbox": [
+            500,
+            590,
+            792,
+            607
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "(3)",
+        "bbox": [
+            870,
+            569,
+            892,
+            584
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "A key step in the above optimization is to optimize the camera trajectory. Nevertheless, using NeRF to directly regress the values in the transformation matrix $c ^ { * }$ does not guarantee that the optimized result remains in the $S E ( 3 )$ manifold.",
+        "bbox": [
+            498,
+            613,
+            893,
+            674
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Preliminary on optimiazation parameters. In most NeRFbased pose estimation works [32], the camera pose is defined as a transform matrix $c ^ { * } \\in S E ( 3 )$ in world coordinates, and is estimated by a trained NeRF model. To ensure the estimated pose still lies in the SE(3) manifold during gradientbased optimization, the camera pose $c ^ { * }$ is represented by an initial pose estimate $c ^ { \\mathrm { i n i t } } \\in S E ( 3 )$ and a transformation matrix A with exponential coordinates:",
+        "bbox": [
+            496,
+            675,
+            895,
+            796
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "equation",
+        "img_path": "images/e0462df5bfce67133990e93e19fdcb4c7d0baf987778209257e80c5086c09f68.jpg",
+        "text": "$$\n\\begin{array} { r l } & { c ^ { * } = A c ^ { \\mathrm { i n i t } } , } \\\\ & { \\mathrm { w h e r e } ~ A = e ^ { [ S ] \\theta } = \\left[ { e ^ { [ w ] \\theta } } \\quad f _ { K ( \\theta , w , v ) } \\right] , } \\\\ & { f _ { K ( \\theta , w , v ) } = ( I \\theta + ( 1 - \\cos \\theta ) [ w ] + ( \\theta - \\sin \\theta [ w ] ^ { 2 } ) ) v _ { \\bot } } \\\\ & { \\ f _ { K ( \\theta , w , v ) } = ( I \\theta + ( 1 - \\cos \\theta ) [ w ] + ( \\theta - \\sin \\theta [ w ] ^ { 2 } ) ) v _ { \\bot } } \\end{array}\\tag{4}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            511,
+            811,
+            879,
+            895
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "page_number",
+        "text": "6725",
+        "bbox": [
+            482,
+            944,
+            516,
+            958
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Here $S = [ w , v ] ^ { T }$ represents the screw axis, θ is a magnitude, [w] represents the skew-symmetric $3 \\times 3$ matrix of w. The matrix optimization problem is then equivalent to figuring out the optimal parameters $( \\theta , w , v )$ . With this parameterization according to Eq. (4), the optimal goal is to achieve optimal relative transformation from an initial estimated pose $c ^ { \\mathrm { i n i t } }$",
+        "bbox": [
+            76,
+            90,
+            470,
+            195
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/71d9f9d1b56c21bbeae05cf8f82f9415ff67fabf584fbc82f88a25480bf5847c.jpg",
+        "text": "$$\n\\theta , w , v = \\underset { S \\theta \\in \\mathbb { R } ^ { 6 } } { \\operatorname { a r g m i n } } \\ \\mathcal { L } ( A c ^ { \\mathrm { i n i t } } \\mid I , \\Theta ) .\\tag{5}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            156,
+            198,
+            387,
+            223
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "For each given observed image, the camera parameters $( \\theta , w , v )$ are initialized near 0, and each is drawn from random from a zero-mean normal distribution $\\mathcal { N } ( 0 , \\sigma = 1 0 ^ { - 6 } )$ .",
+        "bbox": [
+            75,
+            231,
+            470,
+            276
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Sequence camera parameters optimization. Existing NeRF-based camera pose estimation works [28, 32] focus on single-camera pose estimation and rarely tackle a sequence. Their primary objective is to ensure that the rendered image resulting from camera optimization closely resembles the target image. Consequently, they often prioritize this visual similarity over the accuracy of the trajectory in 3D world coordinates. They optimized each time camera parameter $c _ { t } ^ { * }$ independently during this process.",
+        "bbox": [
+            75,
+            279,
+            470,
+            416
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "We aim to optimize the camera pose to produce a correct 2D image and predict the correct inverted 3D camera trajectory. Regrettably, constructing a 3D scene and obtain ing a NeRF representation identical to that of a movie shot with complex dynamic content significant challenges. We accurately detect the pose of the character in the reference shot and subsequently estimate it by predicting SMPL tracks. However, the introduction of noise through SMPL predictions amplifies errors in camera pose estimation, leading to an unreasonable camera trajectory in 3D world coordinates. These motivate us to learn a continuous representation of the camera trajectory to prevent mutations.",
+        "bbox": [
+            75,
+            416,
+            472,
+            598
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "As mentioned in Eq. (4), the camera trajectory parameters $c _ { t } ^ { * } \\in C ^ { * }$ for each time step t can be decomposed by an initial pose $c _ { t } ^ { \\mathrm { i n i t } }$ and a transformation matrix $A _ { t }$",
+        "bbox": [
+            75,
+            598,
+            470,
+            645
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/83530849d61a3fba2255d0ea4bf99cef41c10211ad8ed76632b30a6c4b9215a9.jpg",
+        "text": "$$\nc _ { t } ^ { * } = A _ { t } c _ { t } ^ { \\mathrm { i n i t } } .\\tag{6}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            228,
+            655,
+            315,
+            672
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "To learn a continuous representation of the camera trajectory, we use two strategies. First, the initial pose $c _ { t } ^ { \\mathrm { i n i t } }$ is derived from the camera parameters of the preceding moment: $c _ { t } ^ { \\mathrm { i n i t } } = c _ { t - 1 } ^ { \\ast }$ . Second, we defined a continuous function $f _ { A }$ with respect to time t to calculate transformation matrix $A _ { t } \\colon A _ { t } = f _ { A } ( t )$ . The matrix $A _ { t }$ is defined by parameters $( \\theta , w _ { t } , v _ { t } )$ according to Eq. (4). The parameter θ remains constant throughout the entire camera trajectory Therefore, as long as the parameters $w _ { t }$ and $v _ { t }$ are continuous, the continuity of the camera trajectory can be guaranteed. We use two $\\mathrm { M L P } \\ f _ { \\mathcal { W } }$ and $f _ { \\mathcal { V } }$ to predicted the $w _ { t }$ and $v _ { t }$ in each time step t:",
+        "bbox": [
+            75,
+            685,
+            472,
+            867
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/6f2f1518909436bc87b9e1fba9a0e3962629adc5e6e24c72bae1768d5ca1c769.jpg",
+        "text": "$$\n\\begin{array} { c } { { w _ { t } = w _ { 1 } + f _ { \\mathcal { W } } ( t ) , } } \\\\ { { v _ { t } = v _ { 1 } + f _ { \\mathcal { V } } ( t ) . } } \\end{array}\\tag{7}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            209,
+            868,
+            336,
+            904
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "As mentioned in Sec. 3.1, the $S _ { w }$ is projected to the world coordinates by SLAM camera ${ \\hat { C } } ,$ and then we used the $S _ { w }$ to optimize the camera trajectory $C ^ { * }$ . The camera trajectory $C ^ { * }$ is aligned to the SLAM camera ${ \\hat { C } } .$ To calculate the parameters $\\theta , w _ { 1 }$ and $v _ { 1 }$ in the first time step. So we can use the $\\hat { c } _ { 1 }$ as the $c _ { 1 } ^ { \\mathrm { i n i t } }$ to optimise the first camera pose $c _ { 1 } ^ { * }$ according to Eq. (4) that can reduce the computational cost. We use Eq. (5) to optimize the $\\theta , w _ { 1 }$ and $v _ { 1 }$",
+        "bbox": [
+            496,
+            90,
+            893,
+            212
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Finally, we transform Eq. (6) into the following:",
+        "bbox": [
+            517,
+            212,
+            839,
+            228
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/5a66ff21e3e7f3eb099817453aa9fb94871be8689cf9afed714abc578498a909.jpg",
+        "text": "$$\nc _ { t } ^ { * } = f _ { A } ( \\Theta _ { w } , \\Theta _ { v } , \\theta , t ) c _ { t - 1 } ^ { * } , \\quad t \\in [ 2 , t ) ,\\tag{8}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            560,
+            239,
+            830,
+            257
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "where $\\Theta _ { w }$ and $\\Theta _ { v }$ is the parameters of MLP $f _ { \\mathcal { W } }$ and $f _ { \\nu }$ .",
+        "bbox": [
+            498,
+            268,
+            872,
+            285
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "3.3. Transfer via a 3D Engine-based Workflow",
+        "text_level": 2,
+        "bbox": [
+            498,
+            295,
+            857,
+            310
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "With the accurate character and camera behavior estimation, we can transfer them to 2D and 3D content which are shown in Fig. 3 (d) and (e).",
+        "bbox": [
+            498,
+            319,
+            893,
+            364
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "2D cinematic transfer aims to replace characters in an existing film shot with new 3D characters, while keeping the same character motions and camera behavior. For 2D cinematic transfer, we first render a pure video without background $V _ { f }$ with our camera trajectory and the character after retargeting. Then, we remove the foreground characters from the original shot. In this paper, we use an advanced object removal method ProPainter [36], to erase the characters and generate a pure background video $V _ { b }$ . We combine these two videos $V _ { f }$ and $V _ { b }$ to obtain the final results.",
+        "bbox": [
+            496,
+            364,
+            893,
+            516
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "3D cinematic transfer takes character and camera movements and applies them in new characters and scenes, which further allows for adjustments in different aspects like lighting, character motion, camera motion, offering more control and options for personalizing the final result. 3D cinematic transfer is much simpler, which only needs to apply the motion and camera to the virtual scene and render the result. However, compared to the 2D workflow, 3D cinematic transfer has more flexibility. Since the entire scene is in the 3D space, we are free to modify it according to our needs, for example, change the time from night to day (Fig. 3 middle (e)), place a robot in the corner (Fig. 3 below (e)).",
+        "bbox": [
+            496,
+            517,
+            897,
+            699
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "4. Experiments",
+        "text_level": 2,
+        "bbox": [
+            500,
+            712,
+            633,
+            728
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "4.1. Implementation Details.",
+        "text_level": 2,
+        "bbox": [
+            500,
+            736,
+            722,
+            752
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Our implementation is based on ‘torch-ngp’ and Pytorch. We use PHALP [20] for human pose tracking, SLAHMR [31] for 4D human reconstruction, D-NeRF [19] for neural rendering and VitPose [30] for 2D joints prediction. More details are shown in the supplementary.",
+        "bbox": [
+            496,
+            760,
+            893,
+            837
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "4.2. Qualitative Results",
+        "text_level": 2,
+        "bbox": [
+            500,
+            845,
+            684,
+            862
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Our approach can reproduce character movements and camera trajectories from a given shot, replace characters in the frame, or change the scene through an engine-based workflow. Fig. 3 showcases some examples of cinematic transfer from an original film shot to a synthetic environment. Compared with other methods, our method can handle various scenes with single/double/multiple characters. It can also recover various types [21, 22] of shot trajectories, such as Arc, Track, and Push-In.",
+        "bbox": [
+            498,
+            869,
+            893,
+            901
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "page_number",
+        "text": "6726",
+        "bbox": [
+            482,
+            945,
+            516,
+            957
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "image",
+        "img_path": "images/eea9ab74d0185aece07aab4acf5728c4af4a861879be4fd88388063bec2fe4ca.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            80,
+            88,
+            560,
+            415
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "image",
+        "img_path": "images/b2093bdba5b9415b1f24770c6be86481d0da78bbc103f013e6ff55ac10de4e80.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            563,
+            89,
+            888,
+            250
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "image",
+        "img_path": "images/75d57f02b4c7e09987468ccbfff1d7961493f0e4efe6bb69e54dfce4e730d8b4.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            563,
+            252,
+            888,
+            411
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "image",
+        "img_path": "images/0ab74cbf5f0df3c8f07b2585a8a500716b7be5e1fa3cfbf1d9f190fbe77ecf60.jpg",
+        "image_caption": [
+            "(a) Original Shot"
+        ],
+        "image_footnote": [],
+        "bbox": [
+            80,
+            421,
+            240,
+            632
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "image",
+        "img_path": "images/d41507246cfb6f248ffe9b51734b7dc7732174573d265a19e1c41896a7281511.jpg",
+        "image_caption": [
+            "(b) SMPL Visualization"
+        ],
+        "image_footnote": [],
+        "bbox": [
+            240,
+            428,
+            403,
+            631
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "image",
+        "img_path": "images/569b0ebad467f88e03327f0648b95e00e1dbe91dd3b815ee44dcf00d364632c0.jpg",
+        "image_caption": [
+            "(c) Retargeting Visualization"
+        ],
+        "image_footnote": [],
+        "bbox": [
+            403,
+            438,
+            513,
+            631
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "image",
+        "img_path": "images/e380420f76ac59fe3110b6088885feb99397cad1f83bbbb7d047c7b3b72104fa.jpg",
+        "image_caption": [
+            "(d) 2D Transfer Results"
+        ],
+        "image_footnote": [],
+        "bbox": [
+            563,
+            421,
+            725,
+            632
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "image",
+        "img_path": "images/1bed2fb141924d46abae36bd1abe8254e1c602b425a327f60cc15ee74972a359.jpg",
+        "image_caption": [
+            "(e) 3D Transfer Results",
+            "Figure 3. Examples of cinematic behavior transfer. (a) The original shot: we present three common shot types Arc, Track, and Push In. (b) SMPL visualization of our method. We recreate the cinematic behavior by extracting the SMPL tracks and the camera trajectory from the original shot. (c) New Characters retargeting visualization of our method. We apply the motion of SMPL to new character and render images with optimized camera trajectory through our engine workflow. (d) The 2D cinematic transfer results. We erase the characters in the foreground and combine the background video with (c) to generate a new 2D video like (a). (e) The 3D cinematic transfer results. We appl the motion and camera to a new virtual scene, like a cartoon grassland, palace, and SF tunnel."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            727,
+            421,
+            887,
+            631
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            746,
+            472,
+            853
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Specifically, in Fig. 3: (a) The original shot: we present three common shot types Arc, Track, and Push-In. Arc shot orbits the camera around a subject in an arc pattern. Track shot moves the camera through the scene for an extended amount of time. Push-In shot moves the camera closer to a subject. (b) SMPL visualization of our estimation. We extract and optimize the SMPL tracks and the camera trajectory from the original shot, which can reproduce the characters motion and the camera movement. (c) New 3D characters’ retargeting visualization. We retarget the original shot’s SMPL motion to new 3D characters and render images with optimized camera trajectory through our engine workflow. This allows us to further put them into a scene. (d) The 2d cinematic transfer results. We replace any character in the original shot. For instance, we can replace “Mia” and “Sebastian”, the characters in Lalaland, with our own 3D characters or keep “Mia” and replace “Sebastian” with a new 3D character as shown in Fig. 4 (i-b). It is implemented by first using an advanced object removal method [36] to erase the character in the foreground and combining the background video with (c) to generate the final video. (e) The 3d cinematic transfer results. We apply the characters’ motion and camera movement to new 3D characters and a new virtual scene. This provides the user with more freedom of operation, e.g., adjusting the lighting, or modifying the camera.",
+        "bbox": [
+            75,
+            854,
+            470,
+            901
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            746,
+            897,
+            900
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "page_number",
+        "text": "6727",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "image",
+        "img_path": "images/720f66d67ba43736ceeeec7d27d7a60ae5afb10f6addf03fc1bd2ac351068eb7.jpg",
+        "image_caption": [
+            "(ii-c) 3D Cinematic Transfer (char. & camera)"
+        ],
+        "image_footnote": [],
+        "bbox": [
+            500,
+            87,
+            887,
+            386
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "image",
+        "img_path": "images/831a6950650cba920c1dd257c8bf102ea9df77c48203977a2c64c12139ae9635.jpg",
+        "image_caption": [
+            "Figure 4. Flexibility enabled by 3D engine workflows. For 2D cinematic transfer, we can replace any character like (i-b) or (i-c), in shot (i-a). For 3D cinematic transfer, we demonstrate the ability to apply either the camera alone (ii-b) or both character and camera information to new content(ii-c)."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            78,
+            88,
+            468,
+            417
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            506,
+            472,
+            688
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Flexibility of our cinematic transfer. Fig. 4 shows various transfer results with our 3D engine-based workflow. After investigating artist’s workflows, we figured out that to truly meet their needs, the workflow should enable freely using different information extracted from the video, such as the motions of the characters or the movement of the camera. Our approach can well provide this flexibility to explore various creative possibilities: replacing one character and keeping the others within a movie shot (Fig. 4 (i-c)); employing solely the camera trajectory from a movie shot to a new scene with different character motions (Fig. 4 (ii-b)). However, the recent SOTA cinematic transfer method JAWS [28] does not fully support this flexibility. Their workflow can only apply camera trajectory to scenes that closely resemble",
+        "bbox": [
+            75,
+            689,
+            472,
+            902
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "(a) Original Shot",
+        "bbox": [
+            517,
+            385,
+            599,
+            395
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "(b) JAWS",
+        "bbox": [
+            666,
+            383,
+            717,
+            395
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Figure 5. Comparison of the cinematic transfer results with SOTA. Our method demonstrates a better ability to align with the composition of the original shot compared to JAWS [28]. The two shots are from Inception, 2010 (top) and the Matrix, 1999 (below)",
+        "bbox": [
+            498,
+            396,
+            893,
+            452
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "(c) Ours",
+        "bbox": [
+            795,
+            385,
+            841,
+            395
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "the reference video in terms of the number of characters and their relative positions.",
+        "bbox": [
+            498,
+            462,
+            892,
+            491
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Comparison with SOTA in cinematic transfer. JAWS [28] is an optimization-driven approach that addresses the cinematic transfer from a reference clip to a trained NeRF. It used a on-screen loss and a iner-frame loss to cover the framing and camera motion aspects. It is limited to handling highly mismatched character poses due to inter-frame motion. So, it has to hand-craft a scene that is essentially the same as the original shot to train NeRF, which greatly limits its usage scenarios. Additionally, simply adapting JAWS to our setting does not work due to the lack of background and details of the predicting SMPL tracks. To be specific, the RAFT [26] they used for the optical flow estimation cannot work for the rendered SMPL image and LitePose [29] they used to infer the post joint will ignore the inter-frame motion. To achieve a strong comparison with JAWS, we use the shots used in their papers’ experiments, as shown in Fig. 5. Our method restores not only the composition of the shot but also the action of the characters. Although JAWS used a realistic environment similar to the original shot, it does not accurately reproduce the composition of the original shot. We can clearly observe the flaws in the “Matrix” example, where two characters occupy the left and right parts of the image when the camera is pushed to the end. The composition of the characters in JAWS’s results do not closely align with the original footage. Another limitation of JAWS is that it highly relies on dynamic NeRF results, which will easily fail on the complex motion shots that dynamic NeRF cannot handle. As our method does not require background details of the predicting SMPL tracks, our approach has lower quality requirements for NeRF’s quality, which leads to stronger robustness and better performance.",
+        "bbox": [
+            496,
+            493,
+            895,
+            901
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "page_number",
+        "text": "6728",
+        "bbox": [
+            482,
+            945,
+            516,
+            957
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "image",
+        "img_path": "images/ffac9f84bc2299091ffd8fdeb95a21a6bd88071d751d010c335d77f7e6eb2dcb.jpg",
+        "image_caption": [
+            "Figure 6. Comparison of the human pose estimation in world coordinates with SOTA. As shown in the red box, our method has better results in limb details due to the improved optimization of the camera trajectory."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            78,
+            87,
+            468,
+            227
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            300,
+            472,
+            361
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Comparison with SOTA in world coordinates human pose estimation. As we mentioned in Sec. 3.1, when we finished the the camera $C ^ { * }$ optimization with $f _ { \\mathcal { D } } ^ { \\mathrm { ~ ~ } } ,$ , we can bring it into $f _ { \\mathcal { H } }$ and get new SMPL tracks. Fig. 6 compares the human pose estimation results with SOTA methods. Due to the enhanced optimization of the camera trajectory, our method achieves better results in capturing detailed limb poses. Inspired by bundle adjustment, PACE [7] tightly integrates SLAM and human motion priors in optimization. It can handle the shot with that entire character’s body but is limited to dealing with the shot where only the character’s partial body appears. To achieve a strong comparison with PACE, we use the shots used in their papers’ experiments. In Fig. 6 (b), the feet of the figure on the left are not on the ground. Since films contain lots of partial body shots like close-up shot or medium shot, PACE is not very suitable for cinematic transfer. SLAHMR [31] used relative camera estimates along with data-driven human motion priors to resolve the scene scale ambiguity and recover the human trajectories in world coordinates. However, the human pose is likely to fail due to the noise from DROID-SLAM on dynamic content. In the leftmost character shown in the red box of Fig. 6 (c), the arms should be close to the body, while SLAHMR predicts open arms. We do not directly use SLAM’s camera trajectory and utilize NeRF as a differential render to re-optimize the camera pose. Due to the improved optimization of the camera trajectory, our method achieves better results in capturing finer details of limb poses.",
+        "bbox": [
+            75,
+            363,
+            472,
+            787
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "4.3. Quantitative Results",
+        "text_level": 2,
+        "bbox": [
+            76,
+            800,
+            272,
+            816
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Since A key feature in cinematic behavior transfer is to check if the transferred results are similar to the original shot, we test three metrics on the frame composition restoration and conduct a user study to validate users’ satisfaction with 2D and 3D transfer.",
+        "bbox": [
+            75,
+            824,
+            470,
+            901
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "image",
+        "img_path": "images/b1b37571dbdfff1b8703143f107587e2a68451c44a36ec704ed16caddfac2eac.jpg",
+        "image_caption": [
+            "Figure 7. We show the results of the alignment visualization: (a) the original shot, (b) DROID-SLAM, (c) iNeRF, (d) our method."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            504,
+            85,
+            892,
+            462
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Comparison with SOTA on frame composition restoration. Tab. 1 shows the quantitative results between our method with two SOTA camera pose estimation methods DROID-SLAM [27] and iNeRF [32]. DROID-SLAM is a deep learning-based SLAM system with fewer catastrophic failures. iNeRF uses NeRF for mesh-free, RGB-only 6DoF camera pose estimation, which uses RGB pixels as a supervision signal. Due to the lack of background and details of SMPL, we use the composition loss $\\mathcal { L } _ { c }$ instead of RGB loss to implement iNeRF. We test more than 100 well-known film shots that collected from the Internet with multiple styles to show the effectiveness of our method.",
+        "bbox": [
+            496,
+            521,
+            895,
+            703
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "To measure the effect of different methods on restoring picture composition, we use three metrics to evaluate all the methods: 1) Pixel Accuracy (PA): It is the percentage of pixels in the segmentation image that are correctly classified. 2) Intersection over Union (IoU): The overlap between the character segmentation map in the rendered shot and the character segmentation map in the original shot. 3) Mean Per Joint Position Error (MPJPE): The mean Euclidean distance between the predicted key bone point and the true value. As shown in Tab. 1, (i) Changing backgrounds and moving figures can greatly affect SLAM’s accuracy. It can be seen from the three metrics that the position of the characters in the picture rendered by SLAM is greatly offset from the original shot, which means that the SLAM method cannot get the correct camera trajectory. (ii) Since iNeRF only uses RGB pixels as loss, it can not restore the composition of the picture very well. (iii) Our method achieves the best results in all metrics, which shows that our method can accurately restore the composition of the original shot, and the extracted camera trajectory is basically correct.",
+        "bbox": [
+            496,
+            704,
+            895,
+            902
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "page_number",
+        "text": "6729",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "table",
+        "img_path": "images/9817db5732b01abf2fb955392cddba963296ff126c89325f8f270dff9d7002b0.jpg",
+        "table_caption": [
+            "Table 1. Comparison with the state-of-the-art camera pose estimation methods on different shot movement types. Our approach outperforms the other baselines across all metrics."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Shot Move.</td><td colspan=\"2\">PUSH-IN</td><td colspan=\"2\">PULL-OUT</td><td colspan=\"2\"></td><td colspan=\"2\">PAN</td></tr><tr><td>Methods</td><td>PA↑</td><td>IoU↑</td><td>MPJPE↓</td><td>PA↑ IoU↑</td><td>MPJPE↓</td><td>PA↑</td><td>IoU↑</td><td>MPJPE↓</td></tr><tr><td>DROID-SLAM [27]</td><td>86.2</td><td>85.8</td><td>404.9</td><td>86.0</td><td>85.3 356.2</td><td></td><td>91.9 89.6</td><td>40.9</td></tr><tr><td>iNeRF [32]</td><td>89.0</td><td>88.2</td><td>292.6</td><td>92.8</td><td>91.5 83.9</td><td></td><td>83.9 81.0</td><td>109.6</td></tr><tr><td>Ours</td><td>89.9</td><td>88.5</td><td>59.6</td><td>94.8</td><td>94.0 23.8</td><td></td><td>93.4 91.4</td><td>21.4</td></tr><tr><td>Shot Move.</td><td></td><td>TRACK</td><td></td><td></td><td>FOLLOW</td><td></td><td>ARC</td><td></td></tr><tr><td>Methods</td><td>PA↑</td><td>IoU↑</td><td>MPJPE↓</td><td>PA↑</td><td>IoU ↑</td><td>MPJPE↓</td><td>PA↑ IoU↑</td><td>MPJPE↓</td></tr><tr><td>DROID-SLAM [27]</td><td>89.3</td><td>88.3</td><td>109.2</td><td>73.3</td><td>70.5</td><td>1046.9</td><td>92.7</td><td>92.6 145.2</td></tr><tr><td>iNeRF [32]</td><td>90.1</td><td>89.2</td><td>58.5</td><td>85.3</td><td>85.1</td><td>267.5</td><td>90.8 90.5</td><td>116.3</td></tr><tr><td>Ours</td><td>94.5</td><td>93.8</td><td>21.8</td><td>91.3</td><td>90.5</td><td>130.9</td><td>94.8 94.5</td><td>47.9</td></tr></table>",
+        "bbox": [
+            132,
+            88,
+            828,
+            242
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "table",
+        "img_path": "images/8bc256cc7b0aa7d1fa351612b50337aba8387cf3d1fa692ada3c21a0000c9d2e.jpg",
+        "table_caption": [
+            "Table 2. Pair-wise comparison of our method and baseline on content restoration in seven-point Likert scale (lowest-highest:1-7)."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=1 colspan=2>Methods</td><td rowspan=1 colspan=1>SLAM+SMPL</td><td rowspan=1 colspan=1>Ours</td></tr><tr><td rowspan=2 colspan=1>2D restoration</td><td rowspan=2 colspan=1>camera mov.char. motion</td><td rowspan=2 colspan=1>4.7±1.35.5±1.1</td><td rowspan=1 colspan=1>6.0±0.5</td></tr><tr><td rowspan=1 colspan=1>5.8±0.8</td></tr><tr><td rowspan=2 colspan=1>3D restoration</td><td rowspan=2 colspan=1>camera mov.char. motion</td><td rowspan=2 colspan=1>4.4±1.04.9±0.9</td><td rowspan=1 colspan=1>5.3±0.6</td></tr><tr><td rowspan=1 colspan=1>5.0±1.0</td></tr></table>",
+        "bbox": [
+            88,
+            284,
+            450,
+            353
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            397,
+            470,
+            502
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Fig. 7 visualizes the rendered image of different methods. It can be clearly seen that both SLAM and iNeRF rendered images in which character’s positions are obviously offset from the original images. The images rendered by our method are very consistent, indicating that the camera trajectory we obtained is correct.",
+        "bbox": [
+            75,
+            503,
+            472,
+            594
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "User study. To further demonstrate the validity of our method in practice, we conduct a user study on 30 shots from different films among 10 volunteers. Our study focuses on the accurate recovery of the original video on the screen, and the results of the restored characters and camera movements in world coordinates. Volunteers are required to compare the original shot with the 2D and 3D results and to determine how well the two matched up with the seven-point Likert scale (lowest-highest:1-7). To have a strong baseline, we combined DROID-SLAM [27] and SMPL [31] estimation to jointly infer camera and character behaviors. Volunteers were asked to view the original shot and the results of both methods at the same time, and to rate both results. For 2D results, we use the rendered result from camera view like Fig. 5 (c). For 3D, we chose a side view that can see the movement of the character and the camera completely like Fig. 6 (d). In order to make it easier for volunteers to make judgments, we will provide more than two side views.",
+        "bbox": [
+            75,
+            598,
+            472,
+            871
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Tab. 2 shows that: (i) By employing the NeRF technique to re-optimize the camera trajectory, our method received positive feedback from users who perceiving the extracted camera trajectory as more reasonable compared to SLAM method. (ii) Due to the more reasonable camera trajectory to refine SMPL tracks, users have observed enhanced poses in our optimized SMPL, which in turn has created a greater sense of consistency with the original shot characteristics. It is important to acknowledge that in movie shots, the character’s body is often partially visible, which may lead to an accurate visual representation but lacks accuracy in 3D space. For example, the feet may not be properly positioned on the ground but suspended in the air.",
+        "bbox": [
+            75,
+            869,
+            470,
+            901
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            287,
+            895,
+            455
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "5. Discussion and Conclusion",
+        "text_level": 2,
+        "bbox": [
+            500,
+            467,
+            750,
+            483
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "In comparison to previous works, our method exhibits improved performance and robustness across a wide range of scenes. However, our approach still has certain limitations: i) Our approach relies on a starting camera trajectories obtained from SLAM technology to acquire SMPL tracks. Consequently, when the content of a shot changes too rapidly to extract SMPL tracks, our method is unable to produce the correct results. ii) Our approach is specifically designed for shots that prominently feature human subjects. However, in scenarios where the primary focus of a shot shifts towards showcasing the environment or objects, our method transitions into a simplified version resembling a SLAM approach.",
+        "bbox": [
+            496,
+            492,
+            895,
+            674
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "We introduce a reverse filming behavior estimation technique that enables cinematic behavior transfer. It utilizes NeRF as a differentiable renderer, effectively optimizes camera trajectories and refines character movements with SMPL models. Additionally, our innovative cinematic transfer pipeline demonstrates its versatility by efficiently transferring various shot types to both 2D video and 3D virtual environments. The integration of a 3D engine workflow not only enhances rendering quality and control but also garners a higher user satisfaction rating, showcasing the potential of our approach in digital media production.",
+        "bbox": [
+            496,
+            674,
+            897,
+            842
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Acknowledgement. This work is funded in part by National Key R&D Program of China (2022ZD0160201), and Shanghai Artificial Intelligence Laboratory.",
+        "bbox": [
+            496,
+            852,
+            895,
+            898
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "page_number",
+        "text": "6730",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "References",
+        "text_level": 2,
+        "bbox": [
+            78,
+            89,
+            176,
+            106
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "list",
+        "sub_type": "ref_text",
+        "list_items": [
+            "[1] Zezhou Cheng, Carlos Esteves, Varun Jampani, Abhishek Kar, Subhransu Maji, and Ameesh Makadia. Lu-nerf: Scene and pose estimation by synchronizing local unposed nerfs. arXiv preprint arXiv:2306.05410, 2023. 2",
+            "[2] Shin-Fang Chng, Sameera Ramasinghe, Jamie Sherrah, and Simon Lucey. Garf: gaussian activated radiance fields for high fidelity reconstruction and pose estimation. arXiv e-prints, pages arXiv–2204, 2022. 2",
+            "[3] Hongsuk Choi, Gyeongsik Moon, Ju Yong Chang, and Kyoung Mu Lee. Beyond static features for temporally consistent 3d human pose and shape from a video. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, pages 1964–1973, 2021. 2",
+            "[4] Hugh Durrant-Whyte and Tim Bailey. Simultaneous localization and mapping. IEEE robotics & automation magazine, 13 (2):99–110, 2006. 1",
+            "[5] Dorian F Henning, Tristan Laidlow, and Stefan Leutenegger. Bodyslam: joint camera localisation, mapping, and human motion tracking. In European Conference on Computer Vision, pages 656–673. Springer, 2022. 2",
+            "[6] Angjoo Kanazawa, Jason Y Zhang, Panna Felsen, and Jitendra Malik. Learning 3d human dynamics from video. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, pages 5614–5623, 2019. 2",
+            "[7] Muhammed Kocabas, Ye Yuan, Pavlo Molchanov, Yunrong Guo, Michael J. Black, Otmar Hilliges, Jan Kautz, and Umar Iqbal. Pace: Human and motion estimation from in-the-wild videos. In 3DV, 2024. 1, 2, 7",
+            "[8] Axel Levy, Mark Matthews, Matan Sela, Gordon Wetzstein, and Dmitry Lagun. Melon: Nerf with unposed images using equivalence class estimation. arXiv preprint arXiv:2303.08096, 2023. 2",
+            "[9] Jiefeng Li, Siyuan Bian, Chao Xu, Gang Liu, Gang Yu, and Cewu Lu. D &d: Learning human dynamics from dynamic camera. In European Conference on Computer Vision, pages 479–496. Springer, 2022. 2",
+            "[10] Chen-Hsuan Lin, Wei-Chiu Ma, Antonio Torralba, and Simon Lucey. Barf: Bundle-adjusting neural radiance fields. In Proceedings ofthe IEEE/CVF International Conference on Computer Vision, pages 5741–5751, 2021. 2",
+            "[11] Yunzhi Lin, Thomas Muller, Jonathan Tremblay, Bowen Wen,¨ Stephen Tyree, Alex Evans, Patricio A Vela, and Stan Birchfield. Parallel inversion of neural radiance fields for robust pose estimation. In 2023 IEEE International Conference on Robotics and Automation (ICRA), pages 9377–9384. IEEE, 2023. 2",
+            "[12] Miao Liu, Dexin Yang, Yan Zhang, Zhaopeng Cui, James M Rehg, and Siyu Tang. 4d human body capture from egocentric video via 3d scene grounding. In 2021 international conference on 3D vision (3DV), pages 930–939. IEEE, 2021. 2",
+            "[13] Matthew Loper, Naureen Mahmood, Javier Romero, Gerard Pons-Moll, and Michael J Black. Smpl: A skinned multiperson linear model. In Seminal Graphics Papers: Pushing the Boundaries, Volume 2, pages 851–866. 2023. 1",
+            "[14] Quan Meng, Anpei Chen, Haimin Luo, Minye Wu, Hao Su, Lan Xu, Xuming He, and Jingyi Yu. Gnerf: Gan-based neural radiance field without posed camera. In Proceedings ofthe IEEE/CVF International Conference on Computer Vision, pages 6351–6361, 2021. 2",
+            "[15] Ben Mildenhall, Pratul P. Srinivasan, Matthew Tancik, Jonathan T. Barron, Ravi Ramamoorthi, and Ren Ng. Nerf: Representing scenes as neural radiance fields for view synthesis. In ECCV, 2020. 1",
+            "[16] Ben Mildenhall, Pratul P Srinivasan, Matthew Tancik, Jonathan T Barron, Ravi Ramamoorthi, and Ren Ng. Nerf: Representing scenes as neural radiance fields for view synthesis. Communications of the ACM, 65(1):99–106, 2021. 2",
+            "[17] Thomas Muller, Alex Evans, Christoph Schied, and Alexander¨ Keller. Instant neural graphics primitives with a multiresolution hash encoding. ACM Transactions on Graphics (ToG), 41(4):1–15, 2022. 2",
+            "[18] Georgios Pavlakos, Ethan Weber, Matthew Tancik, and Angjoo Kanazawa. The one where they reconstructed 3d humans and environments in tv shows. In European Conference on Computer Vision, pages 732–749. Springer, 2022. 1, 2",
+            "[19] Albert Pumarola, Enric Corona, Gerard Pons-Moll, and Francesc Moreno-Noguer. D-nerf: Neural radiance fields for dynamic scenes. In Proceedings ofthe IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 10318–10327, 2021. 2, 4",
+            "[20] Jathushan Rajasegaran, Georgios Pavlakos, Angjoo Kanazawa, and Jitendra Malik. Tracking people by predicting 3D appearance, location & pose. In CVPR, 2022. 4",
+            "[21] Anyi Rao, Jiaze Wang, Linning Xu, Xuekun Jiang, Qingqiu Huang, Bolei Zhou, and Dahua Lin. A unified framework for shot type classification based on subject centric lens. In Computer Vision–ECCV 2020: 16th European Conference, Glasgow, UK, August 23–28, 2020, Proceedings, Part XI 16, pages 17–34. Springer, 2020. 5",
+            "[22] Anyi Rao, Xuekun Jiang, Yuwei Guo, Linning Xu, Lei Yang, Libiao Jin, Dahua Lin, and Bo Dai. Dynamic storyboard generation in an engine-based virtual environment for video production. In ACM SIGGRAPH 2023 Posters, pages 1–2. 2023. 5",
+            "[23] Johannes Lutz Schonberger and Jan-Michael Frahm.¨ Structure-from-motion revisited. In Conference on Computer Vision and Pattern Recognition (CVPR), 2016. 1",
+            "[24] Johannes Lutz Schonberger, Enliang Zheng, Marc Pollefeys,¨ and Jan-Michael Frahm. Pixelwise view selection for unstructured multi-view stereo. In European Conference on Computer Vision (ECCV), 2016. 1",
+            "[25] Cameron Smith, Yilun Du, Ayush Tewari, and Vincent Sitzmann. Flowcam: Training generalizable 3d radiance fields without camera poses via pixel-aligned scene flow. arXiv preprint arXiv:2306.00180, 2023. 2",
+            "[26] Zachary Teed and Jia Deng. Raft: Recurrent all-pairs field transforms for optical flow. In Computer Vision–ECCV 2020: 16th European Conference, Glasgow, UK, August 23–28, 2020, Proceedings, Part II 16, pages 402–419. Springer, 2020. 6"
+        ],
+        "bbox": [
+            84,
+            114,
+            468,
+            170
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "page_number",
+        "text": "6731",
+        "bbox": [
+            482,
+            945,
+            514,
+            957
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "list",
+        "sub_type": "ref_text",
+        "list_items": [
+            "[27] Zachary Teed and Jia Deng. Droid-slam: Deep visual slam for monocular, stereo, and rgb-d cameras. Advances in neural information processing systems, 34:16558–16569, 2021. 7, 8",
+            "[28] Xi Wang, Robin Courant, Jinglei Shi, Eric Marchand, and Marc Christie. Jaws: Just a wild shot for cinematic transfer in neural radiance fields. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 16933–16942, 2023. 1, 3, 4, 6",
+            "[29] Yihan Wang, Muyang Li, Han Cai, Wei-Ming Chen, and Song Han. Lite pose: Efficient architecture design for 2d human pose estimation. In Proceedings ofthe IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 13126– 13136, 2022. 6",
+            "[30] Yufei Xu, Jing Zhang, Qiming Zhang, and Dacheng Tao. ViTPose: Simple vision transformer baselines for human pose estimation. In Advances in Neural Information Processing Systems, 2022. 3, 4",
+            "[31] Vickie Ye, Georgios Pavlakos, Jitendra Malik, and Angjoo Kanazawa. Decoupling human and camera motion from videos in the wild. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 21222–21232, 2023. 1, 2, 4, 7, 8",
+            "[32] Lin Yen-Chen, Pete Florence, Jonathan T Barron, Alberto Rodriguez, Phillip Isola, and Tsung-Yi Lin. inerf: Inverting neural radiance fields for pose estimation. In 2021 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), pages 1323–1330. IEEE, 2021. 1, 2, 3, 4, 7, 8",
+            "[33] Jung Eun Yoo, Kwanggyoon Seo, Sanghun Park, Jaedong Kim, Dawon Lee, and Junyong Noh. Virtual camera layout generation using a reference video. In Proceedings ofthe CHI Conference on Human Factors in Computing Systems, pages 1–11, 2021. 2",
+            "[34] Ri Yu, Hwangpil Park, and Jehee Lee. Human dynamics from monocular video with dynamic camera movements. ACM Transactions on Graphics (TOG), 40(6):1–14, 2021. 2",
+            "[35] Ye Yuan, Umar Iqbal, Pavlo Molchanov, Kris Kitani, and Jan Kautz. Glamr: Global occlusion-aware human mesh recovery with dynamic cameras. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, pages 11038–11049, 2022. 2",
+            "[36] Shangchen Zhou, Chongyi Li, Kelvin C.K Chan, and Chen Change Loy. ProPainter: Improving propagation and transformer for video inpainting. In Proceedings of IEEE International Conference on Computer Vision (ICCV), 2023. 4, 6"
+        ],
+        "bbox": [
+            78,
+            93,
+            470,
+            133
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "page_number",
+        "text": "6732",
+        "bbox": [
+            482,
+            945,
+            516,
+            957
+        ],
+        "page_idx": 9
+    }
+]

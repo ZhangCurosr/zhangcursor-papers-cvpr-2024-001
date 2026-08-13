@@ -1,0 +1,1462 @@
+[
+    {
+        "type": "text",
+        "text": "Faces that Speak: Jointly Synthesising Talking Face and Speech from Text",
+        "text_level": 1,
+        "bbox": [
+            202,
+            130,
+            766,
+            176
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Youngjoon Jang<sup>^{1\\*}</sup> Ji-Hoon Kim<sup>^{1\\*}</sup> Junseok Ahn<sup>^1</sup> Doyeop Kwak<sup>^1</sup> Hong-Sun Yang<sup>^2</sup> Yoon-Cheol Ju<sup>^2</sup> Il-Hwan Kim<sup>^2</sup> Byeong-Yeol Kim<sup>^2</sup> Joon Son Chung<sup>^1</sup> <sup>1</sup>Korea Advanced Institute of Science and Technology, <sup>2</sup>42dot Inc., Republic of Korea Project page with demo: https://mm.kaist.ac.kr/projects/faces-that-speak",
+        "bbox": [
+            102,
+            202,
+            864,
+            273
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/84d5f58a2dd398bf38609e2df280e66361b07e0733e4b12b5b5f7db04c185506.jpg",
+        "image_caption": [
+            "Figure 1. Our framework integrates Talking Face Generation (TFG) and Text-to-Speech (TTS) systems, generating synchronised natural speech and a talking face video from a single portrait and text input. Our model is capable of variational motion generation by conditioning the TFG model with the intermediate representations of the TTS model. The speech is conditioned using the identity features extracted in the TFG model to align with the input identity."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            138,
+            290,
+            830,
+            478
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Abstract",
+        "text_level": 2,
+        "bbox": [
+            232,
+            554,
+            315,
+            570
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "The goal of this work is to simultaneously generate natural talkingfaces and speech outputsfrom text. We achieve this by integrating Talking Face Generation (TFG) and Text-to-Speech (TTS) systems into a unifiedframework. We address the main challenges of each task: (1) generating a range of head poses representative of real-world scenarios, and (2) ensuring voice consistency despite variations in facial motion for the same identity. To tackle these issues, we introduce a motion sampler based on conditional flow matching, which is capable ofhigh-quality motion code generation in an efficient way. Moreover, we introduce a novel conditioning method for the TTS system, which utilises motion-removed features from the TFG model to yield uniform speech outputs. Our extensive experiments demonstrate that our method effectively creates naturallooking talking faces and speech that accurately match the input text. To our knowledge, this is the first effort to build a multimodal synthesis system that can generalise to unseen identities.",
+        "bbox": [
+            75,
+            573,
+            472,
+            862
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "1. Introduction",
+        "text_level": 2,
+        "bbox": [
+            500,
+            554,
+            632,
+            570
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "In recent years, the field of talking face synthesis has attracted growing interest, driven by the advancements in deep learning techniques and the development of services within the metaverse. This versatile technology has diverse applications in movie and TV production, virtual assistants, video conferencing, and dubbing, with the goal of creating animated faces that are synchronised with audio to enable natural and immersive human-machine interactions.",
+        "bbox": [
+            496,
+            582,
+            893,
+            703
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Previous studies in deep learning-based talking face synthesis have focused on enhancing the controllability of facial movements and achieving precise lip synchronisation. Some notable works [5, 14, 15, 27, 39, 57, 60, 70] incorporate 2D or 3D structural information to improve motion representations. From this, recent research has naturally diverged into two primary strands along the target applications of TFG: one strand [42, 65, 73, 76] concentrates on generating expressive facial movements only from audio conditions. Meanwhile, the other strand [6, 24, 25, 36, 62, 75] aims to enhance the controllability of talking faces by introducing a target video as an additional condition. Despite these advancements, the audio-driven TFG methods exhibit limitations, especially in scenarios like video production and AI chatbots, where video and speech must be generated simultaneously.",
+        "bbox": [
+            496,
+            704,
+            895,
+            901
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "",
+        "bbox": [
+            104,
+            2,
+            183,
+            41
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore.",
+        "bbox": [
+            235,
+            0,
+            810,
+            46
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "page_footnote",
+        "text": "<sup>∗</sup>Equal contribution.",
+        "bbox": [
+            101,
+            887,
+            214,
+            900
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "page_number",
+        "text": "8818",
+        "bbox": [
+            482,
+            944,
+            516,
+            958
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            92,
+            470,
+            137
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "An emerging area of research is text-driven TFG, which is relatively under-explored compared to audio-driven TFG. Several studies [68, 69, 72] have attempted to merge TTS systems with TFG using a cascade approach, but suffered from issues like error accumulation or computational bottleneck. A very recent work [43] uses latent features from TTS systems for face keypoint generation, yet still requires an additional stage for RGB video production. It highlights the challenges and complexities in integrating TFG and TTS systems into a cohesive and unified framework.",
+        "bbox": [
+            75,
+            138,
+            470,
+            291
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "In this paper, we propose a unified framework, named Text-to-Speaking Face (TTSF), which integrates textdriven TFG and face-stylised TTS. The key to our method lies in analysing mutually complementary elements across distinct tasks and leveraging this analysis to construct an improved framework. As illustrated in Fig. 1, our framework is capable of simultaneously generating talking face videos and natural speeches given text and a face portrait. To combine the different tasks in a single model, we tackle the primary challenges inherent in each task, TFG and TTS.",
+        "bbox": [
+            75,
+            292,
+            470,
+            444
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Firstly, our approach enables the generation of a range of head poses that reflect real-world scenarios. To encompass dynamic and authentic facial movements, we propose a motion sampler based on Optimal-Transport Conditional Flow Matching (OT-CFM). This approach learns Ordinary Differential Equations (ODEs) to extract precise motion codes from a sophisticated distribution. Nonetheless, considerations need to be taken into account to apply OT-CFM to the motion sampling process. Direct prediction of target motion by OT-CFM results in the generation of unsteady facial motions. To address this issue, we employ an auto-encoderbased noise reducer to mitigate feature noise through compression and reconstruction of latent features. The compressed features serve as the target motions for our motion sampler. This demonstrates an enhanced quality of the generated motion, particularly in terms of temporal consistency.",
+        "bbox": [
+            75,
+            445,
+            472,
+            688
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Secondly, we focus on the challenge of producing consistent voices, specifically when the input identity remains the same but facial motions differ. This problem arises from a fundamental inquiry in face-stylised TTS: How can we extract more refined speaker representations, influencing prosody, timbre, and accent, from a portrait image? We observe that facial motion in the source image affects the ability to identify the characteristics of the target voice. Nevertheless, this issue has been overlooked in all previous works [20, 33, 63], as they commonly omit a facial motion disentanglement module, a crucial component in the TFG system. With the benefit of integrating the TFG and TTS models into a system, we present a straightforward yet effective approach to condition the face-stylised TTS model.",
+        "bbox": [
+            75,
+            689,
+            472,
+            902
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "By eliminating motion features from the input portrait, our framework can generate speeches with the consistency of speaker identity.",
+        "bbox": [
+            498,
+            92,
+            893,
+            137
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "In addition to the previously mentioned advantages of our framework, there are further benefits compared to cascade text-driven TFG systems: (1) our framework does not require an additional audio encoder, as it can be substituted with the text encoder in our system, and (2) the joint training eliminates the need for the fine-tuning process and yields better-synchronised lip motions in the generated outcomes.",
+        "bbox": [
+            496,
+            138,
+            893,
+            244
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Our contributions can be summarised as follows:",
+        "bbox": [
+            517,
+            246,
+            846,
+            260
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• To our knowledge, we are the first to propose a unified text-driven multimodal synthesis system with robust generalisation to unseen identities.",
+        "bbox": [
+            500,
+            262,
+            893,
+            308
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• We design the motion sampler based on OT-CFM that is combined with the auto-encoder-based noise reducer, by considering the characteristics of motion features.",
+        "bbox": [
+            500,
+            308,
+            893,
+            353
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• Our method preserves crucial speaker characteristics such as prosody, timbre, and accent by removing the motion factors in the source image,",
+        "bbox": [
+            500,
+            353,
+            893,
+            398
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• With the comprehensive experiments, we demonstrate the proposed method surpasses the cascade-based talking face generation methods while producing speeches from the given text.",
+        "bbox": [
+            500,
+            398,
+            893,
+            460
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "2. Related Works",
+        "text_level": 2,
+        "bbox": [
+            500,
+            477,
+            650,
+            493
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Audio-driven Talking Face Generation. Audio-driven Talking Face Generation (TFG) technology has captured considerable attention in the fields of computer vision and graphics due to its broad range of applications [8, 77]. In the early works [16, 17], the focus is on situations with individual speakers, where a single model generates various talking faces based on a single identity. Recently, advancements in deep learning have facilitated the creation of more versatile TFG models [7, 12, 31, 44, 47, 58, 74]. These models can generate talking faces by incorporating identity conditions as input. However, these studies overlook head movements, grappling with the difficulty of disentangling head poses from facial characteristics linked to identity. To enhance natural facial movements, some studies integrate landmarks and mesh [14, 57, 60, 70] or leverage 3D information [5, 15, 27, 39]. Despite these efforts, performance degradation occurs, especially in wild scenarios with low landmark accuracy. Recent research branches [42, 65, 73, 76] focus on generating vivid facial movements only from audio conditions. Another branch [6, 24, 25, 36, 62, 75] demonstrates improved controllability by introducing a target video as an additional condition. These studies showcase the creation of realistic talking faces with various facial movements, encompassing head, eyes, and lip movements. However, these approaches rely on audio sources for TFG, limiting their applicability in multimedia scenarios lacking",
+        "bbox": [
+            496,
+            507,
+            895,
+            902
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "page_number",
+        "text": "8819",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "image",
+        "img_path": "images/271da54ebf10df9e3078687d5ba573cb57a326f8cc10d74ca13607f1e178161d.jpg",
+        "image_caption": [
+            "Figure 2. Overall architecture of our framework. The TTS model receives identity representations from the TFG model, while the TFG model takes conditions for natural motion generation from the TTS model. These complementary elements enhance our model’s capabilities in generating both speech and talking faces. The EMB block denotes an embedding operation. The grey dashed arrow represents a path used only during the training process, and the red arrows represent paths used only during the inference process."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            117,
+            87,
+            849,
+            271
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "an audio source.",
+        "bbox": [
+            76,
+            347,
+            187,
+            361
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Text-driven Talking Face Generation. Text-driven TFG is relatively less explored compared to the field of audiodriven TFG. Most previous works [18, 31, 32, 38, 59] primarily focus on generating lip regions for text-based redubbing or video-based translation tasks. Recent works [68, 69, 72] have tried to incorporate Text-to-Speech (TTS) technology into the process of TFG through a cascade method. However, it’s worth noting that the cascade method encounters bottlenecks in terms of both performance and inference time [10]. To tackle this issue, the latest study [43] has delved into the latent features of TTS to generate keypoints for talking faces. This exploration provides evidence that leveraging the latent features of a TTS model is advantageous in substituting the latent of an audio encoder for TFG.",
+        "bbox": [
+            75,
+            366,
+            470,
+            578
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "In this paper, we unify TTS and TFG tasks to generate speech and talking face videos concurrently. Furthermore, we extend the application of TTS in TFG by conditioning the target voice with the input identity image. As a result, our model can generate a diverse range of talking face videos using only a static face image and text as input.",
+        "bbox": [
+            75,
+            579,
+            470,
+            670
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Text-to-Speech. Text-to-Speech (TTS) systems aim to generate natural speech from text inputs, evolving from early approaches to recent end-to-end methods [4, 28, 35, 40, 46, 49, 52]. Despite their success, unseen-speaker TTS systems face a challenge in requiring substantial enrollment data for accurate voice reproduction. While prior works [9, 22, 26, 34, 41] extract speaker representations from speech data, obtaining sufficient high-quality utterances is challenging. Recent studies have incorporated face images for speaker representation [20, 33, 63], aiming to capture correlations between visual and audio features. However, these models often neglect motion-related factors in face images, leading to challenges in generating consistent desired voices when the input identity remains constant but the motion varies.",
+        "bbox": [
+            75,
+            674,
+            470,
+            901
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "In this paper, to tackle this issue, we leverage the motion extractor of TFG to eliminate the motion features from the source image. The motion-normalised feature is then fed into the TTS system as a conditioning factor, aiding the TTS model in producing consistent voices.",
+        "bbox": [
+            496,
+            345,
+            893,
+            422
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "3. Method",
+        "text_level": 2,
+        "bbox": [
+            500,
+            435,
+            591,
+            452
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "In Fig. 2, we propose a unified architecture, named TTSF, which integrates TFG and TTS pipelines. In the TTS model, the text input is embedded as $e _ { t }$ by an embedding layer. The text encoder $E _ { t }$ maps this embedding to the text feature $f _ { t } \\in \\mathbb { R } ^ { l _ { t } \\times d }$ , where $l _ { t }$ and $d$ denote the token length and hidden dimension, respectively. The duration predictor then upsamples $f _ { t }$ to $\\bar { f } _ { t } ^ { - } \\in \\mathbb { R } ^ { l _ { m } \\times d }$ to align with the target mel-spectrogram’s length $l _ { m }$ . The $\\tilde { f } _ { t }$ is subsequently passed into the TTS decoder $D _ { T T S }$ to predict the target mel-spectrogram. Both $E _ { t }$ and $D _ { T T S }$ are conditioned with the identity feature $f _ { i d }$ from the TFG model to incorporate the characteristics of the target speaker. In the TFG model, the source image $I _ { s }$ and driving frames $I _ { d } \\in \\mathbb { R } ^ { i }$ t×c×h×w pass through the shared visual encoder $E _ { v } ,$ , yielding visual features $f _ { s }$ and $f _ { d }$ for the source and target, respectively. The motion extractor encodes motion features from the input, obtaining the identity feature $f _ { i d }$ by subtracting the motion feature from $f _ { s }$ . The target motion feature is denoted as $f _ { m }$ . With the motion fusion module, $f _ { i d } , f _ { m }$ , and the audio mapper output $f _ { l i p }$ are aggregated and then, input into the TFG generator $G$ to generate videos $\\hat { I } _ { d }$ with desired motions. To produce variational facial movements during inference, we propose a conditional flow matching-based motion sampler. Additionally, we introduce an auto-encoderbased motion normaliser aimed at reducing the noise in the sampled motions. The feature $f _ { c } ,$ compressed by the normaliser, serves as the motion sampler’s target during training. Consequently, our framework synthesises natural talking faces and speeches from a single portrait image and text",
+        "bbox": [
+            496,
+            460,
+            893,
+            902
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "page_number",
+        "text": "8820",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "condition.",
+        "bbox": [
+            76,
+            92,
+            148,
+            106
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "3.1. Baseline for Talking Face Generation",
+        "text_level": 2,
+        "bbox": [
+            76,
+            116,
+            398,
+            132
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Motion Extractor. Previous research in the fields of motion transfer [53, 54, 67] and TFG [25, 66] has identified the presence of a reference space that only contains individual identities. Formally, we can express this as $E _ { v } ( I ) =$ $f _ { i d } + f _ { m } ,$ , where I is the input image, $E _ { v }$ is the visual encoder, $f _ { i d }$ is an identity feature, and $f _ { m }$ is a motion feature. In our framework, the motion extractor $E _ { m }$ learns the subtraction of identity feature $f _ { i d }$ from the visual feature: $E _ { m } ( E _ { v } ( I ) ) = f _ { m } = f - f _ { i d }$ . Our motion extractor follows the architecture of LIA [67], featuring a 5-layer MLP and trainable motion codes under an orthogonality constraint. This constraint facilitates the representation of diverse motions with compact channel sizes. Unlike LIA, which computes relative motion between source and target images, our motion extractor independently extracts identity and motion features. This distinction is crucial for integrating TFG and TTS models, where the identity feature conditions TTS to generate consistent voice styles robust to facial motions.",
+        "bbox": [
+            75,
+            142,
+            470,
+            416
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Motion Fusion and Generator. To establish a baseline for generating both talking faces and speeches, we consider two key aspects in designing the TFG generator G: (1) memory efficiency and (2) resilience to unseen identity generation. To reflect these, we avoid using an inversion network, known for its computational heaviness, and opt for a flow-based generator that focuses on learning coordinate mapping. For our generator, we choose LIA’s one, which employs a StyleGAN [1]-styled generator as a baseline.",
+        "bbox": [
+            75,
+            419,
+            470,
+            555
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "However, LIA is explicitly tailored for face-to-face motion transfer and does not account for generating lip movements synchronised with an audio source. To apply LIA to TFG, specific considerations are needed. In the training process, the lack of augmentation for target frames leads to the model replicating lip motions from the target frames rather than from audio sources. In response to this, inspired by FC-TFG [25], we regulate lip motions by incorporating audio features into specific n-th layers of the decoder. The fusion process involves a straightforward linear operation:",
+        "bbox": [
+            75,
+            554,
+            472,
+            708
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/957c34e8b968cad403d2f714cd7e70228c97fd0ac9e6e8df9cdc0dbcd72fc1e7.jpg",
+        "text": "$$\nf _ { z , n } = \\left\\{ { \\begin{array} { l l } { f _ { i d } + f _ { m } } & { i \\in \\{ { \\mathrm { n o n } } { \\mathrm { - l i p } } { \\mathrm { m o t i o n } } { \\mathrm { l a y e r s } } \\} } \\\\ { f _ { i d } + f _ { l i p } } & { i \\in \\{ { \\mathrm { l i p } } { \\mathrm { m o t i o n } } { \\mathrm { l a y e r s } } \\} , } \\end{array} } \\right.\\tag{1}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            96,
+            717,
+            426,
+            751
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "where, $f _ { m }$ denotes the target motions extracted from target frames and $f _ { l i p }$ denotes the output of the audio mapper, representing lip motion features. In the end, we generate the final videos $\\hat { I } _ { d }$ by inputting the style feature $f _ { z , n }$ into the TFG generator G.",
+        "bbox": [
+            75,
+            761,
+            470,
+            837
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Audio Mapper. Unlike the cascade text-driven TFG, our framework does not require extracting acoustic features using an audio encoder. Instead, we utilise the intermediate representations of the TTS system, serving a definite purpose: Generating natural lip motion with the TFG generator. This feature is crafted by aggregating the concatenated features of text embedding $e _ { t } .$ the upsampled text feature $\\tilde { f } _ { t }$ , and energy which is an average from $\\tilde { f } _ { t }$ along the channel axis. The text embedding enables the TFG model to grasp phoneme-level lip representation, while the upsampled text feature and energy contribute to capturing intricate lip shapes aligned with the generated speech sound. To aggregate these different types of features, we use Multi-Receptive field Fusion (MRF) module [30]. As illustrated in Fig. 3, the MRF module comprises multiple residual blocks, each characterised by 1D convolutions with distinct kernel sizes and dilations. This diverse configuration enables the module to observe both fine and coarse details in the input along the time axis. To avoid potential artifacts at the boundaries of motion features caused by temporal padding operations, we intentionally remove the padding operation and introduce temporal interpolation. Consequently, our framework achieves well-synchronised lip movements while effectively capturing the characteristics of the generated speech.",
+        "bbox": [
+            75,
+            839,
+            470,
+            901
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "image",
+        "img_path": "images/43f442b5c3745208b6e79fc775aae7a6246f97c93d3779625a7197b9ab2a3cfa.jpg",
+        "image_caption": [
+            "Figure 3. The architecture of the audio mapper. The condition denotes the concatenated feature of text embedding $e _ { t } .$ , upsampled text feature $\\tilde { f } _ { t } ,$ and energy, which is a norm of $\\tilde { f } _ { t }$"
+        ],
+        "image_footnote": [],
+        "bbox": [
+            566,
+            89,
+            815,
+            189
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            250,
+            893,
+            568
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Training Objectives. We use a non-saturating loss [19] in adversarial training:",
+        "bbox": [
+            498,
+            569,
+            892,
+            599
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/7844c9eacea3688d400d47efab6269d97e01e49ac72b9e0a5f9dd61c1cf6ff03.jpg",
+        "text": "$$\n\\begin{array} { r l } & { \\mathcal { L } _ { G A N } = \\underset { G } { \\mathrm { m i n } } \\underset { D } { \\mathrm { m a x } } \\Big ( \\mathbb { E } _ { I _ { d } } [ \\log ( D ( I _ { d } ) ) ] } \\\\ & { \\qquad + \\mathbb { E } _ { f _ { z , n } } [ \\log ( 1 - D ( G ( f _ { z , n } ) ) ] \\Big ) . } \\end{array}\\tag{2}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            521,
+            608,
+            851,
+            655
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "For pixel-level supervision, we use L1 reconstruction loss and Learned Perceptual Image Patch Similarity (LPIPS) loss [71]. The reconstruction loss $\\mathcal { L } _ { r e c }$ is formulated as:",
+        "bbox": [
+            500,
+            664,
+            892,
+            708
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "img_path": "images/e79ea3026674f6d6c3c747db30c83d2ebce813c50b1d79cb49da1834acaa85b8.jpg",
+        "text": "$$\n\\mathcal { L } _ { r e c } = \\parallel \\hat { I } _ { d } - I _ { d } \\parallel _ { 1 } + \\frac { 1 } { N _ { f } } \\sum _ { i = 1 } ^ { N _ { f } } \\parallel \\phi ( \\hat { I } _ { d } ) _ { i } - \\phi ( I _ { d } ) _ { i } \\parallel _ { 2 } ,\\tag{3}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            524,
+            726,
+            851,
+            766
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "where $\\phi$ is a pretrained VGG19 [55] network, and $N _ { f }$ is the number of feature maps. To preserve facial identity after motion transformation, we apply an identity-based similarity loss [50] using a pretrained face recognition network $\\mathcal { L } _ { i d } = 1 - \\cos \\left( E _ { i d } \\left( \\hat { I } _ { d } \\right) , E _ { i d } \\left( I _ { d } \\right) \\right)$ . Finally, To generate well-synchronised videos according to the input audio conditions, We use the modified SyncNet introduced in [25] to enhance our model’s lip representations. We minimise the following sync loss: $\\mathcal { L } _ { s y n c } = 1 - \\mathrm { c o s } \\left( S _ { v } \\left( \\hat { I } _ { d } \\right) , S _ { a } \\left( A _ { s } \\right) \\right)$ where $S _ { a } , S _ { v }$ , and $A _ { s }$ denote the audio encoder, video encoder of SyncNet, and input audio source.",
+        "bbox": [
+            496,
+            773,
+            893,
+            901
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "page_number",
+        "text": "8821",
+        "bbox": [
+            482,
+            944,
+            514,
+            958
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            88,
+            468,
+            142
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "3.2. Variational Motion Sampling",
+        "text_level": 2,
+        "bbox": [
+            76,
+            150,
+            339,
+            166
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Preliminary: Conditional Flow Matching. In this subsection, we present an outline of Optimal-Transport Conditional Flow Matching (OT-CFM). Our exposition primary adheres to the notation and definitions in [37, 40].",
+        "bbox": [
+            75,
+            176,
+            470,
+            238
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Let $\\pmb { x } \\in \\mathbb { R } ^ { d }$ be the data sample from the target distribution $q ( { \\pmb x } )$ , and $p _ { 0 } ( { \\pmb x } )$ be tractable prior distribution. Flow matching generative models aim to map $\\pmb { x } _ { 0 } \\sim p _ { 0 } ( \\pmb { x } )$ to $\\scriptstyle { \\mathbf { \\mathscr { x } } } _ { 1 }$ by constructing a probability density path $p _ { t } : [ 0 , 1 ] \\times \\mathbb { R } ^ { d } $ $\\mathbb { R } _ { > 0 }$ , such that $p _ { 1 } ( { \\pmb x } )$ approximates $q ( { \\pmb x } )$ . Consider an arbitrary Ordinary Differential Equation (ODE):",
+        "bbox": [
+            75,
+            237,
+            468,
+            329
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "img_path": "images/f9063fe643cc0ecf1442697624b7c75df6f24e423d2030daa466a02d5ebc2b2b.jpg",
+        "text": "$$\n\\frac { d } { d t } \\phi _ { t } ( { \\pmb x } ) = { \\pmb v } _ { t } ( \\phi _ { t } ( { \\pmb x } ) ) , \\qquad \\phi _ { 0 } ( { \\pmb x } ) = { \\pmb x } ,\\tag{4}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            140,
+            338,
+            406,
+            368
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "where the vector field $\\pmb { v } _ { t } : [ 0 , 1 ] \\times \\mathbb { R } ^ { d }  \\mathbb { R } ^ { d }$ generates the flow $\\phi _ { t } : [ 0 , 1 ] \\times \\mathbb { R } ^ { d } \\to \\mathbb { R } ^ { d }$ . This ODE is associated with $p _ { t } ,$ and it is sufficient to produce realistic data if a neural network can predict an accurate vector field ${ \\mathbf { } } v _ { t }$",
+        "bbox": [
+            76,
+            377,
+            470,
+            439
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Suppose there exists the optimal vector field $\\mathbf { \\Delta } \\mathbf { u } _ { t }$ that can generate accurate $p _ { t }$ , then the neural network ${ \\pmb v } _ { t } ( { \\pmb x } ; \\theta )$ can be trained to estimate the vector field $\\mathbf { \\Delta } \\mathbf { u } _ { t }$ . However, in practice, it is non-trivial to find the optimal vector field $\\mathbf { \\Delta } \\mathbf { u } _ { t }$ and the target probability $p _ { t }$ . To address this, [37] leverages the fact that estimation of conditional vector field is equivalent to estimation of the unconditional one, i.e.,",
+        "bbox": [
+            75,
+            440,
+            470,
+            546
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "img_path": "images/e33e46baca19473da4d15bcb385df4ce86841020d01347894618ee25acd95190.jpg",
+        "text": "$$\n\\begin{array} { r l } & { \\underset { \\theta } { \\operatorname* { m i n } } \\mathbb { E } _ { t , p _ { t } ( \\boldsymbol { x } ) } \\| \\pmb { u } _ { t } ( \\pmb { x } ) - \\pmb { v } _ { t } ( \\pmb { x } ; \\theta ) \\| ^ { 2 } } \\\\ & { \\equiv \\underset { \\theta } { \\operatorname* { m i n } } \\mathbb { E } _ { t , q ( \\pmb { x } _ { 1 } ) , p _ { t } ( \\pmb { x } | \\pmb { x } _ { 1 } ) } \\| \\pmb { u } _ { t } ( \\pmb { x } | \\pmb { x } _ { 1 } ) - \\pmb { v } _ { t } ( \\pmb { x } ; \\theta ) \\| ^ { 2 } } \\end{array}\\tag{5}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            104,
+            555,
+            426,
+            602
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "with boundary condition $\\begin{array} { r l r } { p _ { 0 } ( { \\pmb x } | { \\pmb x } _ { 1 } ) } & { { } = } & { p _ { 0 } ( { \\pmb x } ) } \\end{array}$ and $p _ { 1 } ( { \\pmb x } | { \\pmb x } _ { 1 } ) = \\mathcal { N } ( { \\pmb x } | { \\pmb x } _ { 1 } , \\sigma ^ { 2 } I )$ for sufficiently small σ.",
+        "bbox": [
+            76,
+            613,
+            468,
+            645
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Meanwhile, [37] further generalise this technique with noise condition $\\pmb { x } _ { 0 } \\sim \\mathcal { N } ( 0 , 1 )$ , and define OT-CFM loss as:",
+        "bbox": [
+            75,
+            643,
+            470,
+            679
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "img_path": "images/7e0e5f333edc0fc7a83263541f0038343dcb70085fb94e728f96b01bcc24ee05.jpg",
+        "text": "$$\n\\begin{array} { r l } & { \\mathcal { L } _ { \\mathrm { { O T - C F M } } } ( \\theta ) = \\mathbb { E } _ { t , q ( \\pmb { x } _ { 1 } ) , p _ { 0 } ( \\pmb { x } _ { 0 } ) } \\| \\pmb { u } _ { t } ^ { \\mathrm { O T } } ( \\phi _ { t } ^ { \\mathrm { O T } } ( \\pmb { x } _ { 0 } ) | \\pmb { x } _ { 1 } ) } \\\\ & { \\qquad - \\pmb { v } _ { t } ( \\phi _ { t } ^ { \\mathrm { O T } } ( \\pmb { x } _ { 0 } ) | \\pmb { \\mu } ; \\theta ) \\| ^ { 2 } , } \\end{array}\\tag{6}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            89,
+            696,
+            437,
+            736
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "where $\\pmb { \\mu }$ is the predicted frame-wise mean of $\\scriptstyle { \\mathbf { \\mathscr { x } } } _ { 1 }$ and $\\phi _ { t } ^ { \\mathrm { O T } } ( \\pmb { x } _ { 0 } ) = ( 1 - ( 1 - \\sigma _ { \\operatorname* { m i n } } ) t ) \\pmb { x } _ { 0 } + t \\pmb { x } _ { 1 }$ is the flow from x<sub>0</sub> to $\\scriptstyle { \\mathbf { { \\vec { x } } } } _ { 1 }$ . The target conditional vector field become ${ \\pmb u } _ { t } ^ { \\mathrm { O T } } ( \\phi _ { t } ^ { \\mathrm { O T } } ( { \\pmb x } _ { 0 } ) | { \\pmb x } _ { 1 } ) = { \\pmb x } _ { 1 } - ( 1 - \\sigma _ { \\operatorname* { m i n } } ) { \\pmb x } _ { 0 } ,$ , which enables the improved performance with its inherent linearity. In our work, we use fixed value of $\\sigma _ { m i n } = 1 0 ^ { - 4 }$",
+        "bbox": [
+            76,
+            747,
+            470,
+            837
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Prior Network. The prior serves as the initial condition for OT-CFM, facilitating the identification of the optimal path to $x _ { 1 }$ . During training, our prior network takes the first motion $f _ { m , 0 }$ of target motion sequence $f _ { m }$ and the acoustic feature $f _ { l i p }$ as inputs. We structure the prior network with a 4-layer conformer [21], where the input is formed by the summation of $f _ { m , 0 }$ and $f _ { l i p }$ . Note that the first motion is replaced as the source image’s motion in inference.",
+        "bbox": [
+            75,
+            839,
+            470,
+            901
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            90,
+            892,
+            152
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "OT-CFM Motion Sampler. The objective of our motion sampler is to sample a sequence of natural motion codes from the prior $\\pmb { \\mu } .$ During training, this module aims to predict target motions $f _ { m }$ . However, in our experiments, we observed that directly regressing $f _ { m }$ (equivalent to setting $\\scriptstyle { \\mathbf { \\mathscr { x } } } _ { 1 }$ as $f _ { m } )$ leads to producing shaky motions during inference. We expect that this is due to the characteristics of the StyleGAN-styled decoder. Each channel of the decoder plays a semantically meaningful role in generating detailed facial attributes. Therefore, when the motion sampler fails to successfully estimate the vector field, it directly impacts the final outcomes. To address this issue, we introduce an auto-encoder-based motion normaliser that compresses feature and reconstructs them into the target motion $f _ { m }$ . The compressed motion features $f _ { c }$ serve as $\\scriptstyle { \\mathbf { \\mathscr { x } } } _ { 1 }$ in OT-CFM.",
+        "bbox": [
+            496,
+            155,
+            893,
+            382
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Training Objectives. The reconstruction loss for training our motion normaliser is defined as Mean Square Error (MSE) loss between the target motion $f _ { m }$ and the reconstructed motion $\\hat { f } _ { m }$ as follows: $\\mathcal { L } _ { A E } \\ = \\parallel \\hat { f } _ { m } - f _ { m } \\parallel _ { 2 } \\mathrm { ~ , ~ }$ Moreover, as motion decoding commences from random noise $\\mathcal { N } ( \\boldsymbol { \\mu } , I )$ at inference, our objective is to minimise the distance between the prior $\\pmb { \\mu }$ and compressed target motion $f _ { c }$ . Considering the output of prior network $\\pmb { \\mu }$ as parameterising the input noise for the decoder, it is natural to view the encoder output $\\pmb { \\mu }$ as a normal distribution $\\mathcal { N } ( \\boldsymbol { \\mu } , I )$ . Following [46], we compute a negative log-likelihood prior loss:",
+        "bbox": [
+            496,
+            385,
+            893,
+            553
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "img_path": "images/94c3602470b440051c1608fa6a15ac192e6d68c73dc7ef14083bdb8ec8437d0c.jpg",
+        "text": "$$\n\\mathcal { L } _ { p r i o r } = - \\sum _ { j = 1 } ^ { T } \\log \\varphi ( f _ { c , j } ; \\mu _ { j } , I ) ,\\tag{7}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            581,
+            559,
+            810,
+            603
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "where $\\varphi ( \\cdot ; \\mu _ { i } , I )$ represents the probability density function of $\\mathcal { N } ( \\mu _ { i } , I )$ , and $T$ denotes the temporal length of motions.",
+        "bbox": [
+            498,
+            612,
+            892,
+            643
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "3.3. Text-to-Speech Synthesis",
+        "text_level": 2,
+        "bbox": [
+            500,
+            650,
+            728,
+            666
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Our TTS system aims to produce well-stylised speech from a single portrait, acquired in in-the-wild setting. In this context, we define the in-the-wild environment as follows: (1) The model is exposed to previously unseen facial data, and (2) the facial images exhibit various facial poses. First, since we cannot access to the identity labels to unseen speakers, we condition our model with image embedding. Second, our emphasis is on the advantages of our framework. By integrating TFG and TTS systems, we can utilise the identity feature $f _ { i d } .$ , a motion-removed feature, obtained from the TFG model. Consequently, our TTS model is capable of generating speeches robust to various facial motions in image, maintaining consistency in the style of voice.",
+        "bbox": [
+            496,
+            674,
+            893,
+            871
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Our system is based on Matcha-TTS [40], an OT-CFMbased TTS model known for synthesising high-quality speeches in a few synthesis steps. We input the identity feature $f _ { i d }$ to both encoder and decoder. With this minimal variation, our model is trained with prior, duration, and OT-CFM losses, as outlined in [40]. These losses are collectively denoted as $L _ { T T S }$ . Finally, we convert the generated mel-spectrogram by using a pretrained vocoder [30].",
+        "bbox": [
+            498,
+            869,
+            892,
+            901
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "page_number",
+        "text": "8822",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "image",
+        "img_path": "images/f8d52c2fcebbf4e55e615214db905bf32ab38d77bffccd410d354f6b3d2de7b6.jpg",
+        "image_caption": [
+            "Figure 4. Qualitative Results. We compare our method with several baselines listed in Table 1. Our approach outperforms all the baselines in terms of generating natural facial motions, encompassing lip shape and head pose. MakeItTalk and SadTalker exhibit smaller variance in head poses, while Audio2Head fails to preserve the source identity. We emphasis that our TTSF system can generate sophisticated lip shapes, reflecting both linguistic and acoustic information from our TTS model."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            116,
+            87,
+            851,
+            421
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            500,
+            470,
+            590
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Final Loss. The final loss is calculated as the sum of the aforementioned losses, represented as follows:",
+        "bbox": [
+            75,
+            593,
+            468,
+            625
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "equation",
+        "img_path": "images/d30f4a8c6b30d0fba1de54f8ec62666209a81878b3a2a45f0531039b1f4ff669.jpg",
+        "text": "$$\n\\begin{array} { r } { \\mathcal { L } _ { t o t a l } = \\lambda _ { 1 } \\mathcal { L } _ { G A N } + \\lambda _ { 2 } \\mathcal { L } _ { r e c } + \\lambda _ { 3 } \\mathcal { L } _ { i d } + \\lambda _ { 4 } \\mathcal { L } _ { s y n c } } \\\\ { + \\lambda _ { 5 } \\mathcal { L } _ { O T - C F M } + \\lambda _ { 6 } \\mathcal { L } _ { a e } + \\lambda _ { 7 } \\mathcal { L } _ { p r i o r } + \\lambda _ { 8 } \\mathcal { L } _ { t t s } , } \\end{array}\\tag{8}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            98,
+            636,
+            429,
+            672
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "where hyperparameters λ are introduced to balance the scale of each loss. Each λ controls the relative importance of its corresponding loss term. Empirically, the values of $\\lambda _ { 1 } , \\lambda _ { 2 } , \\lambda _ { 3 } , \\lambda _ { 4 } , \\lambda _ { 5 } , \\lambda _ { 6 } ,$ λ<sub>7</sub>, and $\\lambda _ { 8 }$ are set to 0.1, 1, 0.3, 0.1, 0.1, 1, 0.1, and 1.",
+        "bbox": [
+            75,
+            683,
+            470,
+            758
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "4. Experiments",
+        "text_level": 2,
+        "bbox": [
+            76,
+            772,
+            210,
+            790
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "4.1. Experimental Setup",
+        "text_level": 2,
+        "bbox": [
+            76,
+            797,
+            267,
+            814
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Dataset. Our framework is trained on the LRS3 [3] dataset, which consists of both talking face videos and transcription labels. LRS3 consists of videos captured during indoor shows of TED or TEDx. We evaluate our model on Vox-Celeb2 [13] and LRS2 [2] datasets, which contain more challenging examples than LRS3 since many videos are shot outdoors. We randomly select a subset of videos from each dataset to evaluate the performance of our framework.",
+        "bbox": [
+            75,
+            824,
+            470,
+            901
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            500,
+            893,
+            545
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Implementation Details. First of all, we pretrain a Matcha-TTS [40] model on the LRS3 dataset for 2,000 epochs and then jointly train with the talking face generation model for 40 epochs. Our focus is on the manipulation of seven specific layers within the generator, namely layers 1 to 7. Furthermore, we exclusively input the audio feature into two specific layers, namely layers 6 and 7. ur motion sampler is trained with 32-frame videos and then inferences with all frames of each video. Audio data is sampled to 16kHz, and converted to mel-spectrogram with a window size of 640, a hop length of 160, and 80 mel bins. To update our model, we employ the Adam optimiser [29] with a learning rate set at 1e−4. The entire framework is implemented using Py-Torch [45] and is trained across eight 48GB A6000 GPUs.",
+        "bbox": [
+            496,
+            549,
+            893,
+            761
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Evaluation Metrics. In our quantitative assessments for TFG, we employ a range of evaluation metrics introduced in previous works. To assess the visual quality of the generated videos, we employ the Frechet Inception Distance´ (FID) score and ID Similarity (ID-SIM) score using a pretrained face recognition model [23]. To measure the accuracy of mouth shapes and lip sync, we utilise the Lip Sync Error Confidence (LSE-C), a metric introduced in [11]. For the diversity of the generated head motions, we calculate the standard deviation of the head motion feature embeddings extracted from the generated frames using Hopenet [51], following the approach introduced in [73].",
+        "bbox": [
+            496,
+            765,
+            895,
+            901
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "page_number",
+        "text": "8823",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "table",
+        "img_path": "images/a93fd7c1320dd54d64400bb2b9437222c468a152479287516c4fa65cec0cdeed.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=\"2\">Models</td><td rowspan=\"2\">Audio</td><td colspan=\"2\">Video Quality</td><td>Synchonisation</td><td>Diversity</td></tr><tr><td>FID↓</td><td>ID-SIM↑</td><td>LSE-C↑</td><td>DIV↑</td></tr><tr><td>Ground Truth</td><td>=</td><td>0.00</td><td>1.00</td><td>5.360</td><td>0.168</td></tr><tr><td>MakeItTalk [76]</td><td>GT</td><td>24.213</td><td>0.845</td><td>2.674</td><td>0.102</td></tr><tr><td>MakeItTalk</td><td>TTS</td><td>25.168</td><td>0.850</td><td>3.487</td><td>0.095</td></tr><tr><td>Audio2Head [64]</td><td>GT</td><td>41.721</td><td>0.217</td><td>4.607</td><td>0.149</td></tr><tr><td>Audio2Head</td><td>TTS</td><td>42.262</td><td>0.225</td><td>5.478</td><td>0.145</td></tr><tr><td>SadTalker [73]</td><td>GT</td><td>20.771</td><td>0.854</td><td>4.978</td><td>0.109</td></tr><tr><td>SadTalker</td><td>TTS</td><td>20.729</td><td>0.859</td><td>6.256</td><td>0.111</td></tr><tr><td>TTSF (Ours)</td><td>=</td><td>18.348</td><td>0.864</td><td>5.686</td><td>0.143</td></tr></table>",
+        "bbox": [
+            89,
+            89,
+            454,
+            222
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "table",
+        "img_path": "images/13991c51aef4340d801e39dc6e5910df0f1a45b03d3991f339f1f76606d7faf8.jpg",
+        "table_caption": [
+            "Table 1. Comparison with the state-of-the-art methods on LRS2 in the one-shot setting. The Audio column refers to the speech source for generation (GT: ground truth, TTS: synthesised audio.)",
+            "Table 2. Comparison with the state-of-the-art methods on Vox-Celeb2 in the one-shot setting. The previous audio-driven TFG models are cascaded with our TTS model to generate talking faces from text."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=\"2\">Models</td><td>Video Quality</td><td>Synchronisation</td><td>Diversity</td></tr><tr><td>ID-SIM↑</td><td>LSE-C↑</td><td>DIV↑</td></tr><tr><td>MakeItTalk [76]</td><td>0.841</td><td>3.529</td><td>0.094</td></tr><tr><td>Audio2Head [64]</td><td>0.151</td><td>5.738</td><td>0.146</td></tr><tr><td>SadTalker [73]</td><td>0.855</td><td>6.310</td><td>0.111</td></tr><tr><td>TTSF (Ours)</td><td>0.876</td><td>5.721</td><td>0.143</td></tr></table>",
+        "bbox": [
+            91,
+            280,
+            454,
+            375
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            468,
+            470,
+            513
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "For the evaluation of TTS performance, we compute Word Error Rate (WER), Mel Cepstral Distortion (MCD), the cosine similarity (C-SIM) between x-vectors [56] of the target and synthesised speech, as well as the Root Mean Square Error (RMSE) for F0. WER and MCD represent the intelligibility and naturalness of speech, respectively. C-SIM and RMSE measure the voice similarity to the target speaker. For WER, we use a publicly available speech recognition model of [48].",
+        "bbox": [
+            75,
+            513,
+            470,
+            651
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "4.2. Comparison with State-of-the-art Methods",
+        "text_level": 2,
+        "bbox": [
+            76,
+            661,
+            442,
+            678
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Text-driven Talking Face Generation. We compare several state-of-the-art methods (MakeitTalk [76], Audio2Head [64], and SadTalker [73]) for the text-driven talking head video generations by attaching our TTS model to the previous audio-driven TFG models in the cascade method. To simulate a one-shot talking face generation scenario, we evaluate the baselines on the in-the-wild datasets, LRS2 and VoxCeleb2. As shown in Table 1, the proposed model outperforms every audio- and cascade text-driven method in terms of video quality (FID, ID-SIM) on LRS2. Additionally, we present experimental results on the Vox-Celeb2 dataset in Table 5. Since this dataset does not contain text transcription according to the speech in the video, our framework generates both speech and a talking face by inputting a single frame from a VoxCeleb2 video and a randomly selected transcription from LRS3. Similar to the experimental results on LRS2, our framework exhibits superior performance in ID-SIM score. On the other hand, the proposed model records a lower synchronisation score compared to SadTalker using the LSE-C metric. However, given that the LSE-C metric relies significantly on a pretrained model, a more useful evaluation of lip synchronisation can be achieved through perceptual judgement by humans, as assessed in user studies. The qualitative assessment in Section 4.3 shows that our method produces perceptually better synchronised output compared to the baseline. Although Audio2Head shows the best diversity score, it records the lowest scores in video quality metrics. We also observe that Audio2Head completely fails to generate a natural video when the input source image is not located in the centre of the screen. On the other hand, our proposed method achieves high scores in both video quality and diversity metrics. Considering the aforementioned issues, our framework demonstrates robust generalisation to unseen data when conducting multimodal synthesis encompassing both video and speech.",
+        "bbox": [
+            75,
+            688,
+            472,
+            902
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "table",
+        "img_path": "images/a4855ee1e5606b826be6c2ed3d1a47ad518601cf2abdc3af38bf63077ddfd2a5.jpg",
+        "table_caption": [
+            "Table 3. Quantitative results of synthesised speech. Intel. and Nat. denote intelligibility and naturalness of audio, respectively."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=1>Models</td><td rowspan=1 colspan=1>Intel.</td><td rowspan=1 colspan=1>Nat.</td><td rowspan=1 colspan=1>Voice similarity</td></tr><tr><td rowspan=1 colspan=1>WER↓</td><td rowspan=1 colspan=1>MCD↓</td><td rowspan=1 colspan=1>C-SIM↑ RMSE↓</td></tr><tr><td rowspan=1 colspan=1>Ground Truth</td><td rowspan=1 colspan=1>6.35</td><td rowspan=1 colspan=1>一</td><td rowspan=1 colspan=1>一        一</td></tr><tr><td rowspan=3 colspan=1>Face-TTS [33]Ours (w/ motion)Ours (w/o motion)</td><td rowspan=2 colspan=1>18.0215.68</td><td rowspan=1 colspan=1>6.85</td><td rowspan=2 colspan=1>0.272   52.330.451   50.67</td></tr><tr><td rowspan=1 colspan=1>7.43</td></tr><tr><td rowspan=1 colspan=1>14.56</td><td rowspan=1 colspan=1>7.23</td><td rowspan=1 colspan=1>0.593   48.52</td></tr></table>",
+        "bbox": [
+            527,
+            89,
+            869,
+            190
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            257,
+            895,
+            590
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Face-stylised Text-to-Speech. To evaluate the generalisability of our TTS system, we compare our model to Face-TTS [33], which is a state-of-the-art method of face-stylised TTS. For the evaluation, we simulate two scenarios on LRS2 dataset: (1) w/motion, where the TTS model is conditioned with source image embedding, i.e., $f _ { i d } + f _ { m } ; ( 2 )$ w/o motion, where the model is conditioned with only identity feature $f _ { i d } .$ . The results are shown in Table 1. While the proposed model shows slight deviance in MCD, it clearly outperforms the baseline in WER, C-SIM, and RMSE, demonstrating its superiority in intelligibility and voice similarity. More importantly, when we consider motion features together as our speaker condition, the generation performance is significantly degraded, especially in voice similarity. It indicates the benefits of unifying TFG and TTS systems, highlighting the advantages of their integration.",
+        "bbox": [
+            496,
+            593,
+            895,
+            837
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "4.3. Qualitative Evaluation",
+        "text_level": 2,
+        "bbox": [
+            500,
+            843,
+            710,
+            859
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "User Study. We evaluate the synthesised videos through a user study involving 40 participants, each providing opinions on 20 videos. Reference images and texts were randomly selected from the LRS2 test split to create videos using MakeItTalk [76], Audio2Head [64], SadTalker [73], and our proposed method. Mean Opinion Scores (MOS) are used for evaluation, following the approach in [25, 36, 75]. Participants rate each video on a scale from 1 to 5, considering lip sync quality, video realness, and head movement naturalness. The order of methods within each video clip is randomly shuffled. The results in Table 4 indicate that our method outperforms existing methods in generating talking face videos with higher lip synchronisation and natural head movement.",
+        "bbox": [
+            498,
+            869,
+            893,
+            901
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "page_number",
+        "text": "8824",
+        "bbox": [
+            482,
+            944,
+            516,
+            958
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "table",
+        "img_path": "images/5fb8671f7b304f364cd55eac6f66edc51bbacb48819f241d169ce9dd18b63ed1.jpg",
+        "table_caption": [
+            "Table 4. MOS evaluation results. MOS is presented with 95% confidence intervals. Note that the previous audio-driven TFG models are cascaded with our TTS model."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Models</td><td>Lip Sync Accuracy</td><td>Motion Naturalness</td><td>Video Realness</td></tr><tr><td>MakeItTalk [76]</td><td> $2 . 4 4 \\pm 0 . 0 7$ </td><td> $2 . 7 9 \\pm 0 . 0 9$ </td><td> $2 . 7 9 \\pm 0 . 0 8$ </td></tr><tr><td>Audio2Head [64]</td><td> $2 . 7 3 \\pm 0 . 0 8$ </td><td> $2 . 9 2 \\pm 0 . 0 9$ </td><td> $2 . 4 8 \\pm 0 . 0 9$ </td></tr><tr><td>SadTalker [73]</td><td> $2 . 7 8 \\pm 0 . 0 8$ </td><td> $2 . 8 0 \\pm 0 . 0 9$ </td><td> $2 . 9 0 \\pm 0 . 0 9$ </td></tr><tr><td>TTSF(Ours)</td><td> ${ \\bf 4 . 0 9 \\pm 0 . 0 7 }$ </td><td> ${ \\bf 3 . 8 5 \\pm 0 . 0 7 }$ </td><td> ${ \\bf 3 . 8 7 \\pm 0 . 0 7 }$ </td></tr></table>",
+        "bbox": [
+            94,
+            89,
+            455,
+            193
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            75,
+            268,
+            472,
+            450
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Analysis on Qualitative Results. We visually present our qualitative results in Fig. 4. MakeItTalk fails to produce precise lip motions aligned with the synthesised speech, and Audio2Head struggles to preserve identity information. SadTalker can generate well-synchronised lip motions but is limited in facial movements. In contrast, our approach exhibits more dynamic facial movements and can generate vivid lip motions that reflect both linguistic and acoustic information. For instance, it can be seen that our model’s lip motions are precisely aligned to the pronunciation of the speeches (refer to the yellow arrows). The accuracy and the details demonstrate that our method can generate realistic and expressive talking faces.",
+        "bbox": [
+            75,
+            453,
+            472,
+            651
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "The Effectiveness of Identity Features. To verify the effectiveness of identity feature-based conditioning, we visualise the feature space of synthesised audio. Fig. 5 shows t-SNE [61] plots of x-vectors from Face-TTS and our method. As shown in Fig. 5a, Face-TTS fails to cluster features derived from the same speaker. This implies the potential failure to generate the target voice with different styles. In contrast, as depicted in Fig. 5b, the proposed TTS system effectively clusters features derived from the same speaker despite the variety in head motions. This demonstrates that our method is capable of synthesising consistent voices, even in the presence of varying motions.",
+        "bbox": [
+            75,
+            652,
+            470,
+            837
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "4.4. Ablation Studies",
+        "text_level": 2,
+        "bbox": [
+            76,
+            843,
+            243,
+            859
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Analysis on Feature Aggregation in Audio Mapper. We perform an ablation study on the feature aggregation in our audio mapper. w/o (energy $\\& \\tilde { f } _ { t } )$ indicates the TFG model conditioned with text embedding $e _ { t }$ from the audio mapper. In this case, the TFG model can incorporate only linguistic information and it leads to our model failing to generate precise lip motions. When we additionally input the upsampled text feature $\\tilde { f } _ { t }$ to our TFG model, the synchronisation score improves significantly. This is because our TTS model is optimised by reducing the prior loss between $\\tilde { f } _ { t }$ and the target mel-spectrogram. This indicates that the $\\tilde { f } _ { t }$ feature contains acoustic information. Finally, when we add the energy feature to the previous condition, our model exhibits the best performance across all metrics. This indicates that the energy of speech significantly impacts generation of detailed lip movements.",
+        "bbox": [
+            75,
+            869,
+            470,
+            901
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "table",
+        "img_path": "images/4c632f4d31f95c9f8d5705937182385a957499983af3ecb6a9bb2ccf109be4aa.jpg",
+        "table_caption": [
+            "Table 5. Ablation study on feature aggregation in audio mapper."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=1>Models</td><td rowspan=1 colspan=1>Video Quality</td><td rowspan=1 colspan=1>Synchronisation</td><td rowspan=1 colspan=1>Diversity</td></tr><tr><td rowspan=1 colspan=1>ID-SIM↑</td><td rowspan=1 colspan=1>LSE-C↑</td><td rowspan=1 colspan=1>DIV↑</td></tr><tr><td rowspan=1 colspan=1>TTSF (Ours)</td><td rowspan=1 colspan=1>0.876</td><td rowspan=1 colspan=1>5.721</td><td rowspan=1 colspan=1>0.143</td></tr><tr><td rowspan=1 colspan=1>w/o energyw/o (energy $\\& \\tilde { f } _ { t } )$ </td><td rowspan=1 colspan=1>0.8740.872</td><td rowspan=1 colspan=1>5.5553.935</td><td rowspan=1 colspan=1>0.1430.139</td></tr></table>",
+        "bbox": [
+            517,
+            90,
+            879,
+            169
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "image",
+        "img_path": "images/df11bc4d5a3541e2e1e086dbef521e1ec884e5ba8eff4c4d4377e48c5e5048ad.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            517,
+            210,
+            691,
+            392
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "image",
+        "img_path": "images/69bfc8bae3e3ec3bdb7d97a11de0cf5dea7c7f3f71829b153fb876fa6d9b2ea3.jpg",
+        "image_caption": [
+            "(b) Ours",
+            "Figure 5. Speaker representation space of (a) Face-TTS and (b) Ours. Each colour represents a different speaker."
+        ],
+        "image_footnote": [],
+        "bbox": [
+            702,
+            210,
+            875,
+            382
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            496,
+            462,
+            893,
+            675
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "5. Conclusion",
+        "text_level": 2,
+        "bbox": [
+            500,
+            688,
+            619,
+            704
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Our work introduces a unified text-driven multimodal synthesis system that exhibits robust generalisation to unseen identities. The proposed OT-CFM-based motion sampler, coupled with an auto-encoder-based noise reducer, produces realistic facial poses. Notably, our method excels in preserving essential speaker characteristics such as prosody, timbre, and accent by effectively removing motion factors from the source image. Our experiments demonstrate the superiority of our proposed method over cascade-based talking face generation approaches, underscoring the effectiveness of our unified framework in multimodal speech synthesis.",
+        "bbox": [
+            496,
+            712,
+            895,
+            895
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "page_number",
+        "text": "8825",
+        "bbox": [
+            482,
+            944,
+            516,
+            957
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "References",
+        "text_level": 2,
+        "bbox": [
+            78,
+            89,
+            176,
+            106
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "list",
+        "sub_type": "ref_text",
+        "list_items": [
+            "[1] Rameen Abdal, Yipeng Qin, and Peter Wonka. Image2styleGAN++: How to edit the embedded images? In Proc. CVPR, 2020. 4",
+            "[2] Triantafyllos Afouras, Joon Son Chung, Andrew Senior, Oriol Vinyals, and Andrew Zisserman. Deep audio-visual speech recognition. IEEE Trans. on Pattern Analysis and Machine Intelligence, 2018. 6",
+            "[3] Triantafyllos Afouras, Joon Son Chung, and Andrew Zisserman. LRS3-TED: A large-scale dataset for visual speech recognition. arXiv preprint arXiv:1809.00496, 2018. 6",
+            "[4] Alan W Black, Heiga Zen, and Keiichi Tokuda. Statistical parametric speech synthesis. In Proc. ICASSP, 2007. 3",
+            "[5] Adrian Bulat and Georgios Tzimiropoulos. How far are we from solving the 2d & 3d face alignment problem? (and a dataset of 230,000 3d facial landmarks). In Proc. ICCV, 2017. 1, 2",
+            "[6] Egor Burkov, Igor Pasechnik, Artur Grigorev, and Victor Lempitsky. Neural head reenactment with latent pose descriptors. In Proc. CVPR, 2020. 1, 2",
+            "[7] Lele Chen, Ross K Maddox, Zhiyao Duan, and Chenliang Xu. Hierarchical cross-modal talking face generation with dynamic pixel-wise loss. In Proc. CVPR, 2019. 2",
+            "[8] Lele Chen, Guofeng Cui, Ziyi Kou, Haitian Zheng, and Chenliang Xu. What comprises a good talking-head video generation?: A survey and benchmark. arXiv preprint arXiv:2005.03201, 2020. 2",
+            "[9] Mingjian Chen, Xu Tan, Bohan Li, Yanqing Liu, Tao Qin, Sheng Zhao, and Tie-Yan Liu. Adaspeech: Adaptive text to speech for custom voice. In Proc. ICLR, 2021. 3",
+            "[10] Jeongsoo Choi, Minsu Kim, Se Jin Park, and Yong Man Ro. Reprogramming audio-driven talking face synthesis into text-driven. In Proc. ICASSP, 2024. 3",
+            "[11] Joon Son Chung and Andrew Zisserman. Out of time: automated lip sync in the wild. In Proc. ACCV, 2017. 6",
+            "[12] Joon Son Chung, Amir Jamaludin, and Andrew Zisserman. You said that? In Proc. BMVC., 2017. 2",
+            "[13] Joon Son Chung, Arsha Nagrani, and Andrew Zisserman. Voxceleb2: Deep speaker recognition. In Proc. Interspeech, 2018. 6",
+            "[14] Dipanjan Das, Sandika Biswas, Sanjana Sinha, and Brojeshwar Bhowmick. Speech-driven facial animation using cascaded GANs for learning of motion and texture. In Proc. ECCV, 2020. 1, 2",
+            "[15] Yu Deng, Jiaolong Yang, Sicheng Xu, Dong Chen, Yunde Jia, and Xin Tong. Accurate 3d face reconstruction with weakly-supervised learning: From single image to image set. In Proc. CVPR, 2019. 1, 2",
+            "[16] Bo Fan, Lijuan Wang, Frank K Soong, and Lei Xie. Photoreal talking head with deep bidirectional LSTM. In Proc. ICASSP, 2015. 2",
+            "[17] Bo Fan, Lei Xie, Shan Yang, Lijuan Wang, and Frank K Soong. A deep bidirectional LSTM approach for videorealistic talking head. Multimedia Tools and Applications, 2016. 2",
+            "[18] Ohad Fried, Ayush Tewari, Michael Zollhofer, Adam Finkel-¨ stein, Eli Shechtman, Dan B Goldman, Kyle Genova, Zeyu",
+            "Jin, Christian Theobalt, and Maneesh Agrawala. Text-based editing of talking-head video. ACM Transactions on Graphics, 2019. 3",
+            "[19] Ian Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David Warde-Farley, Sherjil Ozair, Aaron Courville, and Yoshua Bengio. Generative adversarial networks. Communications ofthe ACM, 2020. 4",
+            "[20] Shunsuke Goto, Kotaro Onishi, Yuki Saito, Kentaro Tachibana, and Koichiro Mori. Face2speech: Towards multispeaker text-to-speech synthesis using an embedding vector predicted from a face image. In Proc. Interspeech, 2020. 2, 3",
+            "[21] Anmol Gulati, James Qin, Chung-Cheng Chiu, Niki Parmar, Yu Zhang, Jiahui Yu, Wei Han, Shibo Wang, Zhengdong Zhang, Yonghui Wu, et al. Conformer: Convolutionaugmented transformer for speech recognition. In Proc. Interspeech, 2020. 5",
+            "[22] Rongjie Huang, Yi Ren, Jinglin Liu, Chenye Cui, and Zhou Zhao. Generspeech: Towards style transfer for generalizable out-of-domain text-to-speech synthesis. In Proc. NeurIPS, 2022. 3",
+            "[23] Yuge Huang, Yuhan Wang, Ying Tai, Xiaoming Liu, Pengcheng Shen, Shaoxin Li, Jilin Li, and Feiyue Huang. Curricularface: Adaptive curriculum learning loss for deep face recognition. In Proc. CVPR, 2020. 6",
+            "[24] Geumbyeol Hwang, Sunwon Hong, Seunghyun Lee, Sungwoo Park, and Gyeongsu Chae. Discohead: Audio-andvideo-driven talking head generation by disentangled control of head pose and facial expressions. In Proc. ICASSP, 2023. 1, 2",
+            "[25] Youngjoon Jang, Kyeongha Rho, Jongbin Woo, Hyeongkeun Lee, Jihwan Park, Youshin Lim, Byeong-Yeol Kim, and Joon Son Chung. That’s what i said: Fully-controllable talking face generation. In Proc. ACM MM, 2023. 1, 2, 4, 8",
+            "[26] Ye Jia, Yu Zhang, Ron Weiss, Quan Wang, Jonathan Shen, Fei Ren, Patrick Nguyen, Ruoming Pang, Ignacio Lopez Moreno, Yonghui Wu, et al. Transfer learning from speaker verification to multispeaker text-to-speech synthesis. In Proc. NeurIPS, 2018. 3",
+            "[27] Zi-Hang Jiang, Qianyi Wu, Keyu Chen, and Juyong Zhang. Disentangled representation learning for 3D face shape. In Proc. CVPR, 2019. 1, 2",
+            "[28] Jaehyeon Kim, Sungwon Kim, Jungil Kong, and Sungroh Yoon. Glow-TTS: A generative flow for text-to-speech via monotonic alignment search. In Proc. NeurIPS, 2020. 3",
+            "[29] Diederik P Kingma and Jimmy Ba. Adam: A method for stochastic optimization. Proc. ICLR, 2014. 6",
+            "[30] Jungil Kong, Jaehyeon Kim, and Jaekyoung Bae. Hifi-GAN: Generative adversarial networks for efficient and high fidelity speech synthesis. In Proc. NeurIPS, 2020. 4, 6",
+            "[31] Prajwal KR, Rudrabha Mukhopadhyay, Jerin Philip, Abhishek Jha, Vinay Namboodiri, and CV Jawahar. Towards automatic face-to-face translation. In Proc. ACM MM, 2019. 2, 3",
+            "[32] Rithesh Kumar, Jose Sotelo, Kundan Kumar, Alexandre De Brebisson, and Yoshua Bengio. Obamanet: Photo-realistic lip-sync from text. arXiv preprint arXiv:1801.01442, 2017. 3"
+        ],
+        "bbox": [
+            84,
+            114,
+            468,
+            155
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "page_number",
+        "text": "8826",
+        "bbox": [
+            482,
+            945,
+            516,
+            957
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "list",
+        "sub_type": "ref_text",
+        "list_items": [
+            "[33] Jiyoung Lee, Joon Son Chung, and Soo-Whan Chung. Imaginary voice: Face-styled diffusion model for text-to-speech. In Proc. ICASSP, 2023. 2, 3, 7, 8",
+            "[34] Ji-Hyun Lee, Sang-Hoon Lee, Ji-Hoon Kim, and Seong-Whan Lee. PVAE-TTS: Adaptive text-to-speech via progressive style adaptation. In Proc. ICASSP, 2022. 3",
+            "[35] Sang-Hoon Lee, Hyun-Wook Yoon, Hyeong-Rae Noh, Ji-Hoon Kim, and Seong-Whan Lee. Multi-spectroGAN: Highdiversity and high-fidelity spectrogram generation with adversarial style combination for speech synthesis. In Proc. AAAI, 2021. 3",
+            "[36] Borong Liang, Yan Pan, Zhizhi Guo, Hang Zhou, Zhibin Hong, Xiaoguang Han, Junyu Han, Jingtuo Liu, Errui Ding, and Jingdong Wang. Expressive talking head generation with granular audio-visual control. In Proc. CVPR, 2022. 1, 2, 8",
+            "[37] Yaron Lipman, Ricky TQ Chen, Heli Ben-Hamu, Maximilian Nickel, and Matt Le. Flow matching for generative modeling. In Proc. ICLR, 2023. 5",
+            "[38] Jinglin Liu, Zhiying Zhu, Yi Ren, Wencan Huang, Baoxing Huai, Nicholas Yuan, and Zhou Zhao. Parallel and highfidelity text-to-lip generation. In Proc. AAAI, 2022. 3",
+            "[39] Yifeng Ma, Suzhen Wang, Zhipeng Hu, Changjie Fan, Tangjie Lv, Yu Ding, Zhidong Deng, and Xin Yu. Styletalk: One-shot talking head generation with controllable speaking styles. In Proc. AAAI, 2023. 1, 2",
+            "[40] Shivam Mehta, Ruibo Tu, Jonas Beskow, Eva Sz<sup>´</sup> ekely, and´ Gustav Eje Henter. Matcha-TTS: A fast TTS architecture with conditional flow matching. In Proc. ICASSP, 2024. 3, 5, 6",
+            "[41] Dongchan Min, Dong Bok Lee, Eunho Yang, and Sung Ju Hwang. Meta-stylespeech: Multi-speaker adaptive text-tospeech generation. In Proc. ICML, 2021. 3",
+            "[42] Dongchan Min, Minyoung Song, and Sung Ju Hwang. Styletalker: One-shot style-based audio-driven talking head video generation. arXiv preprint arXiv:2208.10922, 2022. 1, 2",
+            "[43] Kentaro Mitsui, Yukiya Hono, and Kei Sawada. Uniflg: Unified facial landmark generator from text or speech. In Proc. Interspeech, 2023. 2, 3",
+            "[44] Se Jin Park, Minsu Kim, Joanna Hong, Jeongsoo Choi, and Yong Man Ro. Synctalkface: Talking face generation with precise lip-syncing via audio-lip memory. In Proc. AAAI, 2022. 2",
+            "[45] Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, et al. Pytorch: An imperative style, high-performance deep learning library, 2019. 6",
+            "[46] Vadim Popov, Ivan Vovk, Vladimir Gogoryan, Tasnima Sadekova, and Mikhail Kudinov. Grad-TTS: A diffusion probabilistic model for text-to-speech. In Proc. ICML, 2021. 3, 5",
+            "[47] KR Prajwal, Rudrabha Mukhopadhyay, Vinay P Namboodiri, and CV Jawahar. A lip sync expert is all you need for speech to lip generation in the wild. In Proc. ACM MM, 2020. 2",
+            "[48] Alec Radford, Jong Wook Kim, Tao Xu, Greg Brockman, Christine McLeavey, and Ilya Sutskever. Robust speech recognition via large-scale weak supervision. In Proc. ICML, 2023. 7",
+            "[49] Yi Ren, Yangjun Ruan, Xu Tan, Tao Qin, Sheng Zhao, Zhou Zhao, and Tie-Yan Liu. Fastspeech: Fast, robust and controllable text to speech. In Proc. NeurIPS, 2019. 3",
+            "[50] Elad Richardson, Yuval Alaluf, Or Patashnik, Yotam Nitzan, Yaniv Azar, Stav Shapiro, and Daniel Cohen-Or. Encoding in style: A stylegan encoder for image-to-image translation. In Proc. CVPR, 2021. 4",
+            "[51] Nataniel Ruiz, Eunji Chong, and James M. Rehg. Finegrained head pose estimation without keypoints. In Proc. CVPR, 2018. 7",
+            "[52] Jonathan Shen, Ruoming Pang, Ron J Weiss, Mike Schuster, Navdeep Jaitly, Zongheng Yang, Zhifeng Chen, Yu Zhang, Yuxuan Wang, Rj Skerrv-Ryan, et al. Natural TTS synthesis by conditioning wavenet on mel spectrogram predictions. In Proc. ICASSP, 2018. 3",
+            "[53] Aliaksandr Siarohin, Stephane Lathuili´ ere, Sergey Tulyakov,\\` Elisa Ricci, and Nicu Sebe. First order motion model for image animation. In Proc. NeurIPS, 2019. 4",
+            "[54] Aliaksandr Siarohin, Oliver J Woodford, Jian Ren, Menglei Chai, and Sergey Tulyakov. Motion representations for articulated animation. In Proc. CVPR, 2021. 4",
+            "[55] Karen Simonyan and Andrew Zisserman. Very deep convolutional networks for large-scale image recognition. In Proc. ICLR, 2015. 4",
+            "[56] David Snyder, Daniel Garcia-Romero, Gregory Sell, Daniel Povey, and Sanjeev Khudanpur. X-vectors: Robust dnn embeddings for speaker recognition. In Proc. ICASSP, 2018. 7",
+            "[57] Linsen Song, Wayne Wu, Chen Qian, Ran He, and Chen Change Loy. Everybody’s talkin’: Let me talk as you want. IEEE Transactions on Information Forensics and Security, 2022. 1, 2",
+            "[58] Yang Song, Jingwen Zhu, Dawei Li, Xiaolong Wang, and Hairong Qi. Talking face generation by conditional recurrent adversarial network. Proc. IJCAI, 2019. 2",
+            "[59] Sarah L Taylor, Moshe Mahler, Barry-John Theobald, and Iain Matthews. Dynamic units of visual speech. In Proc. ACM SIGGRAPH, 2012. 3",
+            "[60] Justus Thies, Mohamed Elgharib, Ayush Tewari, Christian Theobalt, and Matthias Nießner. Neural voice puppetry: Audio-driven facial reenactment. In Proc. ECCV, 2020. 1, 2",
+            "[61] Laurens Van der Maaten and Geoffrey Hinton. Visualizing data using t-SNE. Journal of machine learning research, 2008. 8",
+            "[62] Duomin Wang, Yu Deng, Zixin Yin, Heung-Yeung Shum, and Baoyuan Wang. Progressive disentangled representation learning for fine-grained controllable talking head synthesis. In Proc. CVPR, 2022. 1, 2",
+            "[63] Jianrong Wang, Zixuan Wang, Xiaosheng Hu, Xuewei Li, Qiang Fang, and Li Liu. Residual-guided personalized speech synthesis based on face image. In Proc. ICASSP, 2022. 2, 3"
+        ],
+        "bbox": [
+            78,
+            93,
+            467,
+            133
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "page_number",
+        "text": "8827",
+        "bbox": [
+            482,
+            945,
+            516,
+            957
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "list",
+        "sub_type": "ref_text",
+        "list_items": [
+            "[64] Suzhen Wang, Lincheng Li, Yu Ding, Changjie Fan, and Xin Yu. Audio2head: Audio-driven one-shot talking-head generation with natural head motion. In Proc. IJCAI, 2021. 7, 8",
+            "[65] Suzhen Wang, Lincheng Li, Yu Ding, and Xin Yu. Oneshot talking face generation from single-speaker audio-visual correlation learning. In Proc. AAAI, 2022. 1, 2",
+            "[66] Ting-Chun Wang, Arun Mallya, and Ming-Yu Liu. One-shot free-view neural talking-head synthesis for video conferencing. In Proc. CVPR, 2021. 4",
+            "[67] Yaohui Wang, Di Yang, Francois Bremond, and Antitza Dantcheva. Latent image animator: Learning to animate images via latent space navigation. In Proc. ICLR, 2022. 4",
+            "[68] Zhichao Wang, Mengyu Dai, and Keld Lundgaard. Textto-video: A two-stage framework for zero-shot identityagnostic talking-head generation. In Proc. KDD, 2023. 2, 3",
+            "[69] Zhenhui Ye, Ziyue Jiang, Yi Ren, Jinglin Liu, Chen Zhang, Xiang Yin, Zejun Ma, and Zhou Zhao. Ada-TTA: Towards adaptive high-quality text-to-talking avatar synthesis. In Proc. ICMLW, 2023. 2, 3",
+            "[70] Ran Yi, Zipeng Ye, Juyong Zhang, Hujun Bao, and Yong-Jin Liu. Audio-driven talking face video generation with learning-based personalized head pose. IEEE Trans. on Multimedia, 2020. 1, 2",
+            "[71] Richard Zhang, Phillip Isola, Alexei A Efros, Eli Shechtman, and Oliver Wang. The unreasonable effectiveness of deep features as a perceptual metric. In Proc. CVPR, 2018. 4",
+            "[72] Sibo Zhang, Jiahong Yuan, Miao Liao, and Liangjun Zhang. Text2video: Text-driven talking-head video synthesis with personalized phoneme-pose dictionary. In Proc. ICASSP, 2022. 2, 3",
+            "[73] Wenxuan Zhang, Xiaodong Cun, Xuan Wang, Yong Zhang, Xi Shen, Yu Guo, Ying Shan, and Fei Wang. Sadtalker: Learning realistic 3D motion coefficients for stylized audiodriven single image talking face animation. In Proc. CVPR, 2023. 1, 2, 7, 8",
+            "[74] Hang Zhou, Yu Liu, Ziwei Liu, Ping Luo, and Xiaogang Wang. Talking face generation by adversarially disentangled audio-visual representation. In Proc. AAAI, 2019. 2",
+            "[75] Hang Zhou, Yasheng Sun, Wayne Wu, Chen Change Loy, Xiaogang Wang, and Ziwei Liu. Pose-controllable talking face generation by implicitly modularized audio-visual representation. In Proc. CVPR, 2021. 1, 2, 8",
+            "[76] Yang Zhou, Xintong Han, Eli Shechtman, Jose Echevarria, Evangelos Kalogerakis, and Dingzeyu Li. Makeittalk: speaker-aware talking-head animation. ACM Transactions on Graphics, 2020. 1, 2, 7, 8",
+            "[77] Hao Zhu, Man-Di Luo, Rui Wang, Ai-Hua Zheng, and Ran He. Deep audio-visual learning: A survey. International Journal ofAutomation and Computing, 2021. 2"
+        ],
+        "bbox": [
+            78,
+            93,
+            468,
+            146
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "page_number",
+        "text": "8828",
+        "bbox": [
+            482,
+            945,
+            516,
+            957
+        ],
+        "page_idx": 10
+    }
+]
