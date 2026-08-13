@@ -1,0 +1,3508 @@
+[
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "Score-Guided Diffusion for 3D Human Recovery"
+                    }
+                ],
+                "level": 1
+            },
+            "bbox": [
+                238,
+                130,
+                730,
+                151
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Anastasis Stathopoulos Rutgers University"
+                    }
+                ]
+            },
+            "bbox": [
+                186,
+                181,
+                374,
+                218
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Ligong Han Rutgers University"
+                    }
+                ]
+            },
+            "bbox": [
+                423,
+                181,
+                576,
+                218
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/3e60d53f16b21dccd84b17c8d4381a12456972e752e828e43ce16f00997e3355.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": [
+                    {
+                        "type": "text",
+                        "content": "Dimitris Metaxas Rutgers University"
+                    }
+                ]
+            },
+            "bbox": [
+                80,
+                251,
+                344,
+                387
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/0f9ccd14b8489b7df5f50712e451c51ebf2ee60cf81691f4cb0b39d8535def5c.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": [
+                    {
+                        "type": "text",
+                        "content": "SOTA Method + Our Refinement"
+                    }
+                ]
+            },
+            "bbox": [
+                346,
+                250,
+                614,
+                391
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/01d621bce42e8b2ac29ae4ef4db68b961cc5656bb1323438361f6acd668a7710.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 1. Although achieving remarkable 3D human reconstructions, a recent state-of-the-art monocular regression approach [13] may encounter challenges in aligning the human body model to the image (middle image). To address this, we propose an iterative refinement approach that utilizes image observations (e.g., 2D keypoint detections) and achieves better image-model alignment (right image)."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                614,
+                251,
+                883,
+                392
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "Abstract"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                232,
+                469,
+                315,
+                486
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We present Score-Guided Human Mesh Recovery (ScoreHMR), an approachfor solving inverse problemsfor 3D human pose and shape reconstruction. These inverse problems involve fitting a human body model to image observations, traditionally solved through optimization techniques. ScoreHMR mimics model fitting approaches, but alignment with the image observation is achieved through score guidance in the latent space of a diffusion model. The diffusion model is trained to capture the conditional distribution of the human model parameters given an input image. By guiding its denoising process with a taskspecific score, ScoreHMR effectively solves inverse problems for various applications without the need for retraining the task-agnostic diffusion model. We evaluate our approach on three settings/applications. These are: (i) singleframe model fitting; (ii) reconstruction from multiple uncalibrated views; (iii) reconstructing humans in video sequences. ScoreHMR consistently outperforms all optimization baselines on popular benchmarks across all settings. We make our code and models available on the project website: https://statho.github.io/ScoreHMR."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                500,
+                472,
+                819
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "1. Introduction"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                844,
+                209,
+                861
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Approaches for recovering the 3D human pose and shape from 2D evidence (e.g., image, 2D keypoints) typically predict the parameters of a human body model, such as SMPL [38], and solve the problem with regression [12, 13, 20, 25, 62] or optimization [2, 29, 40, 60]. The traditional approach estimates the model parameters by iteratively fitting the model to 2D measurements using hand crafted objectives and energy minimization techniques [2]. However, this optimization process contains multiple local minima, is sensitive to the choice of initialization and typically slow. To avoid those drawbacks, regression methods train a neural network to predict the human model parameters directly from images. But no existing feed-forward system achieves both accurate 3D reconstruction and imagemodel alignment, especially in the monocular setting. A synergy between the regression and optimization paradigms has been established [19, 26, 28], where the regression estimate is further refined through optimization given additional observations (e.g., 2D keypoint detections). However, even in that case the optimization remains challenging, riddled with multiple local minima, while several prior terms are necessary to obtain a meaningful solution."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                869,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                470,
+                893,
+                775
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Diffusion models [17, 50] have recently gained a lot of attention for their ability to capture complex data distributions [10, 43]. These models learn the implicit prior of the underlying data distribution x by matching the gradient of the log density "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\nabla _ { \\mathbf x }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "log p(x) [50], also known as the score function. This learned prior can be utilized when solving inverse problems that aim to recover x from the observations y by incorporating the gradient of the log likelihood "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\nabla _ { \\mathbf { x } } \\log p ( \\mathbf { y } | \\mathbf { x } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", a.k.a score guidance term, during sampling/denoising. The denoising process in diffusion models, characterized by its iterative nature, presents these models as a data-driven substitute for the iterative minimization employed in optimization-based techniques. Thus far, diffusion models have primarily been utilized in the generation of human motions based on text descriptions [41, 52, 61], rather than being harnessed as a tool for addressing inverse problems in 3D human recovery applications."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                779,
+                895,
+                902
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": []
+            },
+            "bbox": [
+                104,
+                2,
+                181,
+                41
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": [
+                    {
+                        "type": "text",
+                        "content": "This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore."
+                    }
+                ]
+            },
+            "bbox": [
+                235,
+                1,
+                810,
+                46
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "906"
+                    }
+                ]
+            },
+            "bbox": [
+                485,
+                945,
+                513,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                92,
+                470,
+                228
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In this paper, we address this gap by leveraging diffusion models to solve inverse problems related to Human Mesh Recovery (HMR). We introduce Score-Guided Human Mesh Recovery (ScoreHMR), an approach designed to refine initial, per-frame 3D estimates obtained from off-theshelf-regression networks [13, 20, 25, 26] based on additional observations. Our approach uses a diffusion model as a learned prior of a human body model (e.g., SMPL) parameters and guides its denoising process with a guidance term that aligns the human model with the available observation. The diffusion model, task-agnostic in nature, is trained on the generic task of capturing the distribution of plausible SMPL parameters conditioned on an input image. Given an initial regression estimate, we invert it to the corresponding latent of the diffusion model through DDIM [48] inversion. Then we perform deterministic DDIM sampling with guidance, where this guidance term acts as the data term in a standard optimization setting, and the diffusion model serves as a learned parametric prior. The DDIM inversion – DDIM guided sampling loop iterates until the body model aligns with the available observation. ScoreHMR can be conceptualized as a data-driven iterative fitting approach, achieving alignment with image observations through score guidance in the latent space of the diffusion model."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                229,
+                472,
+                593
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The diffusion model can be used in many downstream applications without any need for task-specific retraining. For instance, by incorporating guidance with a keypoint reprojection term, we align the human body model with 2D keypoint detections. In scenarios with multiple uncalibrated views of a person, we employ cross-view consistency guidance to recover a 3D human mesh that maintains consistency across all viewpoints. Furthermore, in the context of inferring human motion from a video sequence, temporal consistency guidance, and optionally keypoint reprojection guidance, refines per-frame regression estimates, resulting in temporally consistent human motions. A visual summary of ScoreHMR and its applications is provided in Figure 2."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                595,
+                472,
+                792
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We contribute ScoreHMR, a novel approach addressing inverse problems in 3D human recovery. We demonstrate the effectiveness of ScoreHMR with extensive experiments on the three inverse problems, refining an initial regression estimate with monocular images, multi-view images and video frames as input. Notably, our method surpasses existing optimization approaches across all datasets and evaluation settings without relying on task-specific designs or training. Beyond achieving superior results, ScoreHMR stands out as the only approach enhancing the 3D pose performance of the state-of-the-art monocular feed-forward system [13] in the single-frame model fitting setting. We make our code and models available to support future work. We provide qualitative results on video sequences on the project page."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                795,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                92,
+                895,
+                214
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2. Related Work"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                224,
+                643,
+                242
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Regression for human mesh recovery. When learning to recover the 3D shape of articulated objects [51, 56, 59], most approaches have to simultaneously learn a representation for the shape. This is not the case for the human category, since parametric models [38, 58] of the human body exist, and most approaches in this paradigm learn to regress their parameters. HMR [20] uses MLP layers on top of image features from a CNN to regress the SMPL model [38] parameters and is the canonical example in this category. Subsequent research [11, 12, 14, 25, 31, 32, 34, 55, 62] has led to many improvements in the original method. Notably, PyMAF [62] proposes a more specialized design for the CNN backbone and incorporates a mesh alignment module for SMPL parameter regression. PARE [25] learns distinct features for the pose and shape parameters of SMPL and introduces a body-part-guided attention mechanism to handle occlusions. Recently, HMR 2.0 [13] proposes a fully “transformerized” version of HMR and can effectively reconstruct unusual poses that have been difficult for previous methods. Another line of work [5, 27, 35, 36], makes nonparametric predictions by directly regressing the vertices of the SMPL model. The SMPL parameters can be regressed from non-parametric predictions with an MLP without any loss in reconstruction performance [27]. In this work, we assume that an initial estimate in the form of SMPL parameters from a regression network is available and our goal is to improve it with our proposed approach."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                251,
+                895,
+                659
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Optimization for human mesh recovery. Methods falling under this category [2, 29, 40, 47, 57, 60] utilize iterative optimization to estimate the parameters of a human model [38, 40, 58]. The objective is often formulated as an energy minimization problem by fitting a parametric model to the available observations, and consists of data and prior terms. The data terms measure the deviation between the estimated and detected features, while the prior terms impose constraints on the model parameters. Parametric priors are important during the optimization in order to obtain a meaningful solution, and several works have proposed a variety of them [2, 9, 28, 40, 42, 53]."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                659,
+                895,
+                840
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Nonetheless, optimization suffers from many difficulties, including sensitivity to parameter initialization, the existence of multiple local minima and the trade-off between the data and prior terms. Regression methods often serve as an initial point for an optimization-based method, which refines the estimated parameters until a convergence criterion is met [19, 26, 28]. This practice not only makes the optimization converge faster, but also typically results in a better solution since a lot of local minima are avoided. The need for multi-stage optimization procedures, as followed by early systems (e.g., SMPLify [2]), is also alleviated since the regressed parameters are typically close to a good solution. We evaluate our proposed approach in this setting, where our aim is to refine an initial regression estimate."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                840,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "907"
+                    }
+                ]
+            },
+            "bbox": [
+                485,
+                945,
+                511,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/604cec0ff6036bc18ebe68a1e275b57e7f59cd0aa37f9d60b685085af80631be.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Repeat until aligned with observations"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Figure 2. Score-Guided Human Mesh Recovery and its applications. Top row: Overview of ScoreHMR, which iteratively refines an initial regression estimate in a DDIM inversion – DDIM guided sampling loop until the human body model aligns with the available observation. Bottom row: Applications. (a): Body model fitting to 2D keypoints. (b): Multi-view refinement of individual per-frame predictions with cross-view consistency guidance. (c): Recovering temporally consistent and smooth 3D human motion from a video sequence given initial per-frame estimates."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                81,
+                102,
+                882,
+                343
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                440,
+                470,
+                590
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Solving inverse problems with diffusion models. Diffusion models [17, 46, 50] are used to represent complex distributions, exhibiting remarkable success in various applications such as text-to-image generation [43, 45], personalization [15, 44], image editing [16] and video inpainting [63]. Their state-of-the-art performance in image generation [10] has led to their usage as structural priors when solving inverse problems in image processing applications, such as image inpainting [7, 8, 49], super-resolution [49], deblurring [8] and colorization [7] among others. Diffusion models have not been used to solve inverse problems in the context of 3D human pose and shape estimation, and our work aims to bridge this gap."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                592,
+                470,
+                789
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3. Background"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                799,
+                205,
+                816
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Diffusion models. We first offer some background for diffusion models, namely the denoising diffusion probabilistic model (DDPM) [17] formulation. Let "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { 0 } \\sim p _ { d a t a } ( \\mathbf { x } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "denote samples from the data distribution. Diffusion models progressively perturb data to noise – forward process – via Gaussian kernels for "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "T"
+                    },
+                    {
+                        "type": "text",
+                        "content": "timesteps, creating latents "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ { \\bf x } _ { t } \\} _ { t = 1 } ^ { T }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "The noise is added with a predefined variance schedule "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ \\zeta _ { t } \\} _ { t = 1 } ^ { T }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", such that we obtain a standard Gaussian distribution when "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "t = T , i . e . \\ \\mathbf { x } _ { T } \\sim \\mathcal { N } ( \\mathbf { 0 } , \\mathbf { I } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Latents "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "can be directly sampled from a data point x<sub>0</sub> as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "q ( \\mathbf { x } _ { t } | \\mathbf { x } _ { 0 } ) ="
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { N } ( \\sqrt { \\alpha _ { t } } \\mathbf { x } _ { 0 } , ( 1 - \\alpha _ { t } ) \\mathbf { I } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\begin{array} { r } { \\alpha _ { t } : = \\prod _ { s = 1 } ^ { t } ( 1 - \\zeta _ { s } ) } \\end{array}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "). A denoising model "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\phi }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is trained to predict the added noise to a clean sample via minimization of the following re-weighted evidence lower bound [17, 23]:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                824,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                440,
+                893,
+                577
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { r } { \\mathcal { L } _ { s i m p l e } ( \\phi ) = \\mathbb { E } _ { \\mathbf { x } _ { 0 } , t , \\epsilon } | | \\epsilon _ { \\phi } ( \\mathbf { x } _ { t } , t ) - \\epsilon | | ^ { 2 } , } \\end{array}\\tag{1}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/60edcd43cbb718fc45abe0429a9b5c57ad6968c6ec642ffdc0c9ccd929eae37f.jpg"
+                }
+            },
+            "bbox": [
+                566,
+                585,
+                825,
+                603
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where t is sampled uniformly from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ 1 , . . , T \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and noise ϵ is added to a clean sample "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { 0 } \\sim p _ { d a t a }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to get a noisy sample "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Once the denoising model "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\phi }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is learned, we can use it to generate samples from the diffusion model by sampling "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { T } \\sim \\mathcal { N } ( \\mathbf { 0 } , \\mathbf { I } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and iteratively refining it with "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\phi }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". The predicted noise for a latent "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "at timestep t (noise level) from the denoising model "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\phi }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is related to the score of the model at that timestep [50]:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                611,
+                893,
+                733
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { r } { \\epsilon _ { \\phi } ( \\mathbf x _ { t } , t ) = - \\sqrt { 1 - \\alpha _ { t } } \\nabla _ { \\mathbf x _ { t } } \\log p ( \\mathbf x _ { t } ) . } \\end{array}\\tag{2}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/4dfe68df0c4d4fdc2f485e1c3227da05772e289d000e14edbb0108d2f84f1ebe.jpg"
+                }
+            },
+            "bbox": [
+                570,
+                741,
+                820,
+                758
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Since the sampling process – reverse process – of the DDPM formulation is known to be slow [17, 48], Song et al. [48] proposed the denoising diffusion implicit model (DDIM) formulation for diffusion models, which defines the diffusion process as a non-Markovian process with the same forward marginals as DDPM. This enables faster sampling with the sampling steps given by:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                767,
+                893,
+                875
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbf { x } _ { t - 1 } = \\sqrt { \\alpha _ { t - 1 } } \\hat { \\mathbf { x } } _ { 0 } ( \\mathbf { x } _ { t } ) + \\sqrt { 1 - \\alpha _ { t - 1 } - \\sigma _ { t } ^ { 2 } } \\epsilon _ { \\phi } ( \\mathbf { x } _ { t } , t ) + \\sigma _ { t } \\mathbf { z } ,\\tag{3}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/44792fff5756b4a4e7b7d5924c462722ff56363927b3ff5900251630368bc46f.jpg"
+                }
+            },
+            "bbox": [
+                504,
+                881,
+                866,
+                904
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "908"
+                    }
+                ]
+            },
+            "bbox": [
+                485,
+                945,
+                511,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { z } \\sim \\mathcal { N } ( \\mathbf { 0 } , \\mathbf { I } ) , \\sigma _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the variance of the noise used during sampling, and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { \\mathbf { x } } _ { 0 } ( \\mathbf { x } _ { t } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "denotes the predicted "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\mathrm { 0 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and is given by:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                90,
+                470,
+                137
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { l } { \\hat { { \\mathbf { x } } } _ { 0 } ( { \\mathbf { x } } _ { t } ) = \\displaystyle \\frac { 1 } { \\sqrt { \\alpha _ { t } } } ( { \\mathbf { x } } _ { t } - \\sqrt { 1 - \\alpha _ { t } } \\epsilon _ { \\phi } ( { \\mathbf { x } } _ { t } , t ) ) , } \\\\ { { \\displaystyle \\simeq \\frac { 1 } { \\sqrt { \\alpha _ { t } } } ( { \\mathbf { x } } _ { t } + ( 1 - \\alpha _ { t } ) \\nabla _ { { \\mathbf { x } } _ { t } } \\log p ( { \\mathbf { x } } _ { t } ) ) . } } \\end{array}\\tag{4}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/22a8143a7c841cb27f039f80793d12d7ab39a59ff0ae0e9b853e59d4fd6bbe99.jpg"
+                }
+            },
+            "bbox": [
+                117,
+                145,
+                426,
+                212
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "By setting "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\sigma _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "0 ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "the sampling process becomes deterministic and enables inversion of samples from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "p _ { d a t a }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to their corresponding latents [48]. The same framework can be used for modeling conditional distributions, by incorporating the conditional information in the forward and reverse processes [10]."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                219,
+                470,
+                310
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4. Method"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                321,
+                168,
+                338
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Body model. SMPL [38] is a parametric human body model. It consists of pose "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\theta \\in \\mathbb { R } ^ { 2 4 \\times 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and shape "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\beta \\in \\mathbb { R } ^ { 1 \\bar { 0 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "parameters, and defines a mapping "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { M } ( \\theta , \\beta )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "from the human body parameters to a body mesh "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\dot { M } \\in \\mathbb { R } ^ { N \\times 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "N = 6 9 8 0"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the number of mesh vertices. For a given output mesh M, the 3D body joints J can be computed as a linear combination of the mesh vertices "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "J = W M"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", where W is a pre-trained linear regressor."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                347,
+                470,
+                469
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Problem statement. Suppose we have observations "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\textbf { y } } \\in"
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbb { R } ^ { n }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "that relate to some unknown signal "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { 0 } \\in \\mathbb { R } ^ { m }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "through:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                473,
+                468,
+                503
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbf { y } = \\mathcal { A } ( \\mathbf { x } _ { 0 } ) + \\eta ,\\tag{5}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/acd242a3157aa472e19b71a601214b7a849a9599e4c46cadb6821b5269c8ff3b.jpg"
+                }
+            },
+            "bbox": [
+                215,
+                513,
+                330,
+                529
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\boldsymbol { \\mathcal { A } } ( \\cdot )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is a forward operator and η is the observation noise. Our goal is to recover "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\mathrm { 0 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "from y, i.e. solve the inverse problem. We are interested in recovering the SMPL parameters "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { 0 } ~ = ~ \\{ \\theta _ { 0 } , \\beta _ { 0 } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "from observations y (e.g., 2D keypoint detections), from which the closed-form map to "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\mathrm { 0 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is intractable. Solutions to this family of problems are given through iterative optimization by minimization:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                537,
+                470,
+                645
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\underset { { \\bf x } _ { 0 } } { \\arg \\operatorname* { m i n } } = \\mathcal { L } _ { d a t a } ( { \\bf x } _ { 0 } ) + \\mathcal { L } _ { p r i o r } ( { \\bf x } _ { 0 } ) ,\\tag{6}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/22e0148fc1b8fabf63d491089887f62cfcb8f514f34ccbe019733cc319fbe689.jpg"
+                }
+            },
+            "bbox": [
+                150,
+                655,
+                395,
+                679
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { d a t a }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "measures the deviation between the estimated and detected features and L consists of several prior terms necessary to obtain a plausible solution."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                688,
+                470,
+                733
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In our setting, we are given an input image I of a person and the corresponding SMPL estimate "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { r e g } = \\{ \\theta _ { r e g } , \\beta _ { r e g } \\}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "from regression. Our goal is to improve "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\bf x } _ { r e g }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in the presence of additional observations y. In order to achieve this we propose an approach that injects suitable information in the denoising process of a diffusion model through the log likelihood score, as described next."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                733,
+                470,
+                839
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.1. Score-Guided Human Mesh Recovery"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                847,
+                405,
+                863
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Our main objective is to explore how we can leverage diffusion models to solve inverse problems for human mesh recovery applications. Here, we assume that an initial estimate "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\bf x } _ { r e g }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "for the SMPL parameters is acquired through any off-the-shelf regression network such as [13, 20, 26], while observations y are also automatically detected. Furthermore, we assume that we have access to a trained diffusion model "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\phi } ( \\mathbf { x } _ { t } , t , I )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "that sufficiently captures the conditional distribution of SMPL model parameters given an input image I. Our goal is to improve "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\bf x } _ { r e g }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "with the help of the diffusion model and detected observations y."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                869,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                92,
+                893,
+                227
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To use the regression estimate "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { r e g }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "as an initial point, we invert it to the latent x<sub>τ</sub> at noise level τ with the deterministic DDIM inversion process:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                227,
+                893,
+                273
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbf { x } _ { t + 1 } = \\sqrt { \\alpha _ { t + 1 } } \\hat { \\mathbf { x } } _ { 0 } ( \\mathbf { x } _ { t } ) + \\sqrt { 1 - \\alpha _ { t + 1 } } \\epsilon _ { \\phi } ( \\mathbf { x } _ { t } , t , I ) .\\tag{7}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/6546f31e67aa4d86d25a582023e4e8549978bfcd3c2730b232f0bc2524fd4085.jpg"
+                }
+            },
+            "bbox": [
+                521,
+                284,
+                848,
+                301
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Running the deterministic DDIM sampling starting from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\tau }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", we would get back the initial estimate "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\bf x } _ { r e g }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". We found that this reconstruction error is less than "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "1 0 ^ { - 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "per dimension, which suggests that the DDIM inversion – DDIM sampling loop works as intended. However, we are not interested in getting back the initial regression estimate, but we wish to improve it based on the available observation y."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                311,
+                893,
+                417
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Ideally, we would like to use the conditional score "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\nabla _ { \\mathbf { x } _ { t } } \\log p ( \\mathbf { x } _ { t } | I , \\mathbf { y } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "during DDIM sampling instead of the score "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\nabla _ { \\mathbf { x } _ { t } } \\log p ( \\mathbf { x } _ { t } | I )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "of the data distribution. Using Bayes rule we can write the score "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\nabla _ { \\mathbf { x } _ { t } } \\log p ( \\mathbf { x } _ { t } | I , \\mathbf { y } ) \\ ="
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\nabla _ { \\mathbf { x } _ { t } } \\log p ( \\mathbf { x } _ { t } | I ) + \\nabla _ { \\mathbf { x } _ { t } } \\log p ( \\mathbf { y } | I , \\mathbf { x } _ { t } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", where the first term is the score of the diffusion model "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\phi } ( \\mathbf { x } _ { t } , t , I )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". However, the issue with this posterior sampling approach is that there does not exist an analytical formulation for the likelihood score "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\nabla _ { \\mathbf { x } _ { t } } \\log p ( \\mathbf { y } | I , \\mathbf { x } _ { t } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". To resolve this, a recent line of work estimates the likelihood under some mild assumptions [8, 49]. Inspired by [8], by assuming that the observation noise η in Eq. (5) is Gaussian, we get:"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                417,
+                893,
+                599
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { r l } & { \\nabla _ { \\mathbf x _ { t } } \\log p ( \\mathbf y | I , \\mathbf x _ { t } ) \\simeq \\nabla _ { \\mathbf x _ { t } } \\log p ( \\mathbf y | I , \\hat { \\mathbf x } _ { 0 } ( \\mathbf x _ { t } ) ) } \\\\ & { \\qquad = - \\rho \\nabla _ { \\mathbf x _ { t } } \\vert \\vert \\mathbf y - \\boldsymbol { \\mathcal A } ( \\hat { \\mathbf x } _ { 0 } ( \\mathbf x _ { t } ) ) \\vert \\vert _ { 2 } ^ { 2 } , } \\end{array}\\tag{8}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/49ba349e438ebe32b5f881d6eddb3ea590a5f01a4d058e0073a50e6fd71b6317.jpg"
+                }
+            },
+            "bbox": [
+                521,
+                609,
+                849,
+                647
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\rho"
+                    },
+                    {
+                        "type": "text",
+                        "content": "can be viewed as a tunable step size. Approximating the likelihood score with Eq. (8), we apply guidance to the deterministic DDIM sampling process, with the sampling equations seen below:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                657,
+                893,
+                719
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { r l r } {  { \\hat { \\mathbf { x } } _ { 0 } ^ { ' } ( \\mathbf { x } _ { t } ) = \\frac { 1 } { \\sqrt { \\alpha _ { t } } } ( \\mathbf { x } _ { t } - \\sqrt { 1 - \\alpha _ { t } } \\epsilon _ { \\phi } ^ { ' } ( \\mathbf { x } _ { t } , t , I ) ) , } } \\\\ & { } & { \\mathbf { x } _ { t - 1 } = \\sqrt { \\alpha _ { t - 1 } } \\hat { \\mathbf { x } } _ { 0 } ^ { ' } ( \\mathbf { x } _ { t } ) + \\sqrt { 1 - \\alpha _ { t - 1 } } \\epsilon _ { \\phi } ^ { ' } ( \\mathbf { x } _ { t } , t , I ) . } \\end{array}\\tag{9}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/1411614910bcd8277bc4769e7da22a0b230a5787d3eb207f0a4c76092967c8ed.jpg"
+                }
+            },
+            "bbox": [
+                524,
+                728,
+                862,
+                784
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\phi } ^ { ' }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the modified noise prediction after guidance:"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                795,
+                875,
+                813
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\epsilon _ { \\phi } ^ { ' } = \\epsilon _ { \\phi } ( \\mathbf { x } _ { t } , t , I ) + \\rho \\sqrt { 1 - \\alpha _ { t } } \\nabla _ { \\mathbf { x } _ { t } } | | \\mathbf { y } - \\mathcal { A } ( \\hat { \\mathbf { x } } _ { 0 } ( \\mathbf { x } _ { t } ) ) | | _ { 2 } ^ { 2 } .\\tag{10}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/6b8ab246050ab3da256ace7eb165be7ff8c3b4ca386aeb309559d7376f267483.jpg"
+                }
+            },
+            "bbox": [
+                504,
+                825,
+                854,
+                844
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We use DDIM inversion (Eq. (7)) followed by guided DDIM sampling (Eqs. (9) and (10)) in a loop, aligning the human body model with the detected observations. The loop stops when the relative change of the guidance loss "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { g } = | | \\mathbf { y } - \\mathcal { A } ( \\hat { \\mathbf { x } } _ { 0 } ( \\mathbf { x } _ { t } ) ) | | _ { 2 } ^ { 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is below a given threshold "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\lambda _ { t h r }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "We provide a pseudo-code implementation of ScoreHMR in the supplemental."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                854,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "909"
+                    }
+                ]
+            },
+            "bbox": [
+                485,
+                945,
+                511,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                90,
+                470,
+                151
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.2. Model Design and Training"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                159,
+                325,
+                174
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Without loss of generality, we choose to model only the pose SMPL parameters with our diffusion model, i.e. "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { 0 } \\ = \\ \\theta _ { : }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", to maintain a fair comparison with optimization methods utilizing a learned pose prior "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( e . g ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ", ProHMR [28]). We emphasize that the shape parameters "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\beta"
+                    },
+                    {
+                        "type": "text",
+                        "content": "of SMPL can also be accommodated using the same approach and we present results from such experiments in the supplemental. However, we do not notice any performance improvement by including the SMPL "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\beta"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in ScoreHMR. One plausible explanation is that inferring "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\beta"
+                    },
+                    {
+                        "type": "text",
+                        "content": "from a single image is relatively more straightforward compared to inferring θ for existing methods [13, 20, 26]."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                181,
+                470,
+                363
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In our setting, we are given an input image I of a person, which we encode with a CNN backbone "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "g"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and obtain a context feature "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathrm { ~ \\bf ~ c ~ } = \\mathrm { ~ \\bf ~ g ( } I )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". We model the distribution of plausible poses for that person conditioned on I with a diffusion model "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\phi } ( \\mathbf { x } _ { t } , t , c ~ = ~ g ( I ) )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "The backbone "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "g"
+                    },
+                    {
+                        "type": "text",
+                        "content": "can be either trained end-to-end with "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\phi }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "or remain frozen while training the diffusion model. In the latter case, we can use the features from the backbone of a regression network [20, 25, 26, 28]. We did not observe any performance improvement from training "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "g"
+                    },
+                    {
+                        "type": "text",
+                        "content": "end-to-end with "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\phi } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and therefore, we acquire the context feature c from a pretrained regression network in all of our experiments."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                363,
+                470,
+                545
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Architecture. We follow [64] and use the 6D representation for 3D rotations, thus "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { \\mathrm { 0 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is a 144-dimensional vector. The denoising model "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\phi }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is comprised of 3 MLP blocks that are conditioned on the timestep t and image features c. The model is given a noisy sample "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "for the pose parameters, the timestep t and image features c as input. First, we use a linear layer to project "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to the features "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { \\bar { h } } ^ { ( 1 ) }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "given as input to the first MLP block. We condition the input features "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { h } ^ { ( i ) } \\in \\mathbb { R } ^ { 1 4 4 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "of each MLP block on the timestep "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "t ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "by applying scaling and shifting to get the features "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { h } _ { t } ^ { ( i ) } ="
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { t } _ { s } \\mathbf { h } ^ { ( i ) } + \\mathbf { t } _ { b }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( \\mathbf { t } _ { s } , \\mathbf { t } _ { b } ) \\ \\in \\ \\mathbb { R } ^ { 2 \\times 1 4 4 } \\ = \\ M L P ( \\psi ( t ) )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the output of a MLP with a sinusoidal encoding function "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\psi ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "Then, we condition each MLP block on the image features by concatenating "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { h } _ { t } ^ { ( i ) }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and c. Additional details are provided in the supplemental."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                547,
+                470,
+                779
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Training. Let us assume that we have a collection of images paired with SMPL pose annotations. Then, we could train the diffusion model with its standard training loss:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                781,
+                470,
+                827
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathcal { L } _ { D M } ( \\phi ) = \\mathbb { E } _ { ( I , \\mathbf { x } _ { 0 } ) , t , \\epsilon } | | \\epsilon _ { \\phi } ( \\mathbf { x } _ { t } , t , I ) - \\epsilon | | ^ { 2 } .\\tag{11}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/3910923e1a74ba33051e0257e20a469f2cca379eb8408a6ee30c0141d953dd74.jpg"
+                }
+            },
+            "bbox": [
+                132,
+                832,
+                411,
+                849
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Unfortunately, such paired annotations are not generally available, so we use pseudo ground-truth SMPL pose annotations from various datasets (see Sec. 5)."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                856,
+                468,
+                901
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.3. Applications of ScoreHMR"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                90,
+                745,
+                107
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In this part we show how we can use our approach for solving HMR-related inverse problems. We highlight that for all these applications we use the same trained diffusion model with no per-task training."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                113,
+                893,
+                175
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Body model fitting. In this setting the detected image observations are 2D keypoints detections "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { y } _ { k p }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and their confidences "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { y } _ { c o n f }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Optimization approaches fit the SMPL body model to the 2D keypoints by minimizing "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\lambda _ { J } E _ { J } +"
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\lambda _ { p r i o r } E _ { p r i o r } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ", where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "E _ { J }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "penalizes the deviations between the projected model joints and the detected joints and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "E _ { p r i o r }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "include prior energy terms for the pose and shape parameters of SMPL."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                178,
+                893,
+                299
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Typically the predicted weak-perspective camera from a regression network is converted to a perspective camera "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\pi = ( R , \\gamma )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "based on the bounding box of a person and is also included as a variable to be optimized. The camera π has fixed focal length and intrinsics "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "K ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Since the parameters θ already include a global orientation, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "R \\in \\mathbb { R } ^ { 3 \\times 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is assumed to be identity and only the camera translation "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\gamma \\in \\mathbb { R } ^ { 3 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is optimized along with the human body model parameters."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                299,
+                893,
+                420
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In this setting, the forward operator that relates the body model parameters with the detected joints is "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\Pi _ { K } ( W \\mathcal { M } ( \\mathbf { x } _ { 0 } , \\beta ) + \\gamma )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\Pi _ { K }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the projection matrix with camera intrinsics "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "K"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "W"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is a matrix that regresses the 3D model joints from the mesh vertices of the model. This means that the guidance loss in Eq. (10) becomes:"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                420,
+                893,
+                511
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathcal { L } _ { r e p r } = { \\bf y } _ { c o n f } | | \\Pi _ { K } ( W \\mathcal { M } ( \\hat { \\bf x } _ { 0 } ( { \\bf x } _ { t } ) , \\beta ) + \\gamma ) - { \\bf y } _ { k p } | | _ { 2 } ^ { 2 } .\\tag{12}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/59ffd778c729815e4a849a561e746ec2cd2e7be98d7b0463d0f619a8d011679a.jpg"
+                }
+            },
+            "bbox": [
+                506,
+                520,
+                856,
+                537
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The camera translation "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\gamma"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is also optimized with "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { \\boldsymbol { r } \\boldsymbol { e p r } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "as in standard optimization procedures."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                547,
+                892,
+                579
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Multi-view refinement. In this setting we have a set "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\{ I ^ { ( n ) } \\} _ { n = 1 } ^ { N }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "of uncalibrated views of the same person, and their monocular regression estimate that we want to improve based on information from the other views. For each frame, we decompose the pose parameters "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { 0 } ^ { ( n ) }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to global orientation "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { 0 , g l } ^ { ( n ) }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and body pose parameters "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { 0 , b } ^ { ( n ) }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". We can consolidate all single-frame predictions to improve "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { x } _ { 0 , b } ^ { ( n ) }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "with a cross-view consistency guidance loss:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                583,
+                893,
+                710
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathcal { L } _ { M V } = \\sum _ { n = 1 } ^ { N } | | \\hat { \\mathbf { x } } _ { 0 , b } ^ { ( n ) } ( \\mathbf { x } _ { t } ^ { ( n ) } ) - \\bar { \\mathbf { x } } _ { 0 , b } | | _ { 2 } ^ { 2 } ,\\tag{13}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/23600b35ef8c6ac7eeb8782eadbf3076ed4fa35bee4e8eea5b64db7e49dcb810.jpg"
+                }
+            },
+            "bbox": [
+                575,
+                719,
+                815,
+                762
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\begin{array} { r } { \\bar { \\mathbf { x } } _ { 0 , b } ~ = ~ \\frac { 1 } { N } \\sum _ { n } ^ { N } \\mathbf { x } _ { 0 , b } ^ { ( n ) } ( \\mathbf { x } _ { t } ^ { ( n ) } ) } \\end{array}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and its minimization is equivalent to minimizing the squared distance between all pairs of body poses."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                773,
+                892,
+                821
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Human motion refinement. Although our model has been trained in the monocular setting, we can use the learned conditional distribution to obtain temporally consistent and smooth predictions in a video sequence "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\dot { V } = \\{ I ^ { ( n ) } \\} _ { n = 1 } ^ { N } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "In this setting, the forward operator is the identity function and the observations are the pose predictions of the previous frame in the sequence. We can enforce temporal consistency with the following guidance loss:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                824,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "910"
+                    }
+                ]
+            },
+            "bbox": [
+                485,
+                944,
+                513,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                90,
+                470,
+                137
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathcal { L } _ { t e m p } = \\sum _ { n = 2 } ^ { N } | | \\hat { \\mathbf { x } } _ { 0 } ^ { ( n ) } ( \\mathbf { x } _ { t } ) - \\hat { \\mathbf { x } } _ { 0 } ^ { ( n - 1 ) } ( \\mathbf { x } _ { t } ) | | _ { 2 } ^ { 2 } .\\tag{14}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/3a352329d2bf98630f196932ee69aac1aecabe26f7a94b1aadade72b7960ec48.jpg"
+                }
+            },
+            "bbox": [
+                133,
+                143,
+                413,
+                186
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Guidance with the previous loss can be considered as a learnable smoothing operation that makes sure that the smoothed parameters remain consistent with the image evidence under the image-conditional distribution captured by the diffusion model. We can optionally use additional guidance with the keypoint reprojection loss in Eq. (12) when 2D keypoint detections are available."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                193,
+                472,
+                300
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5. Experiments"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                310,
+                210,
+                329
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Training. We use the typical datasets for training, i.e., Human3.6M [18], MPI-INF-3DHP [39], COCO [37] and MPII [1]. The quality of the pseudo ground-truth pose annotations plays an important role for training the diffusion model. We compare two models trained with pseudo ground-truth from SPIN [26] and EFT [19] respectively. To showcase that ScoreHMR can work with image features from various HMR models, we also train two different versions of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\epsilon _ { \\phi }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "with image features from ProHMR [28] and PARE [25] respectively. When training with PARE features, we only use its pose features. Implementation details and hyper-parameters are provided in the supplemental."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                339,
+                472,
+                522
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Evaluation datasets. For the body model fitting to 2D keypoints and human motion refinement settings, we conduct evaluation on the test set of 3DPW [54] and on the split of EMDB [22] that contains the most challenging sequences (i.e., EMDB 1). For the multi-view refinement experiment, we report results on Human3.6M [18] and Mannequin Challenge [33]. For Mannequin Challenge we use the annotations produced by Leroy et al. [30] and employ the entire dataset for evaluation."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                525,
+                472,
+                661
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Evaluation setup. In order to demonstrate the efficacy of our approach in refining the regression estimates from various networks and accuracy levels, we use the predictions from the less accurate ProHMR’s regression network [28] and the highly accurate HMR 2.0 [13] as our starting points. For experiments with HMR 2.0, we use the HMR 2.0b model, which trains longer and on more data than HMR 2.0a, and can reconstruct humans in challenging and unusual poses."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                665,
+                472,
+                801
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.1. Quantitative Evaluation"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                808,
+                299,
+                824
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.1.1 Body model fitting"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                832,
+                261,
+                848
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We evaluate the accuracy of methods that fit the SMPL body model to 2D keypoint detections. The keypoints are detected with OpenPose [3]."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                854,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/cb21eafcf18522bf34bc85ba9ccbb7c5c1d5c4414b0dd2969c66fe216dadfc0a.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 1. Ablation study. ScoreHMR is initialized by the corresponding regression results. All numbers are PA-MPJPE in mm. Parenthesis denotes the number of body joints used to compute PA-MPJPE."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td></td><td>Features</td><td>Fits</td><td>3DPW (14)</td><td>EMDB 1 (24)</td></tr><tr><td>ProHMR [28]</td><td></td><td></td><td>59.8</td><td>86.1</td></tr><tr><td>+ ScoreHMR</td><td>ProHMR</td><td>SPIN</td><td>55.7</td><td>77.8</td></tr><tr><td>+ ScoreHMR</td><td>ProHMR</td><td>EFT</td><td>55.5</td><td>77.4</td></tr><tr><td>+ ScoreHMR</td><td>PARE</td><td>SPIN</td><td>55.6</td><td>77.4</td></tr><tr><td>+ ScoreHMR</td><td>PARE</td><td>EFT</td><td>54.7</td><td>77.1</td></tr><tr><td>HMR 2.0 [13]</td><td></td><td></td><td>54.3</td><td>78.7</td></tr><tr><td>+ ScoreHMR</td><td>ProHMR</td><td>SPIN</td><td>52.4</td><td>76.5</td></tr><tr><td>+ ScoreHMR</td><td>ProHMR</td><td>EFT</td><td>51.3</td><td>76.4</td></tr><tr><td>+ ScoreHMR</td><td>PARE</td><td>SPIN</td><td>52.4</td><td>76.6</td></tr><tr><td>+ ScoreHMR</td><td>PARE</td><td>EFT</td><td>51.1</td><td>76.6</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                500,
+                90,
+                908,
+                262
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/2d8f93e8f5241f97da6c36522d0599f6ff4126aa6de644120e26c44aae5f24b7.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 2. Evaluation of different model fitting methods. The fitting algorithms are initialized by the corresponding regression results, except LGD [47] and LFMM [6]. All numbers are PA-MPJPE in mm. Parenthesis denotes the number of body joints used to compute PA-MPJPE."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td></td><td>3DPW (14)</td><td>EMDB 1 (24)</td></tr><tr><td>LGD [47] LFMM [6]</td><td>55.9</td><td>81.1</td></tr><tr><td></td><td>52.2</td><td>86.1</td></tr><tr><td>ProHMR [28] + SMPLify [2]</td><td>59.8 60.9</td><td>84.6</td></tr><tr><td>+ fitting [28]</td><td>55.1</td><td>79.8</td></tr><tr><td>+ ScoreHMR-a</td><td>55.7</td><td>77.8</td></tr><tr><td>+ ScoreHMR-b</td><td>54.7</td><td>77.1</td></tr><tr><td></td><td></td><td></td></tr><tr><td>HMR 2.0 [13]</td><td>54.3</td><td>78.7</td></tr><tr><td>+ SMPLify [2]</td><td>60.1</td><td>83.5</td></tr><tr><td>+ fitting [28]</td><td>55.1</td><td>80.1</td></tr><tr><td>+ ScoreHMR-a</td><td>52.4</td><td>76.5</td></tr><tr><td>+ ScoreHMR-b</td><td>51.1</td><td>76.6</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                540,
+                343,
+                838,
+                551
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Ablation study. First, we provide an ablation study of the core components of ScoreHMR. We benchmark ScoreHMR with diffusion models trained with frozen image features from ProHMR [28] and PARE [25], and pseudo groundtruth pose annotations from SPIN [26] and EFT [19]. We report results of iterative refinement with ScoreHMR using the keypoint reprojection loss "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { \\boldsymbol { r } \\boldsymbol { e p r } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in Eq. (12). Following the typical protocols of prior work [26, 28] we use the PA-MPJPE metric for evaluation and present results in Table 1. From Table 1 we observe that running ScoreHMR on top of regression reduces the 3D pose errors in all cases. We also observe that iterative refinement with ScoreHMR is robust to the choice of image features and pseudo groundtruth. The diffusion model, trained with PARE image features and fits from EFT, attains the highest performance. We use ScoreHMR with our worst (ProHMR features & SPIN fits) and best (PARE features & EFT fits) models for evaluation in the rest of the paper, denoting them as ScoreHMR-a and ScoreHMR-b respectively."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                643,
+                895,
+                902
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "911"
+                    }
+                ]
+            },
+            "bbox": [
+                485,
+                945,
+                511,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/9bef1cde527bb3da0a9dec4bb06815dc6e30d763cc783bab3be51a1dae495ae6.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 3. Evaluation of multi-view refinement. We compare our proposed approach with the single-view 3D reconstruction and an optimization-based method [28]. Parenthesis denotes the number of body joints used to compute MPJPE and PA-MPJPE."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td></td><td colspan=\"2\">H36M (14)</td><td colspan=\"2\">Mannequin (17)</td></tr><tr><td></td><td>MPJPE↓</td><td>PA-MPJPE↓</td><td>MPJPE↓</td><td>PA-MPJPE↓</td></tr><tr><td>ProHMR [28]</td><td>65.1</td><td>43.7</td><td>165.3</td><td>86.8</td></tr><tr><td>+ fitting [28]</td><td>59.6</td><td>34.5</td><td>162.6</td><td>80.2</td></tr><tr><td>+ ScoreHMR-a</td><td>55.8</td><td>34.1</td><td>162.0</td><td>81.1</td></tr><tr><td>+ ScoreHMR-b</td><td>51.9</td><td>34.2</td><td>157.7</td><td>80.2</td></tr><tr><td>HMR 2.0 [13]</td><td>52.8</td><td>35.6</td><td>156.0</td><td>90.1</td></tr><tr><td>+ fitting [28]</td><td>52.6</td><td>32.9</td><td>155.5</td><td>79.4</td></tr><tr><td>+ ScoreHMR-a</td><td>47.9</td><td>28.4</td><td>151.0</td><td>79.3</td></tr><tr><td>+ ScoreHMR-b</td><td>44.7</td><td>29.0</td><td>148.3</td><td>79.1</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                73,
+                89,
+                459,
+                224
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                76,
+                300,
+                468,
+                329
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Comparison with optimization methods. Next, we compare with model fitting baselines that are trained to optimize starting from the canonical pose and shape (i.e., LGD [47], LFMM [6]) as well as with baselines that can use the parameters from a regression network as a starting point (i.e., SM-PLify [2], ProHMR-fitting [28]). We benchmark SMPLify (single-stage implementation from [26]) and ProHMRfitting starting from the predictions of the ProHMR’s regression network [28] and those of HMR 2.0 [13]. Results are reported in Table 2. Performing SMPLify on top of regression increases the 3D pose errors, while ProHMR-fitting fails to improve the performance of HMR 2.0. Iterative refinement with ScoreHMR reduces the 3D pose errors in all cases, and ScoreHMR-b outperforms all baselines."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                330,
+                470,
+                542
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.1.2 Multi-view refinement"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                559,
+                289,
+                574
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Next, we evaluate the capability of ScoreHMR at refining the per-view regression estimates when several uncalibrated views of the same person are available. For this task, we use guidance with the cross-view consistency loss "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\mathcal { L } } _ { M V }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in Eq. (13). We test our approach on the Human3.6M [18] and the Mannequin Challenge [33] (some YouTube videos were missing) datasets, reporting MPJPE and PA-MPJPE following [28]. We compare with the individual per-view regression predictions as well as with an optimization-based method [28]. Results are shown in Table 3. Results from Table 3 show that both ScoreHMR and ProHMR-fitting improve the per-frame predictions, but our approach consistently leads to lower MPJPE errors. This happens because refining the body poses at a given noise level also influences the global orientation in the next noise level of the diffusion model, as the model captures the joint distribution of SMPL poses θ. This is not possible with ProHMR-fitting, since only the body poses are updated during the optimization process. Notably, the runtime of ScoreHMR is remarkably swift, requiring only 1.5 minutes for the entire Mannequin Challenge dataset, which contains 20K frames."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                583,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/c85604496c27756d729882d83111bbc3000689b92efba0860034e85e62dc0787.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 4. Evaluation of human motion refinement. We compare different model fitting algorithms and our proposed approach in a temporal setting. Parenthesis denotes the number of body joints used to compute PA-MPJPE and Acc Err."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td></td><td colspan=\"2\">3DPW (14)</td><td colspan=\"2\">EMDB 1 (24)</td></tr><tr><td></td><td>PA-MPJPE↓</td><td>Acc Err ↓</td><td>PA-MPJPE↓</td><td>Acc Err↓</td></tr><tr><td>Vibe [24]</td><td>56.7</td><td>31.5</td><td>85.7</td><td>43.8</td></tr><tr><td>Vibe-opt [24]</td><td>63.9</td><td>42.1</td><td>83.6</td><td>41.4</td></tr><tr><td>ProHMR [28]</td><td>59.8</td><td>25.0</td><td>86.1</td><td>37.7</td></tr><tr><td>+ fitting [28]</td><td>54.5</td><td>14.0</td><td>77.9</td><td>18.4</td></tr><tr><td>+ ScoreHMR-a</td><td>54.9</td><td>11.4</td><td>76.5</td><td>12.8</td></tr><tr><td>+ ScoreHMR-b</td><td>53.9</td><td>11.2</td><td>75.7</td><td>12.1</td></tr><tr><td>HMR 2.0 [13]</td><td>54.3</td><td>17.3</td><td>78.7</td><td>23.7</td></tr><tr><td>+ fitting [28]</td><td>53.8</td><td>14.1</td><td>76.2</td><td>20.0</td></tr><tr><td>+ ScoreHMR-a</td><td>51.7</td><td>10.7</td><td>75.1</td><td>11.9</td></tr><tr><td>+ ScoreHMR-b</td><td>50.5</td><td>11.1</td><td>75.3</td><td>11.9</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                496,
+                89,
+                882,
+                253
+            ]
+        },
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/b79ed2f4321b02afc370bfd57534f94cbea882a95e07a21167cbf35f4cb77c48.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 3. Qualitative evaluation of ScoreHMR Pink: Regression with ProHMR [28]. White: Regression with HMR 2.0 [13]. Green: Regression + ScoreHMR (ours)."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                501,
+                329,
+                877,
+                430
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.1.3 Human motion refinement"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                498,
+                740,
+                513
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In this part, we evaluate ScoreHMR at refining the singleframe regression estimates in a video sequence with 2D keypoint detections. In this setting, we use guidance with "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { \\boldsymbol { r } \\boldsymbol { e p r } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { L } _ { t e m p }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "terms. Following prior work [21] we also report the acceleration error "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( m m / s ^ { 2 } )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", computed as the difference in acceleration between the ground-truth and predicted 3D joints. We use all SMPL body joints for computing this error in EMDB 1, in contrast to the evaluation in [22] that uses specific joints for some temporal metrics (e.g. Jitter)."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                522,
+                893,
+                674
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We compare our approach with the temporal mesh optimization baselines (VIBE-opt [24], ProHMR-fitting [28]). VIBE-opt is initialized by the temporal mesh regression result of VIBE [24]. We run ProHMR-fitting [28] with the default hyperparameters adding a smoothness regularization term. We report results in Table 4. Our approach consistently outperforms all baselines across all datasets and metrics. Notably, ScoreHMR significantly enhances temporal consistency compared to prior works, resulting in a relative improvement of 21.3% (3DPW) and 40.5% (EMDB 1) in acceleration error compared to ProHMR-fitting, when both methods start from the monocular regression estimate of HMR 2.0. Finally, ScoreHMR exhibits exceptional runtime efficiency requiring only 14 minutes for the entire 3DPW test set, which contains 35K frames."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                674,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "912"
+                    }
+                ]
+            },
+            "bbox": [
+                485,
+                945,
+                511,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/677606f4155814a673e4952488814c21dc12f9878a70f2c88d457318cc6174b3.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 4. Body model fitting results. Pink: Regression (ProHMR [28]). White: Regression (HMR 2.0 [13]). Green: Regression + ScoreHMR (ours). Blue: Regression + ProHMR-fitting [28]. Grey: Regression + SMPLify [2]."
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                78,
+                87,
+                892,
+                553
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.2. Qualitative Results"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                617,
+                259,
+                633
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We show qualitative results in body model fitting on top of ProHMR and HMR 2.0 regression in Figure 3. ScoreHMR effectively aligns the body model with the detected keypoints even when the initial regression estimate is inaccurate (e.g., example of first row). Our reconstructions are valid when seen from a novel view. In addition, we compare our approach with SMPLify and ProHMR-fitting in Figure 4. Our approach achieves more faithful reconstructions than the baselines. This is more evident in challenging poses (e.g., example of last row). SMPLify encounters challenges with inaccurate keypoint detections (e.g., example of second row). ProHMR-fitting faces difficulties when there is ambiguity in the image evidence (e.g., occlusion in the example of third row). A potential cause for this issue may be the mode supervision used during ProHMR training, which leads to capturing a less diverse pose distribution as shown in [4]."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                643,
+                472,
+                902
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "6. Conclusion"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                617,
+                619,
+                633
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We present ScoreHMR, an approach for solving inverse problems for 3D human pose and shape reconstruction. ScoreHMR mirrors model fitting approaches, but alignment with the image observation is achieved through score guid ance in the latent space of a diffusion model. We demonstrate the effectiveness of our method with empirical results in several benchmarks and evaluation settings. ScoreHMR achieves strong performance in challenging datasets and outperforms optimization-based methods. Our work highlights the promising potential of score-guided diffusion processes as a better alternative to conventional optimizationbased approaches in addressing 3D human recovery inverse problems."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                652,
+                893,
+                849
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Acknowledgements: This research has been partially funded by research grants to D. Metaxas through NSF: 2310966, 2235405, 2212301, 2003874, and AFOSR-835531"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                858,
+                893,
+                900
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "913"
+                    }
+                ]
+            },
+            "bbox": [
+                485,
+                945,
+                511,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "References"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                78,
+                89,
+                176,
+                106
+            ]
+        },
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[1] Mykhaylo Andriluka, Leonid Pishchulin, Peter Gehler, and Bernt Schiele. 2d human pose estimation: New benchmark and state of the art analysis. In CVPR, 2014. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[2] Federica Bogo, Angjoo Kanazawa, Christoph Lassner, Peter Gehler, Javier Romero, and Michael J Black. Keep it smpl: Automatic estimation of 3d human pose and shape from a single image. In ECCV, 2016. 1, 2, 3, 6, 7, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[3] Zhe Cao, Gines Hidalgo, Tomas Simon, Shih-En Wei, and Yaser Sheikh. Openpose: Realtime multi-person 2d pose estimation using part affinity fields. IEEE TPAMI, 2019. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[4] Rongyu Chen, Linlin Yang, and Angela Yao. Mhentropy: Entropy meets multiple hypotheses for pose and shape recovery. In ICCV, 2023. 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[5] Junhyeong Cho, Kim Youwang, and Tae-Hyun Oh. Crossattention of disentangled modalities for 3d human mesh recovery with transformers. In ECCV, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[6] Vasileios Choutas, Federica Bogo, Jingjing Shen, and Julien Valentin. Learning to fit morphable models. In ECCV, 2022. 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[7] Hyungjin Chung, Byeongsu Sim, Dohoon Ryu, and Jong Chul Ye. Improving diffusion models for inverse problems using manifold constraints. In NeurIPS, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[8] Hyungjin Chung, Jeongsol Kim, Michael T Mccann, Marc L Klasky, and Jong Chul Ye. Diffusion posterior sampling for general noisy inverse problems. In ICLR, 2023. 3, 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[9] Andrey Davydov, Anastasia Remizova, Victor Constantin, Sina Honari, Mathieu Salzmann, and Pascal Fua. Adversarial parametric pose prior. In CVPR, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[10] Prafulla Dhariwal and Alexander Nichol. Diffusion models beat gans on image synthesis. In NeurIPS, 2021. 1, 3, 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[11] Qi Fang, Kang Chen, Yinghui Fan, Qing Shuai, Jiefeng Li, and Weidong Zhang. Learning analytical posterior probability for human mesh recovery. In CVPR, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[12] Georgios Georgakis, Ren Li, Srikrishna Karanam, Terrence Chen, Jana Koseckˇ a, and Ziyan Wu. Hierarchical kinematic´ human mesh recovery. In ECCV, 2020. 1, 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[13] Shubham Goel, Georgios Pavlakos, Jathushan Rajasegaran, Angjoo Kanazawa, and Jitendra Malik. Humans in 4d: Reconstructing and tracking humans with transformers. In ICCV, 2023. 1, 2, 4, 5, 6, 7, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[14] Riza Alp Guler and Iasonas Kokkinos. Holopose: Holistic 3d human reconstruction in-the-wild. In CVPR, 2019. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[15] Ligong Han, Yinxiao Li, Han Zhang, Peyman Milanfar, Dimitris Metaxas, and Feng Yang. Svdiff: Compact parameter space for diffusion fine-tuning. In ICCV, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[16] Ligong Han, Song Wen, Qi Chen, Zhixing Zhang, Kunpeng Song, Mengwei Ren, Ruijiang Gao, Anastasis Stathopoulos, et al. Proxedit: Improving tuning-free real image editing with proximal guidance. In WACV, 2024. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[17] Jonathan Ho, Ajay Jain, and Pieter Abbeel. Denoising diffusion probabilistic models. In NeurIPS, 2020. 1, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[18] Catalin Ionescu, Dragos Papava, Vlad Olaru, and Cristian Sminchisescu. Human3. 6m: Large scale datasets and predictive methods for 3d human sensing in natural environments. IEEE TPAMI, 2014. 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[19] Hanbyul Joo, Natalia Neverova, and Andrea Vedaldi. Exemplar fine-tuning for 3d human model fitting towards in-thewild 3d human pose estimation. In 3DV, 2021. 1, 3, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[20] Angjoo Kanazawa, Michael J Black, David W Jacobs, and Jitendra Malik. End-to-end recovery of human shape and pose. In CVPR, 2018. 1, 2, 4, 5"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[21] Angjoo Kanazawa, Jason Y Zhang, Panna Felsen, and Jitendra Malik. Learning 3d human dynamics from video. In CVPR, 2019. 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[22] Manuel Kaufmann, Jie Song, Chen Guo, Kaiyue Shen, Tianjian Jiang, Chengcheng Tang, Juan Jose Z´ arate, and Otmar´ Hilliges. Emdb: The electromagnetic database of global 3d human pose and shape in the wild. In ICCV, 2023. 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[23] Diederik P Kingma and Max Welling. Auto-encoding variational bayes. In ICLR, 2014. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[24] Muhammed Kocabas, Nikos Athanasiou, and Michael J Black. Vibe: Video inference for human body pose and shape estimation. In CVPR, 2020. 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[25] Muhammed Kocabas, Chun-Hao P Huang, Otmar Hilliges, and Michael J Black. Pare: Part attention regressor for 3d human body estimation. In ICCV, 2021. 1, 2, 5, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[26] Nikos Kolotouros, Georgios Pavlakos, Michael J Black, and Kostas Daniilidis. Learning to reconstruct 3d human pose and shape via model-fitting in the loop. In ICCV, 2019. 1, 2, 3, 4, 5, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[27] Nikos Kolotouros, Georgios Pavlakos, and Kostas Daniilidis. Convolutional mesh regression for single-image human shape reconstruction. In CVPR, 2019. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[28] Nikos Kolotouros, Georgios Pavlakos, Dinesh Jayaraman, and Kostas Daniilidis. Probabilistic modeling for human mesh recovery. In ICCV, 2021. 1, 2, 3, 5, 6, 7, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[29] Christoph Lassner, Javier Romero, Martin Kiefel, Federica Bogo, Michael J Black, and Peter V Gehler. Unite the people: Closing the loop between 3d and 2d human representations. In CVPR, 2017. 1, 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[30] Vincent Leroy, Philippe Weinzaepfel, Romain Bregier,´ Hadrien Combaluzier, and Gregory Rogez. Smply bench-´ marking 3d human pose estimation in the wild. In 3DV, 2020. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[31] Jiefeng Li, Chao Xu, Zhicun Chen, Siyuan Bian, Lixin Yang, and Cewu Lu. Hybrik: A hybrid analytical-neural inverse kinematics solution for 3d human pose and shape estimation. In CVPR, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[32] Jiefeng Li, Siyuan Bian, Qi Liu, Jiasheng Tang, Fan Wang, and Cewu Lu. Niki: Neural inverse kinematics with invertible neural networks for 3d human pose and shape estimation. In CVPR, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[33] Zhengqi Li, Tali Dekel, Forrester Cole, Richard Tucker, Noah Snavely, Ce Liu, and William T Freeman. Learning the depths of moving people by watching frozen people. In CVPR, 2019. 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[34] Zhihao Li, Jianzhuang Liu, Zhensong Zhang, Songcen Xu, and Youliang Yan. Cliff: Carrying location information in full frames into human pose and shape estimation. In ECCV, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[35] Kevin Lin, Lijuan Wang, and Zicheng Liu. End-to-end human pose and mesh reconstruction with transformers. In CVPR, 2021. 2"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                84,
+                114,
+                468,
+                156
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "914"
+                    }
+                ]
+            },
+            "bbox": [
+                485,
+                945,
+                511,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[36] Kevin Lin, Lijuan Wang, and Zicheng Liu. Mesh graphormer. In CVPR, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[37] Tsung-Yi Lin, Michael Maire, Serge Belongie, James Hays, Pietro Perona, Deva Ramanan, Piotr Dollar, and C Lawrence´ Zitnick. Microsoft coco: Common objects in context. In ECCV, 2014. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[38] Matthew Loper, Naureen Mahmood, Javier Romero, Gerard Pons-Moll, and Michael J Black. Smpl: A skinned multiperson linear model. ACM TOG, 2015. 1, 2, 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[39] Dushyant Mehta, Helge Rhodin, Dan Casas, Pascal Fua, Oleksandr Sotnychenko, Weipeng Xu, and Christian Theobalt. Monocular 3d human pose estimation in the wild using improved cnn supervision. In 3DV, 2017. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[40] Georgios Pavlakos, Vasileios Choutas, Nima Ghorbani, Timo Bolkart, Ahmed AA Osman, Dimitrios Tzionas, and Michael J Black. Expressive body capture: 3d hands, face, and body from a single image. In CVPR, 2019. 1, 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[41] Sigal Raab, Inbal Leibovitch, Guy Tevet, Moab Arar, Amit H Bermano, and Daniel Cohen-Or. Single motion diffusion. In ICLR, 2024. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[42] Davis Rempe, Tolga Birdal, Aaron Hertzmann, Jimei Yang, Srinath Sridhar, and Leonidas J Guibas. Humor: 3d human motion model for robust pose estimation. In ICCV, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[43] Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, and Bjorn Ommer. High-resolution image syn-¨ thesis with latent diffusion models. In CVPR, 2022. 1, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[44] Nataniel Ruiz, Yuanzhen Li, Varun Jampani, Yael Pritch, Michael Rubinstein, and Kfir Aberman. Dreambooth: Fine tuning text-to-image diffusion models for subject-driven generation. In CVPR, 2023. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[45] Chitwan Saharia, William Chan, Saurabh Saxena, Lala Li, Jay Whang, Emily Denton, et al. Photorealistic text-toimage diffusion models with deep language understanding. In NeurIPS, 2022. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[46] Jascha Sohl-Dickstein, Eric Weiss, Niru Maheswaranathan, and Surya Ganguli. Deep unsupervised learning using nonequilibrium thermodynamics. In ICML, 2015. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[47] Jie Song, Xu Chen, and Otmar Hilliges. Human body model fitting by learned gradient descent. In ECCV, 2020. 2, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[48] Jiaming Song, Chenlin Meng, and Stefano Ermon. Denoising diffusion implicit models. In ICLR, 2021. 2, 3, 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[49] Jiaming Song, Arash Vahdat, Morteza Mardani, and Jan Kautz. Pseudoinverse-guided diffusion models for inverse problems. In ICLR, 2023. 3, 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[50] Yang Song, Jascha Sohl-Dickstein, Diederik P Kingma, Abhishek Kumar, Stefano Ermon, and Ben Poole. Score-based generative modeling through stochastic differential equations. In ICLR, 2021. 1, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[51] Anastasis Stathopoulos, Georgios Pavlakos, Ligong Han, and Dimitris Metaxas. Learning articulated shape with keypoint pseudo-labels from web images. In CVPR, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[52] Guy Tevet, Sigal Raab, Brian Gordon, Yonatan Shafir, Daniel Cohen-Or, and Amit H Bermano. Human motion diffusion model. In ICLR, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[53] Garvita Tiwari, Dimitrije Antic, Jan Eric Lenssen, Nikolaos´ Sarafianos, Tony Tung, and Gerard Pons-Moll. Pose-ndf: Modeling human pose manifolds with neural distance fields. In ECCV, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[54] Timo Von Marcard, Roberto Henschel, Michael J Black, Bodo Rosenhahn, and Gerard Pons-Moll. Recovering accurate 3d human pose in the wild using imus and a moving camera. In ECCV, 2018. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[55] Yufu Wang and Kostas Daniilidis. Refit: Recurrent fitting network for 3d human recovery. In ICCV, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[56] Shangzhe Wu, Ruining Li, Tomas Jakab, Christian Rupprecht, and Andrea Vedaldi. Magicpony: Learning articulated 3d animals in the wild. In CVPR, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[57] Donglai Xiang, Hanbyul Joo, and Yaser Sheikh. Monocular total capture: Posing face, body, and hands in the wild. In CVPR, 2019. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[58] Hongyi Xu, Eduard Gabriel Bazavan, Andrei Zanfir, William T Freeman, Rahul Sukthankar, and Cristian Sminchisescu. Ghum & ghuml: Generative 3d human shape and articulated pose models. In CVPR, 2020. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[59] Gengshan Yang, Minh Vo, Natalia Neverova, Deva Ramanan, Andrea Vedaldi, and Hanbyul Joo. Banmo: Building animatable 3d neural models from many casual videos. In CVPR, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[60] Vickie Ye, Georgios Pavlakos, Jitendra Malik, and Angjoo Kanazawa. Decoupling human and camera motion from videos in the wild. In CVPR, 2023. 1, 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[61] Ye Yuan, Jiaming Song, Umar Iqbal, Arash Vahdat, and Jan Kautz. Physdiff: Physics-guided human motion diffusion model. In CVPR, 2023. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[62] Hongwen Zhang, Yating Tian, Xinchi Zhou, Wanli Ouyang, Yebin Liu, Limin Wang, and Zhenan Sun. Pymaf: 3d human pose and shape regression with pyramidal mesh alignment feedback loop. In CVPR, 2021. 1, 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[63] Zhixing Zhang, Bichen Wu, Xiaoyan Wang, Yaqiao Luo, Luxin Zhang, Yinan Zhao, Peter Vajda, Dimitris Metaxas, and Licheng Yu. Avid: Any-length video inpainting with diffusion model. In CVPR, 2024. 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[64] Yi Zhou, Connelly Barnes, Jingwan Lu, Jimei Yang, and Hao Li. On the continuity of rotation representations in neural networks. In CVPR, 2019. 5"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                78,
+                93,
+                468,
+                119
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "915"
+                    }
+                ]
+            },
+            "bbox": [
+                485,
+                945,
+                511,
+                957
+            ]
+        }
+    ]
+]

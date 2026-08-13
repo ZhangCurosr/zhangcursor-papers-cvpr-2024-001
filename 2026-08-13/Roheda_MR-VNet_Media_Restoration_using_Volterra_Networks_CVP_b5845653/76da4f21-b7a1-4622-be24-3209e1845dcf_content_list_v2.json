@@ -1,0 +1,3402 @@
+[
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "MR-VNet: Media Restoration using Volterra Networks"
+                    }
+                ],
+                "level": 1
+            },
+            "bbox": [
+                205,
+                130,
+                763,
+                151
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Siddharth Roheda, Amit Unde, Loay Rashid"
+                    }
+                ]
+            },
+            "bbox": [
+                308,
+                181,
+                661,
+                198
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Samsung Research Institute Bengaluru, India"
+                    }
+                ]
+            },
+            "bbox": [
+                372,
+                199,
+                598,
+                233
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "{sid.roheda, amit.unde, loay.rashid}@samsung.com"
+                    }
+                ]
+            },
+            "bbox": [
+                269,
+                237,
+                696,
+                252
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "Abstract"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                233,
+                285,
+                313,
+                303
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "This research paper presents a novel class ofrestoration network architecture based on the Volterra series formulation. By incorporating non-linearity into the system response function through higher order convolutions instead of traditional activation functions, we introduce a general framework for image/video restoration. Through extensive experimentation, we demonstrate that our proposed architecture achieves state-of-the-art (SOTA) performance in the field of Image/Video Restoration. Moreover, we establish that the recently introduced Non-Linear Activation Free Network (NAF-NET) can be considered a special case within the broader class ofVolterra Neural Networks. These findings highlight the potential ofVolterra Neural Networks as a versatile and powerful tool for addressing complex restoration tasks in computer vision."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                318,
+                470,
+                546
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "1. Introduction"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                573,
+                209,
+                589
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In our increasingly visual-oriented world, media such as images and videos play a crucial role in conveying information, expressing emotions, and preserving memories. However, images/videos are susceptible to distortions during the process of capturing (eg. sensor noise, blur, zoom, bad exposure), saving/sharing (eg. compression, down-sampling), and editing (eg. un-natural artefacts). It is crucial to restore such degraded images so as to prevent loss of information and ensure that the best visual quality is delivered to users. This is done through techniques such as image de-noise, de-blur, compression reduction, super-resolution, etc. Recently, Convolutional Neural Networks (CNNs) coupled with ample training data and computational resources has driven remarkable progress in image restoration algorithms [5, 7, 24, 29, 30]. The basic building block in a CNN is a convolutional layer followed by an activation function. The convolution operation provides local connectivity and translational in-variance, while the activation function introduces non-linearity into the network. Following this, Transformer networks that use a more dynamic alternative of selfattention were introduced to resolve some of the shortcomings of CNNs. Namely, instead of relying on convolutional filters that have static weights and cannot adapt to input content, self-attention allows calculation of response at a given pixel by weighted sum of all other positions. The drawback of such methods is that they are extremely heavy and difficult to train. This also makes the analysis and tractability of such networks elusive. More recently, there was an interest shown in activation free networks [4] that are lighter and more powerful than the traditional CNNs. In our work we explore introduction of non-linearity in the network through interaction between the pixels of an image. This is done by performing higher order convolutions to augment linear convolutions. We utilize the well-established Volterra Series [21] to accomplish this task."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                598,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "chart",
+            "content": {
+                "image_source": {
+                    "path": "images/c800aef6248c69b0b28429094eedabf9fc437039d399c4deff51167cba46d3cb.jpg"
+                },
+                "content": "",
+                "chart_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 1. Comparison of PSNR (dB) and Computational Complexity (GMACs) of the various models on the GoPro Dataset."
+                    }
+                ],
+                "chart_footnote": []
+            },
+            "bbox": [
+                503,
+                285,
+                883,
+                465
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                537,
+                893,
+                763
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Contributions: In this paper we propose a novel architecture tailored for image and video restoration that utilizes the recently proposed Volterra layers [18] to optimally introduce non-linearities in the restoration process. We design a U-Net like architecture integrated with Volterra layers to achieve high quality reconstruction while minimizing computational overhead. Our study demonstrates that using the Volterra formulation with the proposed lossless/lossy approximation results in significantly reduced network complexity and depth compared to traditional CNNs to achieve similar performance levels. We also showcase that the recently proposed Non-linear Activation Free NETworks (NAFNet) [4] are a special case of the Volterra Formulation."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                765,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": []
+            },
+            "bbox": [
+                104,
+                2,
+                181,
+                41
+            ]
+        },
+        {
+            "type": "page_header",
+            "content": {
+                "page_header_content": [
+                    {
+                        "type": "text",
+                        "content": "This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore."
+                    }
+                ]
+            },
+            "bbox": [
+                235,
+                1,
+                810,
+                46
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6098"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                90,
+                470,
+                166
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2. Related Work"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                184,
+                220,
+                200
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2.1. Volterra Filter"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                209,
+                225,
+                224
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The Volterra Filter, as proposed in [21], serves as an approximation for capturing the non-linear relationship between the input at time t, denoted as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "x _ { t } ."
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and the corresponding output y<sub>t</sub>. Mathematically, this relationship is expressed as follows:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                234,
+                470,
+                310
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { c } { { \\displaystyle y _ { t } = \\sum _ { \\tau _ { 1 } = 0 } ^ { L - 1 } W _ { \\tau _ { 1 } } ^ { \\mathbf 1 } x _ { t - \\tau _ { 1 } } + \\sum _ { \\tau _ { 1 } , \\tau _ { 2 } = 0 } ^ { L - 1 } W _ { \\tau _ { 1 } , \\tau _ { 2 } } ^ { \\mathbf 2 } x _ { t - \\tau _ { 1 } } x _ { t - \\tau _ { 2 } } } } \\\\ { { + . . . + \\displaystyle \\sum _ { \\tau _ { 1 } , \\tau _ { 2 } , . . . , \\tau _ { K } = 0 } ^ { L - 1 } W _ { \\tau _ { 1 } , \\tau _ { 2 } , . . . , \\tau _ { K } } ^ { K } x _ { t - \\tau _ { 1 } } x _ { t - \\tau _ { 2 } } . . . x _ { t - \\tau _ { K } } , } } \\end{array}\\tag{1}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/6606de2ce088b556c26938647f28ba019955e8b3e896a4666d44c2c7354853e7.jpg"
+                }
+            },
+            "bbox": [
+                84,
+                320,
+                441,
+                410
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where L represents the filter memory or filter length, and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "W ^ { K }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the weight matrix corresponding to the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "K ^ { \\widecheck { t } h }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "order term. Notably, the computational complexity of this formulation experiences exponential growth with an increase in the desired filter order. Specifically, a "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "K ^ { t h }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "order filter with length L necessitates solving "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L ^ { K }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "equations. It is noteworthy that the first term in the equation corresponds to the linear convolutional layer commonly employed in Convolutional Neural Networks (CNNs)."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                422,
+                470,
+                559
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The distinctive feature of Equation 1 is the incorporation of non-linearities through higher order convolutions, as opposed to the traditional activation function. For instance, the second term in Equation 1 specifically refers to a secondorder convolution."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                559,
+                470,
+                636
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2.2. Volterra Filters in Deep Learning"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                647,
+                370,
+                665
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The potential of Volterra Filters in learning non-linear functions is vast, suggesting their potential utility in enhancing the performance of deep learning models. In the study by [31], the authors introduced a second-order Volterra filter to augment non-linearity, supplementing traditional activation functions. The application of a second-order Volterra Filter was also exemplified in facial recognition tasks [9]. Despite demonstrating the efficacy of Volterra Filters, the exploration was constrained to second-order non-linearities, primarily due to computational complexity limitations."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                671,
+                470,
+                824
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In another study [18], a cascaded approach to Volterra Filtering was proposed to address the challenge of Video Action Recognition. This approach involved cascading layers of second-order filters, resulting in a filter with significantly higher complexity. The research showcased the proficiency of Volterra Filters in learning non-linear information from data, all the while demanding lower computational resources compared to conventional Convolutional Neural Networks that rely on activation functions for introducing non-linearities."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                824,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                90,
+                893,
+                167
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "2.3. Image/Video Restoration and Enhancement"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                498,
+                175,
+                872,
+                191
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Image and video restoration is a crucial task involving the enhancement of images or videos that have suffered degradation during capture or storage, ultimately delivering clean, sharp visuals to enhance user experience. Recent contributions in the literature, as exemplified by [5,11,13,20,29], have leveraged the U-Net architecture [19] and extended its capabilities for performance improvement. However, such extensions often come at the cost of increased model complexity. This escalation in complexity, ranging from the incorporation of multiple U-Net stages to the integration of transformers for image restoration, has resulted in a notable surge in model intricacies for achieving marginal PSNR/SSIM improvements."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                198,
+                893,
+                395
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In contrast, a Non-Linear Activation Free Network (NAFNet) was introduced in [4], challenging the prevailing notion that high complexities are indispensable. This work argued that a simple baseline network can achieve comparable results. Moreover, empirical evidence from this study demonstrated that non-linear activation functions may be dispensable, substitutable by straightforward elementwise multiplication. This finding aligns with the assertion in [18], where Volterra Filters replaced activation functions for Action Recognition tasks."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                395,
+                893,
+                545
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "On a different front, Video Restoration has garnered increased attention in the research community. Video Restoration tasks present greater complexity than image restoration, given their multi-frame structure and temporal interdependencies among frames. Addressing both spatial and temporal aspects is crucial to ensuring flickerfree restoration and maintaining continuity across video frames. Recent research in Video Restoration, as observed in the use of LSTMs and RNNs [17, 22], emphasizes effective exploitation of temporal information. Alternatively, transformer architectures [10] have been employed to consider frame order and ensure coherence in restored videos. Volterra Filters [21] offer a promising formulation for exploring the temporal dynamics of videos, enabling the generation of non-linear interactions to enhance both spatial and temporal non-linearity."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                545,
+                895,
+                789
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "3. Problem Formulation"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                799,
+                707,
+                815
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Consider a collection of degraded images denoted as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "X _ { D } = x _ { D } ^ { 1 } , x _ { D } ^ { 2 } , . . . , x _ { D } ^ { N }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "of particular interest. The objective is to devise a restoration function, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "G : \\mathbb { R } ^ { H \\times W \\times \\bar { C } }"
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbb { R } ^ { H \\times W \\times C }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", capable of recovering a set of clean images, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "X _ { R } = x _ { R } ^ { 1 } , x _ { R } ^ { \\hat { 2 } } , . . . , x _ { R } ^ { N }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "from "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "X _ { D }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". This restorative function is structured as a composition of an encoder, a middle block, and a decoder, expressed as follows:"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                824,
+                892,
+                902
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6099"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                75,
+                90,
+                468,
+                122
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "G = \\mathcal { F } _ { D } \\circ \\mathcal { F } _ { M } \\circ \\mathcal { F } _ { E } .\\tag{2}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/1f9e33386f790f0a7d7bc4e1e64f31c727a33b28413ccd37321499712b09c30b.jpg"
+                }
+            },
+            "bbox": [
+                191,
+                136,
+                354,
+                152
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4. Proposed Solution"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                166,
+                254,
+                183
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.1. Volterra Filters for Restoration"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                190,
+                354,
+                207
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In our proposed methodology, we employ the secondorder Volterra formulation to implement a Volterra layer. Specifically, the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "z ^ { t h }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "layer of the Volterra Neural Network (VNN) processes the input "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "X _ { z - 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "as follows:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                213,
+                468,
+                276
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "X _ { z } = V _ { z } ( X _ { z - 1 } ) = \\mathbf { \\mathcal { F } } _ { z } ^ { 1 } ( X _ { z - 1 } ) + \\mathbf { \\mathcal { F } } _ { z } ^ { 2 } ( X _ { z - 1 } ) ,\\tag{3}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/3772506d86042597eebd544880f7f70e142c7edf9b7f4b473546a35fdd5e5df3.jpg"
+                }
+            },
+            "bbox": [
+                117,
+                300,
+                426,
+                319
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { z } ^ { 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { z } ^ { 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "represent the first and second-order convolution operations in the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "z ^ { t h }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "layer. For video data tasks, a spatio-temporal (3D) version of the Volterra Filter is employed to compute the feature value at location "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "[ t , m _ { 1 } , m _ { 2 } ]"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", given by Equation 4:"
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                329,
+                470,
+                407
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { r l } & { X _ { z } \\bigg [ \\underset { m _ { 2 } } { \\overset { t } { \\underbrace { t } } } \\bigg ] = V _ { z } \\left( X _ { z - 1 } \\underset { \\left[ m _ { 2 } - p _ { 1 } : m _ { 2 } + p _ { 2 } \\right] } { \\overset { t } { \\underbrace { t - L : t + L } } } \\right) } \\\\ & { \\qquad = \\underset { \\tau _ { 1 } , \\sigma _ { 1 1 } , \\sigma _ { 2 1 } } { \\sum } W _ { \\left[ \\underset { \\sigma _ { 2 1 } } { \\overset { \\tau _ { 1 } } { \\underbrace { \\tau _ { 1 } } } } \\right] } x \\left[ \\underset { m _ { 2 } - \\sigma _ { 2 1 } } { \\overset { t - \\tau _ { 1 } } { \\underbrace { t - \\tau _ { 1 } } } } \\right] } \\\\ & { \\qquad + \\underset { \\tau _ { 1 } , \\sigma _ { 1 1 } , \\sigma _ { 2 1 } } { \\sum } W _ { \\left[ \\underset { \\sigma _ { 2 1 } } { \\overset { \\tau _ { 1 } } { \\underbrace { \\tau _ { 1 } } } } \\right] } \\left[ \\underset { \\sigma _ { 2 2 } } { \\overset { \\tau _ { 2 } } { \\underbrace { \\tau _ { 1 } } } } \\right] ^ { T } \\left[ \\underset { m _ { 2 } - \\sigma _ { 2 1 } } { \\overset { \\tau _ { 1 } } { \\underbrace { t - \\tau _ { 2 } } } } \\right] ^ { X } \\left[ \\underset { m _ { 2 } - \\sigma _ { 2 2 } } { \\overset { t - \\tau _ { 2 } } { \\underbrace { t - \\tau _ { 1 } } } } \\right] ^ { \\tau } , } \\end{array}\\tag{4}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/c3632ac2d5293a1e9a16b81cd064ee7e163cea1f8702e15d33fcb724785f06b9.jpg"
+                }
+            },
+            "bbox": [
+                84,
+                428,
+                460,
+                561
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\tau _ { i } ~ \\in ~ [ - L , L ] , ~ \\sigma _ { 1 j } ~ \\in ~ [ - p _ { 1 } , p _ { 1 } ]"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\sigma _ { 2 j } \\in"
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "[ - p _ { 2 } , p _ { 2 } ]"
+                    },
+                    {
+                        "type": "text",
+                        "content": "represent temporal and spatial translations (horizontal and vertical directions), respectively. Notably, the first term corresponds to the linear convolution utilized in Convolutional Neural Networks (CNNs), while the second term introduces non-linearity in the network instead of relying on a conventional activation function."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                590,
+                470,
+                696
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "For image data, where only spatial translations (2D) are applicable, the feature value at location "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "[ m _ { 1 } , m _ { 2 } ]"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in feature map "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "X _ { z }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is computed using a 2D version of the Volterra Filter, as expressed in Equation 5:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                696,
+                470,
+                757
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { l } { { \\displaystyle { \\cal X } _ { z _ { [ m _ { 2 } ] } } = V _ { z } \\left( { \\cal X } _ { z - 1 } \\} _ { [ m _ { 2 } - p _ { 2 } : m _ { 2 } + p _ { 2 } ] } \\right) } } \\\\ { { ~ = \\sum _ { \\sigma _ { 1 1 } , \\sigma _ { 2 1 } } W _ { [ \\sigma _ { 2 1 } ] } ^ { 1 } \\boldsymbol { x } _ { [ m _ { 2 } - \\sigma _ { 2 1 } ] } ^ { \\prime } } } \\\\ { { ~ + \\sum _ { \\sigma _ { 1 1 } , \\sigma _ { 2 1 } } W _ { [ \\sigma _ { 2 1 } ] } ^ { 2 } [ \\sigma _ { 2 2 } ] ^ { \\mathcal { X } } [ \\stackrel { m _ { 1 } - \\sigma _ { 1 1 } } { \\scriptstyle { m _ { 2 } - \\sigma _ { 2 1 } } } ] ^ { \\mathcal { X } } \\left[ { m _ { 1 } - \\sigma _ { 1 2 } } \\right] } , }  \\end{array}\\tag{5}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/d21fa3abee92fea59645213207f526ef8a40a74695c0d4ade88a037e840564c0.jpg"
+                }
+            },
+            "bbox": [
+                93,
+                780,
+                434,
+                897
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\sigma _ { 1 j } \\in [ - p _ { 1 } , p _ { 1 } ]"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\sigma _ { 2 j } ~ \\in ~ [ - p _ { 2 } , p _ { 2 } ]"
+                    },
+                    {
+                        "type": "text",
+                        "content": "represent spatial translations in the horizontal and vertical directions, respectively."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                90,
+                892,
+                136
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We incorporate these Volterra filter layers in a cascaded fashion, following the simple U-Net architecture. The cascading of the layers as defined in Equations 4 and 5 leads to the approximation of a higher-order Volterra filter."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                136,
+                893,
+                198
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Proposition 1. [Higher Order Complexity] [18] If Z second-order filters are cascaded, the resulting Volterra Network achieves an effective order of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { K } _ { z } = 2 ^ { 2 ^ { \\overline { { z } } - 1 } }"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                215,
+                892,
+                263
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The implementation of a "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "K ^ { t h }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "order Volterra Filter, as specified in Equation 1, necessitates "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\scriptstyle \\sum _ { k = 1 } ^ { K } ( L . { \\mathcal { P } } _ { 1 } . { \\mathcal { P } } _ { 2 } ) ^ { k }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "parameters. Where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { P } _ { 1 } = 2 p _ { 1 } + 1 , \\mathcal { P } _ { 2 } = 2 \\bar { p } _ { 2 } + 1"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L = 1"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in case of images. The adoption of cascaded "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "2 ^ { n d }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "order filters emerges as a more resource-efficient approach for implementing the Volterra formulation, significantly reducing the required parameters [18]."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                276,
+                893,
+                385
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Proposition 2. [VNN Complexity] [18] The complexity of a cascaded "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { K } _ { z } ^ { t h }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "order Volterra filter is given by:"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                401,
+                892,
+                434
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\sum _ { z = 1 } ^ { z } \\left[ ( L _ { z } . \\mathcal { P } _ { 1 _ { z } } \\mathcal { P } _ { 2 _ { z } } + ( L _ { z } . \\mathcal { P } _ { 1 _ { z } } \\mathcal { P } _ { 2 _ { z } } ) ^ { 2 } ) \\right] .\\tag{6}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/1738bb50dc804c9ce509b43319390105a5acafe33d5922e47f30e441bc65efe8.jpg"
+                }
+            },
+            "bbox": [
+                566,
+                444,
+                823,
+                486
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "As previously mentioned, our approach eschews explicit activation functions like ReLU, tanh, etc. The non-linearity is learned as a function of the input data. Proposition 3 highlights that the VNN formulation is proficient in approximating well-known activation functions, implying that VNN offers a generalized activation encompassing ReLU, sigmoid, tanh, etc., as special cases."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                491,
+                893,
+                597
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Proposition 3. [Generalized Activation] A Volterra Filter, as described in Equation 1, provides an approximation to any continuous function."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                614,
+                892,
+                660
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Proof. Employing the Taylor expansion, any non-linear function, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\sigma ( . )"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", can be expressed as:"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                660,
+                892,
+                691
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\sigma ( x ) = c ^ { 0 } + c ^ { 1 } x + . . . + c ^ { K } x ^ { K } + . . . c ^ { \\infty } x ^ { \\infty } .\\tag{7}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/04285d802e888f224d4a4c7f6a8090bfc7b18593e2aea2e6c4daf127252dd14d.jpg"
+                }
+            },
+            "bbox": [
+                547,
+                717,
+                843,
+                733
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Specifically, a Sigmoid can be written as:"
+                    }
+                ]
+            },
+            "bbox": [
+                517,
+                746,
+                794,
+                762
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\sigma _ { s i g m o i d } ( x ) = { \\frac { 1 } { 1 + e ^ { x } } } = { \\frac { 1 } { 2 } } + { \\frac { 1 } { 4 } } x - { \\frac { 1 } { 4 8 } } x ^ { 2 } + { \\frac { 1 } { 4 8 0 } } x ^ { 5 } . . .\\tag{8}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/2b39ad36b10d527dd1811ccd578903f57f7591cc0a783a881ee37f688f451479.jpg"
+                }
+            },
+            "bbox": [
+                506,
+                784,
+                864,
+                815
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "From Equation 1, the Volterra Filter formulation can effectively approximate such an expansion upto a finite order when "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L = p _ { 1 } = p _ { 2 } = 1"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                824,
+                892,
+                871
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\sigma _ { V F } = w ^ { 0 } + w ^ { 1 } x + w ^ { 2 } x ^ { 2 } + \\ldots + w ^ { K } x ^ { K } ,\\tag{9}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/2a4e9b9d7e7dde46b989ff556a45c755d6561b73f08f59566340db992c63380a.jpg"
+                }
+            },
+            "bbox": [
+                550,
+                882,
+                839,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6100"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/22bd167d6b287d8ff9e9b0680334f6fc1cdefa7d352425dae9ed6be8b9d85150.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 2. High level Block Diagram for implementation of the proposed VNN Image Restoration Model"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                161,
+                90,
+                812,
+                343
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "w ^ { k }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is learned during the training process, rendering it a more generalized activation function capable of learning data-dependent non-linearities. When "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "w ^ { k }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in Equation 9 is assigned the values corresponding to the Taylor expansion coefficients of a specific activation function (such as the sigmoid in Equation 8), it assumes the role of a predefined activation function, representing a special case within the broader framework."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                397,
+                472,
+                520
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.2. Realization of Higher Order Convolutions"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                531,
+                436,
+                547
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.2.1 Lossless Approximation"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                556,
+                299,
+                571
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We will now elaborate on the implementation of the higherorder kernels outlined in Equation 3. The Volterra Formulation from Equation 3 can be expressed as follows:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                582,
+                468,
+                628
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "X _ { z } = W _ { z } ^ { 1 } \\star X _ { z - 1 } + \\sum _ { s _ { 1 } , s _ { 2 } } W _ { z _ { s _ { 1 } , s _ { 2 } } } ^ { 2 } \\star X _ { z - 1 } . S _ { s _ { 1 } , s _ { 2 } } ( X _ { z - 1 } ) ,\\tag{10}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/e091bf203c1b477154448fc974994240cc8512d3757620380228cfaaf0caa7e9.jpg"
+                }
+            },
+            "bbox": [
+                78,
+                656,
+                465,
+                689
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Here, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "denote spatial shifts in the input feature map "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "X _ { z - 1 } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\boldsymbol { S } _ { s _ { 1 } , s _ { 2 } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "represents the feature map circularly shifted along its rows and columns by "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "s _ { 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "respectively. The formulation described in Equation 10 enables the parallel implementation of second order Volterra kernel using 2D convolutions as part of PyTorch [16] or Tensorflow [1]."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                703,
+                470,
+                809
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Consider the scenario where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { P } _ { 1 } = \\mathcal { P } _ { 2 } = \\mathcal { P }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". To implement the second term in Equation 10, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { P } ^ { 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "convolutions would be required. To mitigate redundancy and model complexity, we discard the symmetric terms, resulting in "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ } ^ { \\mathcal { P } } C _ { 2 } <"
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { P } ^ { 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "convolutions. This approach reduces the model’s complexity by eliminating redundant information, thus serving as a lossless approximation of the exact kernel. In the subsequent section, we delve into a lossy approximation for the second-order Volterra kernel."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                809,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                398,
+                892,
+                444
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.2.2 Lossy Approximation"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                467,
+                705,
+                482
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Implementing higher-order convolution can incur significant costs despite the lossless optimization techniques discussed in Section 4.2.1. To address this, we employ the concept of separable kernels to approximate the second-order convolution. In the 2D case, the second-order filter is realized as follows:"
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                492,
+                893,
+                583
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "W _ { \\mathcal { P } _ { 1 } \\times \\mathcal { P } _ { 2 } \\times \\mathcal { P } _ { 1 } \\times \\mathcal { P } _ { 2 } } ^ { 2 } = \\sum _ { q = 1 } ^ { Q } W _ { a q _ { \\mathcal { P } _ { 1 } \\times \\mathcal { P } _ { 2 } \\times 1 } } ^ { 2 } W _ { b q _ { 1 } \\times \\mathcal { P } _ { 1 } \\times \\mathcal { P } _ { 2 } } ^ { 2 } ,\\tag{11}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/078e086e9f744627606a10a2aea01cc2228440245c3dfb970f98a63c52b781a9.jpg"
+                }
+            },
+            "bbox": [
+                513,
+                608,
+                852,
+                652
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where Q is the desired rank of approximation, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { P } _ { 1 } ~ ="
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "2 p _ { 1 } + 1"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { P } _ { 2 } = 2 p _ { 2 } + 1"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". A similar separable kernel approach was explored in [3]. However, authors of [3] only considered a "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "1 ^ { s t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "rank "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( Q = 1 )"
+                    },
+                    {
+                        "type": "text",
+                        "content": "approximation, leading to sub-optimal performance as detailed in Tables 5 and 6."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                666,
+                893,
+                741
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "With this approximation, the Volterra Net Block can be implemented as follows:"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                742,
+                892,
+                773
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "W _ { z } ^ { 1 } \\star X _ { z - 1 } + \\sum _ { q = 1 } ^ { Q } W _ { a q } ^ { 2 } \\star X _ { z - 1 } . W _ { b q } ^ { 2 } \\star X _ { z - 1 } .\\tag{12}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/a71f6538a639598278bcf225740a053b4f72388947dda5d11cb3db0bba880735.jpg"
+                }
+            },
+            "bbox": [
+                526,
+                797,
+                838,
+                842
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "This reduces the complexity of network as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\begin{array} { r } { \\sum _ { z = 1 } ^ { Z } \\left[ ( L _ { z } . \\mathcal { P } _ { 1 _ { z } } . \\mathcal { P } _ { 2 _ { z } } ) ~ + ~ 2 Q \\dot { ( L _ { z } . \\mathcal { P } _ { 1 _ { z } } . \\mathcal { P } _ { 2 _ { z } } ) } \\right] } \\end{array}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "which is significantly lower than Equation 6."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                856,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6101"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                514,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/66dc2b79e1c4bc0cc6af0f621d4111880e3391d4f28b873c1a7493f03dd6c19b.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 3. NAFNet Block on the left, MR-VNN block (lossy approximation) on the right"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                111,
+                87,
+                851,
+                334
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Proposition 4. [Second Order Approximation] The lossy approximation in Equation 11 is a "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\bar { Q } ^ { t h }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "rank approximation of the exact quadratic kernel."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                391,
+                470,
+                435
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Proof. Let’s examine a 1-D Volterra Filter with length "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L ."
+                    },
+                    {
+                        "type": "text",
+                        "content": "The quadratic weight matrix, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "W ^ { 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", in such a case has dimension "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L \\times L"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", and Equation 11 becomes:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                435,
+                468,
+                482
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\boldsymbol { W } _ { L \\times L } ^ { 2 ( Q ) } = \\sum _ { q = 1 } ^ { Q } \\boldsymbol { W } _ { a _ { q L \\times 1 } } ^ { 2 } \\boldsymbol { W } _ { b _ { q 1 \\times L } } ^ { 2 } .\\tag{13}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/3c467cf117c9be3026a2696be48fc7da36cdfd8e5a73b8c0f6d21384d6f84f19.jpg"
+                }
+            },
+            "bbox": [
+                163,
+                492,
+                383,
+                536
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Singular Value Decomposition of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "W ^ { 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "leads to:"
+                    }
+                ]
+            },
+            "bbox": [
+                96,
+                549,
+                411,
+                565
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\mathbf { } W ^ { 2 } = U \\Sigma V ^ { T } ,\\tag{14}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/6a22f76023cb1097f9d95a3036983f52a41e15f83c6abc0b0e7c6245e99309ff.jpg"
+                }
+            },
+            "bbox": [
+                215,
+                578,
+                330,
+                594
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where U and V are "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L \\times L"
+                    },
+                    {
+                        "type": "text",
+                        "content": "matrices, and Σ is a diagonal matrix with singular values of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "W ^ { 2 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Consequently, Equation 14 becomes:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                603,
+                468,
+                650
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "W ^ { 2 } = \\sum _ { q = 1 } ^ { L } u _ { q } \\sigma _ { q } v _ { q } ^ { T } ,\\tag{15}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/602fd6d3a7f3868435c52f58a30a039cfefe92d7bc3bee57e960573ca32ad9ed.jpg"
+                }
+            },
+            "bbox": [
+                204,
+                661,
+                343,
+                704
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "q ^ { t h }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "basis of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "U"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "V"
+                    },
+                    {
+                        "type": "text",
+                        "content": "are represented by "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "u _ { q }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "v _ { q }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "respectively, and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\sigma _ { q }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "q ^ { t h }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "singular value of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "W ^ { 2 }"
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbf { A } Q ^ { t { \\hat { h } } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "rank approximation is then given as:"
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                712,
+                467,
+                758
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { l } { { W ^ { 2 } ( Q ) = \\displaystyle \\sum _ { q = 1 } ^ { Q } u _ { q } \\sigma _ { q } v _ { q } ^ { T } } } \\\\ { { \\ ~ = \\displaystyle \\sum _ { q = 1 } ^ { Q } \\hat { u } _ { q } v _ { q } , } } \\end{array}\\tag{16}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/5988bd2f6e1f98cddf2117800ee40c58ca4753a3f8b9516e50a144162e242a2c.jpg"
+                }
+            },
+            "bbox": [
+                192,
+                781,
+                354,
+                872
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "(17)"
+                    }
+                ]
+            },
+            "bbox": [
+                437,
+                843,
+                467,
+                857
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\hat { u } _ { q } = u _ { q } . \\sigma _ { q } . \\mathrm { ~ I f ~ } W _ { a q } ^ { 2 } = \\hat { u } _ { q } \\mathrm { ~ a n d ~ } W _ { b q } ^ { 2 } = v _ { q } ^ { T } ,"
+                    }
+                ]
+            },
+            "bbox": [
+                96,
+                883,
+                426,
+                904
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "W ^ { 2 ( Q ) } = \\sum _ { q = 1 } ^ { Q } W _ { a q } ^ { 2 } W _ { b q } ^ { 2 } .\\tag{18}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/02e61953727c3d72c45c509e4a593a1a7fce338c5925c5bbfe4c684032a6436f.jpg"
+                }
+            },
+            "bbox": [
+                607,
+                401,
+                784,
+                445
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "This proves that the approximation detailed in Equation 11 is indeed a "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "Q ^ { t h }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "rank approximation of the exact quadratic kernel, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "W ^ { 2 }"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                449,
+                892,
+                494
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Proposition 5. [Special Case of NAFNet] The Non-Linear Activation Free Net (NAFNet) is a special case of Volterra Neural Networks, characterized by "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "W _ { z } ^ { 1 } = \\beta . I"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "Q = 1"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                512,
+                893,
+                571
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Proof. Consider the tensor "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "X _ { z - 1 _ { W \\times H \\times C } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "to be the input to the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "z ^ { t h }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "NAF-Block. The NAF-Block processes the input by convolving it with a kernel, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "W _ { z _ { N A F } } ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", yielding the intermediate output, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { z _ { W \\times H \\times 2 C } } = W _ { z _ { N A F } } \\star X _ { z - 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Subsequently, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { z }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is split into "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { z a w \\times H \\times C }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { z b _ { W } \\times H \\times C } ;"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", which are multiplied to produce the simple gate output, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "M _ { z } \\ ="
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "L _ { z a } . L _ { z b }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Finally, the NAF-Block output is obtained as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "X _ { z } = M _ { z } + \\beta X _ { z - 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", where "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\beta"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is a scaling factor. As "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "W _ { z _ { N A F } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is a depthwise convolution with groups "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "= 2 c ,"
+                    },
+                    {
+                        "type": "text",
+                        "content": "it can be expressed as the product of separable convolutions:"
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                573,
+                893,
+                726
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "W _ { z _ { N A F } } = W _ { z a _ { N A F } } . W _ { z b _ { N A F } } ,\\tag{19}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/7a65a4628fed74bd7857b40d3a9e225bc514babfe611c4770ee372696849f883.jpg"
+                }
+            },
+            "bbox": [
+                591,
+                739,
+                800,
+                757
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Consequently, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "M _ { z }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "is computed as,"
+                    }
+                ]
+            },
+            "bbox": [
+                517,
+                761,
+                750,
+                776
+            ]
+        },
+        {
+            "type": "equation_interline",
+            "content": {
+                "math_content": "\\begin{array} { c } { { M _ { z } = W _ { z a _ { N A F } } \\star X _ { z - 1 } . W _ { z b _ { N A F } } \\star X _ { z - 1 } } } \\\\ { { \\ldots } } \\\\ { { = L _ { z a } . L _ { z b } . } } \\end{array}\\tag{20}",
+                "math_type": "latex",
+                "image_source": {
+                    "path": "images/c047bdc40a05881c39e0ba0212f56e88ec97147a0623a0a6cc3b384fc81afd08.jpg"
+                }
+            },
+            "bbox": [
+                555,
+                796,
+                833,
+                830
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Setting "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "Q = 1"
+                    },
+                    {
+                        "type": "text",
+                        "content": "in Equation 11 yields the expression in Equation 20, demonstrating that the simple gate used in NAFNet Blocks is a "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "1 ^ { s t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "rank approximation of the quadratic Volterra kernel."
+                    }
+                ]
+            },
+            "bbox": [
+                498,
+                839,
+                893,
+                900
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6102"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/267f747508f35776dabc758786b0c926dcb96e2771676f2e8f34bf29d83f2590.jpg"
+                },
+                "table_caption": [],
+                "table_footnote": [],
+                "html": "<table><tr><td>Method MIMO-</td><td>UNet [7]</td><td>HINet [5]</td><td>MAXIM [20]</td><td>Restormer [27]</td><td>UFormer [23]</td><td>Deep- RFT [13]</td><td>MPR- Net [8]</td><td>NAF- Net [4]</td><td>MR-VNet- LYA (Q=2)</td><td>MR-VNet- LYA (Q=4)</td><td>MR- VNet- LLA</td></tr><tr><td>PSNR</td><td>32.68</td><td>32.71</td><td>32.86</td><td>32.92</td><td>32.97</td><td>33.23</td><td>33.31</td><td>33.69</td><td>33.85</td><td>33.93</td><td>34.04</td></tr><tr><td>SSIM</td><td>0.959</td><td>0.959</td><td>0.961</td><td>0.961</td><td>0.967</td><td>0.963</td><td>0.964</td><td>0.967</td><td>0.967</td><td>0.967</td><td>0.969</td></tr><tr><td>GMACs</td><td>1235</td><td>170.7</td><td>169.5</td><td>140</td><td>89.5</td><td>187</td><td>778.2</td><td>65</td><td>47</td><td>70</td><td>96</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                84,
+                89,
+                890,
+                179
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/a98b1bd668516c20f579c5ce000b19e8d187e961efe0b7a9776b32ca2e5ca048.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 1. De-Blurring Performance on GoPro Dataset. Best results are bold, second best are underlined."
+                    },
+                    {
+                        "type": "text",
+                        "content": "Table 2. De-Noising Performance on SIDD Dataset. Best results are bold, second best are underlined."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td>Method MPR-</td><td>Net [8]</td><td>MIR- Net [28]</td><td>NBNet [6]</td><td>UFormer [23]</td><td>MAXIM [20]</td><td>HINet [5]</td><td>Restormer [27]</td><td>NAF- Net [4]</td><td>MR-VNet- LYA (Q=2)</td><td>MR-VNet- LYA (Q=4)</td><td>MR- VNet- LLA</td></tr><tr><td>PSNR</td><td>39.71</td><td>39.72</td><td>39.75</td><td>39.89</td><td>39.96</td><td>39.99</td><td>40.02</td><td>40.30</td><td>40.39</td><td>40.43</td><td>40.58</td></tr><tr><td>SSIM</td><td>0.958</td><td>0.959</td><td>0.959</td><td>0.960</td><td>0.960</td><td>0.958</td><td>0.960</td><td>0.962</td><td>0.962</td><td>0.963</td><td>0.963</td></tr><tr><td>GMACs</td><td>588</td><td>786</td><td>88.8</td><td>89.5</td><td>169.5</td><td>170.7</td><td>140</td><td>65</td><td>47</td><td>70</td><td>96</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                83,
+                220,
+                887,
+                311
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Furthermore, a residual is added to the simple gate output to obtain the final output, which can be written as "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "X _ { z } = M _ { z } + \\beta . I \\star X _ { z - 1 }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". Consequently, the NAF-Block emerges as a special case of the Volterra Networks with "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "W _ { z } ^ { 1 } = \\beta . I"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "Q = 1"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                364,
+                470,
+                440
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The comparison of a NAFNet Block and a MR-VNet (Lossy Approximation) Block is depicted in Figure 3"
+                    }
+                ]
+            },
+            "bbox": [
+                76,
+                440,
+                470,
+                472
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "4.3. Model Architecture"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                478,
+                266,
+                493
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We design a U-Net inspired architecture for approximating the Encoder-Decoder functions. The input image undergoes initial processing through the Encoder function, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { E }"
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathbb { R } ^ { W \\times H \\times C } \\stackrel { \\bullet } { \\to } \\mathbb { R } ^ { w \\times h \\times c }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", comprising 4 encoder blocks. Each encoder block consists of 4 Volterra Layers, implemented as described by Equation 5 utilizing the Lossless and Lossy approximations from Sections 4.2.1 and 4.2.2. Strided convolutions are employed in consecutive Encoder blocks to reduce resolution, resulting in a latent space configuration of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "h = H / 8"
+                    },
+                    {
+                        "type": "text",
+                        "content": "and "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "w = W / 8"
+                    },
+                    {
+                        "type": "text",
+                        "content": ". The middle block in the latent space, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { M } : \\mathbb { R } ^ { h \\times w \\times c }  \\mathbb { R } ^ { h \\times w \\times c }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", is implemented using a single Volterra Layer. Finally, the decoder function, "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "\\mathcal { F } _ { D } : \\overline { { \\mathbb { R } ^ { h \\times w \\times c } } } \\to \\mathbb { R } ^ { \\bar { H } \\times W \\times C }"
+                    },
+                    {
+                        "type": "text",
+                        "content": ", transforms the encoded features back into the image space. The Decoder, symmetric in design to the Encoder with 4 blocks, has only 1 Volterra Layer per block. Each encoder block is connected to its corresponding decoder block via a residual connection. For video restoration problems, the same architecture is retained, but 3D Volterra Filters are used instead of 2D, as detailed in Equation 4. The entire architectural arrangement is illustrated in Figure 2."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                501,
+                470,
+                819
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5. Experiments"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                829,
+                210,
+                847
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "To assess the efficacy of the proposed Volterra Restoration Network, we conduct experiments targeting prevalent degradations in images and videos:"
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                854,
+                470,
+                901
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• Motion-Blur: This degradation, arising from camera or subject motion, is addressed by training and testing the restoration network on the GoPro [14] and Reds [15] datasets for image deblurring."
+                    }
+                ]
+            },
+            "bbox": [
+                517,
+                364,
+                893,
+                426
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "• Camera Sensor Noise: We aim to mitigate noise introduced by the camera sensor during image/video capture. Evaluation is performed using the SIDD [2] and CRVD [25] datasets."
+                    }
+                ]
+            },
+            "bbox": [
+                517,
+                435,
+                893,
+                496
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We present two iterations of our proposed Volterra Layer-based architecture: MR-VNet-LYA, employing the Lossy approximation discussed in Section 4.2.2, and MR-VNet-LLA, incorporating the proposed Lossless approximation. Subsequently, we subject our method to a comprehensive evaluation against state-of-the-art (SOTA) algorithms in the domains of Image and Video Restoration. Evaluation metrics such as Peak Signal to Noise Ratio (PSNR) and Structural Similarity Index Measure (SSIM) are employed for a thorough assessment. Additionally, we conduct a detailed comparative analysis of the computational complexities associated with the proposed methods, quantified in terms of Giga Multiply-Add Computations (GMACs)."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                507,
+                893,
+                719
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "The efficacy of our proposed method is substantiated through comparisons with various SOTA techniques prevalent in the literature. A detailed quantitative assessment for De-Blurring is presented in Tables 1 and 3, utilizing the Go-Pro and REDS datasets, respectively. The results underscore the superior performance of our proposed model, outperforming existing SOTA methods in terms of both PSNR and SSIM metrics."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                719,
+                893,
+                839
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In the realm of image denoising, our proposed method outperforms alternative approaches, as evidenced by the quantitative results presented in Table 2 on the SIDD dataset. Notably, our technique demonstrates superior denoising efficacy, as reflected in higher Peak Signal to Noise Ratio (PSNR) and Structural Similarity Index Measure (SSIM) scores compared to competing methods."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                839,
+                893,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6103"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/c35281a6654c7a00e3bc04819ecf77a7bda35c39038e9fade4a1398bb4fa5be2.jpg"
+                },
+                "image_caption": [
+                    {
+                        "type": "text",
+                        "content": "Figure 5. De-Noising Results on SIDD. Left to Right: Noisy Image, NAFNet, MR-VNet (Ours)"
+                    }
+                ],
+                "image_footnote": []
+            },
+            "bbox": [
+                130,
+                87,
+                838,
+                656
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/5fd32141e35b8383329768839f75a0635084061eecfc8f2e2cae37193f80c43d.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 3. De-Blurring Performance on REDS Dataset"
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td>Method</td><td>PSNR</td><td>SSIM</td><td>GMACs</td></tr><tr><td>MPRNet [8]</td><td>28.79</td><td>0.811</td><td>776.7</td></tr><tr><td>HiNet [5]</td><td>28.83</td><td>0.862</td><td>170.7</td></tr><tr><td>MAXIM [20]</td><td>28.93</td><td>0.865</td><td>169.5</td></tr><tr><td>NAFNet [4]</td><td>29.09</td><td>0.867</td><td>65</td></tr><tr><td>MR-VNet-LYA (Q=4)</td><td>29.79</td><td>0.868</td><td>70</td></tr><tr><td>MR-VNet-LLA</td><td>29.92</td><td>0.869</td><td>96</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                88,
+                707,
+                459,
+                833
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                498,
+                709,
+                893,
+                757
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Furthermore, our exploration extends to the challenging domain of video denoising, detailed in Table 4. In this scenario, we utilize 3D convolution as detailed in Equation 4 and exclusively assess the performance of our Lossy approximation due to its practical efficiency compared to the computationally demanding exact kernel. Our results underscore the effectiveness of the proposed method in achieving superior denoising outcomes in video data, showcasing its competitive edge over existing methodologies."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                765,
+                893,
+                902
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6104"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/c4f1eed159d6ee1f7f6ebc7dec066c64bfe2fc74d9f4f981183e8ce99362e551.jpg"
+                },
+                "table_caption": [],
+                "table_footnote": [],
+                "html": "<table><tr><td>Method</td><td>PSNR</td><td>SSIM</td><td>GMACs</td></tr><tr><td>EMVD-L [12]</td><td>41.00</td><td>0.983</td><td>2543</td></tr><tr><td>RVIDEFormer [26]</td><td>41.29</td><td>0.984</td><td>287</td></tr><tr><td>LLVD-L [17]</td><td>41.41</td><td>0.984</td><td>117</td></tr><tr><td>MR-VNet-LYA</td><td>41.93</td><td>0.985</td><td>163</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                102,
+                89,
+                444,
+                184
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/f4d58a39e81a6abc291019aab672f90999c37ed149cc96f381c3bb9a8950ca6a.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 4. De-Noising Performance on CRVD Dataset. Best performance is bold, second best is underlined."
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td>Kernel Rank</td><td>PSNR</td><td>SSIM</td><td>GMACs</td></tr><tr><td>Q=1 (Special case of NAFNet)</td><td>33.50</td><td>0.965</td><td>36</td></tr><tr><td>Q=2</td><td>33.85</td><td>0.966</td><td>47</td></tr><tr><td>Q=4</td><td>33.93</td><td>0.967</td><td>70</td></tr><tr><td>Q=8</td><td>33.97</td><td>0.967</td><td>115</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                80,
+                241,
+                464,
+                324
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/5098517189548dcc2a60386d41d5dc8d193807f7612a031a1be67c1838dc645a.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 5. Effect of the rank of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "2 ^ { n d }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "order Kernel for GoPro"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Table 6. Effect of the rank of "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "2 ^ { n d }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "order Kernel for SIDD"
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td>Kernel Rank</td><td>PSNR</td><td>SSIM</td><td>GMACs</td></tr><tr><td>Q=1 (Special case of NAFNet)</td><td>40.21</td><td>0.962</td><td>36</td></tr><tr><td>Q=2</td><td>40.39</td><td>0.963</td><td>47</td></tr><tr><td>Q=4</td><td>40.43</td><td>0.963</td><td>70</td></tr><tr><td>Q=8</td><td>40.46</td><td>0.964</td><td>115</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                81,
+                366,
+                464,
+                449
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "These compelling quantitative results affirm the efficacy of our proposed method in addressing both image and video denoising challenges, positioning it as a robust and advanced solution in comparison to contemporary approaches."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                503,
+                470,
+                565
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "5.1. Ablation Study"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                76,
+                574,
+                230,
+                590
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In our comprehensive ablation study, we rigorously analyze the individual contributions of various components within the proposed architecture."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                598,
+                470,
+                643
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "We first investigate the impact of selecting the rank of the kernel in the context of lossy approximation, as demonstrated on the GoPro and SIDD datasets, as detailed in Tables 5 and 6. Notably, when the kernel is constrained to rank 1, it aligns with the specific case observed in NAFNet. As we escalate the rank, the approximation becomes progressively accurate, converging towards the precision of the exact kernel. However, this refinement comes at the expense of heightened complexity."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                643,
+                470,
+                779
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In Table 7, we demonstrate the impact of width of the architecture in terms of channels while keeping the quadratic filter rank constant."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                780,
+                470,
+                824
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In Table 8, we present the impact of incorporating activation functions alongside the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "{ \\bar { \\mathbf { \\theta } } } _ { 2 ^ { n d } }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "order kernel. Our observations indicate that, while ReLU and Sigmoid activation confer a marginal improvement in the case of NAFNet "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "( 1 ^ { s t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Rank approximation), the same effect is not discernible when employing a higher rank approximation of the Volterra Filter. This suggests that the "
+                    },
+                    {
+                        "type": "equation_inline",
+                        "content": "1 ^ { s t }"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Rank kernel utilized in NAFNet is insufficient to closely approximate the exact quadratic kernel. Consequently, the activation function introduces some non-linearity to the model, resulting in improved performance. However, with a closer approximation in the form of a higher rank kernel, none of the activation functions appear to contribute additional non-linearity beyond what the model has already learned."
+                    }
+                ]
+            },
+            "bbox": [
+                75,
+                825,
+                472,
+                901
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/76b4f4bfeee583c9c097a502605371078766de8c44a068d2013faf50ac9c6070.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 7. Effect of width of the architecture when Q=4 (GoPro Dataset)"
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td>Width</td><td>PSNR</td><td>SSIM</td><td>GMACs</td></tr><tr><td>16</td><td>32.80</td><td>0.961</td><td>8</td></tr><tr><td>24</td><td>32.92</td><td>0.963</td><td>18</td></tr><tr><td>32</td><td>33.18</td><td>0.966</td><td>32</td></tr><tr><td>48</td><td>33.93</td><td>0.967</td><td>70</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                529,
+                89,
+                864,
+                178
+            ]
+        },
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/58448f2b568e7ca3e685208e91ebd16a01ee8449c0aae221041a7e63bb28881d.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "Table 8. Impact of using activation functions. The performance is evaluated in terms of PSNR on the SIDD Dataset"
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td>Activation</td><td>NAFNet</td><td>MR-VNet</td></tr><tr><td>Identity</td><td>39.96</td><td>40.43</td></tr><tr><td>ReLU</td><td>39.98</td><td>40.40</td></tr><tr><td>GELU</td><td>39.97</td><td>40.39</td></tr><tr><td>Sigmoid</td><td>39.99</td><td>40.40</td></tr><tr><td>SiLU</td><td>39.96</td><td>40.39</td></tr></table>",
+                "table_type": "simple_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                529,
+                241,
+                864,
+                345
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": []
+            },
+            "bbox": [
+                496,
+                420,
+                893,
+                558
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "6. Conclusion"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                500,
+                580,
+                619,
+                598
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "In conclusion, our research introduces the Media Restoration-Volterra Network (MR-VNet) as a novel approach to image and video restoration. Leveraging higherorder Volterra filters, the proposed architecture demonstrates promising capabilities in addressing common image and video degradations, such as motion blur and camera sensor noise. Through the development of two architectural variants, VNN-LYA and VNN-LLA, employing lossy and lossless approximations, respectively, we offer a comprehensive exploration of the network’s performance."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                609,
+                893,
+                762
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "Our experimental evaluations, conducted on diverse datasets including GoPro, Reds, SIDD, and CRVD, showcase the effectiveness of MR-VNet in comparison to stateof-the-art algorithms. Notably, MR-VNet exhibits competitive results in terms of Peak Signal to Noise Ratio (PSNR) and Structural Similarity Index Measure (SSIM). Furthermore, we analyze the impact of activation functions on the network’s performance, revealing insights into their efficacy in conjunction with higher-order Volterra filters."
+                    }
+                ]
+            },
+            "bbox": [
+                496,
+                763,
+                895,
+                901
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6105"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                958
+            ]
+        }
+    ],
+    [
+        {
+            "type": "title",
+            "content": {
+                "title_content": [
+                    {
+                        "type": "text",
+                        "content": "References"
+                    }
+                ],
+                "level": 2
+            },
+            "bbox": [
+                78,
+                89,
+                176,
+                106
+            ]
+        },
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[1] Mart´ın Abadi, Ashish Agarwal, Paul Barham, Eugene Brevdo, Zhifeng Chen, Craig Citro, Greg S Corrado, Andy Davis, Jeffrey Dean, Matthieu Devin, et al. Tensorflow: Large-scale machine learning on heterogeneous distributed systems. arXiv preprint arXiv:1603.04467, 2016. 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[2] Abdelrahman Abdelhamed, Stephen Lin, and Michael S Brown. A high-quality denoising dataset for smartphone cameras. In Proceedings of the IEEE conference on computer vision and pattern recognition, pages 1692–1700, 2018. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[3] Monami Banerjee, Rudrasis Chakraborty, Jose Bouza, and Baba C Vemuri. Volterranet: A higher order convolutional network with group equivariance for homogeneous manifolds. IEEE Transactions on Pattern Analysis and Machine Intelligence, 44(2):823–833, 2020. 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[4] Liangyu Chen, Xiaojie Chu, Xiangyu Zhang, and Jian Sun. Simple baselines for image restoration. In European Conference on Computer Vision, pages 17–33. Springer, 2022. 1, 2, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[5] Liangyu Chen, Xin Lu, Jie Zhang, Xiaojie Chu, and Chengpeng Chen. Hinet: Half instance normalization network for image restoration. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 182–192, 2021. 1, 2, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[6] Shen Cheng, Yuzhi Wang, Haibin Huang, Donghao Liu, Haoqiang Fan, and Shuaicheng Liu. Nbnet: Noise basis learning for image denoising with subspace projection. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, pages 4896–4906, 2021. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[7] Sung-Jin Cho, Seo-Won Ji, Jun-Pyo Hong, Seung-Won Jung, and Sung-Jea Ko. Rethinking coarse-to-fine approach in single image deblurring. In Proceedings ofthe IEEE/CVF international conference on computer vision, pages 4641–4650, 2021. 1, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[8] Xiaojie Chu, Liangyu Chen, Chengpeng Chen, and Xin Lu. Improving image restoration by revisiting global information aggregation. In European Conference on Computer Vision, pages 53–71. Springer, 2022. 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[9] Ritwik Kumar, Arunava Banerjee, Baba C Vemuri, and Hanspeter Pfister. Trainable convolution filters and their application to face recognition. IEEE transactions on pattern analysis and machine intelligence, 34(7):1423–1436, 2011. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[10] Jingyun Liang, Jiezhang Cao, Yuchen Fan, Kai Zhang, Rakesh Ranjan, Yawei Li, Radu Timofte, and Luc Van Gool. Vrt: A video restoration transformer. arXiv preprint arXiv:2201.12288, 2022. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[11] Jingyun Liang, Jiezhang Cao, Guolei Sun, Kai Zhang, Luc Van Gool, and Radu Timofte. Swinir: Image restoration using swin transformer. In Proceedings of the IEEE/CVF international conference on computer vision, pages 1833–1844, 2021. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[12] Matteo Maggioni, Yibin Huang, Cheng Li, Shuai Xiao, Zhongqian Fu, and Fenglong Song. Efficient multi-stage video denoising with recurrent spatio-temporal fusion. In"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 3466–3475, 2021. 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[13] Xintian Mao, Yiming Liu, Fengze Liu, Qingli Li, Wei Shen, and Yan Wang. Intriguing findings of frequency selection for image deblurring. In Proceedings of the AAAI Conference on Artificial Intelligence, volume 37, pages 1905–1913, 2023. 2, 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[14] Seungjun Nah, Tae Hyun Kim, and Kyoung Mu Lee. Deep multi-scale convolutional neural network for dynamic scene deblurring. In Proceedings of the IEEE conference on computer vision and pattern recognition, pages 3883–3891, 2017. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[15] Seungjun Nah, Sanghyun Son, Suyoung Lee, Radu Timofte, and Kyoung Mu Lee. Ntire 2021 challenge on image deblurring. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 149–165, 2021. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[16] Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, et al. Pytorch: An imperative style, high-performance deep learning library. Advances in neural information processing systems, 32, 2019. 4"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[17] Loay Rashid, Siddharth Roheda, and Amit Unde. Llvd: Lstm-based explicit motion modeling in latent space for video denoising. 2, 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[18] Siddharth Roheda and Hamid Krim. Conquering the cnn over-parameterization dilemma: A volterra filtering approach for action recognition. In Proceedings of the AAAI Conference on Artificial Intelligence, volume 34, pages 11948–11956, 2020. 1, 2, 3"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[19] Olaf Ronneberger, Philipp Fischer, and Thomas Brox. Unet: Convolutional networks for biomedical image segmentation. In Medical Image Computing and Computer-Assisted Intervention–MICCAI 2015: 18th International Conference, Munich, Germany, October 5-9, 2015, Proceedings, Part III 18, pages 234–241. Springer, 2015. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[20] Zhengzhong Tu, Hossein Talebi, Han Zhang, Feng Yang, Peyman Milanfar, Alan Bovik, and Yinxiao Li. Maxim: Multi-axis mlp for image processing. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pages 5769–5780, 2022. 2, 6, 7"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[21] Vito Volterra. Theory of functionals and of integral and integro-differential equations. (No Title), 1959. 1, 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[22] Wei Wang, Xin Chen, Cheng Yang, Xiang Li, Xuemei Hu, and Tao Yue. Enhancing low light videos by exploring high sensitivity camera noise. In Proceedings of the IEEE/CVF International Conference on Computer Vision, pages 4111– 4119, 2019. 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[23] Zhendong Wang, Xiaodong Cun, Jianmin Bao, Wengang Zhou, Jianzhuang Liu, and Houqiang Li. Uformer: A general u-shaped transformer for image restoration. In Proceedings ofthe IEEE/CVF conference on computer vision and pattern recognition, pages 17683–17693, 2022. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[24] Qingyang Xu, Chengjin Zhang, and Li Zhang. Denoising convolutional neural network. In 2015 IEEE International Conference on Information and Automation, pages 1184– 1187. IEEE, 2015. 1"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                84,
+                116,
+                468,
+                184
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6106"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                945,
+                516,
+                957
+            ]
+        }
+    ],
+    [
+        {
+            "type": "list",
+            "content": {
+                "list_type": "reference_list",
+                "list_items": [
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[25] Huanjing Yue, Cong Cao, Lei Liao, Ronghe Chu, and Jingyu Yang. Supervised raw video denoising with a benchmark dataset on dynamic scenes. In Proceedings ofthe IEEE/CVF conference on computer vision and pattern recognition, pages 2301–2310, 2020. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[26] Huanjing Yue, Cong Cao, Lei Liao, and Jingyu Yang. Rvideformer: Efficient raw video denoising transformer with a larger benchmark dataset. arXiv preprint arXiv:2305.00767, 2023. 8"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[27] Syed Waqas Zamir, Aditya Arora, Salman Khan, Munawar Hayat, Fahad Shahbaz Khan, and Ming-Hsuan Yang. Restormer: Efficient transformer for high-resolution image restoration. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, pages 5728–5739, 2022. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[28] Syed Waqas Zamir, Aditya Arora, Salman Khan, Munawar Hayat, Fahad Shahbaz Khan, Ming-Hsuan Yang, and Ling Shao. Learning enriched features for real image restoration and enhancement. In Computer Vision–ECCV 2020: 16th European Conference, Glasgow, UK, August 23–28, 2020, Proceedings, Part XXV 16, pages 492–511. Springer, 2020. 6"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[29] Syed Waqas Zamir, Aditya Arora, Salman Khan, Munawar Hayat, Fahad Shahbaz Khan, Ming-Hsuan Yang, and Ling Shao. Multi-stage progressive image restoration. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, pages 14821–14831, 2021. 1, 2"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[30] Kai Zhang, Wangmeng Zuo, Shuhang Gu, and Lei Zhang. Learning deep cnn denoiser prior for image restoration. In Proceedings ofthe IEEE conference on computer vision and pattern recognition, pages 3929–3938, 2017. 1"
+                            }
+                        ]
+                    },
+                    {
+                        "item_type": "text",
+                        "item_content": [
+                            {
+                                "type": "text",
+                                "content": "[31] Georgios Zoumpourlis, Alexandros Doumanoglou, Nicholas Vretos, and Petros Daras. Non-linear convolution filters for cnn-based learning. In Proceedings of the IEEE international conference on computer vision, pages 4761–4769, 2017. 2"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "bbox": [
+                78,
+                93,
+                470,
+                161
+            ]
+        },
+        {
+            "type": "page_number",
+            "content": {
+                "page_number_content": [
+                    {
+                        "type": "text",
+                        "content": "6107"
+                    }
+                ]
+            },
+            "bbox": [
+                482,
+                944,
+                516,
+                957
+            ]
+        }
+    ]
+]
