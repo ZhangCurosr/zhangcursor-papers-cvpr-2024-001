@@ -3,5 +3,30 @@
  "batch_id": "4d05eaf7-8c97-4218-8b95-47a148afe5d0",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-13 02:32:56",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/943965b2-d9e5-4893-b910-71e6d3ce0d55.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/943965b2-d9e5-4893-b910-71e6d3ce0d55.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 19:12:33",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "image denoising",
+    "self-supervised learning",
+    "blind spot denoising",
+    "correlated noise",
+    "single image restoration"
+   ],
+   "field": "无监督/自监督图像去噪",
+   "innovations": [
+    "揭示BSD掩码比例与噪声相关性的定量关系并提出自适应选择机制",
+    "提出局部像素洗牌技术直接从输入端消除噪声空间相关性",
+    "构建MASH框架在FMDD等数据集上达到单图自监督去噪SOTA"
+   ],
+   "benchmarks": [
+    "SIDD",
+    "FMDD",
+    "PolyU"
+   ]
+  }
+ }
 }

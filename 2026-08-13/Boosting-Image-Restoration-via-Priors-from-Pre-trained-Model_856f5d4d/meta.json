@@ -4,5 +4,42 @@
  "title": "Boosting-Image-Restoration-via-Priors-from-Pre-trained-Model",
  "token": "sk-45Ifw5Iq3...",
  "created_at": "2026-08-13 07:10:28",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/a5a9ac9a-fb82-4441-bb7f-711397104b8d.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/a5a9ac9a-fb82-4441-bb7f-711397104b8d.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 19:12:13",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "图像恢复",
+    "预训练模型",
+    "轻量模块",
+    "CLIP",
+    "空间变化增强",
+    "通道-空间注意力",
+    "泛化"
+   ],
+   "field": "低层视觉-图像恢复",
+   "innovations": [
+    "提出PTG-RM轻量插件，利用预训练多模态模型特征（OSF）作为通用恢复先验",
+    "PTG-SVE用可学习空间映射替代固定SNR参考，自适应融合短程/长程操作",
+    "PTG-CSA利用先验生成空间变化卷积核定制通道-空间注意力"
+   ],
+   "benchmarks": [
+    "LOL-real",
+    "SID",
+    "Rain100H",
+    "Rain100L",
+    "Test100",
+    "GoPro",
+    "HIDE",
+    "RealBlur-R",
+    "DPDD",
+    "Set12",
+    "BSD68",
+    "Urban100",
+    "SIDD"
+   ]
+  }
+ }
 }

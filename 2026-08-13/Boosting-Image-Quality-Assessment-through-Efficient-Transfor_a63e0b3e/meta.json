@@ -4,5 +4,10 @@
  "title": "Boosting-Image-Quality-Assessment-through-Efficient-Transfor",
  "token": "sk-mBuyDYvkR...",
  "created_at": "2026-08-13 07:10:47",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/967e5fe1-502b-4540-ac61-861376d8849b.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/967e5fe1-502b-4540-ac61-861376d8849b.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 19:12:16",
+  "chunks": 1
+ }
 }

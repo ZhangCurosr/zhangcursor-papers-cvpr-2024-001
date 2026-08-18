@@ -4,5 +4,33 @@
  "title": "Combining-Frame-and-GOP-Embeddings-for-Neural-Video-Represen",
  "token": "sk-dD4E81LFV...",
  "created_at": "2026-08-13 07:11:07",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/fb29f037-bf30-494f-8af8-dc7d1b6dac1f.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/fb29f037-bf30-494f-8af8-dc7d1b6dac1f.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 19:13:22",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "隐式神经表示",
+    "视频压缩",
+    "混合编码",
+    "熵约束训练",
+    "光流聚合",
+    "视频表征"
+   ],
+   "field": "神经视频压缩",
+   "innovations": [
+    "提出T-NeRV混合INR架构，结合帧嵌入与GOP特征网格实现内容自适应微调",
+    "扩展熵约束压缩框架以支持帧嵌入的单熵建模，挖掘跨帧冗余",
+    "首个在所有UVG序列上超越HEVC veryslow preset的视频INR方法"
+   ],
+   "benchmarks": [
+    "UVG",
+    "PSNR",
+    "MS-SSIM",
+    "BPP",
+    "HEVC x265 veryslow"
+   ]
+  }
+ }
 }

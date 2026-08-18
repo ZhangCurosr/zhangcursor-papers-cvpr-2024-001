@@ -4,5 +4,32 @@
  "title": "D-sup-4-sup-M-Dataset-Distillation-via-Disentangled-Diffusio",
  "token": "sk-mBuyDYvkR...",
  "created_at": "2026-08-13 05:40:15",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4f2e4ab9-4b4b-45ab-bc95-a65b2d4a90bf.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4f2e4ab9-4b4b-45ab-bc95-a65b2d4a90bf.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 19:15:33",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Dataset Distillation",
+    "Diffusion Model",
+    "Latent Diffusion",
+    "Cross-Architecture Generalization",
+    "Prototype Learning",
+    "Training-Time Matching"
+   ],
+   "field": "数据集压缩与蒸馏",
+   "innovations": [
+    "首次将解耦扩散模型引入数据集蒸馏任务，实现架构无关的生成式蒸馏",
+    "提出原型初始化 + 多模态条件扩散的生成框架，替代传统随机噪声初始化",
+    "引入训练时软标签匹配（TTM）策略，替代合成时匹配以提高跨架构泛化"
+   ],
+   "benchmarks": [
+    "ImageNet-1K",
+    "CIFAR-10",
+    "CIFAR-100",
+    "Tiny-ImageNet"
+   ]
+  }
+ }
 }

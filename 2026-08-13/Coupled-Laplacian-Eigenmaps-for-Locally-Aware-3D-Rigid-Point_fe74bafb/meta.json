@@ -4,5 +4,32 @@
  "title": "Coupled-Laplacian-Eigenmaps-for-Locally-Aware-3D-Rigid-Point",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 05:41:04",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/34933318-2c12-4ade-be65-c4ec3ee02004.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/34933318-2c12-4ade-be65-c4ec3ee02004.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 19:15:33",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "点云匹配",
+    "拉普拉斯特征映射",
+    "耦合图",
+    "异常检测",
+    "骨骼侧别估计",
+    "手性匹配",
+    "谱嵌入",
+    "无监督3D形状分析"
+   ],
+   "field": "3D点云分析与匹配",
+   "innovations": [
+    "提出耦合拉普拉斯算子，通过人工交叉边实现多几何体谱嵌入的先验对齐，避免特征值排序与符号歧义",
+    "定义并基准化自动骨骼侧别估计(BSE)任务，将其建模为非平凡手性形状匹配问题",
+    "在MVTec 3D-AD上以仅3D信息超越融合RGB+Depth的深度学习方法，实现高精度3D异常定位"
+   ],
+   "benchmarks": [
+    "MVTec 3D-AD",
+    "BSE Benchmark (Femur/Hip/Tibia/Fibula)"
+   ]
+  }
+ }
 }

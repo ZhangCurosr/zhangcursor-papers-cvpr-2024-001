@@ -4,5 +4,30 @@
  "title": "Clustering-for-Protein-Representation-Learning",
  "token": "sk-WJrSFDicB...",
  "created_at": "2026-08-13 14:56:04",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/44791388-d8ac-4988-91f7-a9cd7d4c5c17.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/44791388-d8ac-4988-91f7-a9cd7d4c5c17.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 19:13:10",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "protein representation learning",
+    "neural clustering",
+    "graph neural networks",
+    "3D protein structure",
+    "amino acid selection"
+   ],
+   "field": "生物信息学与计算生物学",
+   "innovations": [
+    "提出迭代神经聚类框架自动发现蛋白质关键氨基酸组件",
+    "设计SCI-CRE-CN三阶段可微聚类单元融合1D/3D多模态特征"
+   ],
+   "benchmarks": [
+    "EC number prediction",
+    "GO term prediction",
+    "protein fold classification",
+    "enzyme reaction classification"
+   ]
+  }
+ }
 }

@@ -4,5 +4,32 @@
  "title": "D-sup-4-sup-M-Dataset-Distillation-via-Disentangled-Diffusio",
  "token": "sk-2d8Cyf5aG...",
  "created_at": "2026-08-13 07:12:50",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4f2e4ab9-4b4b-45ab-bc95-a65b2d4a90bf.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4f2e4ab9-4b4b-45ab-bc95-a65b2d4a90bf.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 19:15:47",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Dataset Distillation",
+    "Diffusion Model",
+    "Cross-Architecture Generalization",
+    "Large-Scale Dataset",
+    "Training-Time Matching",
+    "Prototype Learning"
+   ],
+   "field": "数据集压缩与高效学习",
+   "innovations": [
+    "首次将潜扩散模型解耦应用于数据集蒸馏，实现架构无关的高质量生成",
+    "提出训练时匹配策略，通过软标签分布对齐替代计算昂贵的合成时匹配",
+    "在ImageNet-1K等大规模数据集上实现高保真高分辨率蒸馏并超越SOTA"
+   ],
+   "benchmarks": [
+    "CIFAR-10",
+    "CIFAR-100",
+    "ImageNet-1K",
+    "Tiny-ImageNet"
+   ]
+  }
+ }
 }

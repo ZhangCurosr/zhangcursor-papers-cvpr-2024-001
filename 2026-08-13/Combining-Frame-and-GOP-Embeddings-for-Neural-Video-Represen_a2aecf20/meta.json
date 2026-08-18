@@ -4,5 +4,10 @@
  "title": "Combining-Frame-and-GOP-Embeddings-for-Neural-Video-Represen",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 05:40:45",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/fb29f037-bf30-494f-8af8-dc7d1b6dac1f.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/fb29f037-bf30-494f-8af8-dc7d1b6dac1f.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 19:13:49",
+  "chunks": 1
+ }
 }

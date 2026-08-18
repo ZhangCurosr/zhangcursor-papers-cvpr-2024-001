@@ -4,5 +4,34 @@
  "title": "DIOD-Self-Distillation-Meets-Object-Discovery",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 05:39:31",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4c57c0ed-cb96-4551-9669-e0816bb6603a.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4c57c0ed-cb96-4551-9669-e0816bb6603a.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 19:16:15",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "目标发现",
+    "运动引导目标发现",
+    "噪声标签学习",
+    "蒸馏槽注意力",
+    "EMA教师学生",
+    "实例分割",
+    "对象中心学习"
+   ],
+   "field": "无监督视频目标发现",
+   "innovations": [
+    "首次将MGOD建模为噪声标签学习，提出蒸馏槽注意力框架",
+    "one-to-many注意力连接模式避免语义漂移并持续精化伪标签"
+   ],
+   "benchmarks": [
+    "fg-ARI",
+    "all-ARI",
+    "F1@50",
+    "TRI-PD",
+    "KITTI",
+    "MOVi-E"
+   ]
+  }
+ }
 }

@@ -4,5 +4,29 @@
  "title": "CorrMatch-Label-Propagation-via-Correlation-Matching-for-Sem",
  "token": "sk-45Ifw5Iq3...",
  "created_at": "2026-08-13 05:40:38",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/9475c671-e4a8-4eaf-a9d6-e8422e8c368f.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/9475c671-e4a8-4eaf-a9d6-e8422e8c368f.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 19:14:48",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "半监督语义分割",
+    "标签传播",
+    "相关性图",
+    "伪标签",
+    "一致性正则化"
+   ],
+   "field": "半监督视觉分割",
+   "innovations": [
+    "提出像素传播策略，利用相关性图将全局相似度信息注入预测 logits",
+    "提出区域传播策略，从相关性图提取类无关形状掩码并填充伪标签",
+    "设计动态阈值更新机制，自适应调整高置信度筛选标准"
+   ],
+   "benchmarks": [
+    "Pascal VOC 2012",
+    "Cityscapes"
+   ]
+  }
+ }
 }

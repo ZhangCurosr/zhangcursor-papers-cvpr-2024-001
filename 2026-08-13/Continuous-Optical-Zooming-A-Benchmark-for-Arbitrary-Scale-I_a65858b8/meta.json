@@ -4,5 +4,29 @@
  "title": "Continuous-Optical-Zooming-A-Benchmark-for-Arbitrary-Scale-I",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 05:41:06",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/8e50fda1-b472-465c-ab8c-3e7092aaf54b.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/8e50fda1-b472-465c-ab8c-3e7092aaf54b.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 19:14:16",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "任意尺度超分辨率",
+    "真实世界SR",
+    "连续光变焦",
+    "隐式函数",
+    "MLP-mixer",
+    "元学习"
+   ],
+   "field": "任意尺度图像超分辨率",
+   "innovations": [
+    "首个真实世界任意尺度SR基准数据集COZ，通过自动连续光变焦系统采集",
+    "提出LMI网络，基于MLP-mixer和元学习同时建模多坐标局部纹理信息",
+    "证明真实数据训练显著优于模拟数据训练，并在所有倍率下取得SOTA"
+   ],
+   "benchmarks": [
+    "COZ testing set (37 scenes, ×2–×6)"
+   ]
+  }
+ }
 }

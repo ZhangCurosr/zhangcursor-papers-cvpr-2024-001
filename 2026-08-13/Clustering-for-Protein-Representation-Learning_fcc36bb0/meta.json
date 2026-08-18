@@ -4,5 +4,10 @@
  "title": "Clustering-for-Protein-Representation-Learning",
  "token": "sk-45Ifw5Iq3...",
  "created_at": "2026-08-13 05:40:34",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/44791388-d8ac-4988-91f7-a9cd7d4c5c17.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/44791388-d8ac-4988-91f7-a9cd7d4c5c17.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 19:13:52",
+  "chunks": 1
+ }
 }

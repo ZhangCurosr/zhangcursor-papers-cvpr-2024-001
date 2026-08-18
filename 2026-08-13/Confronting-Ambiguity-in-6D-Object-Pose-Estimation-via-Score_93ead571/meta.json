@@ -4,5 +4,32 @@
  "title": "Confronting-Ambiguity-in-6D-Object-Pose-Estimation-via-Score",
  "token": "sk-nY8L7ieIq...",
  "created_at": "2026-08-13 05:39:44",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/7ae107cd-6b2a-48ba-9407-2fc6360e1fb1.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/7ae107cd-6b2a-48ba-9407-2fc6360e1fb1.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 19:14:45",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "6D Object Pose Estimation",
+    "Score-Based Diffusion",
+    "SE(3)",
+    "Pose Ambiguity",
+    "Symmetry-Aware Estimation",
+    "Lie Group Diffusion",
+    "Symmetric Objects"
+   ],
+   "field": "6D物体姿态估计",
+   "innovations": [
+    "首个在图像域将Score-Based Diffusion应用于SE(3)姿态估计",
+    "提出SE(3)上的代理Stein分数公式提升去噪收敛效率",
+    "设计Fourier-based条件机制适应SO(3)周期性分布"
+   ],
+   "benchmarks": [
+    "SYMSOL",
+    "SYMSOL-T",
+    "T-LESS"
+   ]
+  }
+ }
 }

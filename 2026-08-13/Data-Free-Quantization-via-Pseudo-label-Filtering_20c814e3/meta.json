@@ -4,5 +4,31 @@
  "title": "Data-Free-Quantization-via-Pseudo-label-Filtering",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 04:50:00",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/04bf1784-e72c-46e4-b230-fab2e8a6fb1a.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/04bf1784-e72c-46e4-b230-fab2e8a6fb1a.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 19:16:42",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Data-Free Quantization",
+    "Model Compression",
+    "Pseudo-label",
+    "Self-entropy",
+    "Knowledge Distillation",
+    "Neural Network Quantization"
+   ],
+   "field": "模型量化与压缩",
+   "innovations": [
+    "首次在校准前利用自熵评估合成数据可靠性并按质量分桶",
+    "设计主/辅助多伪标签机制差异化利用高/低可靠合成样本",
+    "动态阈值可靠性过滤策略随训练逐步收紧监督标准"
+   ],
+   "benchmarks": [
+    "CIFAR-10",
+    "CIFAR-100",
+    "ImageNet (ILSVRC2012)"
+   ]
+  }
+ }
 }

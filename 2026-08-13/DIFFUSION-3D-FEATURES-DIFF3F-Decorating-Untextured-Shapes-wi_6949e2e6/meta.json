@@ -4,5 +4,33 @@
  "title": "DIFFUSION-3D-FEATURES-DIFF3F-Decorating-Untextured-Shapes-wi",
  "token": "sk-JMLCbBCEj...",
  "created_at": "2026-08-13 05:39:51",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/163a5a52-bb83-4330-80ba-1caecb697a69.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/163a5a52-bb83-4330-80ba-1caecb697a69.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 19:16:02",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "shape correspondence",
+    "diffusion features",
+    "semantic descriptor",
+    "zero-shot 3D",
+    "multi-view aggregation",
+    "ControlNet",
+    "DINOv2"
+   ],
+   "field": "3D shape analysis / 形状对应与语义表示",
+   "innovations": [
+    "将 Stable Diffusion 中间层特征蒸馏到 3D 表面生成零样本语义描述符",
+    "多视图 ControlNet 纹理化容忍图像不一致，通过时间步加权与 ball query 聚合隐式去噪",
+    "扩散特征与 DINOv2 互补融合，在无纹理网格和点云上实现跨类别形状对应"
+   ],
+   "benchmarks": [
+    "SHREC'19",
+    "SHREC'20",
+    "FAUST",
+    "TOSCA"
+   ]
+  }
+ }
 }

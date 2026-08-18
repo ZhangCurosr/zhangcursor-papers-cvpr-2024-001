@@ -4,5 +4,10 @@
  "title": "Denoising-Point-Clouds-in-Latent-Space-via-Graph-Convolution",
  "token": "sk-jX4FaQZVZ...",
  "created_at": "2026-08-13 07:12:00",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/59eeca58-1b4d-46b4-bab8-025088941fb7.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/59eeca58-1b4d-46b4-bab8-025088941fb7.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 19:17:46",
+  "chunks": 1
+ }
 }

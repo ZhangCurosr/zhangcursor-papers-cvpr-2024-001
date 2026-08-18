@@ -4,5 +4,31 @@
  "title": "DemoCaricature-Democratising-Caricature-Generation-with-a-Ro",
  "token": "sk-mBuyDYvkR...",
  "created_at": "2026-08-13 05:40:07",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/35ee9b00-448d-45e9-a67e-6197d9e6ec3c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/35ee9b00-448d-45e9-a67e-6197d9e6ec3c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 19:16:49",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "caricature generation",
+    "text-to-image personalization",
+    "rank-1 model editing",
+    "sketch-conditioned generation",
+    "single-image customization",
+    "diffusion models"
+   ],
+   "field": "可控图像生成与个性化",
+   "innovations": [
+    "显式秩1模型编辑（仅在cross-attention层概念token位置编辑，避免多概念语义干扰）",
+    "随机掩码重建损失增强对夸张形变的鲁棒性",
+    "上位词正则化防止单图个性化过拟合"
+   ],
+   "benchmarks": [
+    "WebCaricature",
+    "CLIP-Score (ID/Style/Shape)",
+    "Human Study"
+   ]
+  }
+ }
 }
