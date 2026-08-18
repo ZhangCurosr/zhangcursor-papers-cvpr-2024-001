@@ -4,5 +4,30 @@
  "title": "Blur-aware-Spatio-temporal-Sparse-Transformer-for-Video-Debl",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 05:40:48",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/838658cc-764d-42b0-a6b7-e37737554a2e.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/838658cc-764d-42b0-a6b7-e37737554a2e.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:20:44",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "视频去模糊",
+    "时空Transformer",
+    "稀疏注意力",
+    "双向特征传播",
+    "模糊图估计",
+    "运动模糊"
+   ],
+   "field": "视频复原与增强",
+   "innovations": [
+    "提出基于光流的非学习模糊图估计方法，为视频去模糊提供运动语义先验",
+    "设计模糊感知时空稀疏Transformer (BSST)，利用模糊图引导时空稀疏注意力以高效扩展时间窗口",
+    "设计模糊感知双向特征传播 (BBFP) 和特征对齐 (BFA)，利用锐利图引导选择性对齐以减少误差累积"
+   ],
+   "benchmarks": [
+    "GoPro",
+    "DVD"
+   ]
+  }
+ }
 }

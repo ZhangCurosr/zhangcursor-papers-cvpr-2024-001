@@ -3,5 +3,31 @@
  "batch_id": "a97b9e6b-fd40-4528-84a6-f3bfc8532a6f",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 02:59:48",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2ae40f83-b068-4d98-98d4-469175ba37e5.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2ae40f83-b068-4d98-98d4-469175ba37e5.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:25:24",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Segment Anything Model",
+    "Medical Image Segmentation",
+    "Prompt-free Adaptation",
+    "Hierarchical Decoding",
+    "LoRA",
+    "Few-shot Segmentation"
+   ],
+   "field": "医学图像分割",
+   "innovations": [
+    "两阶段分层解码架构：利用stage-1概率mask先验引导stage-2精细化分割",
+    "可学习掩码交叉注意力：用概率图替代binary mask实现可微分的空间调制",
+    "类平衡掩码引导自注意力：方差反比高斯扰动缓解医学数据长尾分布"
+   ],
+   "benchmarks": [
+    "Synapse Multi-organ CT",
+    "Left Atrial (LA) MRI",
+    "PROMISE12 Prostate MRI"
+   ]
+  }
+ }
 }

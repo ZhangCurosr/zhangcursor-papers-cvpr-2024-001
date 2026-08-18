@@ -4,5 +4,31 @@
  "title": "Capturing-Closely-Interacted-Two-Person-Motions-with-Reactio",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 05:39:38",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/977e5ee3-9fd5-42f3-be4b-fc78287be28b.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/977e5ee3-9fd5-42f3-be4b-fc78287be28b.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:23:34",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "two-person motion capture",
+    "reaction prior",
+    "invertible neural network",
+    "human-human interaction",
+    "monocular MoCap",
+    "Dual-Human dataset"
+   ],
+   "field": "单目三维人体动作捕捉与人际交互理解",
+   "innovations": [
+    "提出基于运动VAE+INN的双向reaction prior，显式建模双人姿态条件概率分布",
+    "设计interaction-aware自注意力与query-based tracking相结合的端到端双人MoCap框架",
+    "构建Dual-Human大规模高质量双人交互数据集（2k序列+多视图+contact+text标注）"
+   ],
+   "benchmarks": [
+    "Hi4D",
+    "CHI3D",
+    "Dual-Human"
+   ]
+  }
+ }
 }

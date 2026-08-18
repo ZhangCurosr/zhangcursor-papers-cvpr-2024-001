@@ -3,5 +3,27 @@
  "batch_id": "1f8e6935-fe25-4176-8e00-7e1f290ad6c3",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 02:59:55",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/e8a4e8e6-4185-4d6a-a10d-fc529515735c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/e8a4e8e6-4185-4d6a-a10d-fc529515735c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:24:43",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "零样本分割",
+    "鲁棒分割",
+    "Segment Anything Model",
+    "图像退化",
+    "频域去风格"
+   ],
+   "field": "鲁棒视觉基础模型",
+   "innovations": [
+    "以冻结 SAM 为骨干、AMFG+AOTG 双 adapter 保持零样本能力的轻量鲁棒分割框架",
+    "在频域对 mask 与互补特征进行退化风格分离的傅里叶退化抑制模块"
+   ],
+   "benchmarks": [
+    "Robust-Seg (MSRA10K/LVIS/NDD20/STREETS/FSS-1000/COCO/BDD-100k/LIS)"
+   ]
+  }
+ }
 }

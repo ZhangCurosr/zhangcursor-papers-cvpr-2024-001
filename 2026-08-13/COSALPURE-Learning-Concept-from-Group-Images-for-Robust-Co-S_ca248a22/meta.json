@@ -4,5 +4,31 @@
  "title": "COSALPURE-Learning-Concept-from-Group-Images-for-Robust-Co-S",
  "token": "sk-SDuVT3fV1...",
  "created_at": "2026-08-13 07:12:55",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/a970d22b-4bbc-4b57-bb98-0b92167e462d.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/a970d22b-4bbc-4b57-bb98-0b92167e462d.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:23:33",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Co-saliency Detection",
+    "Adversarial Robustness",
+    "Diffusion Model",
+    "Concept Learning",
+    "Image Purification"
+   ],
+   "field": "共显著性检测与视觉鲁棒性",
+   "innovations": [
+    "提出群体图像概念学习模块，利用文本反转从含噪图像组中提取鲁棒的共显著语义概念",
+    "设计概念引导的扩散纯化框架，将语义概念作为条件嵌入T2I去噪过程以提升CoSOD鲁棒性",
+    "验证了方法对对抗攻击和常见图像损坏（运动模糊）的广泛有效性"
+   ],
+   "benchmarks": [
+    "Cosal2015",
+    "iCoseg",
+    "CoSOD3k",
+    "CoCA"
+   ]
+  }
+ }
 }

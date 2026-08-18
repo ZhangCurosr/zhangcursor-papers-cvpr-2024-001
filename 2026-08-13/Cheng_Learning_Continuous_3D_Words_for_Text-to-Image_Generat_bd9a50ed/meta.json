@@ -3,5 +3,30 @@
  "batch_id": "bd9a50ed-ae2a-4085-a1be-d4c727bed359",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 02:59:04",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4333862f-e5f4-42c2-8095-d16b7137858c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4333862f-e5f4-42c2-8095-d16b7137858c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:24:54",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "text-to-image generation",
+    "diffusion models",
+    "3D-aware generation",
+    "continuous control",
+    "subject-driven generation",
+    "domain adaptation"
+   ],
+   "field": "文本到图像生成与细粒度控制",
+   "innovations": [
+    "提出 Continuous 3D Words，用 MLP 将连续 3D 属性映射到 token 空间实现细粒度滑动条控制",
+    "两阶段解耦训练策略，分离对象身份与连续属性以增强跨对象泛化",
+    "ControlNet Augmentation 自动化数据增强，防止渲染背景过拟合"
+   ],
+   "benchmarks": [
+    "User Preference Study",
+    "Average User Ranking"
+   ]
+  }
+ }
 }

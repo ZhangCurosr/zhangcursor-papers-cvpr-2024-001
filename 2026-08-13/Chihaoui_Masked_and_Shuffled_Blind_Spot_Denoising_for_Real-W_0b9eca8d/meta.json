@@ -3,5 +3,30 @@
  "batch_id": "0b9eca8d-4149-44fb-927c-364590509564",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-13 02:59:22",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/943965b2-d9e5-4893-b910-71e6d3ce0d55.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/943965b2-d9e5-4893-b910-71e6d3ce0d55.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:25:38",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "单图去噪",
+    "盲点去噪",
+    "自监督学习",
+    "相关噪声",
+    "局部像素洗牌"
+   ],
+   "field": "无监督/自监督图像恢复",
+   "innovations": [
+    "提出遮罩比率与噪声相关性的定量关系并自动选择最优遮罩",
+    "设计局部像素洗牌技术从源头破坏噪声空间相关性",
+    "构建端到端单图去噪框架MASH达到SOTA性能"
+   ],
+   "benchmarks": [
+    "SIDD",
+    "FMDD",
+    "PolyU"
+   ]
+  }
+ }
 }

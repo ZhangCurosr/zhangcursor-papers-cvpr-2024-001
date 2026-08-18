@@ -4,5 +4,30 @@
  "title": "CAMEL-CAusal-Motion-Enhancement-tailored-for-Lifting-Text-dr",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 05:41:07",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/45ee3429-9112-46ac-8414-80f5b5e10f38.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/45ee3429-9112-46ac-8414-80f5b5e10f38.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:22:03",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "文本驱动视频编辑",
+    "扩散模型",
+    "运动一致性",
+    "频域解耦",
+    "因果运动滤波器",
+    "运动提示"
+   ],
+   "field": "视频编辑与生成",
+   "innovations": [
+    "提出可学习运动提示，通过直接优化从视频模板中提取运动概念作为扩散模型隐式运动条件",
+    "设计因果运动增强注意力机制（CAM-Attn），结合可学习因果滤波器在频域解耦并增强运动分量"
+   ],
+   "benchmarks": [
+    "TGVE-DAVIS",
+    "TGVE-Videvo",
+    "UMTScore"
+   ]
+  }
+ }
 }

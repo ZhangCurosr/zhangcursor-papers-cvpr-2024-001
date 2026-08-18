@@ -3,5 +3,31 @@
  "batch_id": "495fbd53-3e03-4f11-bc16-fd2574a29459",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 02:33:01",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2ae40f83-b068-4d98-98d4-469175ba37e5.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2ae40f83-b068-4d98-98d4-469175ba37e5.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:25:13",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "SAM",
+    "Medical Image Segmentation",
+    "Prompt-free Adaptation",
+    "Hierarchical Decoding",
+    "Few-shot Learning",
+    "Foundation Model"
+   ],
+   "field": "医学图像分割",
+   "innovations": [
+    "提出两阶段分层解码框架，以先验概率mask引导精细分割",
+    "设计类别平衡mask引导自注意力(CMAttn)缓解医学图像长尾分布问题",
+    "提出可学习mask交叉注意力机制替代hard mask以实现梯度可传的mask-guided attention"
+   ],
+   "benchmarks": [
+    "Synapse Multi-organ CT",
+    "Left Atrial (LA) MRI",
+    "PROMISE12 Prostate MRI"
+   ]
+  }
+ }
 }

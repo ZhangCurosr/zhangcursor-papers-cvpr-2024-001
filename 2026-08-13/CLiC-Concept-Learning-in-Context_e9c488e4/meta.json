@@ -4,5 +4,31 @@
  "title": "CLiC-Concept-Learning-in-Context",
  "token": "sk-WFixZKKH5...",
  "created_at": "2026-08-13 07:12:31",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/223279b4-7390-4d28-84b6-4afdc4cf66c1.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/223279b4-7390-4d28-84b6-4afdc4cf66c1.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:22:52",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "视觉概念学习",
+    "扩散模型个性化",
+    "上下文感知生成",
+    "图像编辑",
+    "交叉注意力优化"
+   ],
+   "field": "文本条件图像生成与个性化",
+   "innovations": [
+    "提出软掩码上下文损失保持概念与物体的语义关联",
+    "设计三重损失协同机制实现局部概念的精准定位与跨物体迁移",
+    "提出自动mask匹配算法实现源-目标图像语义对应区域的自动提取"
+   ],
+   "benchmarks": [
+    "用户研究(42位参与者,30对图像)",
+    "Custom Diffusion",
+    "Break-A-Scene",
+    "RealFill"
+   ]
+  }
+ }
 }

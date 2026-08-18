@@ -4,5 +4,34 @@
  "title": "Blur2Blur-Blur-Conversion-for-Unsupervised-Image-Deblurring",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 07:13:08",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/e60b1527-501b-4e4e-8290-55f32ce3a9ce.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/e60b1527-501b-4e4e-8290-55f32ce3a9ce.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:21:12",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "图像去模糊",
+    "无监督学习",
+    "域适应",
+    "模糊转换",
+    "生成对抗网络",
+    "域迁移"
+   ],
+   "field": "低级别视觉/图像恢复",
+   "innovations": [
+    "提出模糊到模糊转换框架，将未知域去模糊分解为模糊转换与已知域去模糊两步",
+    "设计无需配对数据、仅利用目标相机无序模糊/清晰图对的学习机制",
+    "通过模糊核提取技术构建内容保持的已知模糊域合成数据"
+   ],
+   "benchmarks": [
+    "RB2V_Street",
+    "REDS",
+    "RSBlur",
+    "GoPro",
+    "PhoneCraft",
+    "WritingHands"
+   ]
+  }
+ }
 }

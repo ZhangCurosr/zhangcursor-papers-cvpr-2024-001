@@ -3,5 +3,30 @@
  "batch_id": "18792944-c572-40dc-85b4-9f266e5d9a1e",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 02:33:05",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/fc8a7ca3-5801-4bf7-a595-0666dc248987.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/fc8a7ca3-5801-4bf7-a595-0666dc248987.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:24:34",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "视频超分辨率",
+    "扩散模型",
+    "空间适应",
+    "时间一致性",
+    " latent diffusion",
+    "视频恢复"
+   ],
+   "field": "视频超分辨率与生成式恢复",
+   "innovations": [
+    "提出SFA模块通过LR特征预测仿射参数实现HR像素级空间调制",
+    "提出TFA模块在3D tubelet内做自注意力与LR-HR交叉注意力实现时序对齐",
+    "构建UNet latent空间与VAE pixel空间双路径时空引导框架冻结预训练扩散模型"
+   ],
+   "benchmarks": [
+    "REDS4",
+    "Vid4"
+   ]
+  }
+ }
 }

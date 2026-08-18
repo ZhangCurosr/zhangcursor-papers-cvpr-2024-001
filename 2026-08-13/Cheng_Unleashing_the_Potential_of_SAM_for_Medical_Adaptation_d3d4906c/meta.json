@@ -3,5 +3,30 @@
  "batch_id": "d3d4906c-96e2-4067-9a12-2cf241d269d9",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 02:46:44",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2ae40f83-b068-4d98-98d4-469175ba37e5.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2ae40f83-b068-4d98-98d4-469175ba37e5.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:25:47",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "SAM adaptation",
+    "medical image segmentation",
+    "hierarchical decoding",
+    "prompt-free",
+    "few-shot segmentation",
+    "learnable mask attention"
+   ],
+   "field": "医学图像分割 / 基础模型高效微调",
+   "innovations": [
+    "提出两阶段层次化解码框架，以首阶段概率先验引导次阶段精细化医学分割",
+    "设计可学习掩码交叉注意力与类别均衡掩码引导自注意力，解决长尾分布与背景噪声问题"
+   ],
+   "benchmarks": [
+    "Synapse Multi-Organ CT",
+    "LA Left Atrial Segmentation",
+    "PROMISE12 Prostate MRI"
+   ]
+  }
+ }
 }

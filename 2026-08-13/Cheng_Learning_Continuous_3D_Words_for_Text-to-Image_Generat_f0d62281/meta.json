@@ -3,5 +3,33 @@
  "batch_id": "f0d62281-fcfa-44ec-8530-67958b8e16b8",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 02:32:50",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4333862f-e5f4-42c2-8095-d16b7137858c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4333862f-e5f4-42c2-8095-d16b7137858c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:25:06",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "text-to-image generation",
+    "continuous attribute control",
+    "diffusion model",
+    "3D-aware generation",
+    "Dreambooth",
+    "ControlNet",
+    "LoRA",
+    "attribute disentanglement"
+   ],
+   "field": "文本到图像生成与可控合成",
+   "innovations": [
+    "提出Continuous 3D Words，用MLP将连续3D属性映射为词嵌入实现可插值细粒度控制",
+    "两阶段训练+负向提示实现对象身份与连续属性的解耦泛化",
+    "利用Depth/Lineart ControlNet进行低成本数据增强防止渲染背景过拟合"
+   ],
+   "benchmarks": [
+    "用户偏好率(user study)",
+    "平均排名(average user ranking)",
+    "Pix3D椅子数据集"
+   ]
+  }
+ }
 }

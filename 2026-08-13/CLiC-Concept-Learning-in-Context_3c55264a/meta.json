@@ -4,5 +4,28 @@
  "title": "CLiC-Concept-Learning-in-Context",
  "token": "sk-JMLCbBCEj...",
  "created_at": "2026-08-13 05:39:54",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/223279b4-7390-4d28-84b6-4afdc4cf66c1.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/223279b4-7390-4d28-84b6-4afdc4cf66c1.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:22:57",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "in-context concept learning",
+    "diffusion personalization",
+    "cross-attention guidance",
+    "image editing",
+    "visual transfer"
+   ],
+   "field": "文本条件图像生成与个性化编辑",
+   "innovations": [
+    "软掩码上下文损失实现概念与所属物体语义绑定",
+    "跨注意力引导实现概念精准定位与强度控制",
+    "自动 RoI 匹配消除手动标注依赖"
+   ],
+   "benchmarks": [
+    "User study on edit quality and target preservation"
+   ]
+  }
+ }
 }

@@ -3,5 +3,34 @@
  "batch_id": "b347bafe-ba31-4604-a60f-fa5e230ac470",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 02:46:38",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/e8a4e8e6-4185-4d6a-a10d-fc529515735c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/e8a4e8e6-4185-4d6a-a10d-fc529515735c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:24:39",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Segment Anything Model",
+    "鲁棒分割",
+    "图像退化",
+    "零样本分割",
+    "频域处理"
+   ],
+   "field": "图像分割与鲁棒性",
+   "innovations": [
+    "提出AOTG与AMFG模块实现退化不变特征提取",
+    "傅里叶退化抑制策略在分割中的应用"
+   ],
+   "benchmarks": [
+    "MSRA10K",
+    "LVIS",
+    "NDD20",
+    "STREETS",
+    "FSS-1000",
+    "COCO",
+    "BDD-100k",
+    "LIS"
+   ]
+  }
+ }
 }

@@ -4,5 +4,33 @@
  "title": "Cache-Me-if-You-Can-Accelerating-Diffusion-Models-through-Bl",
  "token": "sk-45Ifw5Iq3...",
  "created_at": "2026-08-13 04:49:42",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4c31f3d8-45ef-4fc7-9dfb-85857481fdf9.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4c31f3d8-45ef-4fc7-9dfb-85857481fdf9.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:23:12",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Diffusion Models",
+    "Inference Acceleration",
+    "Block Caching",
+    "Scale-Shift Adjustment",
+    "DPM-Solver",
+    "Latent Diffusion"
+   ],
+   "field": "扩散模型推理加速",
+   "innovations": [
+    "提出Block Caching技术复用去噪步间冗余层计算，实现1.5x-1.8x加速",
+    "设计基于累积L1_rel阈值的自动缓存调度算法",
+    "引入轻量级scale-shift adjustment校正缓存特征错位"
+   ],
+   "benchmarks": [
+    "COCO FID",
+    "LDM-512",
+    "EMU-768",
+    "PartiPrompts",
+    "OUI Prompts"
+   ]
+  }
+ }
 }

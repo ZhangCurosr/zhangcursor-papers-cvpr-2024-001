@@ -3,5 +3,31 @@
  "batch_id": "10af77cf-f607-4e0b-9c47-99d5f7c4b587",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 02:33:03",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/56c342d9-8a32-4e9b-b370-e7cc931d1e4c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/56c342d9-8a32-4e9b-b370-e7cc931d1e4c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:21:14",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "multi-view photometric stereo",
+    "neural volume rendering",
+    "reflectance reconstruction",
+    "normal integration",
+    "SDF optimization"
+   ],
+   "field": "3D视觉与神经渲染",
+   "innovations": [
+    "像素级反射率与法向量联合辐射向量重参数化",
+    "单一优化目标替代多目标冲突策略",
+    "首个将反射率作为先验的NVR MVPS框架"
+   ],
+   "benchmarks": [
+    "DiLiGenT-MV",
+    "Chamfer Distance",
+    "Mean Angular Error",
+    "F-Score"
+   ]
+  }
+ }
 }

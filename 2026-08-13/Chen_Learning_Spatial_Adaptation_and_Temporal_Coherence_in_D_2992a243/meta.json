@@ -3,5 +3,30 @@
  "batch_id": "2992a243-076f-4b12-aa1f-c14d9c99d8d6",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 02:59:51",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/fc8a7ca3-5801-4bf7-a595-0666dc248987.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/fc8a7ca3-5801-4bf7-a595-0666dc248987.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:24:25",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Video Super-Resolution",
+    "Diffusion Models",
+    "Spatial Adaptation",
+    "Temporal Coherence",
+    "Stable Diffusion",
+    "Parameter-Efficient Fine-tuning"
+   ],
+   "field": "视频超分辨率",
+   "innovations": [
+    "提出SFA模块通过LR特征预测逐像素仿射参数调制HR特征实现空间适配",
+    "设计TFA模块在3D管状窗口内自注意力+交叉注意力实现时序校准",
+    "冻结预训练UNet/VAE参数仅优化SFA/TFA实现高效的视频超分适配"
+   ],
+   "benchmarks": [
+    "REDS4",
+    "Vid4"
+   ]
+  }
+ }
 }

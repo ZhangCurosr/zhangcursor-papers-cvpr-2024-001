@@ -4,5 +4,29 @@
  "title": "ASH-Animatable-Gaussian-Splats-for-Efficient-and-Photoreal-H",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 05:40:57",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/c74dba10-121c-4640-a075-173abc81a79f.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/c74dba10-121c-4640-a075-173abc81a79f.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:20:18",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D Gaussian Splatting",
+    "Human Rendering",
+    "Real-time Rendering",
+    "Animatable Avatar",
+    "Neural Rendering"
+   ],
+   "field": "可动画人体神经渲染",
+   "innovations": [
+    "将3D高斯分布附着在可变形网格上并在2D纹理空间高效学习",
+    "运动感知纹理编码实现骨骼姿态到高斯参数的2D到2D翻译"
+   ],
+   "benchmarks": [
+    "DynaCap",
+    "Novel View Synthesis",
+    "Novel Pose Synthesis"
+   ]
+  }
+ }
 }

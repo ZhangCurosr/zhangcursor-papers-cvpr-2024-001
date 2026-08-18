@@ -3,5 +3,29 @@
  "batch_id": "708ad42b-4213-40d9-8ce8-26d34f8881af",
  "token": "sk-45Ifw5Iq3...",
  "created_at": "2026-08-13 01:40:12",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/556f4602-eab4-44ab-a309-facba3f44824.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/556f4602-eab4-44ab-a309-facba3f44824.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:23:58",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Subject-Driven Image Synthesis",
+    "Classifier-Free Guidance",
+    "Text-to-Image Generation",
+    "Content Ignorance",
+    "Customization"
+   ],
+   "field": "扩散模型个性化生成",
+   "innovations": [
+    "提出Subject-Agnostic Guidance(SAG)方法，通过构造主体无关条件缓解内容忽略问题",
+    "设计双分类器无指导(DCFG)机制，结合时变弱CFG和固定权重null CFG"
+   ],
+   "benchmarks": [
+    "CLIP-T",
+    "CLIP-I",
+    "DINO"
+   ]
+  }
+ }
 }

@@ -4,5 +4,30 @@
  "title": "ArtAdapter-Text-to-Image-Style-Transfer-using-Multi-Level-St",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 05:41:04",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/1346b173-60ae-4680-a855-81e01c8c0e3f.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/1346b173-60ae-4680-a855-81e01c8c0e3f.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:20:20",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "文本到图像",
+    "风格迁移",
+    "扩散模型",
+    "多层编码",
+    "显式适配"
+   ],
+   "field": "生成式AI-图像风格迁移",
+   "innovations": [
+    "多级风格编码器捕获层次化风格特征",
+    "显式适配机制分离风格与文本通路",
+    "辅助内容适配器实现训练阶段内容-风格解耦"
+   ],
+   "benchmarks": [
+    "CLIP文本相似度",
+    "CLIP风格相似度",
+    "美学评分"
+   ]
+  }
+ }
 }

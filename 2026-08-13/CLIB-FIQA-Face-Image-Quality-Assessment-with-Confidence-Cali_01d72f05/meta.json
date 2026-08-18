@@ -4,5 +4,37 @@
  "title": "CLIB-FIQA-Face-Image-Quality-Assessment-with-Confidence-Cali",
  "token": "sk-sKVjU65N5...",
  "created_at": "2026-08-13 05:40:02",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/6f0384c3-f8e0-4bed-b522-df80403de7d8.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/6f0384c3-f8e0-4bed-b522-df80403de7d8.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:22:44",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Face Image Quality Assessment",
+    "FIQA",
+    "CLIP",
+    "Confidence Calibration",
+    "Vision-Language Alignment",
+    "Quality Factors",
+    "Quality Fitting"
+   ],
+   "field": "人脸图像质量评估",
+   "innovations": [
+    "提出基于置信度校准的FIQA方法，通过合并因子分布校正识别模型质量锚点的不可靠性",
+    "首次将CLIP视觉-语言对齐模型引入FIQA任务，利用多质量因子联合学习增强质量评估",
+    "设计两阶段训练框架，第一阶段联合学习质量因子置信度，第二阶段校准后精炼模型"
+   ],
+   "benchmarks": [
+    "LFW",
+    "CFP-FP",
+    "CPLFW",
+    "CALFW",
+    "AgeDB",
+    "XQLFW",
+    "Adience",
+    "TinyFace"
+   ]
+  }
+ }
 }

@@ -4,5 +4,10 @@
  "title": "Blur2Blur-Blur-Conversion-for-Unsupervised-Image-Deblurring",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 04:50:09",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/e60b1527-501b-4e4e-8290-55f32ce3a9ce.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/e60b1527-501b-4e4e-8290-55f32ce3a9ce.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:21:30",
+  "chunks": 1
+ }
 }

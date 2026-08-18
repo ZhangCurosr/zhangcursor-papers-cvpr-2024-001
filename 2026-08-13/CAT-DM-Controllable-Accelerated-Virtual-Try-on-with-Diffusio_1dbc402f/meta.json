@@ -4,5 +4,29 @@
  "title": "CAT-DM-Controllable-Accelerated-Virtual-Try-on-with-Diffusio",
  "token": "sk-0vgcClVqT...",
  "created_at": "2026-08-13 07:12:27",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/90f1acdc-83fb-4e60-b4bc-f8bf3671d29c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/90f1acdc-83fb-4e60-b4bc-f8bf3671d29c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:22:19",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "virtual try-on",
+    "diffusion model",
+    "ControlNet",
+    "accelerated sampling",
+    "garment transfer"
+   ],
+   "field": "图像生成与虚拟试穿",
+   "innovations": [
+    "提出GC-DM通过ControlNet+DINO-V2增强扩散模型可控性",
+    "截断加速策略利用预训练GAN生成隐式分布起点实现25倍加速",
+    "Poisson融合消除生成边界痕迹保留非服装区域真实性"
+   ],
+   "benchmarks": [
+    "DressCode",
+    "VITON-HD"
+   ]
+  }
+ }
 }

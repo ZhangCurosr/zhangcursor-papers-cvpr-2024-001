@@ -4,5 +4,35 @@
  "title": "Boosting-Image-Quality-Assessment-through-Efficient-Transfor",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 05:40:44",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/967e5fe1-502b-4540-ac61-861376d8849b.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/967e5fe1-502b-4540-ac61-861376d8849b.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:21:11",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Image Quality Assessment",
+    "Vision Transformer",
+    "Efficient Adaptation",
+    "Local Distortion",
+    "Cross-Attention",
+    "Multi-scale Features"
+   ],
+   "field": "低层视觉质量评估",
+   "innovations": [
+    "首次将大规模预训练ViT高效适配到IQA任务，仅训练9M参数",
+    "提出局部失真提取器与注入器，通过跨注意力融合CNN多尺度特征到ViT",
+    "设计降维适配机制，解决尺度不对齐与参数膨胀问题"
+   ],
+   "benchmarks": [
+    "KADID-10k",
+    "KonIQ-10k",
+    "LIVE",
+    "TID2013",
+    "LIVEC",
+    "SPAQ",
+    "FLIVE"
+   ]
+  }
+ }
 }
