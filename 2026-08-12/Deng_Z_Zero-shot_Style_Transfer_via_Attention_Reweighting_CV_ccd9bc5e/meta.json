@@ -3,5 +3,28 @@
  "batch_id": "ccd9bc5e-e096-4ab6-ac6c-c4bad2deda19",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-08-12 15:41:40",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2ca6c631-1546-46f3-9326-262eb6a3ab9d.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2ca6c631-1546-46f3-9326-262eb6a3ab9d.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:18:46",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "图像风格迁移",
+    "零样本学习",
+    "扩散模型",
+    "交叉注意力",
+    "生成模型"
+   ],
+   "field": "图像生成与风格迁移",
+   "innovations": [
+    "交叉注意力重加权机制，将混合系数嵌入Softmax内部自适应平衡内容与风格",
+    "双流去噪路径实现内容/风格特征时间对齐融合",
+    "零样本免训练风格迁移，利用预训练扩散模型生成先验"
+   ],
+   "benchmarks": [
+    "用户主观评测（55人，1760票）"
+   ]
+  }
+ }
 }

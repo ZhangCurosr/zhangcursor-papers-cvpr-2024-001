@@ -3,5 +3,32 @@
  "batch_id": "d9bcc1b4-9e9a-4645-80da-3d904ec0b35b",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-12 15:34:23",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2ae40f83-b068-4d98-98d4-469175ba37e5.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2ae40f83-b068-4d98-98d4-469175ba37e5.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:17:03",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Segment Anything Model",
+    "医学图像分割",
+    "少样本适应",
+    "分层解码",
+    "LoRA",
+    "无prompt适配",
+    "可学习掩码注意力"
+   ],
+   "field": "医学图像分割与视觉基础模型适配",
+   "innovations": [
+    "两阶段分层解码框架：以Stage-1概率先验掩码引导Stage-2精细解码",
+    "可学习掩码交叉注意力：用连续概率图替代二元硬掩码实现可微空间软调制",
+    "类平衡掩码引导自注意力（CMAttn）：通过逆方差高斯噪声扰动缓解医学长尾标签分布问题"
+   ],
+   "benchmarks": [
+    "Synapse Multi-Organ CT",
+    "Left Atrial (LA) MRI",
+    "PROMISE12 Prostate MRI"
+   ]
+  }
+ }
 }

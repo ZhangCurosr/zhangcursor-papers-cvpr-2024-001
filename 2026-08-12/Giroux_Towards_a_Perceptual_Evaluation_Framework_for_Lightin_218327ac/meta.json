@@ -3,5 +3,31 @@
  "batch_id": "218327ac-fe2f-4244-8b65-ecbc3a0ee19d",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-08-12 15:41:45",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4cb9d7a3-661f-4307-aea2-8efdad4e8670.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4cb9d7a3-661f-4307-aea2-8efdad4e8670.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:20:28",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "lighting estimation",
+    "perceptual evaluation",
+    "image quality assessment",
+    "psychophysical experiment",
+    "virtual object insertion",
+    "human preference"
+   ],
+   "field": "光照估计与感知评估",
+   "innovations": [
+    "提出区分准确性与合理性的双任务心理物理学评估框架",
+    "发现主流IQA指标与人类感知存在系统性不一致",
+    "学习多IQA指标组合以准确预测人类对光照估计的偏好"
+   ],
+   "benchmarks": [
+    "PerceptionMetric (公开感知数据集)",
+    "25个HDR场景(球谐聚类)",
+    "Weber et al. [54], EverLight [8], StyleLight [50], Gardner et al. [14], Zhang et al. [57], Khan et al. [20]"
+   ]
+  }
+ }
 }

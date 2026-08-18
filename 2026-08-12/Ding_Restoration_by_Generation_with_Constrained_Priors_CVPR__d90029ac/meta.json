@@ -3,5 +3,32 @@
  "batch_id": "d90029ac-68ad-4ec1-9ac4-9ec99ca322e9",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-12 15:34:20",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/7e021826-e938-46ce-9a28-55b21cb11bdb.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/7e021826-e938-46ce-9a28-55b21cb11bdb.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:18:44",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "图像恢复",
+    "扩散模型",
+    "盲恢复",
+    "生成空间约束",
+    "个性化恢复"
+   ],
+   "field": "低层视觉/图像恢复",
+   "innovations": [
+    "提出恢复即生成范式，无需退化假设直接利用预训练扩散模型去噪恢复",
+    "设计生成空间约束机制，通过个人/生成相册微调扩散模型平衡质量与保真",
+    "提出Skip Guidance周期性软引导策略生成锚定相册"
+   ],
+   "benchmarks": [
+    "Wider-Test",
+    "LFW-Test",
+    "WebPhoto-Test",
+    "Deblur-Test",
+    "AFHQ Cat/Dog"
+   ]
+  }
+ }
 }

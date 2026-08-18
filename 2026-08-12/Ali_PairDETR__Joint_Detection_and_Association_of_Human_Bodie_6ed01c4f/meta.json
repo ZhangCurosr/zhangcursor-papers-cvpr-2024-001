@@ -3,5 +3,31 @@
  "batch_id": "6ed01c4f-9dfc-426f-8166-72ef4ad86bac",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-12 16:04:36",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4c9008af-c1f3-41e7-a66c-114fd92f39f9.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4c9008af-c1f3-41e7-a66c-114fd92f39f9.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:14:33",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "人体检测",
+    "面部关联",
+    "DETR",
+    "端到端检测",
+    "CrowdHuman",
+    "CityPersons",
+    "二分图匹配"
+   ],
+   "field": "人体检测与关联",
+   "innovations": [
+    "提出近似二分图匹配损失，将 NP-hard 的图预测转化为多项式时间可解问题",
+    "每个 query 直接预测体-面配对，实现端到端联合检测与关联",
+    "引入相对预期类（头部近似面部）处理关联缺失，降低标注依赖"
+   ],
+   "benchmarks": [
+    "CrowdHuman",
+    "CityPersons"
+   ]
+  }
+ }
 }

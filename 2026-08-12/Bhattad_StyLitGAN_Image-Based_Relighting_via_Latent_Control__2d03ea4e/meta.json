@@ -3,5 +3,30 @@
  "batch_id": "2d03ea4e-ffad-4825-8166-1ef37716fb55",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-08-12 16:03:51",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/dd24d775-6b55-4e11-bf1d-8f44c5bec5d5.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/dd24d775-6b55-4e11-bf1d-8f44c5bec5d5.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:14:56",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Image Editing",
+    "Relighting",
+    "StyleGAN",
+    "Intrinsic Images",
+    "Latent Space Manipulation",
+    "Generative Models"
+   ],
+   "field": "图像编辑与生成",
+   "innovations": [
+    "提出基于内禀图像分解引导的 StyleGAN 隐空间光照/材质方向搜索框架，实现无监督重照明与再表面处理",
+    "设计一致性、多样性、区分性及饱和度惩罚联合损失，在 $W^+$ 空间中找到解耦物理属性的编辑方向",
+    "引入前向选择策略筛选高质量、多样化的重照明方向，并验证其在下游法线估计任务中的数据增强价值"
+   ],
+   "benchmarks": [
+    "Multilum Dataset",
+    "Taskonomy Benchmark"
+   ]
+  }
+ }
 }

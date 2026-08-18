@@ -3,5 +3,30 @@
  "batch_id": "1e47afd9-d608-4363-9c70-3cf1ad5364ae",
  "token": "sk-LV19Ft0NN...",
  "created_at": "2026-08-12 15:42:19",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/fc8a7ca3-5801-4bf7-a595-0666dc248987.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/fc8a7ca3-5801-4bf7-a595-0666dc248987.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:15:47",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "视频超分辨率",
+    "扩散模型",
+    "空间适应",
+    "时序一致性",
+    "Stable Diffusion",
+    "特征对齐"
+   ],
+   "field": "视频超分辨率",
+   "innovations": [
+    "提出SATeCo框架，通过SFA和TFA模块在冻结的扩散模型中实现视频超分的空间适应与时序一致性",
+    "设计仿射参数调制的像素级空间引导机制",
+    "提出基于tubelet的3D注意力时序特征对齐方法"
+   ],
+   "benchmarks": [
+    "REDS4",
+    "Vid4"
+   ]
+  }
+ }
 }

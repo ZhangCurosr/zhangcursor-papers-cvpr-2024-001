@@ -4,5 +4,33 @@
  "title": "3D-Paintbrush-Local-Stylization-of-3D-Shapes-with-Cascaded-S",
  "token": "sk-45Ifw5Iq3...",
  "created_at": "2026-08-13 07:13:05",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/608c5723-0464-4bea-bfe5-1cc0ea687db7.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/608c5723-0464-4bea-bfe5-1cc0ea687db7.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:22:00",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D local editing",
+    "mesh texturing",
+    "score distillation",
+    "cascaded diffusion",
+    "text-driven generation",
+    "localization"
+   ],
+   "field": "3D生成与编辑",
+   "innovations": [
+    "首次提出CSD同时蒸馏多级联扩散模型多阶段梯度",
+    "联合优化定位图与纹理图的双向促进机制",
+    "首个原生mesh上的纯文本驱动局部纹理化方法"
+   ],
+   "benchmarks": [
+    "Perceptual Study (39 users)",
+    "3D Highlighter",
+    "SATR",
+    "Latent Paint",
+    "Vox-E"
+   ]
+  }
+ }
 }

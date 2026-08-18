@@ -3,5 +3,34 @@
  "batch_id": "7948224f-07e7-4850-bb1a-0b7779acdd04",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-12 15:34:24",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/b566d0fd-0f5a-461d-a947-a3cf19e9dc81.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/b566d0fd-0f5a-461d-a947-a3cf19e9dc81.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:21:17",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Human-Scene Interaction",
+    "Motion Generation",
+    "Diffusion Model",
+    "MoCap Dataset",
+    "Autoregressive Generation",
+    "3D Scene Understanding"
+   ],
+   "field": "3D人机交互与运动生成",
+   "innovations": [
+    "提出TRUMANS大规模动捕HSI数据集（15h+/100场景/动态物体/逐顶点接触标注）",
+    "设计自回归条件扩散框架，支持任意长度HSI序列实时生成",
+    "引入帧级动作标签与进度指示器，实现跨episode动作演化的精细控制"
+   ],
+   "benchmarks": [
+    "PROX",
+    "Replica",
+    "ScanNet",
+    "ScanNet++",
+    "GRAB",
+    "3DPW"
+   ]
+  }
+ }
 }

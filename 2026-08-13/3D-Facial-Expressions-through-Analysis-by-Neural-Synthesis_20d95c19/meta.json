@@ -4,5 +4,35 @@
  "title": "3D-Facial-Expressions-through-Analysis-by-Neural-Synthesis",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 05:40:59",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/e3ad9f71-c438-4210-bea4-3810dbbe161a.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/e3ad9f71-c438-4210-bea4-3810dbbe161a.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:21:17",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D face reconstruction",
+    "neural rendering",
+    "analysis-by-neural-synthesis",
+    "facial expression",
+    "self-supervised learning",
+    "FLAME",
+    "cycle consistency"
+   ],
+   "field": "单目 3D 人脸重建",
+   "innovations": [
+    "用神经渲染模块替代传统可微渲染，提供纯几何监督梯度",
+    "提出循环一致性表情增强损失，在参数空间强制编码器对多样化表情保持一致响应",
+    "交替冻结编码器与翻译器优化，缓解过补偿并提升重建保真度"
+   ],
+   "benchmarks": [
+    "AffectNet",
+    "MEAD",
+    "FFHQ",
+    "CelebA",
+    "LRS3",
+    "FaMoS"
+   ]
+  }
+ }
 }

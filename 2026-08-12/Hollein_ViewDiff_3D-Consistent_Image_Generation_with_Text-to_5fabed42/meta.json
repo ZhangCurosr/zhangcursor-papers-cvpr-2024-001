@@ -3,5 +3,33 @@
  "batch_id": "5fabed42-605e-4700-8b2a-7bed354d8492",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-12 15:34:42",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f552fca0-4b00-4656-9e75-8267b474ad46.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f552fca0-4b00-4656-9e75-8267b474ad46.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:20:28",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D-consistent generation",
+    "text-to-image model fine-tuning",
+    "multi-view diffusion",
+    "cross-frame attention",
+    "volume rendering",
+    "CO3D"
+   ],
+   "field": "3D视觉与生成模型",
+   "innovations": [
+    "将预训练T2I扩散模型通过加入跨帧注意力和投影层微调为3D一致多视图生成器",
+    "提出自回归生成方案，支持从文本或单图到任意视角高质量视图的平滑渲染"
+   ],
+   "benchmarks": [
+    "CO3Dv2",
+    "FID",
+    "KID",
+    "PSNR",
+    "SSIM",
+    "LPIPS"
+   ]
+  }
+ }
 }

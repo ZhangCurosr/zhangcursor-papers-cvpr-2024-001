@@ -3,5 +3,33 @@
  "batch_id": "f32e1b0b-9c54-42cd-b1a8-c5f2bfe5b29b",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-12 15:34:11",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/1a93fe2c-1274-4e51-9455-401039029fde.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/1a93fe2c-1274-4e51-9455-401039029fde.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:20:39",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "NeRF",
+    "外观迁移",
+    "语义对应",
+    "ViT特征",
+    "多视图一致性",
+    "图像类比",
+    "神经渲染编辑"
+   ],
+   "field": "神经辐射场与3D视觉编辑",
+   "innovations": [
+    "将2D图像类比扩展至NeRF，实现语义驱动的多视图一致外观迁移",
+    "利用DiNO-ViT密集特征建立跨几何像素对应映射，无需文本Embedding",
+    "设计边缘损失正则化缓解视角变化导致的特征噪声，提升高频细节保留"
+   ],
+   "benchmarks": [
+    "BPSNR",
+    "BSSIM",
+    "CLIP方向一致性(CDC)",
+    "用户研究偏好率"
+   ]
+  }
+ }
 }

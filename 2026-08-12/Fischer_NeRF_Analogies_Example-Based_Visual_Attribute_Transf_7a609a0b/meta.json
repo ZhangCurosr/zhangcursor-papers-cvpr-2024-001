@@ -3,5 +3,30 @@
  "batch_id": "7a609a0b-0507-4c07-940c-bb0cc511e34b",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-12 16:04:05",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/1a93fe2c-1274-4e51-9455-401039029fde.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/1a93fe2c-1274-4e51-9455-401039029fde.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:19:57",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "NeRF",
+    "appearance transfer",
+    "semantic correspondence",
+    "ViT features",
+    "3D editing",
+    "multi-view consistency",
+    "image analogy"
+   ],
+   "field": "NeRF编辑与外观迁移",
+   "innovations": [
+    "将2D图像类比推广到多视角一致的NeRF外观迁移，利用DiNO-ViT语义特征建立几何-外观对应",
+    "提出无需可微渲染的直接监督训练策略，引入Edge loss缓解跨视角特征噪声"
+   ],
+   "benchmarks": [
+    "MiP-NeRF 360",
+    "Tanks and Temples"
+   ]
+  }
+ }
 }

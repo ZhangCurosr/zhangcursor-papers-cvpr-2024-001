@@ -3,5 +3,31 @@
  "batch_id": "c79e72af-81fc-4e0e-af18-1d1e2cead6d5",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-08-12 16:03:51",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/5838dba7-91ce-42b6-94c4-e8d10297f54d.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/5838dba7-91ce-42b6-94c4-e8d10297f54d.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:14:42",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "视频摘要",
+    "大规模预训练",
+    "大语言模型",
+    "多模态融合",
+    "自回归解码",
+    "伪真值构建"
+   ],
+   "field": "视频理解与摘要",
+   "innovations": [
+    "LLM作为Oracle抽取式摘要器自动构建25万条长视频-摘要对",
+    "自回归回归式摘要解码替代二分类/重要性评分",
+    "随机MASK文本输入实现多模态容错训练"
+   ],
+   "benchmarks": [
+    "LfVS-T",
+    "SumMe",
+    "TVSum"
+   ]
+  }
+ }
 }

@@ -3,5 +3,28 @@
  "batch_id": "c1369476-fd0e-451e-bf84-789bdd8f271a",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-12 16:04:24",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/56c342d9-8a32-4e9b-b370-e7cc931d1e4c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/56c342d9-8a32-4e9b-b370-e7cc931d1e4c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:15:55",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "多视图光度立体",
+    "神经体积渲染",
+    "SDF",
+    "反射率",
+    "法线重建",
+    "重参数化"
+   ],
+   "field": "多视图3D重建",
+   "innovations": [
+    "像素级联合重参数化将反射率与法线映射为模拟辐射向量，实现单目标优化",
+    "首次将反射率作为先验系统性地融入MVPS神经体积渲染框架"
+   ],
+   "benchmarks": [
+    "DiLiGenT-MV"
+   ]
+  }
+ }
 }

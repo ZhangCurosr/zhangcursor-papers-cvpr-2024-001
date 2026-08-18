@@ -3,5 +3,30 @@
  "batch_id": "06dbd59c-9292-4bc5-abc1-7f4cbc474868",
  "token": "sk-45Ifw5Iq3...",
  "created_at": "2026-08-12 15:42:24",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/27d5f2a6-6ffa-4d4e-819c-ad34f37ba613.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/27d5f2a6-6ffa-4d4e-819c-ad34f37ba613.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:20:00",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Human Motion Generation",
+    "Sparse Observation Reconstruction",
+    "Diffusion Model",
+    "Avatar Synthesis",
+    "Latent VQ-VAE",
+    "Upper-Lower Body Disentanglement"
+   ],
+   "field": "稀疏传感器人体运动重建",
+   "innovations": [
+    "分层解耦重建：利用SMPL运动树结构将全身重建分解为上下半身两阶段串行生成",
+    "条件扩散设计：下半身扩散模型显式以预测的上半身潜码为条件，建模肢体间关联",
+    "在线平滑推理：滑动窗口结合GRU Refiner，实现低延迟、时序平滑的实时重建"
+   ],
+   "benchmarks": [
+    "AMASS (Settings S1, S2, S3)",
+    "MPJRE, Lower PE, Jitter"
+   ]
+  }
+ }
 }

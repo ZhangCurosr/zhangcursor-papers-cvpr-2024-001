@@ -3,5 +3,32 @@
  "batch_id": "dfbad5b8-c455-46e2-b669-8e79f59027dc",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-08-12 15:41:46",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/7c6de27a-6152-407a-8271-223d2613d3cb.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/7c6de27a-6152-407a-8271-223d2613d3cb.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:18:36",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Reward Finetuning",
+    "Diffusion Models",
+    "Reinforcement Learning from Human Feedback",
+    "Prompt Alignment",
+    "Stable Training"
+   ],
+   "field": "生成式人工智能/扩散模型对齐",
+   "innovations": [
+    "提出RDP目标将RL奖励微调转化为稳定监督回归问题",
+    "设计在线近端优化算法实现十万级提示词稳定训练",
+    "证明RDP最优解等价于KL正则化RL目标并提供稳定优化方案"
+   ],
+   "benchmarks": [
+    "HPDv2",
+    "Pick-a-Pic v1",
+    "HPSv2",
+    "PickScore",
+    "LAION Aesthetic"
+   ]
+  }
+ }
 }

@@ -3,5 +3,29 @@
  "batch_id": "2e648670-e287-4474-8234-48ecc865b795",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-08-12 16:03:48",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2ca6c631-1546-46f3-9326-262eb6a3ab9d.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2ca6c631-1546-46f3-9326-262eb6a3ab9d.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:19:32",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "零样本风格迁移",
+    "扩散模型",
+    "注意力重加权",
+    "DDIM反演",
+    "图像编辑"
+   ],
+   "field": "图像风格迁移",
+   "innovations": [
+    "提出零样本训练-free风格迁移框架，直接利用预训练扩散模型先验",
+    "设计注意力重加权机制将缩放因子嵌入Softmax实现自适应内容-风格平衡",
+    "双路径DDIM反演架构保证风格与内容特征在时间维度自然对齐"
+   ],
+   "benchmarks": [
+    "公开风格迁移基准（定性评估）",
+    "用户研究（55人，1760票，三维度评估）"
+   ]
+  }
+ }
 }

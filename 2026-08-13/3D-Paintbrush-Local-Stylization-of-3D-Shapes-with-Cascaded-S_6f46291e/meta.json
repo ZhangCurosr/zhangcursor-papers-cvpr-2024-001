@@ -4,5 +4,10 @@
  "title": "3D-Paintbrush-Local-Stylization-of-3D-Shapes-with-Cascaded-S",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 05:40:55",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/608c5723-0464-4bea-bfe5-1cc0ea687db7.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/608c5723-0464-4bea-bfe5-1cc0ea687db7.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:22:00",
+  "chunks": 1
+ }
 }

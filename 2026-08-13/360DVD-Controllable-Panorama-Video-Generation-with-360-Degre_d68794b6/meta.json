@@ -4,5 +4,29 @@
  "title": "360DVD-Controllable-Panorama-Video-Generation-with-360-Degre",
  "token": "sk-mBuyDYvkR...",
  "created_at": "2026-08-13 05:40:17",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/c77d3d77-ecc1-4bc5-b104-d703be8833e1.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/c77d3d77-ecc1-4bc5-b104-d703be8833e1.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:21:06",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "全景视频生成",
+    "扩散模型",
+    "360度视频",
+    "可控生成",
+    "Web360数据集"
+   ],
+   "field": "全景视频生成",
+   "innovations": [
+    "提出360-Adapter轻量适配模块将预训练T2V模型迁移至全景视频域",
+    "设计纬度感知损失+潜在旋转+循环填充三合一360增强技术解决全景连续性问题",
+    "构建首个带详细文本标注的全景视频数据集WEB360并引入多视图融合标注方法"
+   ],
+   "benchmarks": [
+    "WEB360",
+    "用户偏好研究（5项指标）"
+   ]
+  }
+ }
 }

@@ -3,5 +3,32 @@
  "batch_id": "3708bf87-dc29-408e-9ebf-1d8bffabb5b8",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-12 15:34:27",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/fc8a7ca3-5801-4bf7-a595-0666dc248987.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/fc8a7ca3-5801-4bf7-a595-0666dc248987.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 15:16:18",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Video Super-Resolution",
+    "Diffusion Models",
+    "Spatial Adaptation",
+    "Temporal Coherence",
+    "SFA",
+    "TFA",
+    "Latent Diffusion",
+    "Video Enhancement"
+   ],
+   "field": "视频超分辨率",
+   "innovations": [
+    "在预训练 UNet/VAE 解码器中并行插入 SFA 与 TFA 模块，实现潜空间与像素空间双阶段时空引导",
+    "提出管状窗口自注意力与 HR-LR 交叉注意力相结合的 TFA，在扩散特征空间中显式建模帧间时序一致性",
+    "设计可训练 Video Refiner 以加权融合生成内容与原 LR 信息，平衡感知质量与外观保真度"
+   ],
+   "benchmarks": [
+    "REDS4",
+    "Vid4"
+   ]
+  }
+ }
 }
