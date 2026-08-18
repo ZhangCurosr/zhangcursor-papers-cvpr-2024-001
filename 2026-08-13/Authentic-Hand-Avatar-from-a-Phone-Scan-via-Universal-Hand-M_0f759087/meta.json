@@ -4,5 +4,32 @@
  "title": "Authentic-Hand-Avatar-from-a-Phone-Scan-via-Universal-Hand-M",
  "token": "sk-mBuyDYvkR...",
  "created_at": "2026-08-13 05:40:18",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2e3b359f-51b0-4d22-aec2-699bfc3acaac.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2e3b359f-51b0-4d22-aec2-699bfc3acaac.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:03:03",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D hand avatar",
+    "universal hand model",
+    "simultaneous tracking and modeling",
+    "image matching loss",
+    "skin sliding",
+    "phone scan adaptation"
+   ],
+   "field": "3D hand reconstruction and avatar generation",
+   "innovations": [
+    "Simultaneous tracking and modeling to eliminate error accumulation",
+    "Image matching loss using optical flow for semantic vertex consistency",
+    "Learning-based shadow removal (ShadowNet) replacing single-point light assumption"
+   ],
+   "benchmarks": [
+    "MANO test set",
+    "DHM dataset",
+    "HARP dataset",
+    "Custom phone scan dataset"
+   ]
+  }
+ }
 }

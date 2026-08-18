@@ -4,5 +4,10 @@
  "title": "AiOS-All-in-One-Stage-Expressive-Human-Pose-and-Shape-Estima",
  "token": "sk-WcZzSI744...",
  "created_at": "2026-08-13 07:12:12",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/9c08ea14-2952-4d67-b316-c391590e7a7c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/9c08ea14-2952-4d67-b316-c391590e7a7c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:00:38",
+  "chunks": 1
+ }
 }

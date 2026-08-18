@@ -3,5 +3,30 @@
  "batch_id": "0415292e-101d-4f9f-9570-32aa441a439b",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-08-13 02:46:51",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4c9008af-c1f3-41e7-a66c-114fd92f39f9.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4c9008af-c1f3-41e7-a66c-114fd92f39f9.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:00:22",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "object detection",
+    "object association",
+    "DETR",
+    "bipartite matching",
+    "human-body face",
+    "graph prediction"
+   ],
+   "field": "目标检测与关联",
+   "innovations": [
+    "近似二分匹配解决NP-hard图预测问题",
+    "端到端联合检测与关联框架",
+    "自适应参考点deformable attention策略"
+   ],
+   "benchmarks": [
+    "CrowdHuman",
+    "CityPersons"
+   ]
+  }
+ }
 }

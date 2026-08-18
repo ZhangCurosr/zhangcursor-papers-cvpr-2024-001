@@ -4,5 +4,32 @@
  "title": "Artist-Friendly-Relightable-and-Animatable-Neural-Heads",
  "token": "sk-45Ifw5Iq3...",
  "created_at": "2026-08-13 04:51:08",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2838b835-d57a-4a3e-85ec-5b498b4c6c10.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2838b835-d57a-4a3e-85ec-5b498b4c6c10.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:02:32",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Neural Head Avatar",
+    "Relighting",
+    "Animatable Neural Rendering",
+    "Mixture of Volumetric Primitives",
+    "Nearfield Illumination",
+    "OLAT Capture"
+   ],
+   "field": "神经渲染与数字人脸重建",
+   "innovations": [
+    "引入逐基元局部光照/视角方向条件实现近场重打光与近场视角效果",
+    "纯几何驱动的表达编码器支持推理期 unseen expression 艺术控制",
+    "仅用 32 LED 灯条的低成本 OLAT 动态采集方案"
+   ],
+   "benchmarks": [
+    "Novel Light Directions",
+    "Novel Performances",
+    "Novel Light + Performances (held-out)",
+    "TRAvatar* (reimplemented baseline)"
+   ]
+  }
+ }
 }

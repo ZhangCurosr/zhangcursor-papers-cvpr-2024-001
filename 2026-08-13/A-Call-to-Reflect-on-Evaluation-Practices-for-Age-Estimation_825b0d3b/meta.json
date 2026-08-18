@@ -4,5 +4,36 @@
  "title": "A-Call-to-Reflect-on-Evaluation-Practices-for-Age-Estimation",
  "token": "sk-aknYEUs8O...",
  "created_at": "2026-08-13 05:40:22",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/58f1e8bd-cec4-43b5-8b0b-8bf5db926c1b.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/58f1e8bd-cec4-43b5-8b0b-8bf5db926c1b.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 16:58:27",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "age estimation",
+    "evaluation protocol",
+    "subject-exclusive splitting",
+    "benchmark",
+    "FaRL",
+    "loss function ablation",
+    "cross-dataset generalization"
+   ],
+   "field": "人脸年龄估计与评测基准",
+   "innovations": [
+    "识别年龄估计评测中随机划分导致的数据泄漏与多组件变量耦合问题并提出标准化协议",
+    "在统一设置下证明预训练数据量是影响性能的最关键因素而非损失函数设计",
+    "提出基于FaRL+MLP的强统一基线并在7个数据集上验证"
+   ],
+   "benchmarks": [
+    "MORPH",
+    "AgeDB",
+    "AFAD",
+    "CACD2000",
+    "CLAP2016",
+    "FG-NET",
+    "UTKFace"
+   ]
+  }
+ }
 }

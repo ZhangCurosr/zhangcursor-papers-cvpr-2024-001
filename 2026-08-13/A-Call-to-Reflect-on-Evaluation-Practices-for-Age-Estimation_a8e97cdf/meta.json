@@ -4,5 +4,38 @@
  "title": "A-Call-to-Reflect-on-Evaluation-Practices-for-Age-Estimation",
  "token": "sk-SDuVT3fV1...",
  "created_at": "2026-08-13 07:12:55",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/58f1e8bd-cec4-43b5-8b0b-8bf5db926c1b.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/58f1e8bd-cec4-43b5-8b0b-8bf5db926c1b.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 16:58:46",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "年龄估计",
+    "评估协议",
+    "主体独占划分",
+    "公平对比",
+    "预训练",
+    "跨数据集泛化",
+    "ResNet",
+    "FaRL"
+   ],
+   "field": "人脸识别与年龄估计",
+   "innovations": [
+    "揭示了年龄估计领域中随机数据划分导致的数据泄露问题及其对性能评估的系统性影响",
+    "提出了基于主体独占划分的标准化统一评测协议，首次实现了对SOTA方法的公平可控对比",
+    "发现预训练数据规模是影响性能的首要因素，提出FaRL+MLP高效基线模型"
+   ],
+   "benchmarks": [
+    "AgeDB",
+    "AFAD",
+    "CACD2000",
+    "CLAP2016",
+    "FG-NET",
+    "MORPH",
+    "UTKFace",
+    "IMDB-WIKI"
+   ]
+  }
+ }
 }

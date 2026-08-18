@@ -4,5 +4,30 @@
  "title": "Amodal-Completion-via-Progressive-Mixed-Context-Diffusion",
  "token": "sk-JMLCbBCEj...",
  "created_at": "2026-08-13 05:39:51",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/44fd227b-f53a-4edb-80c1-b90680c1d913.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/44fd227b-f53a-4edb-80c1-b90680c1d913.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:01:22",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Amodal Completion",
+    "Diffusion Models",
+    "Image Inpainting",
+    "Object Completion",
+    "Co-occurrence Bias",
+    "Training-free"
+   ],
+   "field": "图像补全与生成",
+   "innovations": [
+    "提出Mixed Context Diffusion Sampling克服共现偏置",
+    "渐进式遮挡感知补全流程无需训练",
+    "反事实筛选系统自动化评估补全质量"
+   ],
+   "benchmarks": [
+    "COCO",
+    "Open Images"
+   ]
+  }
+ }
 }

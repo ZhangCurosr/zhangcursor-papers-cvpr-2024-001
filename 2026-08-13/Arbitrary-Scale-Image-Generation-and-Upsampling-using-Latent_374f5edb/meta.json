@@ -4,5 +4,33 @@
  "title": "Arbitrary-Scale-Image-Generation-and-Upsampling-using-Latent",
  "token": "sk-45Ifw5Iq3...",
  "created_at": "2026-08-13 04:49:41",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/55a8343d-63f2-4df6-bffb-4d81825cb2bc.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/55a8343d-63f2-4df6-bffb-4d81825cb2bc.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:01:53",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "arbitrary-scale super-resolution",
+    "latent diffusion model",
+    "implicit neural representation",
+    "image generation",
+    "LIIF",
+    "scale consistency"
+   ],
+   "field": "任意尺度图像超分辨率与生成",
+   "innovations": [
+    "LDM与隐式神经解码器的解耦设计，将扩散过程限制在潜空间仅调用一次解码器",
+    "对称自动编码器解码器+MLP串联的任意尺度解码器",
+    "两阶段对齐损失（L_dm+L_recon）缓解潜空间与图像空间的对齐误差"
+   ],
+   "benchmarks": [
+    "FFHQ",
+    "CelebA-HQ",
+    "LSUN Bedroom",
+    "DIV2K",
+    "Flickr2K"
+   ]
+  }
+ }
 }

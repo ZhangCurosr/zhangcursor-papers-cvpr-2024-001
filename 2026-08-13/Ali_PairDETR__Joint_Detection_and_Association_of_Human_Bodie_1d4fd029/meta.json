@@ -3,5 +3,32 @@
  "batch_id": "1d4fd029-86f3-42fe-a4d2-43a55e6ce36f",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 02:33:13",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4c9008af-c1f3-41e7-a66c-114fd92f39f9.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4c9008af-c1f3-41e7-a66c-114fd92f39f9.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:00:55",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "目标检测",
+    "端到端关联",
+    "DETR",
+    "图预测",
+    "人体检测",
+    "近似二分匹配",
+    "CrowdHuman",
+    "CityPersons"
+   ],
+   "field": "行人检测与关联",
+   "innovations": [
+    "提出近似二分匹配损失将NP-hard配对匹配问题映射至多项式时间求解",
+    "在DETR框架内实现无需后处理的端到端body-face联合检测与关联",
+    "用几何近似替代缺失标注几乎无损地降低标注依赖"
+   ],
+   "benchmarks": [
+    "CrowdHuman",
+    "CityPersons"
+   ]
+  }
+ }
 }

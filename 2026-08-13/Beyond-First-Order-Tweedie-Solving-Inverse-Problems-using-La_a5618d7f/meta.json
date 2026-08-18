@@ -4,5 +4,31 @@
  "title": "Beyond-First-Order-Tweedie-Solving-Inverse-Problems-using-La",
  "token": "sk-mBuyDYvkR...",
  "created_at": "2026-08-13 05:40:13",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/9819a4ea-9811-49f7-aa62-95c641292862.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/9819a4ea-9811-49f7-aa62-95c641292862.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:03:39",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Latent Diffusion Models",
+    "Inverse Problems",
+    "Tweedie's Formula",
+    "Posterior Sampling",
+    "Image Editing",
+    "Second-order Approximation"
+   ],
+   "field": "生成模型与逆问题求解",
+   "innovations": [
+    "通过代理损失函数实现高效二阶Tweedie近似，仅需Hessian迹估计将复杂度从O(d²)降至O(1)",
+    "改进初始化策略并结合随机平均迭代，以50步扩散实现高质量逆问题求解，NFEs减少4-8倍",
+    "提出STSL-CAT两阶段框架，首次实现含污损图像的有效文本引导编辑"
+   ],
+   "benchmarks": [
+    "FFHQ-1K",
+    "ImageNet-1K",
+    "COCO 2017"
+   ]
+  }
+ }
 }

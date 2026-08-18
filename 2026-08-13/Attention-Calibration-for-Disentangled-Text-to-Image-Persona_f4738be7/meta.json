@@ -4,5 +4,30 @@
  "title": "Attention-Calibration-for-Disentangled-Text-to-Image-Persona",
  "token": "sk-aknYEUs8O...",
  "created_at": "2026-08-13 07:10:59",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/368b947d-5926-449d-87b5-8a84e4f2da99.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/368b947d-5926-449d-87b5-8a84e4f2da99.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:02:44",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Text-to-Image Personalization",
+    "Attention Calibration",
+    "Disentangled Generation",
+    "Diffusion Models",
+    "Single-Image Learning"
+   ],
+   "field": "个性化文本到图像生成",
+   "innovations": [
+    "提出注意力校准机制实现单图多概念解耦学习",
+    "设计L_bind与L_s&s损失联合约束修饰符与类token注意力图",
+    "引入抑制策略锐化注意力边界以增强概念独立性"
+   ],
+   "benchmarks": [
+    "CLIP image-alignment",
+    "CLIP text-alignment",
+    "Custom-Diffusion基线对比"
+   ]
+  }
+ }
 }

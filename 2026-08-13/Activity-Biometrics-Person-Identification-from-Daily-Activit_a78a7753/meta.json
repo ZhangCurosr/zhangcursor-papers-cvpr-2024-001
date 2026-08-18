@@ -4,5 +4,32 @@
  "title": "Activity-Biometrics-Person-Identification-from-Daily-Activit",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 07:13:06",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/ce2eddd3-b445-45b6-997d-eb782e015a69.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/ce2eddd3-b445-45b6-997d-eb782e015a69.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 16:58:49",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Activity Biometrics",
+    "Person Identification",
+    "Feature Disentanglement",
+    "Knowledge Distillation",
+    "Face-Restricted Recognition"
+   ],
+   "field": "视频级个体识别",
+   "innovations": [
+    "提出跨模态无偏见蒸馏+扭曲增广的双路径特征解耦框架",
+    "构建日常活动人脸受限识别的五个基准数据集",
+    "联合活动先验与生物特征学习提升跨活动泛化能力"
+   ],
+   "benchmarks": [
+    "NTU RGB-AB",
+    "PKU MMD-AB",
+    "Charades-AB",
+    "ACC-MM1-Activities",
+    "BRIAR-BGC3"
+   ]
+  }
+ }
 }

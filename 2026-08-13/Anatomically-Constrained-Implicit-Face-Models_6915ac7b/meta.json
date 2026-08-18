@@ -4,5 +4,30 @@
  "title": "Anatomically-Constrained-Implicit-Face-Models",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 05:39:38",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/058259f2-c790-47b2-b1a0-71c2c945da7a.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/058259f2-c790-47b2-b1a0-71c2c945da7a.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:01:42",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "隐式人脸模型",
+    "解剖约束",
+    "blendshape",
+    "神经重参数化",
+    "面部动画",
+    "坐标基网络"
+   ],
+   "field": "三维人脸建模与动画",
+   "innovations": [
+    "首次将密集解剖约束引入隐式blendshape模型，通过显式公式s=b+d·n内化约束而非正则项",
+    "利用神经重参数化优化实现秒级拟合，相比ALM快数十倍",
+    "端到端学习皮肤-解剖耦合结构，支持解剖厚度直接编辑与刚性/非刚性变形解耦"
+   ],
+   "benchmarks": [
+    "Studio Scanner 3D扫描序列",
+    "819帧5演员定量评估"
+   ]
+  }
+ }
 }

@@ -3,5 +3,30 @@
  "batch_id": "b6ecd704-5495-4ec8-b232-49290c11f147",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 01:39:53",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/5838dba7-91ce-42b6-94c4-e8d10297f54d.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/5838dba7-91ce-42b6-94c4-e8d10297f54d.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:02:25",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Video Summarization",
+    "Large Language Models",
+    "Self-supervised Pretraining",
+    "Multimodal Learning",
+    "Dataset Curation"
+   ],
+   "field": "视频理解与生成",
+   "innovations": [
+    "利用LLMs作为Oracle生成大规模视频摘要伪标签数据集",
+    "提出自回归视频摘要模型解决类别不平衡和时序依赖问题",
+    "构建新的长视频摘要基准LfVS-T"
+   ],
+   "benchmarks": [
+    "LfVS-T",
+    "SumMe",
+    "TVSum"
+   ]
+  }
+ }
 }

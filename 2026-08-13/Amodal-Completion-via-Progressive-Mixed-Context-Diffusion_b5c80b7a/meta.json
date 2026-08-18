@@ -4,5 +4,32 @@
  "title": "Amodal-Completion-via-Progressive-Mixed-Context-Diffusion",
  "token": "sk-0a1o6nr9t...",
  "created_at": "2026-08-13 07:12:19",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/44fd227b-f53a-4edb-80c1-b90680c1d913.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/44fd227b-f53a-4edb-80c1-b90680c1d913.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:01:24",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "amodal completion",
+    "diffusion inpainting",
+    "co-occurrence bias",
+    "training-free generation",
+    "image outpainting",
+    "context disentanglement"
+   ],
+   "field": "生成式视觉与场景理解",
+   "innovations": [
+    "混合上下文扩散采样：在扩散中途替换背景以打破共现偏置，无需重新训练模型",
+    "反事实补全筛选：通过outpaint后mask扩展比例无训练判定补全完整性",
+    "渐进式遮挡感知迭代：跳过amodal mask预测直接生成完整物体外观"
+   ],
+   "benchmarks": [
+    "COCO pseudo-occluded (2500 objects)",
+    "Open Images pseudo-occluded (500 objects)",
+    "Easy cases (20-50% occlusion)",
+    "Hard cases (50-80% occlusion)"
+   ]
+  }
+ }
 }

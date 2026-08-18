@@ -3,5 +3,30 @@
  "batch_id": "a308a69b-2c08-48e6-a3a3-8a9f70aa2b65",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-12 15:42:13",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/556f4602-eab4-44ab-a309-facba3f44824.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/556f4602-eab4-44ab-a309-facba3f44824.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 16:58:00",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "主题驱动图像合成",
+    "文本到图像生成",
+    "扩散模型",
+    "个性化生成",
+    "分类器无引导"
+   ],
+   "field": "生成式AI/图像合成",
+   "innovations": [
+    "提出主题无关嵌入的通用构建方法",
+    "设计双分类器无引导（DCFG）机制",
+    "提出时间变化的引导权重策略以平衡主题一致性与文本对齐"
+   ],
+   "benchmarks": [
+    "CLIP-T",
+    "CLIP-I",
+    "DINO"
+   ]
+  }
+ }
 }

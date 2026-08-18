@@ -4,5 +4,31 @@
  "title": "A-B-BNN-Add-Bit-Operation-Only-Hardware-Friendly-Binary-Neur",
  "token": "sk-5WOIsMt5v...",
  "created_at": "2026-08-13 05:39:41",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/9fdd4300-04d4-4c48-8ba3-b5cf06b4944f.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/9fdd4300-04d4-4c48-8ba3-b5cf06b4944f.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 16:58:23",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Binary Neural Network",
+    "Hardware-friendly",
+    "Multiplication-free",
+    "BN-Free",
+    "Quantized RPReLU",
+    "Bit-operation"
+   ],
+   "field": "低功耗边缘推理与硬件友好型神经网络",
+   "innovations": [
+    "通过 mask layer 吸收 β 乘法并在推理阶段移除，实现零乘法推理",
+    "提出量化 RPReLU，将 PReLU 斜率约束为 2 的整数次幂以移位替代乘法",
+    "在 ReActNet 系列上以微小精度代价消除全部全精度乘法并给出 FPGA 综合证据"
+   ],
+   "benchmarks": [
+    "ImageNet",
+    "CIFAR-10",
+    "CIFAR-100"
+   ]
+  }
+ }
 }

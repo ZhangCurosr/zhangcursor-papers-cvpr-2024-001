@@ -3,5 +3,29 @@
  "batch_id": "fd96c329-7bd0-4663-8b5d-9a92d66b8a5f",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-12 16:04:16",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/556f4602-eab4-44ab-a309-facba3f44824.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/556f4602-eab4-44ab-a309-facba3f44824.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 16:57:56",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Subject-Driven Image Synthesis",
+    "Classifier-Free Guidance",
+    "Text-to-Image Customization",
+    "Diffusion Models",
+    "Text-Image Alignment"
+   ],
+   "field": "文生图个性化定制",
+   "innovations": [
+    "提出SAG机制通过subject-agnostic条件削弱主体信息过度主导",
+    "设计DCFG双级分类器无引导策略实现动态权重调节"
+   ],
+   "benchmarks": [
+    "CLIP-T",
+    "CLIP-I",
+    "DINO"
+   ]
+  }
+ }
 }

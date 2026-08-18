@@ -4,5 +4,34 @@
  "title": "Affine-Equivariant-Networks-Based-on-Differential-Invariants",
  "token": "sk-sKVjU65N5...",
  "created_at": "2026-08-13 05:40:04",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-13/3011b211-1b1f-43f8-b428-4488b17d2c65.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-13/3011b211-1b1f-43f8-b428-4488b17d2c65.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 16:59:28",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "equivariant network",
+    "affine group",
+    "differential invariant",
+    "symmetric PDE",
+    "deep learning",
+    "computer vision",
+    "group symmetry"
+   ],
+   "field": "等变深度学习与几何深度学习",
+   "innovations": [
+    "首次在无群离散/采样前提下基于对称PDE与微分不变量构建仿射等变网络",
+    "提出SupNorm归一化相对微分不变量（SNDI）避免除零并增强表达能力",
+    "设计即插即用InvarLayer等变层并统一覆盖仿射群及其连续子群"
+   ],
+   "benchmarks": [
+    "Scale-MNIST",
+    "Scale-Fashion",
+    "RS-MNIST",
+    "RS-Fashion",
+    "affNIST"
+   ]
+  }
+ }
 }

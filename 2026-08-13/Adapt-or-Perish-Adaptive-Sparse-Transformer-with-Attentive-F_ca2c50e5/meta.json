@@ -4,5 +4,32 @@
  "title": "Adapt-or-Perish-Adaptive-Sparse-Transformer-with-Attentive-F",
  "token": "sk-45Ifw5Iq3...",
  "created_at": "2026-08-13 05:40:37",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d0a9c4cf-76f8-41f7-978c-74d150e23bc4.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d0a9c4cf-76f8-41f7-978c-74d150e23bc4.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 16:59:16",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "图像恢复",
+    "Transformer",
+    "稀疏注意力",
+    "特征冗余",
+    "雨条纹去除",
+    "雾霾去除"
+   ],
+   "field": "低级别视觉-图像恢复",
+   "innovations": [
+    "提出双分支自适应稀疏自注意力（ASSA），通过可学习权重融合稀疏与密集分支，避免过稀疏导致的信息损失",
+    "设计增强-简化策略特征细化前馈网络（FRFN），利用 PConv 和门控机制沿通道维度筛选关键特征",
+    "在雨条纹、雨滴、雾霾三项恢复任务上均取得 SOTA，SPAD 达 49.51 dB，超越 DRSformer 0.98 dB"
+   ],
+   "benchmarks": [
+    "SPAD",
+    "AGAN-Data",
+    "Dense-Haze",
+    "Internet-Data"
+   ]
+  }
+ }
 }

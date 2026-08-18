@@ -4,5 +4,30 @@
  "title": "3D-Face-Reconstruction-with-the-Geometric-Guidance-of-Facial",
  "token": "sk-sKVjU65N5...",
  "created_at": "2026-08-13 05:39:59",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/57016237-248b-4900-8b01-4e652d0f2e62.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/57016237-248b-4900-8b01-4e652d0f2e62.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 16:58:07",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D face reconstruction",
+    "PRDL",
+    "facial part segmentation",
+    "geometric guidance",
+    "extreme expression",
+    "Part IoU"
+   ],
+   "field": "3D人脸重建",
+   "innovations": [
+    "提出PRDL损失，通过网格锚点统计距离（min/max/ave）构建几何描述符实现部件级点集对齐，避免可微渲染器的梯度不稳定问题",
+    "构建新3D网格部件标注体系（基于2D分割语义标注BFG/FaceVerse顶点），连接3D模型与2D分割的语义鸿沟",
+    "生成20万+极端表情（闭眼/张嘴/皱眉）合成数据集并引入Part IoU新评测基准"
+   ],
+   "benchmarks": [
+    "Part IoU (MEAD)",
+    "REALY"
+   ]
+  }
+ }
 }

@@ -4,5 +4,31 @@
  "title": "Artist-Friendly-Relightable-and-Animatable-Neural-Heads",
  "token": "sk-45Ifw5Iq3...",
  "created_at": "2026-08-13 07:10:27",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2838b835-d57a-4a3e-85ec-5b498b4c6c10.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2838b835-d57a-4a3e-85ec-5b498b4c6c10.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:02:43",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Neural Avatar",
+    "Relightable Rendering",
+    "Mixture of Volumetric Primitives",
+    "Near-field Lighting",
+    "Dynamic NeRF",
+    "Facial Animation"
+   ],
+   "field": "神经渲染与数字人",
+   "innovations": [
+    "在MVP外观分支中引入每原语局部光照/视角方向，实现近场光照与视角建模",
+    "去纹理编码的Mesh Encoder，使z仅驱动几何变形以支持未见表情的艺术化驱动"
+   ],
+   "benchmarks": [
+    "PSNR",
+    "SSIM",
+    "LPIPS",
+    "MAE"
+   ]
+  }
+ }
 }

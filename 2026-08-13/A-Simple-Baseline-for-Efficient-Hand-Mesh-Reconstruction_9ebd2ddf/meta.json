@@ -4,5 +4,10 @@
  "title": "A-Simple-Baseline-for-Efficient-Hand-Mesh-Reconstruction",
  "token": "sk-dY4OBV5wM...",
  "created_at": "2026-08-13 05:40:32",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/32440554-3717-47b4-b895-c50eaf7f5a8e.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/32440554-3717-47b4-b895-c50eaf7f5a8e.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 16:59:00",
+  "chunks": 1
+ }
 }

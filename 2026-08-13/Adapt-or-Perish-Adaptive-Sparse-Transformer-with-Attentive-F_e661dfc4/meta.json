@@ -4,5 +4,30 @@
  "title": "Adapt-or-Perish-Adaptive-Sparse-Transformer-with-Attentive-F",
  "token": "sk-nY8L7ieIq...",
  "created_at": "2026-08-13 07:10:38",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d0a9c4cf-76f8-41f7-978c-74d150e23bc4.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d0a9c4cf-76f8-41f7-978c-74d150e23bc4.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 16:59:42",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Adaptive Sparse Transformer",
+    "Image Restoration",
+    "Self-Attention",
+    "Feature Redundancy",
+    "Rain Removal",
+    "Dehazing"
+   ],
+   "field": "图像恢复",
+   "innovations": [
+    "通过稀疏与密集两分支自适应融合抑制无关区域噪声并保留关键信息",
+    "设计增强‑缓解前馈网络在通道维度消除冗余"
+   ],
+   "benchmarks": [
+    "SPAD",
+    "AGAN-Data",
+    "Dense-Haze"
+   ]
+  }
+ }
 }

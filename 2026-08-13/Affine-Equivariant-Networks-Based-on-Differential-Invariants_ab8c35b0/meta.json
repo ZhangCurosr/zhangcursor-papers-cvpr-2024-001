@@ -4,5 +4,34 @@
  "title": "Affine-Equivariant-Networks-Based-on-Differential-Invariants",
  "token": "sk-ZGznq9xBq...",
  "created_at": "2026-08-13 07:12:32",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-13/3011b211-1b1f-43f8-b428-4488b17d2c65.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-13/3011b211-1b1f-43f8-b428-4488b17d2c65.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 16:59:27",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "等变网络",
+    "仿射等变",
+    "微分不变量",
+    "对称PDE",
+    "SupNorm归一化",
+    "affNIST",
+    "InvarLayer"
+   ],
+   "field": "等变深度学习",
+   "innovations": [
+    "首次不依赖群离散化/采样的仿射等变网络，从对称PDE视角构建等变层",
+    "提出SupNorm归一化微分不变量(SNDI)，消除仿射群分数不变量的除零问题并增强表达力",
+    "设计可插拔等变层InvarLayer，可直接替换CNN卷积层，参数更少且在affNIST OOD上提升3.37%"
+   ],
+   "benchmarks": [
+    "affNIST",
+    "Scale-MNIST",
+    "Scale-Fashion",
+    "RS-MNIST",
+    "RS-Fashion"
+   ]
+  }
+ }
 }

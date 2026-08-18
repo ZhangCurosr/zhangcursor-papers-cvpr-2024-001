@@ -4,5 +4,33 @@
  "title": "AlignSAM-Aligning-Segment-Anything-Model-to-Open-Context-via",
  "token": "sk-YrIlRFySy...",
  "created_at": "2026-08-13 07:11:50",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/868d6fb7-332b-4e79-8cee-18738c369d6d.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/868d6fb7-332b-4e79-8cee-18738c369d6d.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-08-18 17:01:07",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Segment Anything Model",
+    "Reinforcement Learning",
+    "Automatic Prompting",
+    "Vision Foundation Model",
+    "Semantic Segmentation",
+    "Parameter-Efficient Adaptation"
+   ],
+   "field": "视觉基础模型适配",
+   "innovations": [
+    "基于RL的自动提示框架，无需梯度回传至SAM主干网络",
+    "语义校准模块通过隐式/显式双分支统一处理不同语义类型任务",
+    "仅用50张样本实现多任务高效适配并达到SOTA性能"
+   ],
+   "benchmarks": [
+    "CUHK Blur Detection",
+    "SBU Shadow Detection",
+    "MSD Glass Detection",
+    "DUTS Saliency Detection",
+    "Pascal-VOC 2012 Semantic Segmentation"
+   ]
+  }
+ }
 }
