@@ -4,5 +4,32 @@
  "title": "Predicated-Diffusion-Predicate-Logic-Based-Attention-Guidanc",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 03:38:26",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/8f75c674-bd19-4d80-928c-b3b18dc817a5.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/8f75c674-bd19-4d80-928c-b3b18dc817a5.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:42:03",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "text-to-image diffusion",
+    "attention guidance",
+    "predicate logic",
+    "fuzzy logic",
+    "training-free guidance",
+    "Stable Diffusion"
+   ],
+   "field": "文本到图像生成",
+   "innovations": [
+    "将谓词逻辑命题映射为注意力图的乘积模糊逻辑损失，统一指导扩散生成",
+    "提出所有关系失败的解决方案，通过蕴含命题鼓励对象重叠",
+    "在50步反向过程中仅前25步施加训练无引导，平衡质量与忠实度"
+   ],
+   "benchmarks": [
+    "Concurrent Existence (400 prompts)",
+    "One-to-One Correspondence (400 prompts)",
+    "Possession (10 prompts × 20 images)",
+    "ABC-6K complex prompts"
+   ]
+  }
+ }
 }

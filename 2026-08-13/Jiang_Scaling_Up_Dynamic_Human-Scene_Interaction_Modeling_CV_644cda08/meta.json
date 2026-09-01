@@ -3,5 +3,36 @@
  "batch_id": "644cda08-7d14-49d0-8c0e-035e116d4796",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 02:46:46",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/b566d0fd-0f5a-461d-a947-a3cf19e9dc81.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/b566d0fd-0f5a-461d-a947-a3cf19e9dc81.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:39:27",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Human-Scene Interaction",
+    "Motion Generation",
+    "Diffusion Model",
+    "MoCap Dataset",
+    "Autoregressive Generation",
+    "3D Human Pose"
+   ],
+   "field": "3D 人体场景交互生成",
+   "innovations": [
+    "提出 TRUMANS 数据集：15h+ MoCap HSI、100 场景、逐顶点接触标注，规模与质量超越现有数据集",
+    "自回归扩散 HSI 生成模型：episode 级转移掩码 + 子目标掩码实现任意长度可控序列生成",
+    "逐帧动作嵌入含进度指示器：将动作阶段信息注入标签，支持跨 episode 动作演化建模"
+   ],
+   "benchmarks": [
+    "PROX",
+    "Replica",
+    "ScanNet",
+    "ScanNet++",
+    "GRAB",
+    "3DPW",
+    "RICH",
+    "DA-MON"
+   ]
+  }
+ }
 }

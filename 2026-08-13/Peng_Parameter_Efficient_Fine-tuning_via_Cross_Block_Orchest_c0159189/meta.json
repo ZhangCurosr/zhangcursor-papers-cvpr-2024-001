@@ -3,5 +3,39 @@
  "batch_id": "c0159189-22fa-4981-bcdf-59ea77e31a76",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-13 02:59:10",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d2ee9452-9ee1-4e48-bf68-7edc4156324b.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d2ee9452-9ee1-4e48-bf68-7edc4156324b.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:41:48",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "PEFT",
+    "Segment Anything Model",
+    "Cross-block Orchestration",
+    "Hyper-complex Layer",
+    "Parameter-efficient Fine-tuning",
+    "Medical Image Segmentation",
+    "Vision Transformer"
+   ],
+   "field": "视觉基础模型微调",
+   "innovations": [
+    "提出跨块编排机制打破HMC约束，在参数空间实现块间通信",
+    "引入超复数层通过Hamilton积生成投影头权重增强层内协调",
+    "仅增加约1K参数即可显著提升LoRA/Adaptformer在10个分割数据集上的性能"
+   ],
+   "benchmarks": [
+    "ADOME",
+    "NWPU",
+    "TRCAN",
+    "SSDD",
+    "SONAR",
+    "SPLEN",
+    "MOMO",
+    "BRAST",
+    "SEGRAP",
+    "COCO"
+   ]
+  }
+ }
 }

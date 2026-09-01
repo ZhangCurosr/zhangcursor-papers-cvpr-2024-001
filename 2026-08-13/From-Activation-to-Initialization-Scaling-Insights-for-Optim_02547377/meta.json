@@ -4,5 +4,10 @@
  "title": "From-Activation-to-Initialization-Scaling-Insights-for-Optim",
  "token": "sk-YrIlRFySy...",
  "created_at": "2026-08-13 07:11:47",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/41aee40c-7b32-46b8-8534-518899c67907.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/41aee40c-7b32-46b8-8534-518899c67907.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:39:17",
+  "chunks": 1
+ }
 }

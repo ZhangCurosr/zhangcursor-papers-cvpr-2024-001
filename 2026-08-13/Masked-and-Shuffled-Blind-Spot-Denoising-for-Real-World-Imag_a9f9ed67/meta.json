@@ -4,5 +4,32 @@
  "title": "Masked-and-Shuffled-Blind-Spot-Denoising-for-Real-World-Imag",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-13 03:38:06",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/943965b2-d9e5-4893-b910-71e6d3ce0d55.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/943965b2-d9e5-4893-b910-71e6d3ce0d55.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:39:50",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "单图像去噪",
+    "盲点去噪",
+    "自监督学习",
+    "相关噪声",
+    "像素洗牌",
+    "真实世界图像"
+   ],
+   "field": "无监督单图像去噪",
+   "innovations": [
+    "揭示掩码比例与噪声相关性的定量关系并提出自适应选择机制",
+    "引入局部像素洗牌技术直接去相关化输入噪声",
+    "基于噪声估计间隙ε自动检测噪声空间相关性"
+   ],
+   "benchmarks": [
+    "SIDD Validation",
+    "SIDD Benchmark",
+    "FMDD",
+    "PolyU"
+   ]
+  }
+ }
 }

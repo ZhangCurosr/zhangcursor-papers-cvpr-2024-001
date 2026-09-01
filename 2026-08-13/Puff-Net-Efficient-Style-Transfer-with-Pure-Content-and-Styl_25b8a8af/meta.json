@@ -4,5 +4,33 @@
  "title": "Puff-Net-Efficient-Style-Transfer-with-Pure-Content-and-Styl",
  "token": "sk-45Ifw5Iq3...",
  "created_at": "2026-08-13 03:38:16",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/761afb79-4590-43a8-a3fc-9c84dc4d4933.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/761afb79-4590-43a8-a3fc-9c84dc4d4933.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:42:24",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "风格迁移",
+    "Transformer",
+    "特征解耦",
+    "高效模型",
+    "风格化生成",
+    "Content-Aware Positional Encoding"
+   ],
+   "field": "图像风格迁移",
+   "innovations": [
+    "仅编码器Transformer设计，通过可学习输出序列嵌入实现高效风格迁移",
+    "双重特征解耦提取器分离内容与风格信息，预处理后再融合",
+    "轻量模型在大幅降低容量下仍取得领先综合性能与推理速度"
+   ],
+   "benchmarks": [
+    "MS-COCO + WikiArt",
+    "StyTr²",
+    "CAP-VSTNet",
+    "StyleFormer",
+    "IEST"
+   ]
+  }
+ }
 }

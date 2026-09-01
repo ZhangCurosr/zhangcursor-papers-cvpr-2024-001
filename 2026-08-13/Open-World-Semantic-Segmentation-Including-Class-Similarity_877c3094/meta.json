@@ -4,5 +4,29 @@
  "title": "Open-World-Semantic-Segmentation-Including-Class-Similarity",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-13 03:50:03",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d624ce32-fc1b-4b15-806b-a4cf67f76add.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d624ce32-fc1b-4b15-806b-a4cf67f76add.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:41:01",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "open-world semantic segmentation",
+    "anomaly segmentation",
+    "novel class discovery",
+    "class similarity",
+    "out-of-distribution detection"
+   ],
+   "field": "开放世界语义分割",
+   "innovations": [
+    "双解码器架构联合优化语义分割与异常分割，无需额外训练数据",
+    "特征空间高斯建模+对比/Objectosphere损失实现已知类描述符学习与未知类检测",
+    "基于高斯推断的类别相似度度量替代直接logit比较"
+   ],
+   "benchmarks": [
+    "SegmentMeIfYouCan",
+    "BDDAnomaly"
+   ]
+  }
+ }
 }

@@ -3,5 +3,28 @@
  "batch_id": "62aaefdc-017e-476e-90ca-d89a3494df4b",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-08-13 02:59:29",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f45fb4d6-80e9-42f4-9710-5155c48b6160.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f45fb4d6-80e9-42f4-9710-5155c48b6160.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:42:39",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D point cloud generation",
+    "diffusion model",
+    "time-varying mask",
+    "position encoding",
+    "Transformer",
+    "CNN"
+   ],
+   "field": "3D点云生成",
+   "innovations": [
+    "时间自适应双流去噪架构，通过可学习时间掩码动态融合全局Transformer特征与局部CNN特征",
+    "提出PSPE和BλPE两种新型3D连续位置编码，保留相对位置线性表达能力"
+   ],
+   "benchmarks": [
+    "ShapeNetv2"
+   ]
+  }
+ }
 }

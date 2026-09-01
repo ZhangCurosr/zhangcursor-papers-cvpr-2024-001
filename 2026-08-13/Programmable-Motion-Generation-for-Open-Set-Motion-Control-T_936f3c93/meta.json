@@ -4,5 +4,29 @@
  "title": "Programmable-Motion-Generation-for-Open-Set-Motion-Control-T",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 03:37:55",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/5d7c41a4-1ca4-414f-a445-bab97c6b16cf.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/5d7c41a4-1ca4-414f-a445-bab97c6b16cf.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:42:15",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "开放集运动控制",
+    "可编程运动生成",
+    "扩散模型",
+    "人体运动生成",
+    "约束优化",
+    "LLM自动编程"
+   ],
+   "field": "人体运动生成与控制",
+   "innovations": [
+    "提出可编程运动生成范式，将任意约束组合编程为可微误差函数优化预训练模型潜在噪声",
+    "设计原子约束库与重设计的逻辑操作实现模块化运动编程",
+    "利用LLM自动将自然语言任务描述转换为误差函数代码"
+   ],
+   "benchmarks": [
+    "HumanML3D"
+   ]
+  }
+ }
 }

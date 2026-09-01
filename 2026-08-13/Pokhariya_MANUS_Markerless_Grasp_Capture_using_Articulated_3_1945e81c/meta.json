@@ -3,5 +3,30 @@
  "batch_id": "1945e81c-e9bd-4afb-b320-bdcfe654ae08",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 02:59:46",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/9bba0cec-5839-4cf6-b98e-013b354018c5.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/9bba0cec-5839-4cf6-b98e-013b354018c5.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:42:11",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "手-物抓取捕获",
+    "3D Gaussian Splatting",
+    "接触估计",
+    "多视角 RGB 数据集",
+    "articulated hand model",
+    "markerless capture"
+   ],
+   "field": "手-物交互与抓取捕获",
+   "innovations": [
+    "提出 MANUS-Hand，首个基于 3D 高斯泼溅的无模板可 articulated 手部表示",
+    "构建 MANUS-Grasps，53相机/7M+帧多视角抓取数据集，含湿颜料接触标注",
+    "用网格权重（Grid Weights）替代 MANO 直接权重分配，提升蒙皮质量并减少 artifacts"
+   ],
+   "benchmarks": [
+    "MANUS-Grasps 湿颜料接触评估（mIoU / F1）",
+    "Interhand2.6M 手部渲染评估（PSNR / SSIM / LPIPS）"
+   ]
+  }
+ }
 }

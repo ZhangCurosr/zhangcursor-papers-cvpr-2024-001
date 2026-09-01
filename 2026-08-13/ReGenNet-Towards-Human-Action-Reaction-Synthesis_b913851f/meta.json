@@ -4,5 +4,31 @@
  "title": "ReGenNet-Towards-Human-Action-Reaction-Synthesis",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 03:50:14",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/62b7a704-1403-48e1-8320-3d771a4aec37.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/62b7a704-1403-48e1-8320-3d771a4aec37.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:42:36",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "human motion generation",
+    "action-reaction synthesis",
+    "diffusion model",
+    "Transformer decoder",
+    "human-human interaction",
+    "actor-reactor asymmetry"
+   ],
+   "field": "三维人体运动生成与交互合成",
+   "innovations": [
+    "首个多设置人类动作-反应合成基准（NTU120-AS/InterHuman-AS/Chi3D-AS）并标注actor-reactor非对称顺序",
+    "基于扩散模型+Transformer解码器的在线反应生成框架ReGenNet，支持无意图可见条件下的即时合成",
+    "设计基于FK/RM的显式距离交互损失，约束actor-reactor相对姿态/朝向/位移的几何合理性"
+   ],
+   "benchmarks": [
+    "NTU120-AS",
+    "Chi3D-AS",
+    "InterHuman-AS"
+   ]
+  }
+ }
 }

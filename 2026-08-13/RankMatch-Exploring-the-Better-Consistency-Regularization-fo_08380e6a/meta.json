@@ -4,5 +4,30 @@
  "title": "RankMatch-Exploring-the-Better-Consistency-Regularization-fo",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-13 03:50:06",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/5ccbd48a-6439-4aa0-8ddc-84c3357ea314.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/5ccbd48a-6439-4aa0-8ddc-84c3357ea314.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:42:29",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "semi-supervised semantic segmentation",
+    "consistency regularization",
+    "rank-aware correlation",
+    "agent selection",
+    "inter-pixel correlation"
+   ],
+   "field": "半监督语义分割",
+   "innovations": [
+    "提出从像素间相关性视角替代对比学习构建安全的半监督监督信号",
+    "设计正交选择策略从特征图中动态挑选代表性agents",
+    "发明rank-aware相关性一致性正则化，将agent相关性转化为排列概率分布并约束teacher-student一致性"
+   ],
+   "benchmarks": [
+    "PASCAL VOC 2012",
+    "Cityscapes",
+    "Lucchi"
+   ]
+  }
+ }
 }

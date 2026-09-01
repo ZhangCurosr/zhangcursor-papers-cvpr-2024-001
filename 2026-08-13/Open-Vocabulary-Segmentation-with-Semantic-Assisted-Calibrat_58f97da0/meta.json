@@ -4,5 +4,33 @@
  "title": "Open-Vocabulary-Segmentation-with-Semantic-Assisted-Calibrat",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 03:37:59",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4137c022-5730-410a-a17e-f95d312d886a.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4137c022-5730-410a-a17e-f95d312d886a.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:40:54",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "open-vocabulary segmentation",
+    "vision-language model",
+    "CLIP",
+    "semantic segmentation",
+    "domain adaptation",
+    "cross-modal alignment"
+   ],
+   "field": "开放词汇视觉分割",
+   "innovations": [
+    "通过语义注入校准 proposal embedding 防止类别坍缩",
+    "上下文移位策略缓解 CLIP 的域偏移问题",
+    "提出考虑类别语义关系的 SG-IoU 评估指标"
+   ],
+   "benchmarks": [
+    "ADE20K-150",
+    "ADE20K-847",
+    "Pascal VOC",
+    "Pascal Context-59",
+    "Pascal Context-459"
+   ]
+  }
+ }
 }

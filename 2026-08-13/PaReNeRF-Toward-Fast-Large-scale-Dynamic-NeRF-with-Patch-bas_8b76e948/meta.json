@@ -4,5 +4,31 @@
  "title": "PaReNeRF-Toward-Fast-Large-scale-Dynamic-NeRF-with-Patch-bas",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 03:49:58",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-13/3ccab615-8b79-4b1c-b710-cef742377b17.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-13/3ccab615-8b79-4b1c-b710-cef742377b17.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:41:24",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "NeRF",
+    "动态场景重建",
+    "大规模神经渲染",
+    "参考解码器",
+    "patch采样",
+    "光流",
+    "结构相似度"
+   ],
+   "field": "神经辐射场与大场景重建",
+   "innovations": [
+    "基于光流和结构相似性的先验信息搜索方法，加速训练阶段参考信息查找",
+    "patch-based采样替代随机光线采样，结合低分辨率渲染与参考解码器，同步提升训练/推理速度及渲染质量",
+    "轻量级参考解码器融合已知视图信息，有效补偿低分辨率渲染的精度损失"
+   ],
+   "benchmarks": [
+    "KITTI",
+    "VKITTI2"
+   ]
+  }
+ }
 }

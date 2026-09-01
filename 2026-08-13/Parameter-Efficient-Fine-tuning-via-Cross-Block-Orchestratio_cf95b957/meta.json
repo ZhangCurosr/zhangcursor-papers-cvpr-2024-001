@@ -4,5 +4,38 @@
  "title": "Parameter-Efficient-Fine-tuning-via-Cross-Block-Orchestratio",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-13 03:38:06",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d2ee9452-9ee1-4e48-bf68-7edc4156324b.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d2ee9452-9ee1-4e48-bf68-7edc4156324b.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:41:30",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "parameter-efficient fine-tuning",
+    "Segment Anything Model",
+    "cross-block orchestration",
+    "hyper-complex layer",
+    "T-product",
+    "image segmentation"
+   ],
+   "field": "视觉基础模型高效微调",
+   "innovations": [
+    "提出跨块编排机制突破HMC限制，实现参数空间全局协同调整",
+    "首次将超复数层引入PEFT权重生成，增强投影方向表达能力",
+    "设计双系数集架构兼顾信息保持与跨层通信"
+   ],
+   "benchmarks": [
+    "ADOME",
+    "SEGRAP",
+    "SSDD",
+    "NWPU",
+    "TRCAN",
+    "COCO",
+    "SONAR",
+    "MOMO",
+    "BRAST",
+    "SPLEN"
+   ]
+  }
+ }
 }

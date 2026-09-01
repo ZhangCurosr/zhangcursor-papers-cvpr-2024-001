@@ -4,5 +4,10 @@
  "title": "PeLK-Parameter-efficient-Large-Kernel-ConvNets-with-Peripher",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 03:49:47",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/0975b993-16a1-4ef7-945f-377098162744.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/0975b993-16a1-4ef7-945f-377098162744.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:41:37",
+  "chunks": 1
+ }
 }

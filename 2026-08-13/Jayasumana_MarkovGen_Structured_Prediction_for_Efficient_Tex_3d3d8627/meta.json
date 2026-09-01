@@ -3,5 +3,31 @@
  "batch_id": "3d3d8627-675d-400b-aece-b0ff2be716fb",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 02:58:59",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/10661e7e-2998-440b-8c48-461e3fb4d19b.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/10661e7e-2998-440b-8c48-461e3fb4d19b.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:38:58",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Text-to-Image Generation",
+    "Markov Random Field",
+    "Structured Prediction",
+    "Token-based Generation",
+    "Muse",
+    "Mean-field Inference",
+    "Efficient Sampling"
+   ],
+   "field": "文本到图像生成与高效推理",
+   "innovations": [
+    "首次将完全连接MRF引入离散token空间的文本到图像生成，显式建模全局token兼容性",
+    "提出MarkovGen框架，用可微分MRF层替换Muse后期采样步，实现1.5倍加速与质量提升",
+    "端到端训练MRF参数：自监督预训练+KL散度精调模仿目标模型最终分布"
+   ],
+   "benchmarks": [
+    "MS-COCO FID",
+    "Parti Prompts Human Evaluation"
+   ]
+  }
+ }
 }

@@ -4,5 +4,34 @@
  "title": "KeyPoint-Relative-Position-Encoding-for-Face-Recognition",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-13 03:50:16",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/17e1cf13-dbb2-4d97-8713-868b5a5c7907.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/17e1cf13-dbb2-4d97-8713-868b5a5c7907.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:39:38",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Keypoint RPE",
+    "Vision Transformer",
+    "Face Recognition",
+    "Relative Position Encoding",
+    "Affine Robustness",
+    "Low-Quality Recognition"
+   ],
+   "field": "人脸识别与几何鲁棒表示",
+   "innovations": [
+    "提出 Keypoint RPE，将关键点位置动态调制 ViT 的 relative position attention bias，显著提升对未见过仿射变换的鲁棒性",
+    "设计 Absolute/Relative/Multihead 三种 f(P) 变体，其中 Relative f(P) 使 query-key 关系取决于 query 与关键点的相对位置，Unaligned IJB-C TAR 从 14.91% 跃升至 85.22%",
+    "KP-RPE 计算开销仅为 iRPE 的约 1/10（+0.02~0.07 GFLOP），并成功推广至步态识别（Gait3D）"
+   ],
+   "benchmarks": [
+    "TinyFace",
+    "IJB-S",
+    "CFPFP",
+    "IJB-C",
+    "AgeDB",
+    "Gait3D"
+   ]
+  }
+ }
 }

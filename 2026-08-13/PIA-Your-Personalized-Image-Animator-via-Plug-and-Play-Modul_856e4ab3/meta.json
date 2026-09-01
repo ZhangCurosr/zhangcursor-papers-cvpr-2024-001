@@ -4,5 +4,29 @@
  "title": "PIA-Your-Personalized-Image-Animator-via-Plug-and-Play-Modul",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 03:49:47",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d650d269-5672-49a7-b4e0-ea37541b1712.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d650d269-5672-49a7-b4e0-ea37541b1712.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:41:09",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "个性化图像动画",
+    "文本到视频",
+    "扩散模型",
+    "插拔式模块",
+    "运动可控性"
+   ],
+   "field": "视频生成",
+   "innovations": [
+    "提出条件模块实现外观-运动解耦对齐",
+    "基于帧间亲和度的运动幅度可控机制",
+    "插拔式架构支持任意个性化T2I模型转动画器"
+   ],
+   "benchmarks": [
+    "AnimateBench",
+    "WebVid"
+   ]
+  }
+ }
 }

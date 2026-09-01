@@ -4,5 +4,31 @@
  "title": "Memory-Scalable-and-Simplified-Functional-Map-Learning",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 03:38:21",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/43111917-ea06-4dbb-a7b1-d62bf154535f.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/43111917-ea06-4dbb-a7b1-d62bf154535f.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:39:53",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "functional maps",
+    "shape correspondence",
+    "deep learning",
+    "GPU computing",
+    "differentiable refinement"
+   ],
+   "field": "3D形状匹配与功能映射",
+   "innovations": [
+    "可缩放稠密映射的GPU实现，避免存储完整点态映射矩阵",
+    "首次将完整ZoomOut算法可微分化为内存高效的GPU模块",
+    "首个无需线性系统求解器求导的单分支功能映射网络"
+   ],
+   "benchmarks": [
+    "FAUST",
+    "SCAPE",
+    "SHREC19",
+    "DT4D-H"
+   ]
+  }
+ }
 }

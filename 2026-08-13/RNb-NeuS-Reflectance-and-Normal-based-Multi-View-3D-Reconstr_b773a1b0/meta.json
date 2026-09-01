@@ -4,5 +4,28 @@
  "title": "RNb-NeuS-Reflectance-and-Normal-based-Multi-View-3D-Reconstr",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 03:38:16",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/56c342d9-8a32-4e9b-b370-e7cc931d1e4c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/56c342d9-8a32-4e9b-b370-e7cc931d1e4c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:42:21",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "多视角光度立体",
+    "神经体积渲染",
+    "法线重建",
+    "反射率估计",
+    "单目标优化",
+    "DiLiGenT-MV"
+   ],
+   "field": "多视角几何重建",
+   "innovations": [
+    "反射率与法线像素级联合重参数化为辐射向量以实现单目标优化",
+    "基于任意光照模拟的NVR损失适配漫反射场景"
+   ],
+   "benchmarks": [
+    "DiLiGenT-MV"
+   ]
+  }
+ }
 }

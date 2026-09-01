@@ -3,5 +3,34 @@
  "batch_id": "45710ed5-9f97-46e3-8898-1d194816737c",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 02:59:50",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/b566d0fd-0f5a-461d-a947-a3cf19e9dc81.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/b566d0fd-0f5a-461d-a947-a3cf19e9dc81.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:39:18",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Human-Scene Interaction",
+    "Motion Synthesis",
+    "Diffusion Model",
+    "MoCap Dataset",
+    "Autoregressive Generation",
+    "3D Human Pose"
+   ],
+   "field": "3D人体运动生成与人机交互",
+   "innovations": [
+    "提出TRUMANS大规模动作捕捉HSI数据集（15h+/100场景）",
+    "设计自回归扩散框架实现任意长度HSI实时生成",
+    "引入帧级动作进度嵌入与局部场景感知器提升可控性"
+   ],
+   "benchmarks": [
+    "PROX",
+    "Replica",
+    "ScanNet",
+    "ScanNet++",
+    "3DPW",
+    "GRAB"
+   ]
+  }
+ }
 }

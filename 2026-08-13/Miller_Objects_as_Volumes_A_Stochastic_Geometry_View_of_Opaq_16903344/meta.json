@@ -3,5 +3,31 @@
  "batch_id": "16903344-4b5f-4ca1-8247-6c0891b17b0e",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 02:46:40",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/e1f97f7d-c2b4-4ece-9891-91db37171e2d.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/e1f97f7d-c2b4-4ece-9891-91db37171e2d.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:40:07",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "stochastic geometry",
+    "volumetric rendering",
+    "opaque solids",
+    "reciprocity",
+    "implicit surfaces",
+    "3D reconstruction"
+   ],
+   "field": "神经体积渲染",
+   "innovations": [
+    "从随机几何第一性原理推导不透明固体的指数体积传输理论，证明马尔可夫条件与互易性要求",
+    "引入法向量分布参数化各向异性，实现表面/内部行为的连续插值",
+    "统一解释并纠正 NeuS/VolSDF 等先前方法的物理缺陷（如违反互易性）"
+   ],
+   "benchmarks": [
+    "DTU",
+    "BlendedMVS",
+    "NeRF Realistic Synthetic"
+   ]
+  }
+ }
 }

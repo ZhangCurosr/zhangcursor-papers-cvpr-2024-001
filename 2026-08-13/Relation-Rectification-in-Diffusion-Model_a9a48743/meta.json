@@ -4,5 +4,29 @@
  "title": "Relation-Rectification-in-Diffusion-Model",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 03:49:51",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/6e0dbc67-4472-4ecb-8088-c56d99363544.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/6e0dbc67-4472-4ecb-8088-c56d99363544.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 21:42:41",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Diffusion Model",
+    "Relation Generation",
+    "Heterogeneous GCN",
+    "Vision-Language Model",
+    "Text-to-Image"
+   ],
+   "field": "文生图关系生成",
+   "innovations": [
+    "提出Relation Rectification任务，利用HGCN调整[EOT]嵌入以修正方向性关系生成",
+    "设计正负损失组合策略分离OSP对嵌入，同时保持物体语义解耦",
+    "构建包含21种关系的Relation Rectification Benchmark"
+   ],
+   "benchmarks": [
+    "Relation Rectification Benchmark",
+    "COCO"
+   ]
+  }
+ }
 }
