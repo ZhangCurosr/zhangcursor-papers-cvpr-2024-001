@@ -4,5 +4,34 @@
  "title": "FocSAM-Delving-Deeply-into-Focused-Objects-in-Segmenting-Any",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 07:13:01",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/573e964a-740f-434d-b0db-396931beccd1.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/573e964a-740f-434d-b0db-396931beccd1.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 19:58:49",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "interactive segmentation",
+    "SAM",
+    "FocSAM",
+    "dynamic window attention",
+    "pixel-wise dynamic ReLU",
+    "object-focused refinement"
+   ],
+   "field": "交互式图像分割",
+   "innovations": [
+    "提出聚焦细化器(Dwin-MSA+P-DyReLU)，在SAM流水线中动态增强目标相关图像嵌入",
+    "Dwin-MSA按预测mask动态选取窗口计算自注意力，避免背景冗余",
+    "P-DyReLU用query-patch相似度逐像素生成激活参数实现特征自适应选择"
+   ],
+   "benchmarks": [
+    "Grab-Cut",
+    "Berkeley",
+    "SBD",
+    "DAVIS",
+    "MVTec",
+    "COD10K"
+   ]
+  }
+ }
 }

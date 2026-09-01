@@ -3,5 +3,31 @@
  "batch_id": "d7be2c3a-1527-41d1-b912-11f72b7c9655",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-08-13 02:46:50",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/43111917-ea06-4dbb-a7b1-d62bf154535f.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/43111917-ea06-4dbb-a7b1-d62bf154535f.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 20:02:21",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Functional Maps",
+    "Shape Correspondence",
+    "Deep Learning",
+    "Memory Efficiency",
+    "Differentiable ZoomOut"
+   ],
+   "field": "3D形状匹配与对应计算",
+   "innovations": [
+    "Scalable dense maps避免存储n1*n2稠密矩阵，内存复杂度降至线性",
+    "可微分ZoomOut训练时自监督一致性损失替代双分支架构",
+    "单分支网络无需谱分支和线性系统求解器"
+   ],
+   "benchmarks": [
+    "FAUST",
+    "SCAPE",
+    "SHREC19",
+    "DT4D-H"
+   ]
+  }
+ }
 }

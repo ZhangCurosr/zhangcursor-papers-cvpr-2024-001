@@ -4,5 +4,33 @@
  "title": "FlowIE-Efficient-Image-Enhancement-via-Rectified-Flow",
  "token": "sk-mBuyDYvkR...",
  "created_at": "2026-08-13 05:40:09",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/bc4f8f6f-4ce1-4176-b401-1ea02ecb9019.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/bc4f8f6f-4ce1-4176-b401-1ea02ecb9019.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 19:58:31",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "图像增强",
+    "Rectified Flow",
+    "扩散模型",
+    "盲人脸修复",
+    "盲图像超分",
+    "生成模型加速"
+   ],
+   "field": "图像增强与高效生成建模",
+   "innovations": [
+    "将条件化rectified flow从one-to-one扩展为many-to-one映射以适应图像增强任务，免去大规模数据对准备",
+    "基于Lagrange中值定理的均值采样策略，在极少推理步数下提升路径估计精度",
+    "轻量初始恢复模型+ControlNet注入的条件化flow框架，实现10倍加速的同时保持SOTA质量"
+   ],
+   "benchmarks": [
+    "CelebA-Test",
+    "LFW-Test",
+    "WIDER-Test",
+    "RealSRSet",
+    "Collect-100"
+   ]
+  }
+ }
 }

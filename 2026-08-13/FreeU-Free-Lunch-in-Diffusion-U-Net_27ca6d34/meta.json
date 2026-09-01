@@ -4,5 +4,32 @@
  "title": "FreeU-Free-Lunch-in-Diffusion-U-Net",
  "token": "sk-0vgcClVqT...",
  "created_at": "2026-08-13 07:12:36",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/6822eca8-001a-4b84-81f8-f8c906ac09bd.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/6822eca8-001a-4b84-81f8-f8c906ac09bd.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 19:59:08",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "FreeU",
+    "Diffusion U-Net",
+    "无训练推理增强",
+    "频域分析",
+    "图像生成",
+    "视频生成"
+   ],
+   "field": "生成式人工智能",
+   "innovations": [
+    "提出 FreeU 方法，在推理时通过双因子缩放平衡 U-Net 骨干与跳跃特征贡献，无成本提升生成质量",
+    "首次从傅里叶域分析扩散去噪过程及 U-Net 内部组件作用"
+   ],
+   "benchmarks": [
+    "Stable Diffusion",
+    "SDXL",
+    "ModelScope",
+    "DreamBooth",
+    "ControlNet"
+   ]
+  }
+ }
 }

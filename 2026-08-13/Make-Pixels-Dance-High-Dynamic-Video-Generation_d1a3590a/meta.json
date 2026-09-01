@@ -4,5 +4,28 @@
  "title": "Make-Pixels-Dance-High-Dynamic-Video-Generation",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 03:38:16",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/c55807be-93f4-467f-9d4c-3f6536d1338f.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/c55807be-93f4-467f-9d4c-3f6536d1338f.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 20:02:11",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "视频生成",
+    "扩散模型",
+    "文本到视频",
+    "长视频生成",
+    "多模态条件"
+   ],
+   "field": "视频生成与编辑",
+   "innovations": [
+    "首末帧图像指令联合文本的多条件视频生成框架",
+    "末帧引导的分层推理策略（前τ步强引导后自由生成）"
+   ],
+   "benchmarks": [
+    "MSR-VTT",
+    "UCF-101"
+   ]
+  }
+ }
 }

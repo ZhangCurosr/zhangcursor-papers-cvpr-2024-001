@@ -4,5 +4,30 @@
  "title": "FreeDrag-Feature-Dragging-for-Reliable-Point-based-Image-Edi",
  "token": "sk-nY8L7ieIq...",
  "created_at": "2026-08-13 05:39:44",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/3aa1a6fd-15d0-4ae5-a14d-3987fcb85032.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/3aa1a6fd-15d0-4ae5-a14d-3987fcb85032.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 19:59:02",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Point-based Image Editing",
+    "Generative Adversarial Networks",
+    "Diffusion Models",
+    "Feature Dragging",
+    "Interactive Editing",
+    "Latent Space Manipulation"
+   ],
+   "field": "生成式图像编辑",
+   "innovations": [
+    "提出基于自适应模板特征的特征拖拽范式，摆脱对逐帧精确点跟踪的依赖",
+    "设计线搜索与回溯机制，在直线上约束搜索并动态修正异常运动以抵抗歧义跟踪",
+    "构建FreeDragBench数据集及对称拖拽内容一致性（CCSD）评测指标"
+   ],
+   "benchmarks": [
+    "FreeDragBench",
+    "DragBench"
+   ]
+  }
+ }
 }

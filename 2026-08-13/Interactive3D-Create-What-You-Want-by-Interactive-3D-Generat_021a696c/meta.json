@@ -4,5 +4,28 @@
  "title": "Interactive3D-Create-What-You-Want-by-Interactive-3D-Generat",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 03:49:44",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/28be54ef-9c45-4d94-9693-789544f77ecb.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/28be54ef-9c45-4d94-9693-789544f77ecb.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 19:59:52",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Interactive 3D Generation",
+    "Gaussian Splatting",
+    "InstantNGP",
+    "User Interaction",
+    "Score Distillation Sampling"
+   ],
+   "field": "交互式3D生成",
+   "innovations": [
+    "两阶段框架结合高斯泼溅与InstantNGP实现灵活交互与精细重建",
+    "交互式哈希细化模块解决特征冲突并支持局部细节增强"
+   ],
+   "benchmarks": [
+    "CLIP R-Precision",
+    "Cap3D"
+   ]
+  }
+ }
 }

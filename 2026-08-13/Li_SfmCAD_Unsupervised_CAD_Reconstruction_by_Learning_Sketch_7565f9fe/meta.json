@@ -3,5 +3,33 @@
  "batch_id": "7565f9fe-1b8a-4f0f-aad4-59cb66546686",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-08-13 02:46:48",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/1f283287-c305-417f-bb7c-49b9247b0d6b.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/1f283287-c305-417f-bb7c-49b9247b0d6b.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 20:00:51",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "CAD重建",
+    "草图特征建模",
+    "无监督学习",
+    "Bézier曲线",
+    "隐式神经表示",
+    "可微分SDF",
+    "参数化3D重建"
+   ],
+   "field": "3D计算机视觉与图形学",
+   "innovations": [
+    "首个支持拉伸/扫描/放样/旋转四种操作的无监督通用CAD重建网络",
+    "结构-细节解耦的草图+路径表示，用Bézier曲线编码路径、隐式网络编码2D草图",
+    "两阶段粗到细学习策略配合实时采样加速隐式草图训练"
+   ],
+   "benchmarks": [
+    "ABC dataset",
+    "ShapeNet (chair/table/display)",
+    "Tree dataset",
+    "PartNet semantic segmentation"
+   ]
+  }
+ }
 }

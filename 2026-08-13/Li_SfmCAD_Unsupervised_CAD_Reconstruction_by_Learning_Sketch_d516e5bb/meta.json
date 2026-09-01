@@ -3,5 +3,33 @@
  "batch_id": "d516e5bb-e5d2-4691-b9a3-7235082262e6",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 03:00:03",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/1f283287-c305-417f-bb7c-49b9247b0d6b.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/1f283287-c305-417f-bb7c-49b9247b0d6b.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 20:00:47",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "CAD reconstruction",
+    "sketch-based modeling",
+    "unsupervised learning",
+    "implicit surface",
+    "Sweep/Loft",
+    "Bezier curve",
+    "feature primitive"
+   ],
+   "field": "3D几何重建与CAD逆向",
+   "innovations": [
+    "首个无监督支持Extrude/Sweep/Loft/Revolve四种CAD操作的通用草图特征建模重建网络",
+    "结构-细节解耦的Box+Path两阶段粗到细学习策略",
+    "可微分Sweep/Loft算子结合实时采样加速训练"
+   ],
+   "benchmarks": [
+    "ABC",
+    "ShapeNet",
+    "Tree",
+    "PartNet"
+   ]
+  }
+ }
 }

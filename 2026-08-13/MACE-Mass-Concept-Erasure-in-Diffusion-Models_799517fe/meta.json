@@ -4,5 +4,33 @@
  "title": "MACE-Mass-Concept-Erasure-in-Diffusion-Models",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 03:49:46",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/11c5e897-a3f7-4df5-9e7c-7f4ff6a9d513.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/11c5e897-a3f7-4df5-9e7c-7f4ff6a9d513.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 20:01:17",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "概念擦除",
+    "扩散模型",
+    "LoRA",
+    "交叉注意力",
+    "参数高效微调",
+    "生成安全"
+   ],
+   "field": "生成模型安全与伦理",
+   "innovations": [
+    "闭合形式交叉注意力精炼去除概念残差信息",
+    "Per-Concept LoRA配合概念聚焦重要性采样（CFIS）平衡普遍性与特异性",
+    "闭合形式多LoRA融合防止模块干扰与灾难性遗忘"
+   ],
+   "benchmarks": [
+    "CIFAR-10物体擦除",
+    "GIPHY名人检测（200名人）",
+    "I2P露骨内容prompt",
+    "MS-COCO 30K",
+    "Artistic Style Database（200艺术家）"
+   ]
+  }
+ }
 }

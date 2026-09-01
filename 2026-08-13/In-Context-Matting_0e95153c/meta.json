@@ -4,5 +4,29 @@
  "title": "In-Context-Matting",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 03:50:01",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/223d92f6-b25d-4f6a-b8c3-de9fe3f0ecea.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/223d92f6-b25d-4f6a-b8c3-de9fe3f0ecea.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 19:59:41",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "image matting",
+    "in-context learning",
+    "diffusion model",
+    "foreground extraction",
+    "cross-image matching"
+   ],
+   "field": "图像分割与抠图",
+   "innovations": [
+    "提出in-context matting新任务，单参考图指导批量自动抠图",
+    "基于Stable Diffusion的Inter+Intra双路径相似度匹配机制",
+    "构建ICM-57首个in-context matting评测数据集"
+   ],
+   "benchmarks": [
+    "ICM-57",
+    "AIM-500"
+   ]
+  }
+ }
 }

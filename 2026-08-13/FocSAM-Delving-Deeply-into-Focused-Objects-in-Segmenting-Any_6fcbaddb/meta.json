@@ -4,5 +4,33 @@
  "title": "FocSAM-Delving-Deeply-into-Focused-Objects-in-Segmenting-Any",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 05:41:07",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/573e964a-740f-434d-b0db-396931beccd1.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/573e964a-740f-434d-b0db-396931beccd1.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 19:58:47",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "交互式分割",
+    "Segment Anything Model",
+    "动态窗口注意力",
+    "动态ReLU",
+    "高效推理"
+   ],
+   "field": "交互式图像分割",
+   "innovations": [
+    "提出Focus Refiner模块动态精炼图像Embedding以解决SAM稳定性问题",
+    "设计Dwin-MSA实现基于预测掩码的动态窗口注意力计算",
+    "发明P-DyReLU将点击融合Query信息注入像素级动态激活"
+   ],
+   "benchmarks": [
+    "SBD",
+    "DAVIS",
+    "GrabCut",
+    "Berkeley",
+    "MVTec",
+    "COD10K"
+   ]
+  }
+ }
 }

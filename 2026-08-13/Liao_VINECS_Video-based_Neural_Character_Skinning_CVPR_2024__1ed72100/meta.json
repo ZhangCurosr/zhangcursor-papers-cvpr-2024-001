@@ -3,5 +3,31 @@
  "batch_id": "1ed72100-e446-4386-ac41-01f0674c6995",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-13 02:46:29",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/afe332f0-06e0-4f7e-80d5-d6e9613355cf.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/afe332f0-06e0-4f7e-80d5-d6e9613355cf.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 20:00:55",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "neural character skinning",
+    "pose-dependent rigging",
+    "multi-view video reconstruction",
+    "differentiable rendering",
+    "implicit surface",
+    "character animation"
+   ],
+   "field": "神经角色建模与动画",
+   "innovations": [
+    "首个仅从多视图视频学习姿态依赖蒙皮权重的端到端方法",
+    "坐标基MLP实现多分辨率姿态条件蒙皮场",
+    "Albedo+Shadow解耦外观场辅助弱监督训练"
+   ],
+   "benchmarks": [
+    "DynaCap",
+    "Chamfer Distance",
+    "Hausdorff Distance"
+   ]
+  }
+ }
 }

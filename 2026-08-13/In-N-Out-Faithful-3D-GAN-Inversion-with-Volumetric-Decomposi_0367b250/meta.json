@@ -4,5 +4,32 @@
  "title": "In-N-Out-Faithful-3D-GAN-Inversion-with-Volumetric-Decomposi",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-08-13 03:38:10",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/8905f3ea-c093-4f38-b496-6d97e28157e9.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/8905f3ea-c093-4f38-b496-6d97e28157e9.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 19:59:49",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "GAN inversion",
+    "3D-aware generation",
+    "volumetric decomposition",
+    "face editing",
+    "out-of-distribution reconstruction",
+    "composite rendering",
+    "EG3D"
+   ],
+   "field": "3D生成与编辑",
+   "innovations": [
+    "提出体积分解框架将InD人脸与OOD物体分属独立辐射场，通过复合渲染合并",
+    "设计blending weight熵正则与latent正则联合约束，缓解重建-可编辑性权衡",
+    "将混合体积渲染引入3D GAN反演，支持语义编辑、新视角合成与OOD物体移除"
+   ],
+   "benchmarks": [
+    "自建20条含重化妆/遮挡的人脸视频基准",
+    "LPIPS/PSNR/SSIM/ID Similarity重建指标",
+    "InterfaceGAN/StyleCLIP编辑后ArcFace身份保持评估"
+   ]
+  }
+ }
 }

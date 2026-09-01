@@ -4,5 +4,30 @@
  "title": "Identifying-Important-Group-of-Pixels-using-Interactions",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 03:49:44",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/353e9610-9567-4ad2-a260-d85f83fb95d7.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/353e9610-9567-4ad2-a260-d85f83fb95d7.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 19:59:32",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "可解释人工智能",
+    "Shapley值",
+    "交互项",
+    "Vision Transformer",
+    "像素可视化",
+    "模型解释"
+   ],
+   "field": "计算机视觉可解释性",
+   "innovations": [
+    "提出MoXI方法，通过自上下文Shapley值和交互项联合贪心选择重要像素组",
+    "从博弈论角度证明简单贪心策略的理论正当性并降低计算复杂度至二次级"
+   ],
+   "benchmarks": [
+    "ImageNet",
+    "Insertion/Deletion Curve",
+    "Common Corruption"
+   ]
+  }
+ }
 }

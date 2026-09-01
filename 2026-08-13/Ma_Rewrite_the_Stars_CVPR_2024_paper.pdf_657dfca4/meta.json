@@ -3,5 +3,32 @@
  "batch_id": "657dfca4-bf1a-46c2-bf68-1342f90a7b06",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 02:59:53",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/549d43f6-a770-4af1-9296-68f49dee2e09.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/549d43f6-a770-4af1-9296-68f49dee2e09.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 20:01:48",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "star operation",
+    "element-wise multiplication",
+    "implicit high dimension",
+    "efficient network",
+    "kernel trick",
+    "activation-free"
+   ],
+   "field": "高效视觉神经网络架构",
+   "innovations": [
+    "首次从理论上证明 star operation 可将输入隐式映射到约 (d/√2)^2 维非线性特征空间，类比多项式核函数",
+    "证明多层 star operation 使隐式维度指数增长至 (d/√2)^(2^l) 维，几层即可达近似无穷维",
+    "提出极简 StarNet 原型网络，在不使用复杂设计的情况下超越多种 SOTA 高效模型"
+   ],
+   "benchmarks": [
+    "ImageNet-1K",
+    "iPhone13 Latency",
+    "P100 GPU Latency",
+    "CPU Latency"
+   ]
+  }
+ }
 }

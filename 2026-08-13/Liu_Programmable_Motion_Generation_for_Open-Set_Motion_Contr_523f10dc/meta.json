@@ -3,5 +3,32 @@
  "batch_id": "523f10dc-f26f-4e6d-b159-988ce082735d",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-08-13 02:58:55",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/5d7c41a4-1ca4-414f-a445-bab97c6b16cf.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/5d7c41a4-1ca4-414f-a445-bab97c6b16cf.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 20:01:15",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "开放集运动控制",
+    "可编程运动生成",
+    "扩散模型",
+    "约束优化",
+    "人物动画",
+    "潜在空间优化"
+   ],
+   "field": "3D human motion generation and control",
+   "innovations": [
+    "提出可编程运动生成范式，将任意任务编程为可微误差函数优化预训练扩散模型潜在码",
+    "设计原子约束库与重设计逻辑操作支持任意约束组合",
+    "发现并验证未见任务上的新技能涌现现象"
+   ],
+   "benchmarks": [
+    "HumanML3D",
+    "Foot Skate",
+    "FID",
+    "Constraint Error"
+   ]
+  }
+ }
 }

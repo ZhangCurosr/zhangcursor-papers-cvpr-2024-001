@@ -3,5 +3,28 @@
  "batch_id": "84a0d1d9-5a74-4d56-b59c-e0802e032c16",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-08-13 02:46:50",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/549d43f6-a770-4af1-9296-68f49dee2e09.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/549d43f6-a770-4af1-9296-68f49dee2e09.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 20:02:01",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "star operation",
+    "efficient networks",
+    "implicit high-dimensional features",
+    "element-wise multiplication",
+    "mobile neural networks",
+    "image classification"
+   ],
+   "field": "轻量级视觉网络设计",
+   "innovations": [
+    "揭示了星操作可将输入隐式映射到高维非线性特征空间",
+    "提出极简高效网络StarNet，以极少参数超越多个先进轻量级模型"
+   ],
+   "benchmarks": [
+    "ImageNet-1K"
+   ]
+  }
+ }
 }

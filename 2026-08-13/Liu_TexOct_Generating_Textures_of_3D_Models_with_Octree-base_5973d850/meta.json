@@ -3,5 +3,27 @@
  "batch_id": "5973d850-bfcb-4030-a8a7-26053c2da052",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 02:46:37",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d3317ab2-e3d8-475b-bb7c-28ff80b466da.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d3317ab2-e3d8-475b-bb7c-28ff80b466da.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 20:01:11",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D纹理生成",
+    "八叉树扩散",
+    "DDPM",
+    "点云生成",
+    "条件生成"
+   ],
+   "field": "3D图形生成",
+   "innovations": [
+    "基于八叉树的扩散模型，首次在OCTREE结构上执行DDPM去噪实现密集点云纹理生成",
+    "端到端3D空间纹理生成，规避UV映射复杂性和多视角自遮挡问题"
+   ],
+   "benchmarks": [
+    "ShapeNet"
+   ]
+  }
+ }
 }

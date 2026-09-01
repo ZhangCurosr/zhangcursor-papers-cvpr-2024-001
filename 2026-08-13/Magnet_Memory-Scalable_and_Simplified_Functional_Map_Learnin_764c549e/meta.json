@@ -3,5 +3,32 @@
  "batch_id": "764c549e-6a55-4b69-b87d-24506660f3ca",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 02:59:53",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/43111917-ea06-4dbb-a7b1-d62bf154535f.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/43111917-ea06-4dbb-a7b1-d62bf154535f.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 20:02:07",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "functional maps",
+    "shape matching",
+    "deep learning",
+    "memory scalability",
+    "differentiable optimization",
+    "ZoomOut"
+   ],
+   "field": "深度功能映射学习",
+   "innovations": [
+    "基于 KeOps 的可微分内存可扩展稠密映射计算",
+    "首次将可微分 ZoomOut 精化算法用于训练期自监督一致性损失",
+    "单分支网络无需对线性系统求导即可实现 SOTA 级形状匹配"
+   ],
+   "benchmarks": [
+    "FAUST",
+    "SCAPE",
+    "SHREC19",
+    "DT4D-H"
+   ]
+  }
+ }
 }

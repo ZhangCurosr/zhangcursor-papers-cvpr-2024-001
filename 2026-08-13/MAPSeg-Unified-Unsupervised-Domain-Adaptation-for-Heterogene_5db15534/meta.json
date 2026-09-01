@@ -4,5 +4,31 @@
  "title": "MAPSeg-Unified-Unsupervised-Domain-Adaptation-for-Heterogene",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 03:38:20",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/846ac52c-cc8b-41f0-9439-dbd903c879ad.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/846ac52c-cc8b-41f0-9439-dbd903c879ad.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 20:01:32",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "无监督域适应",
+    "掩码自编码",
+    "伪标签",
+    "医学影像分割",
+    "联邦学习",
+    "测试时适应",
+    "3D 分割"
+   ],
+   "field": "医学影像域适应",
+   "innovations": [
+    "首个统一框架同时处理四种医学影像域偏移（跨序列/跨中心/跨年龄/跨模态）",
+    "MAE预训练与掩码伪标签互补组合，无需目标域标签进行模型验证",
+    "统一支持集中式、联邦式和测试时三种UDA场景的3D医学影像分割框架"
+   ],
+   "benchmarks": [
+    "BCP50 婴儿脑MRI",
+    "MMWHS 2017 心脏CT-MRI"
+   ]
+  }
+ }
 }

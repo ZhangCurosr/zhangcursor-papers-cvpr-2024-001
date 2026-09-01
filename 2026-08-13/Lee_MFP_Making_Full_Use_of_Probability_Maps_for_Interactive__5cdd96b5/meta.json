@@ -3,5 +3,32 @@
  "batch_id": "5cdd96b5-ae8b-42ea-88cb-51301c90a5be",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 02:59:04",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/771f9ef2-99cc-403f-b473-210993a3e510.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/771f9ef2-99cc-403f-b473-210993a3e510.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 20:00:24",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "interactive image segmentation",
+    "probability map modulation",
+    "click-based segmentation",
+    "gamma correction",
+    "late fusion",
+    "recursive training"
+   ],
+   "field": "交互式图像分割",
+   "innovations": [
+    "首次提出概率图调制（gamma校正）增强历史预测信息的传递",
+    "设计晚期融合架构将概率特征与骨干特征有效聚合",
+    "提出递归训练策略实现全链路有序交互信息利用"
+   ],
+   "benchmarks": [
+    "GrabCut",
+    "Berkeley",
+    "DAVIS",
+    "SBD"
+   ]
+  }
+ }
 }

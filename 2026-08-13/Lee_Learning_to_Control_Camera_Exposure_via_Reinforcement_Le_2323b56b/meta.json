@@ -3,5 +3,31 @@
  "batch_id": "2323b56b-f363-4899-ab3d-f5fe015619a4",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 03:00:01",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/64221d82-605b-4220-90e4-75dc55a5d339.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/64221d82-605b-4220-90e4-75dc55a5d339.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 20:00:25",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "自动曝光控制",
+    "深度强化学习",
+    "相机参数调节",
+    "域随机化",
+    "课程学习",
+    "实时视觉"
+   ],
+   "field": "相机控制与低层视觉",
+   "innovations": [
+    "首个将DRL（SAC）应用于相机曝光时间-增益联合控制的框架，实现3-5帧快速收敛",
+    "向量化强度历史轻量状态设计，CPU推理仅需1ms",
+    "静态到动态光照课程学习+空间域随机化实现零样本真实场景泛化"
+   ],
+   "benchmarks": [
+    "Exposure Control Dataset [21]",
+    "SIFT特征提取（5355对图像）",
+    "YOLOv5目标检测"
+   ]
+  }
+ }
 }

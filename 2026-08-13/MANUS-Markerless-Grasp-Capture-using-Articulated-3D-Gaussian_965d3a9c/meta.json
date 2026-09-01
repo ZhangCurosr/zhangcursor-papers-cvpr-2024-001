@@ -4,5 +4,30 @@
  "title": "MANUS-Markerless-Grasp-Capture-using-Articulated-3D-Gaussian",
  "token": "sk-45Ifw5Iq3...",
  "created_at": "2026-08-13 03:38:13",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/9bba0cec-5839-4cf6-b98e-013b354018c5.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/9bba0cec-5839-4cf6-b98e-013b354018c5.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 20:01:28",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "hand-object grasp capture",
+    "3D Gaussian splatting",
+    "contact estimation",
+    "markerless motion capture",
+    "multi-view reconstruction",
+    "articulated hand modeling"
+   ],
+   "field": "手-物交互三维重建与接触估计",
+   "innovations": [
+    "提出基于骨骼驱动的 articulated 3D Gaussian 手部表示，支持高效接触地图计算",
+    "构建 50+ 相机 7M+ 帧多视角抓握数据集 MANUS-Grasps，并提供湿油漆接触 ground truth 评估协议",
+    "引入网格权重蒙皮替代 MANO 权重直接迁移，有效减少形变伪影"
+   ],
+   "benchmarks": [
+    "MANUS-Grasps (w/ wet-paint ground truth)",
+    "InterHand2.6M (visual quality eval)"
+   ]
+  }
+ }
 }
