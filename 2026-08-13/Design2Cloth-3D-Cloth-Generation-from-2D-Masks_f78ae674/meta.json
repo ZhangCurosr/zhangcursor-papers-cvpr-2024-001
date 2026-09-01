@@ -4,5 +4,32 @@
  "title": "Design2Cloth-3D-Cloth-Generation-from-2D-Masks",
  "token": "sk-0a1o6nr9t...",
  "created_at": "2026-08-13 07:12:14",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/dd468ebd-495d-4dcf-849d-d4e4ce54ba4e.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/dd468ebd-495d-4dcf-849d-d4e4ce54ba4e.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:50:00",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D服装生成",
+    "隐式函数",
+    "虚拟试穿",
+    "数字人重建",
+    "GANS",
+    "无符号距离函数"
+   ],
+   "field": "3D服装生成与重建",
+   "innovations": [
+    "首个基于2000+真实扫描的大规模3D服装生成模型，用户只需2D mask即可生成高保真服装",
+    "双分辨率判别器分离低频结构与高频褶皱细节的对抗训练",
+    "全可微隐式生成框架支持从单张在野图像直接优化latent code进行3D服装重建"
+   ],
+   "benchmarks": [
+    "DigitalMe",
+    "Cloth3D",
+    "ClothesNet",
+    "CustomHumans"
+   ]
+  }
+ }
 }

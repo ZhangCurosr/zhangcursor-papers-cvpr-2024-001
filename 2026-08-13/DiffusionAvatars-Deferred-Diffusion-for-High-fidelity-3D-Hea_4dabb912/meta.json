@@ -4,5 +4,35 @@
  "title": "DiffusionAvatars-Deferred-Diffusion-for-High-fidelity-3D-Hea",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 04:50:00",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f7f8dc96-001d-43ca-816e-43409eb51cf7.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f7f8dc96-001d-43ca-816e-43409eb51cf7.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:50:49",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D Head Avatar",
+    "Diffusion Model",
+    "Neural Rendering",
+    "Deferred Rendering",
+    "NPHM",
+    "ControlNet",
+    "Cross-attention"
+   ],
+   "field": "3D 头像生成与动画",
+   "innovations": [
+    "结合 NPHM 隐式几何与预训练 LDM 的 Deferred Diffusion 渲染器",
+    "基于 TriPlanes 的规范空间表面特征绑定机制",
+    "直接表达式代码的 Cross-attention 条件注入"
+   ],
+   "benchmarks": [
+    "NeRSemble",
+    "PSNR",
+    "LPIPS",
+    "JOD",
+    "AKD",
+    "CSIM"
+   ]
+  }
+ }
 }

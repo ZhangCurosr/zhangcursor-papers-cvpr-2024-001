@@ -4,5 +4,33 @@
  "title": "Fast-ODE-based-Sampling-for-Diffusion-Models-in-Around-5-Ste",
  "token": "sk-WFixZKKH5...",
  "created_at": "2026-08-13 07:12:20",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4435444d-42e8-43b4-982a-e2cc4adf82c7.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4435444d-42e8-43b4-982a-e2cc4adf82c7.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:54:36",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "diffusion models",
+    "ODE solvers",
+    "fast sampling",
+    "NFE reduction",
+    "image generation",
+    "knowledge distillation"
+   ],
+   "field": "扩散模型快速采样",
+   "innovations": [
+    "提出AMED-Solver，利用轨迹二维子空间性质学习预测平均方向，显著降低极小NFE下的截断误差",
+    "设计AMED-Plugin插件，可无侵入式提升任意现有ODE求解器在低步数下的采样质量",
+    "发现并验证采样轨迹近似位于二维子空间的几何规律，为高效求解器设计提供新视角"
+   ],
+   "benchmarks": [
+    "CIFAR-10 32x32",
+    "ImageNet 64x64",
+    "FFHQ 64x64",
+    "LSUN Bedroom 256x256",
+    "Stable Diffusion 512x512"
+   ]
+  }
+ }
 }

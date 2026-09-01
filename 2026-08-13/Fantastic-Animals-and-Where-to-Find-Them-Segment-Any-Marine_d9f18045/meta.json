@@ -4,5 +4,32 @@
  "title": "Fantastic-Animals-and-Where-to-Find-Them-Segment-Any-Marine",
  "token": "sk-JiEKTe0tT...",
  "created_at": "2026-08-13 07:11:08",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/273a5cfd-0aaa-4f1d-b562-ebb88141b070.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/273a5cfd-0aaa-4f1d-b562-ebb88141b070.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:54:11",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Marine Animal Segmentation",
+    "SAM",
+    "Domain Adaptation",
+    "Connectivity Prediction",
+    "Parameter-Efficient Fine-tuning"
+   ],
+   "field": "水下视觉与语义分割",
+   "innovations": [
+    "提出Dual-SAM双分支框架适配预训练SAM至水下场景",
+    "设计MCP自动提示生成策略替代单点人工提示",
+    "提出C³P连通性预测范式建模像素间结构化关系"
+   ],
+   "benchmarks": [
+    "MAS3K",
+    "RMAS",
+    "UFO120",
+    "RUWI",
+    "USOD10K"
+   ]
+  }
+ }
 }

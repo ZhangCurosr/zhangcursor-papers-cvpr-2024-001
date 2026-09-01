@@ -4,5 +4,31 @@
  "title": "Diffusion-Models-Without-Attention",
  "token": "sk-sKVjU65N5...",
  "created_at": "2026-08-13 05:40:28",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-13/35b2a4f3-f8ee-4632-ab20-938c0b476361.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-13/35b2a4f3-f8ee-4632-ab20-938c0b476361.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:50:27",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "diffusion models",
+    "state space models",
+    "attention-free architectures",
+    "image generation",
+    "efficient generative modeling"
+   ],
+   "field": "生成式扩散模型架构",
+   "innovations": [
+    "提出完全去除注意力的DIFFUSSM架构，用门控双向SSM替代自注意力",
+    "设计沙漏式前馈网络在SSM旁压缩序列以降低FLOPs而不损失全局上下文",
+    "在ImageNet 256x256上以20%更低训练FLOPs取得优于DiT的FID和sFID"
+   ],
+   "benchmarks": [
+    "ImageNet 256x256",
+    "ImageNet 512x512",
+    "LSUN-Church 256x256",
+    "LSUN-Bedroom 256x256"
+   ]
+  }
+ }
 }

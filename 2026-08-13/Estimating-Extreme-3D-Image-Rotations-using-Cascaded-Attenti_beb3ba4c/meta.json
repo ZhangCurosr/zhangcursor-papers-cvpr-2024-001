@@ -4,5 +4,33 @@
  "title": "Estimating-Extreme-3D-Image-Rotations-using-Cascaded-Attenti",
  "token": "sk-EqwJR1nOB...",
  "created_at": "2026-08-13 14:56:04",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/1a1f04ac-daeb-419e-93c6-e733d5cebe41.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/1a1f04ac-daeb-419e-93c6-e733d5cebe41.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:53:23",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "极端旋转估计",
+    "Transformer注意力",
+    "4D相关性体",
+    "图像配准",
+    "相对位姿回归",
+    "四元数旋转",
+    "无重叠图像"
+   ],
+   "field": "图像配准与相对位姿估计",
+   "innovations": [
+    "基于Transformer编码器的交叉注意力机制替代传统4DCV内积计算",
+    "跨图像蒸馏的交叉解码方案增强图像对嵌入表示",
+    "级联双解码器交替精化旋转查询与交叉注意力编码"
+   ],
+   "benchmarks": [
+    "InteriorNet",
+    "StreetLearn",
+    "SUN360",
+    "HoliCity跨数据集泛化"
+   ]
+  }
+ }
 }

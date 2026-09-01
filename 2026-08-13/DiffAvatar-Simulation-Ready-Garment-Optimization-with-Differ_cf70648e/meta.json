@@ -4,5 +4,34 @@
  "title": "DiffAvatar-Simulation-Ready-Garment-Optimization-with-Differ",
  "token": "sk-5WOIsMt5v...",
  "created_at": "2026-08-13 05:39:42",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/22db1efa-0a2b-4976-a939-b30f612a84a6.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/22db1efa-0a2b-4976-a939-b30f612a84a6.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:49:52",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "differentiable simulation",
+    "garment optimization",
+    "2D pattern recovery",
+    "XPBD",
+    "avatar asset generation",
+    "physics-based reconstruction",
+    "body shape estimation"
+   ],
+   "field": "可微分物理仿真与数字人资产恢复",
+   "innovations": [
+    "首次在可微分布料仿真中联合优化2D版型rest shape、材料参数与身体形态姿态",
+    "提出基于控制笼+MVC的正则化版型优化表示以防止非物理退化",
+    "端到端生成具备仿真就绪mesh质量的服装资产（逼近艺术家手工水准）"
+   ],
+   "benchmarks": [
+    "3dMD多视角扫描（dress/long-sleeve/polo/shirt）",
+    "PiFU-HD",
+    "Diffusion+NeuS",
+    "PoP",
+    "NeuralTailor"
+   ]
+  }
+ }
 }

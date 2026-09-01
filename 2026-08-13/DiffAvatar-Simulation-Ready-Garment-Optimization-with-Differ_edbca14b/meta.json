@@ -4,5 +4,32 @@
  "title": "DiffAvatar-Simulation-Ready-Garment-Optimization-with-Differ",
  "token": "sk-YrIlRFySy...",
  "created_at": "2026-08-13 07:11:53",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/22db1efa-0a2b-4976-a939-b30f612a84a6.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/22db1efa-0a2b-4976-a939-b30f612a84a6.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:49:58",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "可微分仿真",
+    "服装重建",
+    "3D人体建模",
+    "布料物理",
+    "版型优化"
+   ],
+   "field": "三维人体重建与服装仿真",
+   "innovations": [
+    "首次将高分辨率可微分XPBD仿真用于真实扫描的服装与身体联合资产恢复",
+    "在可微分布料仿真中首次引入控制笼正则化的2D版型直接优化",
+    "设计了缝合线长度与边界曲率正则化确保输出版型制造可用"
+   ],
+   "benchmarks": [
+    "3dMD scanned human datasets",
+    "Chamfer Distance",
+    "LPIPS",
+    "SSIM",
+    "Triangle conditioning metric"
+   ]
+  }
+ }
 }

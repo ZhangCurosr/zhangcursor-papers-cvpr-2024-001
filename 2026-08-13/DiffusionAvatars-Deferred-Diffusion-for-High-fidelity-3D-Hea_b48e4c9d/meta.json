@@ -4,5 +4,31 @@
  "title": "DiffusionAvatars-Deferred-Diffusion-for-High-fidelity-3D-Hea",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 07:13:04",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f7f8dc96-001d-43ca-816e-43409eb51cf7.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f7f8dc96-001d-43ca-816e-43409eb51cf7.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:50:57",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D Head Avatar",
+    "Diffusion Model",
+    "Neural Rendering",
+    "NPHM",
+    "ControlNet",
+    "Deferred Rendering"
+   ],
+   "field": "3D人脸动画与生成",
+   "innovations": [
+    "提出Deferred Diffusion架构，将NPHM隐式几何与预训练LDM结合实现高保真3D头像",
+    "设计TriPlane空间特征绑定策略以补偿NPHM无UV空间的缺陷",
+    "通过cross-attention直接注入NPHM表达式码以增强细节表情控制"
+   ],
+   "benchmarks": [
+    "NeRSemble",
+    "Self-Reenactment",
+    "Avatar Animation"
+   ]
+  }
+ }
 }

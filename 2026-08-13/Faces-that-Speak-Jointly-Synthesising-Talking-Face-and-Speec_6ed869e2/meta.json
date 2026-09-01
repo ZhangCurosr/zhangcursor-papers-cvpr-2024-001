@@ -4,5 +4,31 @@
  "title": "Faces-that-Speak-Jointly-Synthesising-Talking-Face-and-Speec",
  "token": "sk-OZiRtsQic...",
  "created_at": "2026-08-13 05:39:46",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/0ee8f391-5744-43d0-b832-4af2ba70ec65.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/0ee8f391-5744-43d0-b832-4af2ba70ec65.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:53:37",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Talking Face Generation",
+    "Text-to-Speech",
+    "Flow Matching",
+    "Multimodal Generation",
+    "Identity Preservation",
+    "OT-CFM"
+   ],
+   "field": "多模态生成与语音技术",
+   "innovations": [
+    "首个统一的文本驱动 TFG 与 TTS 联合生成框架，实现从文本到同步语音和说话人脸视频的端到端生成",
+    "提出基于 OT-CFM 的运动采样器结合 AE 归一化器，实现高质量、时序稳定的面部运动序列生成",
+    "通过在 TFG 模块内解耦身份与运动特征，并将纯净身份特征 $f_{id}$ 作为 TTS 条件，解决了变运动下语音风格一致性的难题"
+   ],
+   "benchmarks": [
+    "LRS2",
+    "VoxCeleb2",
+    "LRS3 (训练)"
+   ]
+  }
+ }
 }

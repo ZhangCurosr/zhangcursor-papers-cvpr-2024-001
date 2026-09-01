@@ -3,5 +3,36 @@
  "batch_id": "9240e16f-7fec-4130-952d-fb4697927e40",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 03:00:03",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/27d5f2a6-6ffa-4d4e-819c-ad34f37ba613.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/27d5f2a6-6ffa-4d4e-819c-ad34f37ba613.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:54:36",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "full-body avatar generation",
+    "sparse observation reconstruction",
+    "latent diffusion model",
+    "VQ-VAE",
+    "human motion prediction",
+    "AR/VR tracking",
+    "disentangled representation",
+    "SMPL"
+   ],
+   "field": "三维人体运动重建",
+   "innovations": [
+    "利用 SMPL 运动学树上体与下体单根连接特性进行分层解耦，提出上体优先再以下体条件级联生成的 Stratified Motion Diffusion 策略",
+    "使用两个独立 VQ-VAE 分别编码上下体离散潜在空间，并从头训练全身体解码器以显式建模半身间相关性",
+    "提出更客观的 S3 评测设置（9:1 划分）纠正 S2 测试集过小的偏差，揭示分层设计在下体重建（Lower PE）上的显著提升"
+   ],
+   "benchmarks": [
+    "AMASS",
+    "CMU MoCap",
+    "BMLrub",
+    "HDM05",
+    "HumanEva",
+    "Transition"
+   ]
+  }
+ }
 }

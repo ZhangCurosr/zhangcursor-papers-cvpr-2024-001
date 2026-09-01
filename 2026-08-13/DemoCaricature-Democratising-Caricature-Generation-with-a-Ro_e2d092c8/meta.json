@@ -4,5 +4,29 @@
  "title": "DemoCaricature-Democratising-Caricature-Generation-with-a-Ro",
  "token": "sk-ZGznq9xBq...",
  "created_at": "2026-08-13 07:12:39",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/35ee9b00-448d-45e9-a67e-6197d9e6ec3c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/35ee9b00-448d-45e9-a67e-6197d9e6ec3c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:49:15",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "卡通头像生成",
+    "扩散模型",
+    "单图像个性化",
+    "草图引导",
+    "显式秩一编辑"
+   ],
+   "field": "图像生成与编辑",
+   "innovations": [
+    "显式秩一模型编辑实现身份与风格的解耦融合",
+    "随机掩码重建增强对变形草图的鲁棒性",
+    "类属词正则化防止单样本过拟合"
+   ],
+   "benchmarks": [
+    "WebCaricature",
+    "CLIP-Score (ID/Style/Shape)"
+   ]
+  }
+ }
 }

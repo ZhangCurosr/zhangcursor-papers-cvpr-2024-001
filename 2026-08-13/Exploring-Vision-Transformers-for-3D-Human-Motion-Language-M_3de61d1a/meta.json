@@ -4,5 +4,32 @@
  "title": "Exploring-Vision-Transformers-for-3D-Human-Motion-Language-M",
  "token": "sk-zybFjYcVd...",
  "created_at": "2026-08-13 07:10:43",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/ae68041d-43ea-4073-9c19-18d1fa0f8bb8.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/ae68041d-43ea-4073-9c19-18d1fa0f8bb8.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:53:42",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D Human Motion",
+    "Vision Transformer",
+    "Motion-Language Model",
+    "Cross-modal Retrieval",
+    "Transfer Learning",
+    "Motion Patches"
+   ],
+   "field": "3D人体运动理解与多模态学习",
+   "innovations": [
+    "提出motion patches统一表示任意骨架结构的3D运动序列",
+    "将ImageNet预训练ViT迁移至运动编码器以缓解数据稀缺",
+    "在文本-运动检索及零样本分类/跨骨架识别任务上达到SOTA"
+   ],
+   "benchmarks": [
+    "HumanML3D",
+    "KIT-ML",
+    "BABEL-60",
+    "InterHuman"
+   ]
+  }
+ }
 }

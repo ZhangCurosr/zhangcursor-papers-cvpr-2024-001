@@ -4,5 +4,32 @@
  "title": "Enhancing-Video-Super-Resolution-via-Implicit-Resampling-bas",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 07:13:03",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/3cf3714c-ee49-4251-b1c0-d80508a7410c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/3cf3714c-ee49-4251-b1c0-d80508a7410c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:52:17",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Video Super-Resolution",
+    "Implicit Resampling",
+    "Coordinate Network",
+    "Cross-Attention",
+    "Motion Alignment",
+    "Sinusoidal Positional Encoding"
+   ],
+   "field": "视频超分辨率",
+   "innovations": [
+    "首次系统研究VSR中对齐采样步骤的影响，揭示双线性插值的高频衰减问题",
+    "提出隐式重采样对齐模块，用坐标网络+窗口交叉注意力替代显式插值，避免低通滤波和空间畸变"
+   ],
+   "benchmarks": [
+    "REDS4",
+    "Vimeo90K-T",
+    "Vid4",
+    "UDM10",
+    "Sintel"
+   ]
+  }
+ }
 }

@@ -4,5 +4,32 @@
  "title": "Cinematic-Behavior-Transfer-via-NeRF-based-Differentiable-Fi",
  "token": "sk-0a1o6nr9t...",
  "created_at": "2026-08-13 07:12:17",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/02f23567-a56c-4e27-8d2a-32d3007e499e.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/02f23567-a56c-4e27-8d2a-32d3007e499e.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:49:17",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "NeRF",
+    "相机姿态估计",
+    "电影镜头转移",
+    "SMPL",
+    "可微渲染",
+    "动态场景"
+   ],
+   "field": "三维视觉与神经渲染",
+   "innovations": [
+    "利用动态NeRF作为可微渲染器提供组合损失与关节损失，替代RGB loss优化相机轨迹",
+    "螺旋轴参数化+MLP时间连续性建模实现SE(3)约束下的序列相机轨迹优化",
+    "相机-角色双向优化闭环：优化后的相机轨迹反哺refine世界坐标SMPL tracks"
+   ],
+   "benchmarks": [
+    "DROID-SLAM",
+    "iNeRF",
+    "JAWS",
+    "PACE"
+   ]
+  }
+ }
 }

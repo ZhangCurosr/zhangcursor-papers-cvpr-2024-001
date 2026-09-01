@@ -4,5 +4,31 @@
  "title": "Diffusion-Model-Alignment-Using-Direct-Preference-Optimizati",
  "token": "sk-zw57yHIgm...",
  "created_at": "2026-08-13 07:11:46",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/fd431733-dfbb-45a5-bfb6-bf728b14e0f8.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/fd431733-dfbb-45a5-bfb6-bf728b14e0f8.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:50:24",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Diffusion-DPO",
+    "Direct Preference Optimization",
+    "diffusion model alignment",
+    "human preference learning",
+    "SDXL",
+    "RLHF alternative"
+   ],
+   "field": "文本到图像生成与对齐",
+   "innovations": [
+    "首次将 DPO 框架推广至扩散模型并推导可微损失",
+    "在 SDXL-1.0 上实现超越完整 base+refiner pipeline 的开放词汇对齐效果",
+    "验证 AI 反馈（PickScore/HPSv2）可替代人工标注进行高效扩散模型微调"
+   ],
+   "benchmarks": [
+    "PartiPrompts",
+    "HPSv2",
+    "Pick-a-Pic v2"
+   ]
+  }
+ }
 }

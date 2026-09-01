@@ -4,5 +4,32 @@
  "title": "Diffusion-Models-Without-Attention",
  "token": "sk-DXHHyylpH...",
  "created_at": "2026-08-13 14:56:56",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-13/35b2a4f3-f8ee-4632-ab20-938c0b476361.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-13/35b2a4f3-f8ee-4632-ab20-938c0b476361.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:51:36",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Diffusion Model",
+    "State Space Model",
+    "Attention-free",
+    "Image Generation",
+    "FLOP-efficient",
+    "S4D"
+   ],
+   "field": "生成模型架构设计",
+   "innovations": [
+    "首次提出完全无注意力的扩散模型架构 DIFFUSSM，用门控双向SSM替代Self-Attention",
+    "设计Hourglass SSM块，在SSM层保持全长捕获全局上下文、在MLP层降采样降低计算量",
+    "在ImageNet 256x256上以20%更少Gflops超越DiT-XL/2（FID 9.07 vs 9.62）"
+   ],
+   "benchmarks": [
+    "ImageNet 256x256",
+    "ImageNet 512x512",
+    "LSUN-Church 256x256",
+    "LSUN-Bedroom 256x256"
+   ]
+  }
+ }
 }

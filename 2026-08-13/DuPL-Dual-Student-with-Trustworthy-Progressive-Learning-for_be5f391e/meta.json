@@ -4,5 +4,29 @@
  "title": "DuPL-Dual-Student-with-Trustworthy-Progressive-Learning-for",
  "token": "sk-2d8Cyf5aG...",
  "created_at": "2026-08-13 07:12:48",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/9d97d5fc-33ca-4f87-af19-39ab6c421c5f.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/9d97d5fc-33ca-4f87-af19-39ab6c421c5f.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:51:30",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "弱监督语义分割",
+    "CAM确认偏差",
+    "双学生框架",
+    "渐进学习",
+    "噪声过滤"
+   ],
+   "field": "弱监督语义分割",
+   "innovations": [
+    "双学生互监督架构对抗CAM确认偏差",
+    "可信渐进学习策略动态引入监督像素",
+    "基于GMM的自适应噪声过滤与一致性正则化"
+   ],
+   "benchmarks": [
+    "PASCAL VOC 2012",
+    "MS COCO 2014"
+   ]
+  }
+ }
 }

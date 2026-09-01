@@ -4,5 +4,30 @@
  "title": "Exploring-Efficient-Asymmetric-Blind-Spots-for-Self-Supervis",
  "token": "sk-aknYEUs8O...",
  "created_at": "2026-08-13 05:40:36",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/1e2420ba-0f88-4e61-8bac-40807d0dcf9c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/1e2420ba-0f88-4e61-8bac-40807d0dcf9c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:53:09",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "self-supervised denoising",
+    "blind-spot network",
+    "real-world noise",
+    "asymmetric training-inference",
+    "multi-teacher distillation",
+    "image restoration"
+   ],
+   "field": "低层视觉自监督去噪",
+   "innovations": [
+    "提出AT-BSN，以特征移位实现可调盲点并在训练/推理采用非对称设置以平衡去相关与结构保留",
+    "将单一网络视为元教师，通过多盲点采样生成互补教师并进行轻量蒸馏",
+    "基于有效感受野与采样定理的系统分析，确立原始分辨率非对称盲点范式的理论依据"
+   ],
+   "benchmarks": [
+    "SIDD",
+    "DND"
+   ]
+  }
+ }
 }

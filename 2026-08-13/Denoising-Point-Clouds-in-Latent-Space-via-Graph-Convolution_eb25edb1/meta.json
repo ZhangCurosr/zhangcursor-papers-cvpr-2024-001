@@ -4,5 +4,29 @@
  "title": "Denoising-Point-Clouds-in-Latent-Space-via-Graph-Convolution",
  "token": "sk-nY8L7ieIq...",
  "created_at": "2026-08-13 05:39:43",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/59eeca58-1b4d-46b4-bab8-025088941fb7.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/59eeca58-1b4d-46b4-bab8-025088941fb7.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:49:36",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "point cloud denoising",
+    "invertible neural network",
+    "graph convolution",
+    "latent space",
+    "monotone operator"
+   ],
+   "field": "3D点云处理",
+   "innovations": [
+    "基于可逆单调算子的潜空间噪声显式解耦方法",
+    "多级图卷积与可逆网络融合的结构设计",
+    "EMD双射匹配替代最近邻均匀监督策略"
+   ],
+   "benchmarks": [
+    "PUNet",
+    "Paris-rue-Madame"
+   ]
+  }
+ }
 }

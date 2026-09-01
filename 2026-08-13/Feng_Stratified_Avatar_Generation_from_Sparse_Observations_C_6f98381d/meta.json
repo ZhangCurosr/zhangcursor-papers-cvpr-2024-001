@@ -3,5 +3,30 @@
  "batch_id": "6f98381d-2e9a-42a4-80d1-cedd0f5ccbca",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-08-13 02:46:50",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/27d5f2a6-6ffa-4d4e-819c-ad34f37ba613.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/27d5f2a6-6ffa-4d4e-819c-ad34f37ba613.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:54:38",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "稀疏观测运动重建",
+    "分层扩散模型",
+    "Avatar生成",
+    "VQ-VAE",
+    "SMPL"
+   ],
+   "field": "人体运动估计与重建",
+   "innovations": [
+    "基于SMPL树结构的上半身/下半身解耦分层重建框架",
+    "级联条件扩散模型显式建模上下半身运动相关性",
+    "直接预测离散潜变量的高效扩散推理策略"
+   ],
+   "benchmarks": [
+    "AMASS",
+    "S1设置(CMU/BMLrub/HDM05)",
+    "S3设置(大规模多样测试)"
+   ]
+  }
+ }
 }

@@ -4,5 +4,32 @@
  "title": "DiffusionPoser-Real-time-Human-Motion-Reconstruction-From-Ar",
  "token": "sk-yjjHVmEWF...",
  "created_at": "2026-08-13 07:11:21",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2a659763-5f52-4f20-ae5c-6001c295e663.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2a659763-5f52-4f20-ae5c-6001c295e663.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:51:15",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "human motion reconstruction",
+    "diffusion model",
+    "inertial sensors",
+    "sparse IMU",
+    "real-time motion capture",
+    "inpainting denoising",
+    "autoregressive inference"
+   ],
+   "field": "人体运动重建与稀疏传感器融合",
+   "innovations": [
+    "首个支持任意稀疏传感器配置的自回归扩散运动重建模型",
+    "inpainting去噪替代条件控制实现传感器灵活性",
+    "接触标签正则化联合抑制足部滑动和根漂移"
+   ],
+   "benchmarks": [
+    "TotalCaptureReal",
+    "DIP-IMU",
+    "AMASS"
+   ]
+  }
+ }
 }

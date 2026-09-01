@@ -4,5 +4,31 @@
  "title": "Efficient-Multi-scale-Network-with-Learnable-Discrete-Wavele",
  "token": "sk-aknYEUs8O...",
  "created_at": "2026-08-13 05:40:20",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/999f29e0-c949-48ee-99e2-00a12902a0f0.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/999f29e0-c949-48ee-99e2-00a12902a0f0.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:51:47",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "图像去模糊",
+    "多尺度网络",
+    "离散小波变换",
+    "盲去卷积",
+    "真实世界恢复"
+   ],
+   "field": "图像恢复与重建",
+   "innovations": [
+    "提出SIMO多尺度基线消除MIMO融合复杂度",
+    "设计可学习小波变换节点LWN并引入完美重构自监督损失",
+    "在小波域提取方向与频率特征，提升真实模糊细节恢复能力"
+   ],
+   "benchmarks": [
+    "RealBlur-J",
+    "RealBlur-R",
+    "RSBlur",
+    "GoPro"
+   ]
+  }
+ }
 }

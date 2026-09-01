@@ -4,5 +4,34 @@
  "title": "Cinematic-Behavior-Transfer-via-NeRF-based-Differentiable-Fi",
  "token": "sk-JMLCbBCEj...",
  "created_at": "2026-08-13 05:39:52",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/02f23567-a56c-4e27-8d2a-32d3007e499e.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/02f23567-a56c-4e27-8d2a-32d3007e499e.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 11:49:22",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "NeRF",
+    "camera pose estimation",
+    "SMPL",
+    "cinematic transfer",
+    "differentiable rendering",
+    "human motion estimation"
+   ],
+   "field": "3D视觉与神经渲染",
+   "innovations": [
+    "NeRF可微渲染辅助的序列相机轨迹连续优化",
+    "组合损失与关节损失联合的精化策略",
+    "2D/3D双路径电影行为转移工作流"
+   ],
+   "benchmarks": [
+    "Push-In",
+    "Pull-Out",
+    "Pan",
+    "Track",
+    "Follow",
+    "Arc"
+   ]
+  }
+ }
 }
