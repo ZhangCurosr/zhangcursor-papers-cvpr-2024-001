@@ -4,5 +4,29 @@
  "title": "Gaussian-Head-Avatar-Ultra-High-fidelity-Head-Avatar-via-Dyn",
  "token": "sk-OZiRtsQic...",
  "created_at": "2026-08-13 05:39:48",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2b810d26-61b9-425d-820f-b1f1ca6b784c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2b810d26-61b9-425d-820f-b1f1ca6b784c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:43:53",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D Gaussian Splatting",
+    "Head Avatar",
+    "Dynamic Deformation",
+    "Sparse View",
+    "High-fidelity Rendering"
+   ],
+   "field": "三维头 avatar 重建",
+   "innovations": [
+    "提出全学习表情条件变形场，突破LBS线性表达瓶颈",
+    "设计基于SDF与DMTet的几何引导初始化策略，实现分钟级稳定收敛",
+    "融合3D Gaussian与超分网络，在稀疏视图下实现2K超高保真头部动画"
+   ],
+   "benchmarks": [
+    "NeRSemble",
+    "HAvatar"
+   ]
+  }
+ }
 }

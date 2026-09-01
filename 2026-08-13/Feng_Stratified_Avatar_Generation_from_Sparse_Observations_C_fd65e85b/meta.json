@@ -3,5 +3,28 @@
  "batch_id": "fd65e85b-f079-492e-bcff-e8025bc43d1f",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 01:40:23",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/27d5f2a6-6ffa-4d4e-819c-ad34f37ba613.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/27d5f2a6-6ffa-4d4e-819c-ad34f37ba613.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:42:30",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "稀疏观测全身重建",
+    "分层扩散模型",
+    "VQ-VAE",
+    "HMD动捕",
+    "人体运动生成"
+   ],
+   "field": "基于稀疏观测的3D人体姿态重建",
+   "innovations": [
+    "利用SMPL运动学树将全身重建解耦为上/下半身两阶段分层扩散",
+    "双VQ-VAE离散表示+分层条件扩散联合训练全身解码器",
+    "在线滑动窗口+GRU时序Refiner实现0.74ms/帧实时推理"
+   ],
+   "benchmarks": [
+    "AMASS (S1/S2/S3)"
+   ]
+  }
+ }
 }

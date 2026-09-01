@@ -4,5 +4,29 @@
  "title": "Guided-Slot-Attention-for-Unsupervised-Video-Object-Segmenta",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 05:40:53",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/83adf65e-6569-40f7-b334-533d797159d5.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/83adf65e-6569-40f7-b334-533d797159d5.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:45:06",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "无监督视频物体分割",
+    "槽注意力",
+    "引导式槽",
+    "KNN滤波",
+    "特征聚合Transformer",
+    "光流"
+   ],
+   "field": "无监督视频物体分割",
+   "innovations": [
+    "提出引导式槽注意力机制，通过Slot Generator从目标帧编码器特征生成前景/背景引导槽，替代随机初始化",
+    "设计特征聚合Transformer(FAT)与KNN滤波策略，融合跨帧局部-全局特征并抑制噪声干扰"
+   ],
+   "benchmarks": [
+    "DAVIS-16",
+    "FBMS"
+   ]
+  }
+ }
 }

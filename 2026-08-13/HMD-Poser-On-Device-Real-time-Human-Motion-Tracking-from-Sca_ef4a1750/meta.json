@@ -4,5 +4,31 @@
  "title": "HMD-Poser-On-Device-Real-time-Human-Motion-Tracking-from-Sca",
  "token": "sk-aknYEUs8O...",
  "created_at": "2026-08-13 05:40:57",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/6b3cbedf-e5d9-45c5-8b5e-c7ad9bd13e25.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/6b3cbedf-e5d9-45c5-8b5e-c7ad9bd13e25.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:45:19",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Human Motion Tracking",
+    "HMD",
+    "IMU",
+    "Real-time Inference",
+    "Edge AI",
+    "SMPL"
+   ],
+   "field": "端侧人体姿态估计",
+   "innovations": [
+    "LSTM+Transformer轻量TSFL网络实现端侧实时全身追踪",
+    "手-头相对坐标表示与在线形状估计提升关节位置精度",
+    "统一框架支持HMD/HMD+2IMUs/HMD+3IMUs可扩展稀疏输入"
+   ],
+   "benchmarks": [
+    "AMASS Protocol 1",
+    "AMASS Protocol 2",
+    "Free-dancing Motion Dataset (PICO 4)"
+   ]
+  }
+ }
 }

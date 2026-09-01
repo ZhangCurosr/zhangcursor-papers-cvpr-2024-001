@@ -4,5 +4,30 @@
  "title": "DiffusionRegPose-Enhancing-Multi-Person-Pose-Estimation-usin",
  "token": "sk-OZiRtsQic...",
  "created_at": "2026-08-13 05:39:47",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/b4cc2d02-d4f7-443a-89fc-f8fb91a74257.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/b4cc2d02-d4f7-443a-89fc-f8fb91a74257.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:41:38",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "多人体姿态估计",
+    "扩散模型",
+    "端到端回归",
+    "拥挤场景",
+    "关键点去噪",
+    "姿态歧义建模"
+   ],
+   "field": "多人体姿态估计",
+   "innovations": [
+    "将一阶段端到端关键点回归转化为基于扩散的去噪采样过程，首次用于多人体姿态估计",
+    "提出姿态去噪与人检测之间的双向注意力交互机制，实现 mutual benefit",
+    "提出概率性不可见关键点补全方法，基于高斯分布 MLE 改善遮挡场景学习"
+   ],
+   "benchmarks": [
+    "COCO val2017",
+    "CrowdPose test"
+   ]
+  }
+ }
 }

@@ -4,5 +4,33 @@
  "title": "Flexible-Biometrics-Recognition-Bridging-the-Multimodality-G",
  "token": "sk-aknYEUs8O...",
  "created_at": "2026-08-13 05:40:20",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/0d2caef7-e725-4b93-8424-74a407729517.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/0d2caef7-e725-4b93-8424-74a407729517.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:42:58",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "flexible biometrics recognition",
+    "multimodal fusion",
+    "prompt tuning",
+    "face-periocular recognition",
+    "cross-modality alignment",
+    "Vision Transformer",
+    "soft biometrics"
+   ],
+   "field": "多模态生物特征识别",
+   "innovations": [
+    "提出 MFA-ViT 架构，通过 DWS-Conv 与 DWFC-MSA 并行模块实现人脸、眼周和软性生物特征三模态深度融合",
+    "设计 MPT（多模态 Prompt 调优）机制，以跨层动态 prompt 引导多模态对齐，优于标准 VPT",
+    "提出 PRM（prompt-based）分类头替代标准 CLS token，在跨模态融合任务中取得显著提升"
+   ],
+   "benchmarks": [
+    "Ethnic",
+    "FaceScrub",
+    "IMDB",
+    "Cross-Modal DB"
+   ]
+  }
+ }
 }

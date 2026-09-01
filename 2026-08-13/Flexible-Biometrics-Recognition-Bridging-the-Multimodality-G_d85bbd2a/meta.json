@@ -4,5 +4,31 @@
  "title": "Flexible-Biometrics-Recognition-Bridging-the-Multimodality-G",
  "token": "sk-RsHYrwqhL...",
  "created_at": "2026-08-13 07:12:54",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/0d2caef7-e725-4b93-8424-74a407729517.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/0d2caef7-e725-4b93-8424-74a407729517.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:42:57",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "生物识别",
+    "多模态融合",
+    "提示微调",
+    "跨模态匹配",
+    "Vision Transformer",
+    "柔性识别"
+   ],
+   "field": "多模态生物特征识别",
+   "innovations": [
+    "提出MFA-ViT架构实现面部-眼周-软生物三模态统一嵌入学习",
+    "设计MPT机制通过层间Prompt传递促进跨模态交互并保留模态特异性"
+   ],
+   "benchmarks": [
+    "Ethnic",
+    "FaceScrub",
+    "IMDB",
+    "Cross-Modal DB"
+   ]
+  }
+ }
 }

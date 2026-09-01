@@ -3,5 +3,35 @@
  "batch_id": "ec26618f-1a27-4381-a8e7-bc71060cd0ab",
  "token": "sk-LV19Ft0NN...",
  "created_at": "2026-08-13 02:47:01",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f552fca0-4b00-4656-9e75-8267b474ad46.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f552fca0-4b00-4656-9e75-8267b474ad46.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:45:59",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "text-to-image diffusion",
+    "3D-consistent generation",
+    "cross-frame attention",
+    "volume rendering",
+    "autoregressive generation",
+    "CO3Dv2",
+    "novel view synthesis"
+   ],
+   "field": "3D-aware 图像生成",
+   "innovations": [
+    "在预训练T2I U-Net中嵌入交叉帧注意力与投影层，实现单次联合去噪的多视图一致图像生成",
+    "提出自回归生成方案，支持单图重建与多角度轨迹渲染，无需第二阶3D重建",
+    "利用真实世界CO3Dv2数据微调十亿级2D先验，兼顾照片级真实感与多样性"
+   ],
+   "benchmarks": [
+    "CO3Dv2",
+    "FID",
+    "KID",
+    "PSNR",
+    "SSIM",
+    "LPIPS"
+   ]
+  }
+ }
 }

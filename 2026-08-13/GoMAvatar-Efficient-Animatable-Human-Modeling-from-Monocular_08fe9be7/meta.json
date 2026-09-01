@@ -4,5 +4,29 @@
  "title": "GoMAvatar-Efficient-Animatable-Human-Modeling-from-Monocular",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 05:39:31",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/57ffdf14-d7f2-417e-b6aa-4cb04fc6ff0c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/57ffdf14-d7f2-417e-b6aa-4cb04fc6ff0c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:44:33",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D Gaussian Splatting",
+    "Human Avatar",
+    "Monocular Reconstruction",
+    "Real-time Rendering",
+    "Animatable Human Modeling"
+   ],
+   "field": "神经辐射场与可动画人体建模",
+   "innovations": [
+    "Gaussians-on-Mesh混合表示：将3D高斯附着于可变形网格三角面，结合高斯溅射渲染质量与显式几何正则化",
+    "前向运动学架构：基于显式网格实现正向LBS变形，避免NeRF类方法的隐式反向映射问题",
+    "伪漫反射-伪着色分解：通过高斯溅射与法线图的神经着色模块分离外观与光照效应"
+   ],
+   "benchmarks": [
+    "ZJU-MoCap",
+    "PeopleSnapshot"
+   ]
+  }
+ }
 }

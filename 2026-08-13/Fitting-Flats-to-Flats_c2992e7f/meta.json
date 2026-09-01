@@ -4,5 +4,30 @@
  "title": "Fitting-Flats-to-Flats",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 07:12:59",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/87f85b7a-558a-4dae-88e8-513d7977ef49.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/87f85b7a-558a-4dae-88e8-513d7977ef49.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:42:53",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Affine Subspace Fitting",
+    "Squared Distance Fields",
+    "Riemannian Geometry",
+    "Least Squares",
+    "Robust Statistics",
+    "Computer Vision"
+   ],
+   "field": "几何计算与计算机视觉",
+   "innovations": [
+    "提出基于平方距离场的flat-to-flat最小二乘拟合方法，避免流形优化",
+    "证明算法具有刚性变换等变性和无向性，优于传统Grassmann方法",
+    "通过L1中位数扩展实现鲁棒拟合，抵抗异常值干扰"
+   ],
+   "benchmarks": [
+    "Synthetic flat fitting in R^d (d=4..20)",
+    "Multi-view reconstruction of line-like objects (archery target)"
+   ]
+  }
+ }
 }

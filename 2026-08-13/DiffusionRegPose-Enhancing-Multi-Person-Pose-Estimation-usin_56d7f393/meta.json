@@ -4,5 +4,29 @@
  "title": "DiffusionRegPose-Enhancing-Multi-Person-Pose-Estimation-usin",
  "token": "sk-qk0HszLxn...",
  "created_at": "2026-08-13 07:12:05",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/b4cc2d02-d4f7-443a-89fc-f8fb91a74257.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/b4cc2d02-d4f7-443a-89fc-f8fb91a74257.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:41:42",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "multi-person pose estimation",
+    "diffusion model",
+    "end-to-end regression",
+    "crowded scene",
+    "keypoint completion"
+   ],
+   "field": "多目标姿态估计",
+   "innovations": [
+    "首次将单步端到端关键点回归转换为扩散去噪采样过程",
+    "引入人检-姿态联合交互注意力（H2K）双向提升检测与去噪鲁棒性",
+    "基于 MLE 的概率不可见关键点补全以缓解遮挡歧义"
+   ],
+   "benchmarks": [
+    "MS COCO val2017",
+    "CrowdPose test set"
+   ]
+  }
+ }
 }

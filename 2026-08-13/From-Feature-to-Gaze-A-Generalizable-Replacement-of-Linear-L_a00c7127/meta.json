@@ -4,5 +4,33 @@
  "title": "From-Feature-to-Gaze-A-Generalizable-Replacement-of-Linear-L",
  "token": "sk-45Ifw5Iq3...",
  "created_at": "2026-08-13 04:51:08",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d5a3ab7c-17ab-4a8b-8bd8-28af0e94ce38.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d5a3ab7c-17ab-4a8b-8bd8-28af0e94ce38.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:43:31",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "gaze estimation",
+    "domain generalization",
+    "geodesic projection",
+    "Isomap",
+    "FC layer replacement",
+    "analytical regression",
+    "cross-domain"
+   ],
+   "field": "眼动估计与域泛化",
+   "innovations": [
+    "用测地投影模块（GPM）以10参数替代数千参数FC层，从根本上缓解眼动估计跨域过拟合",
+    "提出Isometric Propagator使Isomap可微分，将球面几何约束反向传播到CNN特征提取器",
+    "揭示并验证深度特征测地距离与视线角差成正比的跨域普适规律"
+   ],
+   "benchmarks": [
+    "ETH-XGaze",
+    "Gaze360",
+    "MPIIFaceGaze",
+    "EyeDiap"
+   ]
+  }
+ }
 }

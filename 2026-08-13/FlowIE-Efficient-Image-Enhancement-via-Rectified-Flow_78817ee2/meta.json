@@ -4,5 +4,33 @@
  "title": "FlowIE-Efficient-Image-Enhancement-via-Rectified-Flow",
  "token": "sk-ZGznq9xBq...",
  "created_at": "2026-08-13 07:12:50",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/bc4f8f6f-4ce1-4176-b401-1ea02ecb9019.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/bc4f8f6f-4ce1-4176-b401-1ea02ecb9019.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:43:12",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "图像增强",
+    "Rectified Flow",
+    "扩散模型",
+    "盲人脸复原",
+    "盲图像超分辨率",
+    "高效生成"
+   ],
+   "field": "图像增强与复原",
+   "innovations": [
+    "首次将Rectified Flow应用于图像增强，推理加速约10倍",
+    "提出多对一映射范式避免大规模数据准备",
+    "基于Lagrange中值定理的均值采样优化路径估计"
+   ],
+   "benchmarks": [
+    "CelebA-Test",
+    "LFW-Test",
+    "WIDER-Test",
+    "RealSRSet",
+    "Collect-100"
+   ]
+  }
+ }
 }

@@ -4,5 +4,10 @@
  "title": "HEAL-SWIN-A-Vision-Transformer-On-The-Sphere",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 05:40:52",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/54950d60-f8bb-4962-ae73-77ca0f21046f.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/54950d60-f8bb-4962-ae73-77ca0f21046f.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:45:08",
+  "chunks": 1
+ }
 }

@@ -4,5 +4,29 @@
  "title": "DiffInDScene-Diffusion-based-High-Quality-3D-Indoor-Scene-Ge",
  "token": "sk-jX4FaQZVZ...",
  "created_at": "2026-08-13 07:11:56",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/652af0fe-e0e7-4e33-9820-295f7c6bed23.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/652af0fe-e0e7-4e33-9820-295f7c6bed23.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:41:38",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D室内场景生成",
+    "稀疏扩散模型",
+    "TSDF",
+    "级联扩散",
+    "多视图立体优化"
+   ],
+   "field": "3D计算机视觉与生成模型",
+   "innovations": [
+    "首次将稀疏扩散应用于房间级3D室内场景生成，节省两个数量级资源",
+    "提出随机TSDF融合算法保持生成质量与全局一致性",
+    "设计多尺度Patch-VQGAN提供分层occupancy特征引导"
+   ],
+   "benchmarks": [
+    "3D-FRONT",
+    "ScanNet"
+   ]
+  }
+ }
 }

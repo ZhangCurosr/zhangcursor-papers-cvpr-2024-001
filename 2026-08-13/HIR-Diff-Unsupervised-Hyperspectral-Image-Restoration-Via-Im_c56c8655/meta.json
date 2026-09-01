@@ -4,5 +4,31 @@
  "title": "HIR-Diff-Unsupervised-Hyperspectral-Image-Restoration-Via-Im",
  "token": "sk-nY8L7ieIq...",
  "created_at": "2026-08-13 05:39:44",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d04eb69b-3179-415e-8e51-26514646d6df.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d04eb69b-3179-415e-8e51-26514646d6df.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:44:59",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Hyperspectral Image Restoration",
+    "Diffusion Model",
+    "Unsupervised Learning",
+    "Low-rank Decomposition",
+    "Total Variation Guidance",
+    "Noise Schedule"
+   ],
+   "field": "高光谱图像复原与生成模型",
+   "innovations": [
+    "基于预训练扩散模型的无监督HSI复原框架HIR-Diff，将HSI分解为约简图像与系数矩阵分别恢复",
+    "提出TV引导函数将传统正则化嵌入扩散采样过程",
+    "设计指数噪声调度实现约5倍加速且保持性能"
+   ],
+   "benchmarks": [
+    "Washington DC Mall",
+    "Houston",
+    "Salinas"
+   ]
+  }
+ }
 }

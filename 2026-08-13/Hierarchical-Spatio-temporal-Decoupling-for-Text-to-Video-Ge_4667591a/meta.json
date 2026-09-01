@@ -4,5 +4,30 @@
  "title": "Hierarchical-Spatio-temporal-Decoupling-for-Text-to-Video-Ge",
  "token": "sk-aknYEUs8O...",
  "created_at": "2026-08-13 04:51:00",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/8536b77a-b61b-4587-8a94-2836ef0050ff.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/8536b77a-b61b-4587-8a94-2836ef0050ff.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:45:23",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Text-to-Video Generation",
+    "Diffusion Model",
+    "Spatio-temporal Decoupling",
+    "Motion Control",
+    "Appearance Factor"
+   ],
+   "field": "视频生成",
+   "innovations": [
+    "结构层两阶段时空解耦（空间推理+时间推理）",
+    "内容层运动/外观因子显式解耦控制"
+   ],
+   "benchmarks": [
+    "MSR-VTT",
+    "FID",
+    "FVD",
+    "CLIPSIM"
+   ]
+  }
+ }
 }

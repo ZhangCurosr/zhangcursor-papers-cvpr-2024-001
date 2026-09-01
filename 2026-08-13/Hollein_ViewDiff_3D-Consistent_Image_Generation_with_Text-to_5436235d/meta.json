@@ -3,5 +3,34 @@
  "batch_id": "5436235d-97d9-4405-a05e-97907d01e251",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 03:00:05",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f552fca0-4b00-4656-9e75-8267b474ad46.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f552fca0-4b00-4656-9e75-8267b474ad46.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:45:43",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D-consistent generation",
+    "text-to-image diffusion models",
+    "multi-view synthesis",
+    "cross-frame attention",
+    "projection layer",
+    "autoregressive generation",
+    "CO3Dv2"
+   ],
+   "field": "3D generative modeling",
+   "innovations": [
+    "Integrates 3D volume rendering and cross-frame attention into pretrained T2I U-Net for single-pass multi-view generation",
+    "Autoregressive generation scheme enables novel view synthesis without additional 3D reconstruction",
+    "Fine-tunes on real-world datasets while leveraging large 2D priors, balancing photorealism and diversity"
+   ],
+   "benchmarks": [
+    "FID",
+    "KID",
+    "PSNR",
+    "SSIM",
+    "LPIPS"
+   ]
+  }
+ }
 }

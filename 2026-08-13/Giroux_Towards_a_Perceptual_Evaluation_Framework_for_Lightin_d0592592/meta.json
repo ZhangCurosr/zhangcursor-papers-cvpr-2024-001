@@ -3,5 +3,31 @@
  "batch_id": "d0592592-472a-4cd0-8268-801d335e0f1b",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 01:39:56",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4cb9d7a3-661f-4307-aea2-8efdad4e8670.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4cb9d7a3-661f-4307-aea2-8efdad4e8670.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:44:18",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "lighting estimation",
+    "perceptual evaluation",
+    "image quality assessment",
+    "psychophysical experiment",
+    "virtual object insertion",
+    "HDR relighting"
+   ],
+   "field": "计算摄影与光照估计",
+   "innovations": [
+    "系统性心理物理学实验揭示IQA指标与人类感知的系统性偏差",
+    "学习组合15种IQA指标构建感知评估度量，显著优于单一指标"
+   ],
+   "benchmarks": [
+    "Thurstone z-score排序",
+    "Agreement Score",
+    "Spearman ρ",
+    "Kendall τ"
+   ]
+  }
+ }
 }

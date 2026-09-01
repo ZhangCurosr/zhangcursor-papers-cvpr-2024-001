@@ -3,5 +3,33 @@
  "batch_id": "83910ad8-103e-4010-8ee4-b32448270cf2",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 02:59:45",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/7e021826-e938-46ce-9a28-55b21cb11bdb.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/7e021826-e938-46ce-9a28-55b21cb11bdb.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:42:01",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "图像复原",
+    "扩散模型",
+    "盲人脸复原",
+    "生成约束先验",
+    "个性化生成",
+    "skip guidance"
+   ],
+   "field": "低层视觉与图像复原",
+   "innovations": [
+    "通过加噪将退化图像投影到扩散模型生成空间并直接去噪采样实现盲复原",
+    "利用生成相册/个性化相册微调约束扩散模型生成空间，无需假设退化类型",
+    "提出skip guidance策略周期性强弱引导，平衡生成质量与输入忠实度"
+   ],
+   "benchmarks": [
+    "Wider-Test",
+    "LFW-Test",
+    "WebPhoto-Test",
+    "Deblur-Test",
+    "AFHQ Dog/Cat"
+   ]
+  }
+ }
 }

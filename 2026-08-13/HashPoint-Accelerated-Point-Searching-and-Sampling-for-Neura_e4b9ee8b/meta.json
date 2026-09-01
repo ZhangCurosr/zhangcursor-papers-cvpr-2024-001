@@ -4,5 +4,33 @@
  "title": "HashPoint-Accelerated-Point-Searching-and-Sampling-for-Neura",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 03:37:58",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/277ac729-95b6-4b1d-9225-b6ded4d3a86d.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/277ac729-95b6-4b1d-9225-b6ded4d3a86d.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:45:43",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "neural rendering",
+    "point cloud rendering",
+    "ray tracing",
+    "hash table",
+    "adaptive sampling",
+    "primary surface",
+    "NeRF"
+   ],
+   "field": "神经辐射场与点云渲染",
+   "innovations": [
+    "提出 Hashed-Point Searching，将 3D 点云近邻搜索降维至 2D 图像平面哈希查询，复杂度从 O(m log n) 降至 O(m q)",
+    "提出 Adaptive Primary Surface Sampling，基于伪 UDF 和遮挡感知权重自适应筛选主表面样本点，替代多表面均匀采样",
+    "方法可插拔集成至 Point-NeRF/NPLF/Pointersect/Point-SLAM，最高 80 倍加速且精度持平或超越"
+   ],
+   "benchmarks": [
+    "Synthetic-NeRF",
+    "Waymo",
+    "Replica",
+    "ShapeNet"
+   ]
+  }
+ }
 }

@@ -4,5 +4,31 @@
  "title": "Fitting-Flats-to-Flats",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 05:41:03",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/87f85b7a-558a-4dae-88e8-513d7977ef49.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/87f85b7a-558a-4dae-88e8-513d7977ef49.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-01 15:42:49",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "flat fitting",
+    "squared distance field",
+    "affine Grassmannian",
+    "Riemannian center of mass",
+    "principal angles",
+    "multiview reconstruction",
+    "robust statistics"
+   ],
+   "field": "计算机视觉几何基础",
+   "innovations": [
+    "将flat表示为平方距离场系数并直接求和，得到flat-to-flat的最小二乘闭式解",
+    "首次证明该方法在刚体变换下等变且平分角度与距离，优于Graff流形上的Riemannian mean",
+    "提出Median-SDF变体，通过Weiszfeld迭代实现L1鲁棒拟合并保持等变性"
+   ],
+   "benchmarks": [
+    "synthetic R3 line-from-planes reconstruction with Gaussian noise and outliers",
+    "archery multi-view line reconstruction from 4 calibrated cameras"
+   ]
+  }
+ }
 }
