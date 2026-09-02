@@ -3,5 +3,29 @@
  "batch_id": "08bb9277-3900-4773-9ff7-59ac990acc13",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 03:00:00",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/761afb79-4590-43a8-a3fc-9c84dc4d4933.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/761afb79-4590-43a8-a3fc-9c84dc4d4933.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 07:16:07",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "风格迁移",
+    "Transformer",
+    "可逆神经网络",
+    "特征解耦",
+    "高效视觉模型",
+    "内容风格分离"
+   ],
+   "field": "图像风格迁移",
+   "innovations": [
+    "仅用 transformer 编码器替代完整 encoder-decoder 实现高效风格迁移",
+    "设计纯内容与纯风格特征提取器实现输入图像的显式解耦预处理"
+   ],
+   "benchmarks": [
+    "MS-COCO",
+    "WikiArt"
+   ]
+  }
+ }
 }

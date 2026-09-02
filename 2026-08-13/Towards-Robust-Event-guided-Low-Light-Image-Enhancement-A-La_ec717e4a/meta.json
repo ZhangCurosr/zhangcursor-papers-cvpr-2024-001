@@ -4,5 +4,29 @@
  "title": "Towards-Robust-Event-guided-Low-Light-Image-Enhancement-A-La",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-13 03:38:05",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/c88cd445-48c1-414d-84dc-01e69ca0787c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/c88cd445-48c1-414d-84dc-01e69ca0787c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 07:14:27",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "低光照图像增强",
+    "事件相机",
+    "多模态融合",
+    "SNR引导特征选择",
+    "时空对齐数据集"
+   ],
+   "field": "低光照视觉增强",
+   "innovations": [
+    "提出SDE大规模真实世界事件-图像数据集（30K+对，0.03mm空间精度）",
+    "设计SNR引导的区域特征选择机制自适应融合异构传感器特征",
+    "匹配对齐策略消除事件-图像时序偏差（90%误差<0.01s）"
+   ],
+   "benchmarks": [
+    "SDE",
+    "SDSD"
+   ]
+  }
+ }
 }

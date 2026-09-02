@@ -4,5 +4,36 @@
  "title": "Scaling-Up-Dynamic-Human-Scene-Interaction-Modeling",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 03:38:18",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/b566d0fd-0f5a-461d-a947-a3cf19e9dc81.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/b566d0fd-0f5a-461d-a947-a3cf19e9dc81.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 07:14:24",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Human-Scene Interaction",
+    "Motion Generation",
+    "Diffusion Model",
+    "Motion Capture Dataset",
+    "Autoregressive Generation",
+    "3D Human Pose"
+   ],
+   "field": "3D人体动作生成与交互建模",
+   "innovations": [
+    "提出TRUMANS大规模MoCap HSI数据集（15h/100场景/1.6M帧）",
+    "自回归条件扩散框架支持任意长度HSI序列实时生成",
+    "帧级动作进度指示器与局部场景感知器双条件控制"
+   ],
+   "benchmarks": [
+    "PROX",
+    "Replica",
+    "ScanNet",
+    "ScanNet++",
+    "GRAB",
+    "3DPW",
+    "RICH",
+    "DAMON"
+   ]
+  }
+ }
 }

@@ -3,5 +3,33 @@
  "batch_id": "b04d5af2-d480-4829-95be-eb2a22e20d76",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 02:59:58",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/400b8d76-3964-493c-8202-245be6fb88db.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/400b8d76-3964-493c-8202-245be6fb88db.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 07:14:47",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "novel view synthesis",
+    "zero-shot learning",
+    "diffusion model",
+    "3D generation",
+    "score distillation sampling",
+    "NeRF"
+   ],
+   "field": "3D视觉生成",
+   "innovations": [
+    "6DoF+1相机条件参数化与视角中心归一化方案",
+    "SDS锚定机制提升背景多样性",
+    "首个野外场景单图像零样本360度视图合成系统"
+   ],
+   "benchmarks": [
+    "DTU",
+    "Mip-NeRF 360",
+    "CO3D",
+    "RealEstate10K",
+    "ACID"
+   ]
+  }
+ }
 }

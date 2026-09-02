@@ -4,5 +4,31 @@
  "title": "VINECS-Video-based-Neural-Character-Skinning",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 03:38:09",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/afe332f0-06e0-4f7e-80d5-d6e9613355cf.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/afe332f0-06e0-4f7e-80d5-d6e9613355cf.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 07:15:25",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "neural character skinning",
+    "pose-dependent skinning",
+    "multi-view video",
+    "differentiable rendering",
+    "explicit mesh",
+    "character rigging"
+   ],
+   "field": "3D角色建模与动画",
+   "innovations": [
+    "首个从多视图视频学习姿态依赖蒙皮权重的端到端方法",
+    "坐标基MLP实现的连续蒙皮权重场支持任意网格分辨率",
+    "四阶段弱监督训练结合辅助外观场解决纯视频监督收敛困难"
+   ],
+   "benchmarks": [
+    "DynaCap D2",
+    "DynaCap D5",
+    "自建V6"
+   ]
+  }
+ }
 }

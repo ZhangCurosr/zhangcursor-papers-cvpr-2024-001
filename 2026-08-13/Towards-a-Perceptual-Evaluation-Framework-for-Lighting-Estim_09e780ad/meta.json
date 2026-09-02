@@ -4,5 +4,32 @@
  "title": "Towards-a-Perceptual-Evaluation-Framework-for-Lighting-Estim",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 03:37:59",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4cb9d7a3-661f-4307-aea2-8efdad4e8670.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4cb9d7a3-661f-4307-aea2-8efdad4e8670.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 07:14:59",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "光照估计",
+    "图像质量评估",
+    "心理物理学",
+    "感知度量",
+    "IQA指标",
+    " learned metric",
+    "计算机图形学"
+   ],
+   "field": "计算摄影与渲染评估",
+   "innovations": [
+    "揭示IQA指标与人类感知在光照估计评估中的根本分歧",
+    "提出基于ε-SVR的多指标学习融合框架，显著提升感知预测准确性"
+   ],
+   "benchmarks": [
+    "Thurstone z-score",
+    "Agreement Score",
+    "Spearman's ρ",
+    "Kendall's τ"
+   ]
+  }
+ }
 }

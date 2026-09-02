@@ -4,5 +4,32 @@
  "title": "VRetouchEr-Learning-Cross-frame-Feature-Interdependence-with",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 03:38:01",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/917bc27d-bc52-410b-8276-a756047763a4.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/917bc27d-bc52-410b-8276-a756047763a4.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 07:15:40",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "视频人脸修图",
+    "瑕疵流估计",
+    "多帧注意力",
+    "Transformer",
+    "时序一致性",
+    "图像修复"
+   ],
+   "field": "视频人脸处理与增强",
+   "innovations": [
+    "FIR模块利用瑕疵流精修跨帧瑕疵定位，提升时序稳定性",
+    "MMA机制通过掩码加权实现多帧正常皮肤特征协同修复"
+   ],
+   "benchmarks": [
+    "FFHQR-Seq",
+    "MRFV",
+    "PSNR",
+    "VFID",
+    "Soft-IoU"
+   ]
+  }
+ }
 }
