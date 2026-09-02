@@ -3,5 +3,34 @@
  "batch_id": "4e144df1-c5cd-4688-b1e5-516468a065ea",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-08-13 02:58:56",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/ff1d06d7-2ec0-4ed0-9aae-0a7c45536dfc.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/ff1d06d7-2ec0-4ed0-9aae-0a7c45536dfc.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 11:53:51",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "camouflaged image generation",
+    "diffusion model",
+    "knowledge retrieval",
+    "image inpainting",
+    "VQ-VAE",
+    "synthetic data"
+   ],
+   "field": "伪装视觉感知与合成数据生成",
+   "innovations": [
+    "首次提出无需人工背景输入的伪装图像生成范式",
+    "提出可解释的检索-推理解耦框架（BKRM+RCEM）",
+    "利用VQ-VAE codebook作为背景知识库进行纹理对齐"
+   ],
+   "benchmarks": [
+    "COD10K",
+    "CAMO",
+    "NC4K",
+    "DUTS",
+    "COCO2017",
+    "Places365"
+   ]
+  }
+ }
 }

@@ -3,5 +3,32 @@
  "batch_id": "e2a4def0-da9f-401f-b749-74af40ec4ff4",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 02:59:51",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/846ac52c-cc8b-41f0-9439-dbd903c879ad.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/846ac52c-cc8b-41f0-9439-dbd903c879ad.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 11:53:57",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "无监督域适应",
+    "医学图像分割",
+    "掩码自动编码器",
+    "伪标签",
+    "联邦学习",
+    "测试时适应",
+    "3D分割"
+   ],
+   "field": "医学图像分析-域适应",
+   "innovations": [
+    "提出统一MAPSeg框架，首次系统性解决四种医学图像域偏移",
+    "首次实现统一框架同时适用于集中式、联邦式和测试时三种域适应场景",
+    "设计无需目标标签的模型选择策略Score",
+    "结合3D MAE预训练与掩码伪标签MPL，提升伪标签稳定性"
+   ],
+   "benchmarks": [
+    "BCP50婴儿脑MRI",
+    "MMWHS 2017心脏CT-MRI"
+   ]
+  }
+ }
 }
