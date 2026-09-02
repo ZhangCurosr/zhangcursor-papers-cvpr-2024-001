@@ -3,5 +3,34 @@
  "batch_id": "3cf210a7-af58-4846-bfa8-59b78f9e350b",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 02:59:47",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/b03af9e2-839d-4c3b-99f3-782d128f68ba.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/b03af9e2-839d-4c3b-99f3-782d128f68ba.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:50:21",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "视听联合生成",
+    "扩散模型",
+    "多模态对齐",
+    "ImageBind",
+    "训练免费生成",
+    "跨模态引导"
+   ],
+   "field": "多模态生成",
+   "innovations": [
+    "提出基于ImageBind的扩散潜空间对齐器，无需训练即可桥接单模态扩散模型实现跨模态生成",
+    "设计双损失/三角损失函数结合引导提示词调优，解决音频语义稀疏和时序一致性问题"
+   ],
+   "benchmarks": [
+    "VGGSound",
+    "Landscape",
+    "MKL",
+    "FAD",
+    "FVD",
+    "KVD",
+    "AV-align"
+   ]
+  }
+ }
 }

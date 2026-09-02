@@ -3,5 +3,34 @@
  "batch_id": "ae85ba26-d54b-44fb-bdaa-826a43f90082",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 02:46:46",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/87c4f8c7-5ea5-4e54-81b9-013107e30217.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/87c4f8c7-5ea5-4e54-81b9-013107e30217.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:49:54",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Image Warping",
+    "Multi-Frequency Representation",
+    "Gabor Wavelet",
+    "Super-Resolution",
+    "Out-of-Distribution Generalization",
+    "Homography"
+   ],
+   "field": "低层视觉与图像修复/扭曲",
+   "innovations": [
+    "提出渐进式多频率表示学习框架MFR，逐层生成粗细不同的变形图像细节",
+    "引入可学习Gabor小波滤波器增强局部空间-频率联合表征能力",
+    "短连接+1D注意力门控融合空间与频率表征，提升分布外泛化性能"
+   ],
+   "benchmarks": [
+    "DIV2KW",
+    "Set5W",
+    "Set14W",
+    "B100W",
+    "Urban100W",
+    "Flick360"
+   ]
+  }
+ }
 }

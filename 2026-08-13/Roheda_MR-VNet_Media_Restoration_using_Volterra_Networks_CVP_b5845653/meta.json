@@ -3,5 +3,32 @@
  "batch_id": "b5845653-d30a-4775-b322-759ea04dbb80",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 02:59:28",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/e660068d-e237-461c-9331-c915544eddce.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/e660068d-e237-461c-9331-c915544eddce.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:47:24",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Volterra Networks",
+    "Image Restoration",
+    "Video Denoising",
+    "Activation-Free",
+    "Deblurring",
+    "De-noising"
+   ],
+   "field": "图像/视频恢复",
+   "innovations": [
+    "提出基于二阶Volterra卷积的MR-VNet架构，用高阶卷积替代传统激活函数引入非线性",
+    "设计无损(LLA)和有损(LYA)两种高效近似方案实现高阶卷积",
+    "理论证明NAFNet是Volterra网络在Q=1时的特殊情形"
+   ],
+   "benchmarks": [
+    "GoPro",
+    "REDS",
+    "SIDD",
+    "CRVD"
+   ]
+  }
+ }
 }

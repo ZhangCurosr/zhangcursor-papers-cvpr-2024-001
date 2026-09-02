@@ -4,5 +4,34 @@
  "title": "ViewDiff-3D-Consistent-Image-Generation-with-Text-to-Image-M",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 03:38:28",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f552fca0-4b00-4656-9e75-8267b474ad46.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f552fca0-4b00-4656-9e75-8267b474ad46.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:49:29",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D-consistent image generation",
+    "text-to-image diffusion",
+    "multi-view synthesis",
+    "cross-frame attention",
+    "volume rendering",
+    "autoregressive generation"
+   ],
+   "field": "3D内容生成",
+   "innovations": [
+    "在U-Net中集成跨帧注意力和3D体积渲染投影层实现3D一致的多视角图像生成",
+    "利用预训练2D文本到图像模型的先验在真实世界3D数据集上fine-tune",
+    "自回归生成方案从任意视角渲染3D一致的高质量图像"
+   ],
+   "benchmarks": [
+    "CO3Dv2",
+    "FID",
+    "KID",
+    "PSNR",
+    "SSIM",
+    "LPIPS"
+   ]
+  }
+ }
 }

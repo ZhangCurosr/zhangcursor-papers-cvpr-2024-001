@@ -4,5 +4,10 @@
  "title": "Texture-Preserving-Diffusion-Models-for-High-Fidelity-Virtua",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-13 03:38:05",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f81ee322-b34b-44e1-b600-befe18a1cde7.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f81ee322-b34b-44e1-b600-befe18a1cde7.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:49:46",
+  "chunks": 1
+ }
 }

@@ -4,5 +4,10 @@
  "title": "Task-aligned-Part-aware-Panoptic-Segmentation-through-Joint",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 03:38:15",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/6387aee9-7289-4dcf-be3b-3e137e3c02b4.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/6387aee9-7289-4dcf-be3b-3e137e3c02b4.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:48:53",
+  "chunks": 1
+ }
 }

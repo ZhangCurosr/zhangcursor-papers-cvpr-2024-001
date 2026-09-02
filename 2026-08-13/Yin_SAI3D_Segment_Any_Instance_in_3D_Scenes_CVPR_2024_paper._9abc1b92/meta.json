@@ -3,5 +3,32 @@
  "batch_id": "9abc1b92-df17-4cb4-b977-568691fee2a5",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-13 02:46:37",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4df3b292-3733-4247-bd5c-c2324a9a60f9.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4df3b292-3733-4247-bd5c-c2324a9a60f9.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:52:08",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D instance segmentation",
+    "zero-shot segmentation",
+    "SAM",
+    "open-vocabulary",
+    "region growing",
+    "multi-view consistency"
+   ],
+   "field": "3D 视觉感知",
+   "innovations": [
+    "提出结合 SAM 多视角 2D 掩码与 3D 几何超点的零样本实例分割框架",
+    "设计多级融合标准与渐进动态阈值区域生长算法，避免误差累积",
+    "在 ScanNet++ 上类无关分割超越全监督 Mask3D，展现强零样本泛化能力"
+   ],
+   "benchmarks": [
+    "ScanNet++",
+    "ScanNetV2",
+    "ScanNet200",
+    "Matterport3D"
+   ]
+  }
+ }
 }

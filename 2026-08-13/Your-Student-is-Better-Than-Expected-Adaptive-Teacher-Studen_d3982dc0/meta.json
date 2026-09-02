@@ -4,5 +4,32 @@
  "title": "Your-Student-is-Better-Than-Expected-Adaptive-Teacher-Studen",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 03:38:09",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/5e4268ad-1356-48d2-8f98-89ef9ec20f71.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/5e4268ad-1356-48d2-8f98-89ef9ec20f71.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:52:24",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "diffusion models",
+    "knowledge distillation",
+    "text-to-image generation",
+    "teacher-student collaboration",
+    "consistency distillation",
+    "adaptive sampling"
+   ],
+   "field": "生成模型高效推理",
+   "innovations": [
+    "发现蒸馏学生模型在约30%样本上可超越教师模型",
+    "提出基于ImageReward oracle的自适应教师-学生协作框架",
+    "设计再生与精炼双策略按需教师介入机制"
+   ],
+   "benchmarks": [
+    "COCO2014",
+    "LAION-Aesthetics",
+    "SD1.5",
+    "SDXL"
+   ]
+  }
+ }
 }

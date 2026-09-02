@@ -4,5 +4,29 @@
  "title": "Z-sup-sup-Zero-shot-Style-Transfer-via-Attention-Reweighting",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 03:37:57",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2ca6c631-1546-46f3-9326-262eb6a3ab9d.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2ca6c631-1546-46f3-9326-262eb6a3ab9d.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:52:37",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "zero-shot style transfer",
+    "diffusion model",
+    "attention reweighting",
+    "latent diffusion",
+    "cross-attention"
+   ],
+   "field": "图像风格迁移",
+   "innovations": [
+    "提出基于预训练 latent diffusion 的零样本风格迁移框架，无需训练/微调",
+    "设计 cross-attention reweighting 机制将加权系数嵌入 Softmax 内部实现自适应内容-风格平衡",
+    "双路径 DDIM 反转确保内容和风格特征在时间维度对齐"
+   ],
+   "benchmarks": [
+    "User Study (55 participants, 1760 votes)",
+    "Qualitative comparison with ArtFlow, AdaAttN, StyTr², CAST, InST, VCT"
+   ]
+  }
+ }
 }

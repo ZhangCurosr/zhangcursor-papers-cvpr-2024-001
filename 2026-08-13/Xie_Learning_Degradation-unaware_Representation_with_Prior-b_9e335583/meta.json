@@ -3,5 +3,30 @@
  "batch_id": "9e335583-ad38-4b5b-bb7c-7c2215a1a3be",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 03:00:03",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f314fa9b-76ae-4dc7-81ea-b9f4a02288a9.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f314fa9b-76ae-4dc7-81ea-b9f4a02288a9.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:50:19",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Blind Face Restoration",
+    "Degradation-unaware Representation",
+    "Latent Diffusion",
+    "Prior-based Key-Value",
+    "Vision Transformer"
+   ],
+   "field": "盲面部恢复",
+   "innovations": [
+    "通过潜扩散正则化学习退化无关查询表征，减少对特定退化的过拟合",
+    "基于潜在字典的全局映射策略增强Key-Value的先验表达能力"
+   ],
+   "benchmarks": [
+    "CelebA-Test",
+    "WIDER FACE",
+    "LFW-Test",
+    "WebPhoto-Test"
+   ]
+  }
+ }
 }

@@ -4,5 +4,31 @@
  "title": "SDPose-Tokenized-Pose-Estimation-via-Circulation-Guide-Self",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-13 03:50:04",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/0c4a6622-eab9-467f-9cce-c44ae92e1806.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/0c4a6622-eab9-467f-9cce-c44ae92e1806.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:48:10",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "人体姿态估计",
+    "自蒸馏",
+    "Transformer",
+    "轻量化模型",
+    "Multi-Cycled Transformer",
+    "知识蒸馏"
+   ],
+   "field": "人体姿态估计",
+   "innovations": [
+    "首次发现循环 forward 可在不增加参数的情况下增大 transformer 隐式深度，设计了 MCT 模块",
+    "设计了首个面向 transformer 姿态估计的自蒸馏范式，利用同向量空间特性实现无额外对齐的蒸馏",
+    "通过训练时多轮推理、推理时单轮执行的方式，在参数量不变的情况下显著提升小型模型性能"
+   ],
+   "benchmarks": [
+    "MSCOCO val",
+    "MSCOCO test-dev",
+    "CrowdPose test"
+   ]
+  }
+ }
 }

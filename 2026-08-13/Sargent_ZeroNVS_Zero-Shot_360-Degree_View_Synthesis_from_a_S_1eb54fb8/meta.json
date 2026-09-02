@@ -3,5 +3,33 @@
  "batch_id": "1eb54fb8-4038-45e1-b5d7-d16260d82bb7",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 02:46:42",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/400b8d76-3964-493c-8202-245be6fb88db.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/400b8d76-3964-493c-8202-245be6fb88db.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:47:55",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "New View Synthesis",
+    "Score Distillation Sampling",
+    "Zero-Shot Learning",
+    "NeRF",
+    "Diffusion Model",
+    "3D Generation"
+   ],
+   "field": "单图 3D 场景生成与重建",
+   "innovations": [
+    "提出面向复杂场景的 6DoF+1 相机条件参数化及基于输入视区的深度归一化方案",
+    "提出 SDS 锚定机制以提升背景多样性和真实性",
+    "在零样本设置下于 DTU 和 Mip-NeRF 360 基准上取得 LPIPS 最优结果"
+   ],
+   "benchmarks": [
+    "DTU",
+    "Mip-NeRF 360",
+    "CO3D",
+    "RealEstate10K",
+    "ACID"
+   ]
+  }
+ }
 }

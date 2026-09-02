@@ -3,5 +3,31 @@
  "batch_id": "541ec22d-61e6-407c-aef2-329ae2278fde",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 02:46:28",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/df414ac3-e7c9-4a01-8c59-29caff0b6d1c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/df414ac3-e7c9-4a01-8c59-29caff0b6d1c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:51:17",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "文本驱动人脸编辑",
+    "3D可控生成",
+    "StyleGAN",
+    "跨模态对齐",
+    "属性解耦"
+   ],
+   "field": "3D可控人脸图像合成",
+   "innovations": [
+    "提出Text-conditional 3D Editor实现文本到3D空间的细粒度属性操控",
+    "引入属性嵌入空间(AES)发现解耦的方向避免非目标属性变化",
+    "设计跨模态潜空间映射网络通过3D差异预测校正向量实现2D/3D一致生成"
+   ],
+   "benchmarks": [
+    "FFHQ",
+    "FID",
+    "IDD",
+    "TARR"
+   ]
+  }
+ }
 }

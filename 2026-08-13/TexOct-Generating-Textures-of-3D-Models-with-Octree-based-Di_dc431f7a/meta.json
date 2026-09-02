@@ -4,5 +4,31 @@
  "title": "TexOct-Generating-Textures-of-3D-Models-with-Octree-based-Di",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-08-13 03:38:10",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d3317ab2-e3d8-475b-bb7c-28ff80b466da.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d3317ab2-e3d8-475b-bb7c-28ff80b466da.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:48:38",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D Texture Generation",
+    "Diffusion Model",
+    "Octree",
+    "Point Cloud",
+    "Text-to-3D",
+    "ShapeNet"
+   ],
+   "field": "3D 视觉生成",
+   "innovations": [
+    "首次将DDPM扩散去噪过程直接作用于八叉树节点以生成3D纹理",
+    "端到端在3D空间生成纹理，无需UV展开或多视图聚合",
+    "在八叉树U-Net中引入octree-based multi-head cross-attention实现文本/图像条件生成"
+   ],
+   "benchmarks": [
+    "ShapeNet",
+    "FID",
+    "KID"
+   ]
+  }
+ }
 }

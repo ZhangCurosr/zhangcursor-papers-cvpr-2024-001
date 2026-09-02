@@ -4,5 +4,34 @@
  "title": "ZeroNVS-Zero-Shot-360-Degree-View-Synthesis-from-a-Single-Im",
  "token": "sk-45Ifw5Iq3...",
  "created_at": "2026-08-13 03:38:14",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/400b8d76-3964-493c-8202-245be6fb88db.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/400b8d76-3964-493c-8202-245be6fb88db.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:52:59",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "novel view synthesis",
+    "360-degree view synthesis",
+    "score distillation sampling",
+    "diffusion model",
+    "zero-shot 3D",
+    "scene reconstruction",
+    "camera parameterization"
+   ],
+   "field": "单图新视角合成与3D生成",
+   "innovations": [
+    "提出6DoF+1相机条件参数化与viewer-centric深度规范化，消除混合数据源的尺度歧义",
+    "设计SDS anchoring机制，通过DDIM锚点视图轮换条件提升背景多样性",
+    "在零样本设置下于DTU和Mip-NeRF 360基准上取得SOTA，并提出后者作为新评测基准"
+   ],
+   "benchmarks": [
+    "DTU",
+    "Mip-NeRF 360",
+    "CO3D",
+    "RealEstate10K",
+    "ACID"
+   ]
+  }
+ }
 }

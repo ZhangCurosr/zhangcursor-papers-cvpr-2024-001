@@ -4,5 +4,30 @@
  "title": "SHViT-Single-Head-Vision-Transformer-with-Memory-Efficient-M",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 03:38:10",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/ce958cb1-17b8-40d3-940b-e44f8fb8206a.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/ce958cb1-17b8-40d3-940b-e44f8fb8206a.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:47:54",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Vision Transformer",
+    "Efficient Deep Learning",
+    "Mobile AI",
+    "Single-Head Attention",
+    "Image Classification",
+    "Object Detection"
+   ],
+   "field": "高效视觉Transformer架构设计",
+   "innovations": [
+    "提出16×16重叠大stride patchify stem与3-stage宏设计消除早期空间冗余",
+    "设计Partial-channel单头自注意力（SHSA）模块同时避免head冗余并并行融合全局与局部特征",
+    "在GPU/CPU/移动端实现最优延迟-准确率权衡，ImageNet-1K达79.4% Top-1且显著快于SOTA"
+   ],
+   "benchmarks": [
+    "ImageNet-1K",
+    "MS COCO 2017"
+   ]
+  }
+ }
 }

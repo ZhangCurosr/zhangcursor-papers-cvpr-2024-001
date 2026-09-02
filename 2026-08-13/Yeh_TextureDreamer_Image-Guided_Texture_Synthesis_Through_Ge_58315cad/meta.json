@@ -3,5 +3,31 @@
  "batch_id": "58315cad-98de-4030-840b-1611a894405f",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-13 02:46:35",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d47063bd-353e-4b78-9bfa-c4a1575e5620.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/d47063bd-353e-4b78-9bfa-c4a1575e5620.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:51:21",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "纹理合成",
+    "扩散模型",
+    "3D 生成",
+    "几何感知",
+    "Dreambooth",
+    "Score Distillation"
+   ],
+   "field": "三维视觉与图形学",
+   "innovations": [
+    "提出个性化几何感知分数蒸馏（PGSD）框架，结合Dreambooth、VSD和ControlNet实现稀疏图像到任意几何的高质量纹理转移。",
+    "揭示在VSD优化中移除LoRA模块能显著提升纹理保真度的关键设计。",
+    "证明法线图ControlNet条件在驱动纹理-几何一致性方面优于深度图。"
+   ],
+   "benchmarks": [
+    "自建4类物体稀疏图像数据集",
+    "CLIP相似度",
+    "Amazon Turk用户研究"
+   ]
+  }
+ }
 }

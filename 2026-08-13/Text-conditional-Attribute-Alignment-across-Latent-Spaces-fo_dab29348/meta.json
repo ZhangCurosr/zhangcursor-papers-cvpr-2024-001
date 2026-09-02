@@ -4,5 +4,31 @@
  "title": "Text-conditional-Attribute-Alignment-across-Latent-Spaces-fo",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 03:38:08",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/df414ac3-e7c9-4a01-8c59-29caff0b6d1c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/df414ac3-e7c9-4a01-8c59-29caff0b6d1c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:49:06",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "文本驱动人脸编辑",
+    "3D可控生成",
+    "跨模态对齐",
+    "StyleGAN",
+    "属性嵌入空间"
+   ],
+   "field": "3D可控人脸图像合成",
+   "innovations": [
+    "引入属性嵌入空间（AES）实现文本到3D属性的解耦映射",
+    "基于3D差异Δθ的跨模态校正向量学习替代全局潜码预测",
+    "联合3D一致性与2D地标约束实现高精度多属性文本驱动编辑"
+   ],
+   "benchmarks": [
+    "FFHQ",
+    "FID",
+    "IDD",
+    "TARR"
+   ]
+  }
+ }
 }

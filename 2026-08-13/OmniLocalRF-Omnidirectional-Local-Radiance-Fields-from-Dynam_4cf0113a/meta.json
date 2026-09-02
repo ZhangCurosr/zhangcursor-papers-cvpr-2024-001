@@ -4,5 +4,28 @@
  "title": "OmniLocalRF-Omnidirectional-Local-Radiance-Fields-from-Dynam",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 03:50:12",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4e0a1dd4-a2cb-4e23-ae42-a34eb6b9d5d0.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4e0a1dd4-a2cb-4e23-ae42-a34eb6b9d5d0.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:47:03",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "neural rendering",
+    "omnidirectional view synthesis",
+    "dynamic scene decomposition",
+    "radiance fields",
+    "360 video"
+   ],
+   "field": "神经辐射场与三维重建",
+   "innovations": [
+    "提出双向远帧优化机制，利用360°视频的全局共视特性反向细化局部辐射场",
+    "设计多分辨率自监督运动掩码模块，无需预训练模型即实现动态物体精确分割"
+   ],
+   "benchmarks": [
+    "synthetic 360 video dataset (3 scenes)",
+    "real-world Insta360 dataset (6 outdoor scenes)"
+   ]
+  }
+ }
 }

@@ -4,5 +4,31 @@
  "title": "SAI3D-Segment-Any-Instance-in-3D-Scenes",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-08-13 03:38:11",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4df3b292-3733-4247-bd5c-c2324a9a60f9.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4df3b292-3733-4247-bd5c-c2324a9a60f9.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:46:59",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D实例分割",
+    "零样本学习",
+    "SAM",
+    "开放词汇",
+    "区域生长",
+    "多视图一致性"
+   ],
+   "field": "3D视觉理解",
+   "innovations": [
+    "提出基于几何原语与多视图SAM掩码协同的零样本3D实例分割框架",
+    "设计多级合并标准与渐进式动态阈值区域生长算法提升细粒度分割鲁棒性"
+   ],
+   "benchmarks": [
+    "ScanNetV2",
+    "ScanNet200",
+    "Matterport3D",
+    "ScanNet++"
+   ]
+  }
+ }
 }

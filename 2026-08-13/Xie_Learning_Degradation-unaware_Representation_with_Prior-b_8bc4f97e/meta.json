@@ -3,5 +3,32 @@
  "batch_id": "8bc4f97e-022b-44f4-918c-0f9fe94c1ab3",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-08-13 02:46:49",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f314fa9b-76ae-4dc7-81ea-b9f4a02288a9.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f314fa9b-76ae-4dc7-81ea-b9f4a02288a9.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:50:17",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "盲人脸修复",
+    "退化解耦表示",
+    "潜扩散模型",
+    "向量量化",
+    "交叉注意力"
+   ],
+   "field": "盲人脸恢复",
+   "innovations": [
+    "提出潜扩散正则化模块学习退化解耦 query",
+    "基于潜字典的 top-d 全局映射构建先验 key/value",
+    "DWT 低频注入辅助反向扩散保持语义"
+   ],
+   "benchmarks": [
+    "CelebA-Test",
+    "WIDER-Hard",
+    "WIDER-Medium",
+    "LFW-Test",
+    "WebPhoto-Test"
+   ]
+  }
+ }
 }

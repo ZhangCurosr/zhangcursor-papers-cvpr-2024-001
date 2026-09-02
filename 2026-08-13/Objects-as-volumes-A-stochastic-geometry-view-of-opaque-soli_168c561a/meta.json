@@ -4,5 +4,31 @@
  "title": "Objects-as-volumes-A-stochastic-geometry-view-of-opaque-soli",
  "token": "sk-45Ifw5Iq3...",
  "created_at": "2026-08-13 03:38:12",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/e1f97f7d-c2b4-4ece-9891-91db37171e2d.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/e1f97f7d-c2b4-4ece-9891-91db37171e2d.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 01:47:14",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "体积渲染",
+    "随机几何",
+    "不透明固体",
+    "互易性",
+    "神经隐式表面",
+    "3D重建"
+   ],
+   "field": "神经辐射场与体积表示",
+   "innovations": [
+    "从随机几何第一性原理推导不透明固体的指数体积传输理论",
+    "提出满足互易性和可逆性的衰减系数闭式解及空间变化各向异性建模",
+    "统一解释并修正NeuS/VoSDF等现有表示的物理缺陷，在标准基准上取得最优重建精度"
+   ],
+   "benchmarks": [
+    "DTU",
+    "BlendedMVS",
+    "NeRF Realistic Synthetic"
+   ]
+  }
+ }
 }
