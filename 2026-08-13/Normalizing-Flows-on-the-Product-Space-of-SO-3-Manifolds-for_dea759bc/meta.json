@@ -4,5 +4,28 @@
  "title": "Normalizing-Flows-on-the-Product-Space-of-SO-3-Manifolds-for",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 03:50:13",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2ec3ecf8-5caa-4f55-8fa7-c6342c4db67d.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2ec3ecf8-5caa-4f55-8fa7-c6342c4db67d.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:14:36",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Normalizing Flows",
+    "SO(3) Manifold",
+    "Human Pose Modeling",
+    "Probabilistic Inverse Kinematics",
+    "Rotation Density Estimation"
+   ],
+   "field": "3D人体姿态建模",
+   "innovations": [
+    "在SO(3)乘积空间上设计归一化流实现规范化密度学习",
+    "引入随机排列自回归条件捕获关节间任意依赖关系"
+   ],
+   "benchmarks": [
+    "AMASS",
+    "5-Point Evaluation"
+   ]
+  }
+ }
 }

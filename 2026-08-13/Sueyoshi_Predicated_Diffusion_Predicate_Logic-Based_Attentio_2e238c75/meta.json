@@ -3,5 +3,33 @@
  "batch_id": "2e238c75-6766-4ec6-bb00-e778336af9c7",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 03:00:06",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/8f75c674-bd19-4d80-928c-b3b18dc817a5.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/8f75c674-bd19-4d80-928c-b3b18dc817a5.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:17:39",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "text-to-image diffusion",
+    "attention guidance",
+    "predicate logic",
+    "fuzzy logic",
+    "training-free guidance",
+    "attribute leakage",
+    "possession failure"
+   ],
+   "field": "文生图扩散模型引导方法",
+   "innovations": [
+    "基于谓词逻辑的统一注意力引导框架，将文本语义形式化为可微分损失",
+    "首次系统化提出并解决'归属失败'问题，用逻辑蕴含刻画持有/穿戴关系",
+    "乘积模糊逻辑映射注意力图强度，支持多种命题类型的组合优化"
+   ],
+   "benchmarks": [
+    "自建并存对象评测集(400 prompts)",
+    "自建一对一对应评测集(400 prompts)",
+    "自建归属关系评测集(10 prompts×20 images)",
+    "ABC-6K复杂提示子集"
+   ]
+  }
+ }
 }

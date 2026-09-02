@@ -4,5 +4,36 @@
  "title": "RobustSAM-Segment-Anything-Robustly-on-Degraded-Images",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-08-13 03:38:11",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/e8a4e8e6-4185-4d6a-a10d-fc529515735c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/e8a4e8e6-4185-4d6a-a10d-fc529515735c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:15:23",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Segment Anything Model",
+    "退化图像分割",
+    "零样本分割",
+    "鲁棒性",
+    "图像恢复",
+    "频域抑制"
+   ],
+   "field": "退化图像鲁棒分割",
+   "innovations": [
+    "提出RobustSAM框架，冻结原SAM参数仅微调少量模块以增强退化鲁棒性",
+    "设计AMFG与AOTG模块，结合归一化、注意力与傅里叶退化抑制提取退化不变特征",
+    "构建688K图像的Robust-Seg数据集并验证下游去雾/去模糊任务增益"
+   ],
+   "benchmarks": [
+    "MSRA10K",
+    "LVIS",
+    "NDD20",
+    "STREETS",
+    "FSS-1000",
+    "COCO",
+    "BDD-100k",
+    "LIS"
+   ]
+  }
+ }
 }

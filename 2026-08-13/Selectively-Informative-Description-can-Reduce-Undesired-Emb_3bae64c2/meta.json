@@ -4,5 +4,34 @@
  "title": "Selectively-Informative-Description-can-Reduce-Undesired-Emb",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 03:49:59",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/6663b80b-5c57-4e64-88d9-3a7fc99023d0.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/6663b80b-5c57-4e64-88d9-3a7fc99023d0.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:16:01",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "text-to-image personalization",
+    "embedding entanglement",
+    "DreamBooth",
+    "selective description",
+    "vision-language model",
+    "cross-attention"
+   ],
+   "field": "文本到图像个性化生成",
+   "innovations": [
+    "提出SID策略，通过仅描述非主体对象的信息性训练描述抑制嵌入纠缠",
+    "系统归纳五类个性化生成偏见（背景/邻近物体/绑定物体/风格/姿态）",
+    "定义SA/NSD/TA三项专用评估指标，揭示通用image-alignment的局限性"
+   ],
+   "benchmarks": [
+    "DreamBooth",
+    "Custom Diffusion",
+    "SVDiff",
+    "Textual Inversion",
+    "ELITE",
+    "BLIP-Diffusion"
+   ]
+  }
+ }
 }

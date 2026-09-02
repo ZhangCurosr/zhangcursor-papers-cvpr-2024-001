@@ -3,5 +3,31 @@
  "batch_id": "053adee0-7e95-4e46-9918-5c0fb87eb1b8",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-13 02:46:36",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/e660068d-e237-461c-9331-c915544eddce.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/e660068d-e237-461c-9331-c915544eddce.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:15:26",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Volterra Network",
+    "Image Restoration",
+    "Video Denoising",
+    "Activation-Free Network",
+    "Nonlinear Filter"
+   ],
+   "field": "图像/视频恢复",
+   "innovations": [
+    "提出MR-VNet架构，用二阶Volterra卷积替代传统激活函数建模非线性交互",
+    "设计无损/有损两种Volterra核近似方案，证明NAFNet为其Q=1特例",
+    "在去模糊、去噪、视频去噪任务上以更低复杂度达到SOTA性能"
+   ],
+   "benchmarks": [
+    "GoPro",
+    "SIDD",
+    "REDS",
+    "CRVD"
+   ]
+  }
+ }
 }

@@ -3,5 +3,32 @@
  "batch_id": "d7fe7712-1af6-4659-b293-82d62911c640",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-13 02:46:32",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/781f613c-125f-4820-86f9-73391a563b90.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/781f613c-125f-4820-86f9-73391a563b90.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:17:01",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Referring Image Segmentation",
+    "Prompt Learning",
+    "CLIP",
+    "SAM",
+    "Cross-Modal Prompting",
+    "Instance Contrastive Learning",
+    "Vision-Language"
+   ],
+   "field": "视觉-语言理解与分割",
+   "innovations": [
+    "提出 CMP 双向跨模态提示实现 CLIP 到像素级任务的适配",
+    "设计 ICL 实例对比学习提升多实例判别与多描述鲁棒性",
+    "通过 prompt learning 端到端桥接 CLIP 与 SAM 生成三类 prompt"
+   ],
+   "benchmarks": [
+    "RefCOCO",
+    "RefCOCO+",
+    "G-Ref"
+   ]
+  }
+ }
 }

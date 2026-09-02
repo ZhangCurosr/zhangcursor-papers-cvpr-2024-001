@@ -4,5 +4,31 @@
  "title": "Scaling-Up-Video-Summarization-Pretraining-with-Large-Langua",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 03:37:59",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/5838dba7-91ce-42b6-94c4-e8d10297f54d.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/5838dba7-91ce-42b6-94c4-e8d10297f54d.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:15:54",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "视频摘要",
+    "大语言模型",
+    "自回归解码",
+    "多模态预训练",
+    "伪真值构建",
+    "LfVS-P",
+    "LfVS-T"
+   ],
+   "field": "视频理解与摘要",
+   "innovations": [
+    "LLM Oracle 抽取式时间戳对齐自动生成 25 万对长视频-摘要预训练数据",
+    "多模态自回归连续特征解码替代逐帧分类，缓解长尾与重复选取"
+   ],
+   "benchmarks": [
+    "LfVS-T",
+    "TVSum",
+    "SumMe"
+   ]
+  }
+ }
 }

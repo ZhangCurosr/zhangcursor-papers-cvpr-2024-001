@@ -4,5 +4,33 @@
  "title": "NeRF-Analogies-Example-Based-Visual-Attribute-Transfer-for-N",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-13 03:38:05",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/1a93fe2c-1274-4e51-9455-401039029fde.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/1a93fe2c-1274-4e51-9455-401039029fde.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:14:21",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "NeRF",
+    "神经辐射场",
+    "外观迁移",
+    "语义对应",
+    "ViT特征",
+    "多视角一致性",
+    "图像类比",
+    "3D编辑"
+   ],
+   "field": "NeRF编辑与三维内容生成",
+   "innovations": [
+    "提出NeRF Analogies框架，将2D图像类比扩展到多视角一致的3D外观迁移",
+    "利用DiNO-ViT语义特征建立跨视图密集对应关系，实现几何-外观解耦编辑",
+    "设计边缘损失(DoG正则化)缓解跨视图特征噪声导致的高频细节模糊"
+   ],
+   "benchmarks": [
+    "MiP-NeRF 360",
+    "Tanks and Temples",
+    "ShapeNet"
+   ]
+  }
+ }
 }

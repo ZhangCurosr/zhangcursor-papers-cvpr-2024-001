@@ -4,5 +4,29 @@
  "title": "Stratified-Avatar-Generation-from-Sparse-Observations",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 03:38:22",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/27d5f2a6-6ffa-4d4e-819c-ad34f37ba613.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/27d5f2a6-6ffa-4d4e-819c-ad34f37ba613.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:17:23",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Human Motion Reconstruction",
+    "Sparse Observations",
+    "Diffusion Model",
+    "Avatar Generation",
+    "Disentangled Representation",
+    "VR/AR"
+   ],
+   "field": "三维人体动画生成",
+   "innovations": [
+    "提出基于SMPL运动学树结构的上半身/下半身分层解耦表征学习框架",
+    "设计分层条件潜在扩散模型，串行生成上下半身潜在以显式建模其依赖关系",
+    "构建联合训练的全身体解码器与分层扩散管线，提升稀疏观测下的全身重建质量"
+   ],
+   "benchmarks": [
+    "AMASS"
+   ]
+  }
+ }
 }

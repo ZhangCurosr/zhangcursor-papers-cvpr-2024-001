@@ -3,5 +3,31 @@
  "batch_id": "e28fa6a2-d385-4cd9-b1a9-91fe06067d7a",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 03:00:06",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/bffb7f04-a91a-4015-8f42-55d247eed192.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/bffb7f04-a91a-4015-8f42-55d247eed192.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:18:07",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D human motion prediction",
+    "online meta adaptation",
+    "model-agnostic meta-learning",
+    "MoAdapter",
+    "concept drift",
+    "streaming data"
+   ],
+   "field": "3D人体运动预测",
+   "innovations": [
+    "首次将在线元适应引入人体运动预测，利用近期预测误差驱动沿时间的参数自适应",
+    "提出MoAdapter模块与双层优化框架，分离通用参数与自适应参数",
+    "Fast-MoML通过闭式解实现最后一层的高效在线适应"
+   ],
+   "benchmarks": [
+    "Human3.6M",
+    "CMU-Mocap",
+    "3DPW"
+   ]
+  }
+ }
 }

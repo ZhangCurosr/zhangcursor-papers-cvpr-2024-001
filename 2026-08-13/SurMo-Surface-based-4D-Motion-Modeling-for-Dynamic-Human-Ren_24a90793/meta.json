@@ -4,5 +4,30 @@
  "title": "SurMo-Surface-based-4D-Motion-Modeling-for-Dynamic-Human-Ren",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-13 03:50:18",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/092dd9a7-f789-4f09-a823-17a3d0dbddc2.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/092dd9a7-f789-4f09-a823-17a3d0dbddc2.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:18:15",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "动态人体渲染",
+    "4D 运动建模",
+    "表面三平面",
+    "物理运动学习",
+    "自由视角合成"
+   ],
+   "field": "动态神经辐射场与人体渲染",
+   "innovations": [
+    "提出基于 SMPL UV 表面参数的 4D 运动三平面表示，联合编码时空运动与外观",
+    "设计物理运动解码器，显式预测下一时刻表面法向与速度以强化时序动力学学习",
+    "在稀疏多视角视频下实现快速运动与运动相关阴影的高保真自由视角合成"
+   ],
+   "benchmarks": [
+    "ZJU-MoCap",
+    "MPII-RDDC",
+    "AIST++"
+   ]
+  }
+ }
 }

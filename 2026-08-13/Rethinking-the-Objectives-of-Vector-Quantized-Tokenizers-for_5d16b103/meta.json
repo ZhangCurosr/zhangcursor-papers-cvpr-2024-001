@@ -4,5 +4,33 @@
  "title": "Rethinking-the-Objectives-of-Vector-Quantized-Tokenizers-for",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-13 03:50:16",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/99312661-88cd-44e2-b0bd-11d83386493f.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/99312661-88cd-44e2-b0bd-11d83386493f.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:14:55",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "VQ Tokenizer",
+    "Image Synthesis",
+    "Semantic Compression",
+    "Generative Transformer",
+    "Vector Quantization",
+    "Perceptual Loss"
+   ],
+   "field": "图像生成与离散潜空间建模",
+   "innovations": [
+    "揭示VQ tokenizer重建保真度与生成质量的解耦关系，提出语义压缩与细节保留的竞争目标",
+    "设计两阶段训练框架SeQ-GAN，解耦潜空间语义学习与Decoder细节恢复",
+    "提出语义增强感知损失与熵正则化codebook使用策略"
+   ],
+   "benchmarks": [
+    "ImageNet 256x256",
+    "FFHQ",
+    "LSUN-Cat",
+    "LSUN-Church",
+    "LSUN-Bedroom"
+   ]
+  }
+ }
 }

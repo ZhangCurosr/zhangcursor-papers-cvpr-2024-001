@@ -3,5 +3,32 @@
  "batch_id": "5279b696-7209-4579-9451-ef7709eb3340",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-08-13 02:46:30",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/5e4268ad-1356-48d2-8f98-89ef9ec20f71.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/5e4268ad-1356-48d2-8f98-89ef9ec20f71.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:17:17",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "diffusion model distillation",
+    "teacher-student collaboration",
+    "text-to-image generation",
+    "consistency distillation",
+    "adaptive inference",
+    "image editing"
+   ],
+   "field": "生成式扩散模型加速与优化",
+   "innovations": [
+    "发现蒸馏学生模型在约30%样本上可超越教师模型质量",
+    "提出基于ImageReward阈值的自适应师生协同框架",
+    "支持精炼与重新生成双策略的教师介入机制"
+   ],
+   "benchmarks": [
+    "COCO2014",
+    "LAION-Aesthetics",
+    "SD1.5",
+    "SDXL"
+   ]
+  }
+ }
 }

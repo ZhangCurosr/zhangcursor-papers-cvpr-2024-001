@@ -4,5 +4,10 @@
  "title": "Mocap-Everyone-Everywhere-Lightweight-Motion-Capture-With-Sm",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 03:49:57",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/a9ea604e-38e8-4ff7-8b85-8b7577ed7fd6.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/a9ea604e-38e8-4ff7-8b85-8b7577ed7fd6.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:14:34",
+  "chunks": 1
+ }
 }

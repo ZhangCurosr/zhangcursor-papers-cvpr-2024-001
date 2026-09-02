@@ -4,5 +4,10 @@
  "title": "Rewrite-the-Stars",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 03:38:23",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/549d43f6-a770-4af1-9296-68f49dee2e09.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/549d43f6-a770-4af1-9296-68f49dee2e09.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:15:50",
+  "chunks": 1
+ }
 }

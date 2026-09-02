@@ -3,5 +3,31 @@
  "batch_id": "c235eb04-f0ff-4386-b684-f025ba6efa33",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 02:59:03",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/70cc4691-7b73-4e4b-a825-c2d709db3efe.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/70cc4691-7b73-4e4b-a825-c2d709db3efe.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:18:33",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "gaze following",
+    "multi-person vision",
+    "transformer architecture",
+    "dense prediction",
+    "Conditional DPT",
+    "vision transformer"
+   ],
+   "field": "多人员视线性（Multi-Person Gaze Following）",
+   "innovations": [
+    "将人物信息编码为单个 location-aware gaze token 并与图像 token 在 Transformer 中联合交互",
+    "提出 Conditional DPT 多尺度条件化解码器用于生成 gaze heatmap",
+    "首次在原任务设定下实现端到端多人员 gaze following，无需可学习对象嵌入和 Hungarian matching"
+   ],
+   "benchmarks": [
+    "GazeFollow",
+    "VideoAttentionTarget",
+    "ChildPlay"
+   ]
+  }
+ }
 }

@@ -4,5 +4,32 @@
  "title": "Score-Guided-Diffusion-for-3D-Human-Recovery",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 03:50:14",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4a8eff21-ef3c-4c84-a178-18155887a3c2.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/4a8eff21-ef3c-4c84-a178-18155887a3c2.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:16:18",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D Human Mesh Recovery",
+    "Diffusion Model",
+    "Score Guidance",
+    "Inverse Problem",
+    "Human Pose Estimation",
+    "SMPL"
+   ],
+   "field": "3D人体恢复与重建",
+   "innovations": [
+    "利用扩散模型score guidance在隐空间迭代精化人体参数，无需任务特定重训练",
+    "提出通用框架统一处理单帧拟合、多视图重建和时序精化三类逆问题",
+    "DDIM反演-引导采样循环设计，首次使扩散模型有效替代传统优化拟合"
+   ],
+   "benchmarks": [
+    "3DPW",
+    "EMDB 1",
+    "Human3.6M",
+    "Mannequin Challenge"
+   ]
+  }
+ }
 }

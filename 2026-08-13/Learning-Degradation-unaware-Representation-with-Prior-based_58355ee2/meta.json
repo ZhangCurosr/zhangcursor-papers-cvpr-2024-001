@@ -4,5 +4,32 @@
  "title": "Learning-Degradation-unaware-Representation-with-Prior-based",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 03:38:21",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f314fa9b-76ae-4dc7-81ea-b9f4a02288a9.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f314fa9b-76ae-4dc7-81ea-b9f4a02288a9.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:14:00",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "盲人脸恢复",
+    "潜扩散",
+    "退化无关表征",
+    "交叉注意力",
+    "向量量化",
+    "小波变换"
+   ],
+   "field": "盲人脸恢复",
+   "innovations": [
+    "提出潜扩散正则化模块学习退化无关query，结合DWT低频引导保留语义",
+    "构建HQ人脸潜字典并学习top-d近邻全局映射以生成退化鲁棒的key/value",
+    "从query/key/value先验变换的新视角重新设计Transformer注意力机制用于BFR"
+   ],
+   "benchmarks": [
+    "CelebA-Test",
+    "WIDER-Hard",
+    "LFW-Test",
+    "WebPhoto-Test"
+   ]
+  }
+ }
 }

@@ -4,5 +4,30 @@
  "title": "TIGER-Time-Varying-Denoising-Model-for-3D-Point-Cloud-Genera",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 03:37:56",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f45fb4d6-80e9-42f4-9710-5155c48b6160.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/f45fb4d6-80e9-42f4-9710-5155c48b6160.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:18:24",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D Point Cloud Generation",
+    "Diffusion Model",
+    "Transformer",
+    "Convolutional Network",
+    "Position Encoding",
+    "Time-varying Architecture"
+   ],
+   "field": "3D点云生成",
+   "innovations": [
+    "提出时变双分支去噪模型，动态融合CNN局部特征与Transformer全局特征",
+    "设计PSPE和BλPE两种3D连续位置编码方法",
+    "引入位置感知自注意力机制增强长程依赖建模"
+   ],
+   "benchmarks": [
+    "ShapeNetv2 Airplane/Chair/Car",
+    "1-NN Accuracy (CD-based and EMD-based)"
+   ]
+  }
+ }
 }

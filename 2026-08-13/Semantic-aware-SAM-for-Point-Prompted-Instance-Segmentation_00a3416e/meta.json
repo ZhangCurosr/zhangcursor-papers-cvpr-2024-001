@@ -4,5 +4,10 @@
  "title": "Semantic-aware-SAM-for-Point-Prompted-Instance-Segmentation",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 03:38:17",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/ff29fe05-ab43-4b3a-b9c3-a22b221dda7e.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/ff29fe05-ab43-4b3a-b9c3-a22b221dda7e.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:17:15",
+  "chunks": 1
+ }
 }

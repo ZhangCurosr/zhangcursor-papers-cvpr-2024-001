@@ -4,5 +4,30 @@
  "title": "Single-Mesh-Diffusion-Models-with-Field-Latents-for-Texture",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-08-13 03:38:11",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/9dae4c00-2c3b-4271-8982-6687f073d81c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/9dae4c00-2c3b-4271-8982-6687f073d81c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:17:01",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D纹理生成",
+    "扩散模型",
+    "流形深度学习",
+    "等距等变性",
+    "单样本生成",
+    "场潜变量"
+   ],
+   "field": "3D生成式建模",
+   "innovations": [
+    "提出Field Latents将纹理编码为切向量场，利用对数坐标函数实现丰富特征插值",
+    "构建等距等变的场卷积扩散模型(FLDM)，支持单网格纹理生成与跨几何纹理转移",
+    "将卷积核扩展至C×R^e→C实现条件注入，在保持等变性的同时稳定训练"
+   ],
+   "benchmarks": [
+    "Google Scanned Objects",
+    "Objaverse"
+   ]
+  }
+ }
 }

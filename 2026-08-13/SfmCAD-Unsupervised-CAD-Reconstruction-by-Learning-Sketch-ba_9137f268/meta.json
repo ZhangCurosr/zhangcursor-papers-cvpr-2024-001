@@ -4,5 +4,34 @@
  "title": "SfmCAD-Unsupervised-CAD-Reconstruction-by-Learning-Sketch-ba",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 03:38:21",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/1f283287-c305-417f-bb7c-49b9247b0d6b.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/1f283287-c305-417f-bb7c-49b9247b0d6b.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:16:33",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "CAD reconstruction",
+    "sketch-based modeling",
+    "unsupervised learning",
+    "implicit representation",
+    "feature primitives",
+    "Bezier curve",
+    "SDF",
+    "3D shape parsing"
+   ],
+   "field": "3D计算机视觉与图形学",
+   "innovations": [
+    "首个无监督通用草图+路径CAD重建网络，支持拉伸/扫掠/放样/旋转四种操作",
+    "结构-细节解耦表示：3D Bezier曲线表示整体结构，隐式2D草图表示局部几何",
+    "两阶段粗到细学习策略：Box+Path粗表示加速收敛，隐式草图细化细节"
+   ],
+   "benchmarks": [
+    "ABC Dataset",
+    "ShapeNet Dataset",
+    "Tree Dataset",
+    "PartNet Dataset"
+   ]
+  }
+ }
 }

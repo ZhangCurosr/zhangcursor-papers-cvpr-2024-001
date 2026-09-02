@@ -4,5 +4,30 @@
  "title": "Learning-Spatial-Adaptation-and-Temporal-Coherence-in-Diffus",
  "token": "sk-9BdnpHblK...",
  "created_at": "2026-08-13 03:38:19",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/fc8a7ca3-5801-4bf7-a595-0666dc248987.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/fc8a7ca3-5801-4bf7-a595-0666dc248987.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:13:54",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "视频超分辨率",
+    "扩散模型",
+    "空间适配",
+    "时序一致性",
+    "Stable Diffusion",
+    "潜空间去噪"
+   ],
+   "field": "视频超分辨率",
+   "innovations": [
+    "提出 SFA 模块通过 LR 特征估计仿射参数实现 HR 特征的像素级自适应调制",
+    "提出 TFA 模块在 3D tubelet 内执行自注意力与跨注意力实现帧间时序特征对齐",
+    "设计可学习 Video Refiner 平衡扩散合成质量与 LR 输入保真度"
+   ],
+   "benchmarks": [
+    "REDS4",
+    "Vid4"
+   ]
+  }
+ }
 }

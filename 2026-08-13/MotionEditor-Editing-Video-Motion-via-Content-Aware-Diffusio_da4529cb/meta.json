@@ -4,5 +4,32 @@
  "title": "MotionEditor-Editing-Video-Motion-via-Content-Aware-Diffusio",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 03:50:12",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/0cb35146-cb46-4f73-a61e-6a400a387b19.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/0cb35146-cb46-4f73-a61e-6a400a387b19.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:14:13",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "video motion editing",
+    "diffusion model",
+    "ControlNet",
+    "content-aware",
+    "appearance preservation",
+    "temporal consistency"
+   ],
+   "field": "视频生成与编辑",
+   "innovations": [
+    "首个基于扩散模型的视频动作编辑框架，解决源-条件动作冲突问题",
+    "内容感知运动适配器通过交叉注意力桥接源隐特征与姿态条件",
+    "高保真注意力注入机制利用分割掩码解耦前景/背景实现外观保持"
+   ],
+   "benchmarks": [
+    "TaichiHD",
+    "YouTube in-the-wild videos",
+    "CLIP Score",
+    "LPIPS-S/N/T"
+   ]
+  }
+ }
 }

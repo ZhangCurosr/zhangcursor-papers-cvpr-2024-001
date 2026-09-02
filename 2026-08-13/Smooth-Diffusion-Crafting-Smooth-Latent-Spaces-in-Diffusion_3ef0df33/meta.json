@@ -4,5 +4,34 @@
  "title": "Smooth-Diffusion-Crafting-Smooth-Latent-Spaces-in-Diffusion",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 03:49:59",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2d364d9d-2cf5-413c-b74c-9fe85dacf8e5.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/2d364d9d-2cf5-413c-b74c-9fe85dacf8e5.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:17:07",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "扩散模型",
+    "潜空间平滑性",
+    "图像插值",
+    "图像反转",
+    "图像编辑",
+    "正则化",
+    "LoRA"
+   ],
+   "field": "生成模型与下游应用",
+   "innovations": [
+    "提出逐步变化正则化实现扩散模型潜空间平滑性",
+    "设计ISTD指标量化潜空间平滑程度",
+    "在Stable Diffusion基础上仅微调LoRA即显著提升插值/反转/编辑质量"
+   ],
+   "benchmarks": [
+    "MS-COCO validation",
+    "LAION Aesthetics 6.5+",
+    "Stable Diffusion Walk",
+    "DDIM Inversion",
+    "Null-Text Inversion"
+   ]
+  }
+ }
 }

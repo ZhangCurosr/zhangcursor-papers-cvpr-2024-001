@@ -4,5 +4,29 @@
  "title": "Retrieval-Augmented-Layout-Transformer-for-Content-Aware-Lay",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 03:50:15",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/97f50044-cec6-4bc5-8fa9-2d5e00d8d8aa.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/97f50044-cec6-4bc5-8fa9-2d5e00d8d8aa.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:15:11",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "内容感知布局生成",
+    "检索增强生成",
+    "自回归模型",
+    "可控生成",
+    "图形设计"
+   ],
+   "field": "内容感知布局生成",
+   "innovations": [
+    "提出检索增强布局变换器RALF，通过检索相似设计示例缓解数据稀缺",
+    "检索增强可泛化至GAN/扩散模型等不同生成架构",
+    "仅用3000样本即超越Baseline全量训练效果"
+   ],
+   "benchmarks": [
+    "PKU",
+    "CGL"
+   ]
+  }
+ }
 }

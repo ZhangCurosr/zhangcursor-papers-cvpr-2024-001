@@ -4,5 +4,30 @@
  "title": "Semantic-Human-Mesh-Reconstruction-with-Textures",
  "token": "sk-Ar06zcDAy...",
  "created_at": "2026-08-13 03:49:45",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/68e3c8fb-0d9a-4e51-92ca-ce67767611ad.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/68e3c8fb-0d9a-4e51-92ca-ce67767611ad.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:16:18",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "语义人体网格",
+    "单目3D重建",
+    "非刚性配准",
+    "UV补全",
+    "扩散纹理生成",
+    "SMPL-X"
+   ],
+   "field": "单目3D人体重建与纹理生成",
+   "innovations": [
+    "提出SHERT管线，将详细表面/单目图像重建为带稳定UV与语义的完整可动画人体网格",
+    "设计SNS采样与质量过滤，在canonical空间自监督补全与细化，处理不完整/含错输入",
+    "利用微调Stable Diffusion+ControlNet实现文本/图像驱动的局部修复与高分辨率纹理生成"
+   ],
+   "benchmarks": [
+    "CAPE",
+    "THuman2.0"
+   ]
+  }
+ }
 }

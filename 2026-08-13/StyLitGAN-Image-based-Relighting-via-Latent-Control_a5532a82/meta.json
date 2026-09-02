@@ -4,5 +4,10 @@
  "title": "StyLitGAN-Image-based-Relighting-via-Latent-Control",
  "token": "sk-Ir4JqYCnj...",
  "created_at": "2026-08-13 03:37:59",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/dd24d775-6b55-4e11-bf1d-8f44c5bec5d5.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/dd24d775-6b55-4e11-bf1d-8f44c5bec5d5.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:21:20",
+  "chunks": 1
+ }
 }

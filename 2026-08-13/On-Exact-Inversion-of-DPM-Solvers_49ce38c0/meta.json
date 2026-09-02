@@ -4,5 +4,10 @@
  "title": "On-Exact-Inversion-of-DPM-Solvers",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-08-13 03:49:39",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/3e06216d-29b8-4afd-aa52-1bdc4d8aaff6.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-08-12/3e06216d-29b8-4afd-aa52-1bdc4d8aaff6.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-09-02 00:15:07",
+  "chunks": 1
+ }
 }
