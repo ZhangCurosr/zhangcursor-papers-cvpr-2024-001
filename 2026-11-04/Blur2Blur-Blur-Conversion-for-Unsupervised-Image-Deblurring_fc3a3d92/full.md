@@ -1,0 +1,288 @@
+# Blur2Blur: Blur Conversion for Unsupervised Image Deblurring on Unknown Domains
+
+Bang-Dang Pham<sup>1</sup> Phong Tran<sup>2</sup> Anh Tran<sup>1</sup> Cuong Pham<sup>1,3</sup> Rang Nguyen<sup>1</sup> Minh Hoai<sup>1,4</sup> <sup>1</sup>VinAI Research, Vietnam <sup>2</sup>MBZUAI, UAE <sup>3</sup>Posts & Telecommunications Inst. of Tech., Vietnam <sup>4</sup>University of Adelaide, Australia {v.dangpb1, v.anhtt152, v.rangnhm, v.hoainm}@vinai.io cuongpv@ptit.edu.vn the.tran@mbzuai.ac.ae
+
+![](images/68e1ff3f04428692e763c6b728de98eec2082e895ed46746ff2773dd988186d3.jpg)  
+Figure 1. We address the unsupervised image deblurring problem by training a blur translator that converts an input image with unknown blur to an image with a predefined known blur. The figure shows the effectiveness of our approach. The blurry images before and after translation (left image in each box) exhibit similar visual content but have different blur patterns (zoomed-in patches). While a standard image deblurring technique fails to restore the unknown-blur image, it successfully recovers the known-blur version, yielding an approximate 2.2 dB increase in PSNR score (noted below each deblurred image on the right side of each box).
+
+## Abstract
+
+This paper presents an innovative framework designed to train an image deblurring algorithm tailored to a specific camera device. This algorithm works by transforming a blurry input image, which is challenging to deblur, into another blurry image that is more amenable to deblurring. The transformation process, from one blurry state to another, leverages unpaired data consisting of sharp and blurry images captured by the target camera device. Learning this blur-to-blur transformation is inherently simpler than direct blur-to-sharp conversion, as it primarily involves modifying blur patterns rather than the intricate task of reconstructing fine image details. The efficacy of the proposed approach has been demonstrated through comprehensive experiments on various benchmarks, where it significantly outperforms state-of-the-art methods both quantitatively and qualitatively. Our code and data are available at https://github.com/VinAIResearch/Blur2Blur
+
+## 1. Introduction
+
+Motion blur in images and videos is a common issue, often resulting from camera shake or rapid movement within the scene. Such blur can detract from the aesthetic quality of the content and may undermine the performance of downstream computer vision applications. Consequently, an effective image deblurring method is essential in various contexts.
+
+While the idea of deblurring images from arbitrary, diverse sources sounds impressive and broadly useful, the practical necessity, commercial value, and societal impact of image deblurring are frequently connected to specific application scenarios and particular cameras. For example, a mobile phone manufacturer might focus on integrating the most effective deblurring algorithm for the camera types used in their latest phone models. Similarly, a factory manager might consider installing ceiling-mounted cameras to identify errors on the assembly line, enhancing workforce efficiency. However, motion blur could significantly degrade the performance of computer vision algorithms meant to detect and track workers’ hands and tools. In law enforcement, a police officer using a body-worn camera coupled with face recognition technology might find that motion blur hampers the accuracy of detecting faces and identifying fugitives. Therefore, in these scenarios, the development of a framework to customize a deblurring algorithm for specific cameras or camera types becomes crucial and represents a significant and growing need.
+
+In this paper, we explore the question: How can we deblur images captured by specific cameras? Classical deblurring algorithms, which use signal processing or theoretical models of motion blur, are one option. Yet, their reliance on oversimplified blur models limits their effectiveness in addressing the complex motion blur encountered in real-world scenarios. An alternative is a data-driven approach that leverages advancements in machine learning. This approach involves using pre-trained deblurring networks developed through supervised learning, as illustrated by works such as [2, 3, 14, 33, 35, 40]. These networks, trained on extensive datasets of paired images, aim to transform blurry images into sharp ones. However, they often suffer from overfitting and tend to underperform on novel blurred im ages that were not captured by the cameras used to create their training datasets. Our empirical findings indicate that the performance of these models is still unsatisfactory when confronting unseen blurs produced by real-world cameras.
+
+When pre-trained networks are unsuitable, the alternative is to develop a deblurring network specifically for our camera. However, this approach faces the challenge of not having access to paired training data, consisting of corresponding blurry and sharp images. Generating such data typically involves a sophisticated setup with a beam splitter, identical cameras operating at varying speeds, and capabilities for time synchronization, geometrical alignment, and color calibration [16, 17, 29]. Often, the camera targeted for deblurring may not meet these stringent requirements, and arranging this setup is not feasible for many. Therefore, we are left with the option of utilizing unpaired data. Yet, training on unpaired data presents its own set of challenges due to the lack of supervision for restoring fine details that are missing or distorted in the blurry input images. Existing methods [19, 38, 42, 44], which attempt to recreate these absent details, frequently fall short, particularly when dealing with blur typical of real-world images.
+
+In this paper, we introduce Blur2Blur, a novel plug-andplay framework that leverages pretrained deblurring models to train an image deblurring algorithm specifically for a chosen camera device. Similar to other unsupervised deblurring methods, we utilize unpaired data. More precisely, we use the target camera to capture a set of blurry images and sharp images, without requiring a one-to-one correspondence between the images in these two sets. This approach makes data collection relatively simple and straightforward. Our method diverges from existing unsupervised methods by not attempting to directly learn a function from the domain of blurry images captured by our camera (the unknown blur domain, denoted as $C ) ,$ to the domain of sharp images. Instead, our strategy involves first learning a mapping G from the domain $C$ to another domain $C ^ { \prime }$ of blurry images, where deblurring techniques are already well-established. To deblur an image taken by our camera, we first convert it into an image in $C ^ { \prime }$ using the learned mapping $G ,$ then apply a pre-trained network to deblur this transformed image. Consequently, our primary goal is to learn the blur-to-blur mapping from $C$ to $C ^ { \prime } .$ , which is inherently less challenging than the direct blur-to-sharp mapping, because the former primarily involves altering blur patterns rather than the more complex task of reconstructing detailed image features.
+
+To learn the blur-to-blur mapping, we propose a novel learning framework to leverage the collected set of blurry and sharp images as well as the blurry images from the known blur domain $C ^ { \prime } .$ To train the blur-to-blur mapping network, we carefully define various loss terms, including perceptual, adversarial, and gradient penalty terms. The details of our approach are illustrated in Fig. 1.
+
+We conducted extensive experiments to compare the effectiveness of our model with other state-of-the-art image deblurring approaches on both real-world and synthetic blur datasets. The results demonstrate that Blur2Blur outperforms other methods by a significant margin, highlighting its superior performance in addressing the challenges of image deblurring in real-world settings. Notably, when combined with our blur translation method, supervised methods achieve an impressive boost up to 2.91 dB in PSNR.
+
+## 2. Related Work
+
+Many methods have been proposed for image deblurring. Beyond classical methods that do not necessitate training data, many contemporary approaches are grounded in machine learning. Learning-based methods can be broadly categorized based on their data requirements, whether it be paired, synthetic, or unpaired data. This section reviews representative works from these categories.
+
+Classical Image Deblurring. Early deblurring methods assume that the blur operator is linear and uniform. In other words, the blur can be approximated by a single convolution operator: $y = x * k + \eta .$ , where y, x, k, and η represent the blurry image, sharp image, blur kernel, and noise, respectively. Based on this assumption, given a blurry image $y ,$ the sharp image x and the blur kernel $k$ can be obtained by maximizing the posterior distribution: $x ^ { * } , k ^ { * } = \operatorname { a r g m a x } _ { x , k } P ( x , k | y ) P ( x ) P ( k )$ . Traditional methods primarily focus on finding prior distributions for either x [1, 7, 12, 13] or k [16, 18, 26]. However, these methods generalize poorly to real-world blurry images because blur kernels are often non-uniform and non-linear.
+
+Supervised learning with paired data. Going beyond the assumptions of uniformity and linearity, several deep deblurring neural networks have been proposed [3, 14, 15, 20, 34, 39], demonstrating promising results. These networks are typically trained on large-scale datasets containing pairs of blurry and sharp images. The distinguishing factors among these works primarily lie on their architectural designs. For instance, Tao et al. [34] introduced a multi-scale recurrent network architecture specifically tailored for image deblurring. Other methods [4, 23] leveraged a coarse-to-fine strategy, utilizing multi-scale inputs to incrementally refine the deblurring process. Kupyn et al. [14] was the first to incorporate GAN-based loss into the image deblurring framework, aiming to enhance the realism of deblurred images. Meanwhile, Zamir et al. [39] proposed a multi-stage framework that breaks down the image restoration task into smaller, more manageable stages. Lastly, Chen et al. [3] reduced the complexity both between and within network blocks based on UNet [30] architecture.
+
+In supervised learning, training convolutional networks effectively requires extensive datasets comprising both sharp and blurry image pairs. Acquiring these datasets can be a complex and lengthy process, often necessitating advanced hardware and careful setup. Recent studies [25, 27, 43] have introduced real-world deblurring datasets created using a dual-camera system, consisting of a high-speed and a lowspeed camera, synchronized and aligned precisely with a time trigger and a beam splitter. This method ensures the collection of perfectly matched pairs of blurry and sharp images. Nonetheless, a limitation arises as deblurring networks trained on these specific datasets may become too tailored to the characteristics of the cameras used, resulting in reduced performance when applied to images from different cameras. Moreover, the dual-camera system is an advanced setup, requiring specific camera types that meet certain criteria, which means not all cameras are suitable for this purpose.
+
+Supervised learning with synthesized data. One common approach for synthesizing blurry images is to average multiple consecutive sharp frames from a video sequence [23, 24]. Although this method mimics the way blurry im ages are captured, it has been demonstrated that models trained on these datasets often underperform when tested on real-world blurry images [28, 37]. Recent studies have proposed more advanced techniques to synthesize deblurring datasets, aiming to improve the generalization of models trained on these datasets to unseen blur. For instance, Zhang et al. [41] created a synthesized dataset by combining mul tiple types of degradation operators initially developed for the super-resolution task. Rim et al. [28] compared real and synthetic blurry images to design a more realistic blur synthesis pipeline. However, as demonstrated in Sec. 4.2, the degradation augmentation in [41] significantly impairs the quality of input images, leading to distorted outputs. On the other hand, models trained on the synthesized deblurring dataset in [28] exhibit signs of overfitting to the training data.
+
+One promising direction was to leverage the known relationship between blurry and sharp image pairs from existing datasets [37]. This method involves capturing the blur distribution characteristic of each pair, which can then be applied to construct a synthesized blurred dataset. Inspired by the effectiveness of this strategy in capturing blur attributes from the known dataset, Blur2Blur adopts this approach. It is designed to discern and retain the blur kernel while selectively ignoring the camera-specific attributes of the target dataset.
+
+Unupservised learning with unpaired data. Another approach to address the overfitting problem is through unpaired deblurring [19, 38, 42, 44]. Unlike supervised methods, these techniques do not require paired sharp and blurry images for training. However, they often face limitations, such as being domain-specific [19], or making low-level statisti cal assumptions about blur operators [42], which may not be valid for real-world blurry images. To facilitate domain adaptation between blurred and sharp images, other methods [38, 44] have been explored. However, these approaches struggle to bridge the gap between these domains effectively due to (1) the significant variation in the degree of blur across different images, which affects the perceived semantics of the objects within, and (2) the complex and unpredictable nature of real-world blur patterns, often contradicting the simplistic assumptions used in these models. Consequently, the challenge of achieving truly blind image deblurring remains unsolved.
+
+Considering these limitations, our Blur2Blur approach is centered around the innovative idea of blur kernel transfer. This involves transforming the blur kernel from any particular camera into a familiar blur kernel from a dataset or camera that has a strong, pre-trained deblurring model. This method enables us to utilize the benefits of supervised techniques within an unsupervised framework, effectively tackling the challenge of deblurring images with a wide range of unknown blur distributions.
+
+## 3. Methodology
+
+## 3.1. Approach Overview
+
+We formulate a blurry image $y$ as a function of the corresponding sharp image x through a blur operator $\mathcal { F } _ { C } ( \cdot , k )$ which is associated with a device-dependent blur domain $C$ and a blur kernel k:
+
+$$
+y = \mathcal { F } _ { C } ( x , k ) + \eta ,\tag{1}
+$$
+
+where $\eta$ is a noise term. Our task is to find a deblurring function $\mathcal { G } _ { C } ^ { * }$ that can recover the sharp image from the blurry input, i.e., ${ \mathcal G } _ { C } ^ { * } ( y ) = x$
+
+One strategy is to utilize an existing, pre-trained deblurring network to approximate the desired function $\mathcal { G } _ { C } ^ { * }$ , and then use it for deblurring. However, this approach often leads to unsatisfactory results. The pre-trained network is generally trained on a dataset from a camera with a unique blur space $C ^ { \prime }$ , which is likely to be different from the blur space $C$ of our camera. In essence, this would mean approximating $\mathcal { G } _ { C } ^ { * }$ with $\mathcal { G } _ { C } ^ { * } ,$ , an approach that is not ideal due to the differences between $C$ and $C ^ { \prime }$ , resulting in suboptimal deblurring performance.
+
+When a pre-trained network is not a good choice, our remaining option is to train a new deblurring network tailored to our camera. The obstacle here is that the specific blur space $C$ of our device is unknown, and we cannot rely on having paired training data of corresponding blurry and sharp images. Paired training data requires a complex hard ware setup, involving a beam splitter, along with identical devices capturing at different speeds, and the capability for time synchronization, geometrical alignment, and color calibration. Not all camera devices meet these requirements, and setting up such a system is beyond the expertise of many. Consequently, our only feasible option is to use unpaired data. Fortunately, we can access the camera device to cap ture sets of blurry images $\boldsymbol { B }$ and sharp images S, which are unpaired and do not necessitate correspondence between images in $\boldsymbol { B }$ and images in S. Thus, gathering these datasets is relatively easy and straightforward. The downside, however, is that learning from unpaired data is challenging. The deblurring process, which transforms a blurred image y into a sharp image x, typically requires an understanding of the blurring domain C. For unpaired data, this necessity poses a significant hurdle, especially in reconstructing fine details absent or distorted in the blurred input. Traditional deblurring networks [19, 38, 42, 44], attempting to ‘hallucinate these missing details, often produce unsatisfactory results, particularly with images affected by real-world blurring.
+
+In this section, we introduce an innovative method to learn $\mathcal { G } _ { C } ^ { * }$ . Rather than directly learning this function, which is extremely challenging, or roughly approximating it using a function learned for another blur domain $\mathcal { G } _ { C } ^ { * } ,$ , we treat $\mathcal { G } _ { C } ^ { * }$ as a composition of $\mathcal { G } _ { C } ^ { * }$ <sub>′</sub> and a translation function $G , { \mathrm { i . e . } }$ $\mathcal { G } _ { C } ^ { * } = \mathcal { G } _ { C ^ { \prime } } ^ { * } \circ G$ . Our goal then shifts to learning G to bridge the gap between domains $C$ and $C ^ { \prime }$
+
+More specifically, our task is to learn a mapping function G that maps each blurry input image $y$ defined in $\mathrm { E q . ( 1 ) }$ to an image $y ^ { \prime }$ with the same sharp visual representation x but belongs to a known blur distribution $C ^ { \prime }$
+
+$$
+G : y \to y ^ { \prime } , { \mathrm { w h e r e ~ } } y ^ { \prime } = { \mathcal { F } } _ { C ^ { \prime } } ( x , k ^ { \prime } ) + \eta ^ { \prime } .\tag{2}
+$$
+
+Our approach breaks a complex task into two manageable ones. One task requires deblurring from $C ^ { \prime }$ , which, while challenging, benefits from existing research. We can select a well-performing pre-trained network $\mathcal { G } _ { C ^ { \prime } } ^ { * }$ , which has been trained with supervised learning using paired data in its domain. The other task is to learn a translation from an unknown blur domain $C$ to a known domain $C ^ { \prime }$ . The difficult of this task depends on the differences between $C$ and $C ^ { \prime }$ , yet it is surely easier than directly learning a mapping from $C$ to a sharp domain. This is because a blur-to-blur transformation primarily modifies the blur patterns, avoiding the need to reconstruct intricate image details. Moreover, we have the flexibility to choose the most appropriate $C ^ { \prime }$ and $\mathcal { G } _ { C } ^ { * }$ <sub>′</sub> for our specific blur domain. This flexibility extends to the possibility of utilizing synthetic data, which allows for the generation of extensive datasets, ensuring that the deblurring network is thoroughly trained.
+
+In the remaining of this section, we will discuss two main components of our method, including the blur-to-blur translation network G and the target blur space $C ^ { \prime }$
+
+## 3.2. Blur-to-blur translation
+
+Our objective here is to train a blur-to-blur translation network G, capable of converting any blurry image from the unknown blur domain $C$ to a known blur domain $C ^ { \prime }$ while preserving the image content. To train G, we require two datasets: B, which consists of blurry images from the unknown blur domain, and K contains images with known blur, for which a deblurring model has already been trained. We design G to work at multiple scales and carefully design the training losses to achieve the desired outcome.
+
+Adversarial Loss. We employ an adversarial loss [5] to enforce the translation network G to produce images with the desired target blur. To achieve this, we introduce a discriminator network D, which is responsible for distinguishing between real images from the known blur domain and generated images. Two networks $G$ and D are trained alternately in a minimax game. The adversarial loss is defined as:
+
+$$
+\begin{array} { r l } & { \mathcal { L } _ { a d v } ( G , D ) = \mathbb { E } _ { y \sim \mathcal { K } } [ \log D ( y ) ] } \\ & { \qquad + \mathbb { E } _ { y \sim \mathcal { B } } [ \log ( 1 - D ( G ( y ) ) ) ] . } \end{array}\tag{3}
+$$
+
+The blur translation network is trained to minimize the above loss term, while the discriminator D is trained to maximize it. We also force the Lipschitz continuity constraint on the discriminator using the gradient penalty regularization [6]:
+
+$$
+\mathcal { L } _ { g r a d } ^ { D } ( D ) = \mathbb { E } _ { \hat { y } \sim \hat { B } } [ ( \| \nabla _ { \hat { y } } D ( \hat { y } ) \| _ { 2 } - 1 ) ^ { 2 } ] ,\tag{4}
+$$
+
+where $\hat { B }$ is the set of samples $\hat { y }$ randomly interpolated between a real image $y \in \ B$ and the generated image $G ( y )$ using a random mixing ratio $\epsilon \in \ [ 0 , 1 ]$ , i.e., $\hat { y } =$ $\epsilon y + ( 1 - \epsilon ) G ( y )$
+
+Reconstruction Loss. Given a blurry image $y ,$ the desired function G should translate the blur characteristics from C to $C ^ { \prime }$ while maintaining the elements belonging to the sharp image x. Using the adversarial loss helps translate the image to the target blur domain but does not guarantee sharp content preservation. Hence, we integrate a reconstruction loss to enforce the visual consistency between the generated blurry image $G ( y )$ and the original image $y .$ . This loss term has two benefits: (1) it prevents G from modifying the im age content and only focuses on the blur kernel translation, and (2) it provides additional supervision to our network, enhancing the training stability. Moreover, to make G focus on preserving the input semantic content rather than being overly constrained by pixel-wise accuracy, we (1) employ perceptual loss [9] instead of the common $L _ { 1 }$ or $L _ { 2 }$ loss function and (2) adopt a multi-scale deblurring architecture [4] to reconstruct the image content from coarse to fine:
+
+![](images/2ce63e81f9c1a9f0df7bb0415f3f04a7bdda808b2c43c17f9ce62fa489b54092.jpg)  
+Figure 2. Overview of our problem and proposed method. a) Given a camera, we aim to develop an algorithm to deblur its captured blurry images. We assume access to the camera to collect unpaired sets of blurry images (B) and sharp image sequences (S). b) The key component in our proposed system is a blur translator that converts unknown-blur images captured by the camera to have the target known-blur presented in K. This translator is trained using reconstruction and adversarial losses. The converted images have known blur and can be successfully deblurred using the previously trained deblurring model (Zoom for best view).
+
+$$
+\mathcal { L } _ { r e c } ^ { G } ( G ) = \frac { 1 } { M } \sum _ { i = 1 } ^ { M } \frac { 1 } { t _ { i } } \mathbb { E } _ { y _ { i } \sim B } [ | | \phi ( y _ { i } ) - \phi ( G ( y _ { i } ) ) | | _ { 1 } ] ,\tag{5}
+$$
+
+where M is the number of levels, $y _ { i }$ is the input image at scale level i, ϕ(.) is a pre-trained feature extractor with the VGG19 backbone [32]. We divide the loss by the number of total elements $t _ { i }$ for normalization.
+
+Total Loss. Our final objective function for G combines the adversarial and reconstruction loss terms:
+
+$$
+\mathcal { L } _ { t o t a l } ^ { G } ( G , D ) = \mathcal { L } _ { a d v } ( G , D ) + \lambda _ { r e c } \mathcal { L } _ { r e c } ( G ) ,\tag{6}
+$$
+
+where $\lambda _ { r e c }$ is the weight factor for the reconstruction loss, ensuring the input content is maintained. Concurrently, the objective function for D is established as follows:
+
+$$
+\mathcal { L } _ { t o t a l } ^ { D } ( G , D ) = - \mathcal { L } _ { a d v } ( G , D ) + \lambda _ { g r a d } \mathcal { L } _ { g r a d } ( D ) .\tag{7}
+$$
+
+Here $\lambda _ { g r a d }$ is a hyperparameter that controls the importance of the gradient penalty loss component.
+
+## 3.3. Known Blur Selection
+
+The choice of $C ^ { \prime }$ and its representative dataset K is important because the difficulty of learning the blur translation network depends on the discrepancy between the two blur domains. As described in Sec. 3.2, the representative dataset K only affects the adversarial training losses. The translation network G aims to convert images in B to have similar blur characteristics as images in K so that the discriminator D cannot differentiate between the generated images and the real images in K. However, if K and B have different characteristics besides the blur kernel distribution, such as color tone, image resolution, or device-dependent noise pattern, D may rely on them to differentiate real and generated images. It can cause G to either fail to converge or introduce undesired characteristics from the representative dataset K into the transferred outcomes.
+
+To avoid this issue, we propose generating images in K from a set of sharp images S captured with the same camera as B, thus sharing identical characteristics. These images are then augmented by blur kernels from a known domain, characterized by a dataset of blurry-sharp image pairs using the blur transfer technique [37]. The blurry-sharp image pair dataset can be selected from commonly used image deblurring datasets like REDS [24], GOPRO [23], RSBlur [29], and RB2V [25], and we can utilize any deblurring network pre-trained on that dataset. A key component in [37] is a Blur Kernel Extractor F that can isolate and transfer blur kernels from random blurry-sharp image pairs to the target sharp inputs. After applying this blur synthesis procedure, we obtain a known-blur image set K that carries blur ker nels from the known-blur domain while maintaining other camera-based characteristics similar to the unknown-blur images in B. Consequently, the discriminator can focus on distinguishing based on blur kernels, facilitating effective blur-to-blur translation training. The overview problem and pipeline of our method is illustrated in Fig. 2.
+
+## 4. Experiments
+
+## 4.1. Experimental Setups
+
+## 4.1.1 Datasets and implementation details
+
+We evaluate our proposed method on four datasets. REDS dataset [24] consists of 300 high-speed videos used to create synthetic blur. By ramping up the frame rate from 120 to 1920 fps and averaging frames with an inverse Cam era Response Function (CRF), it simulates more realistic motion blur, differentiating it from other synthetic datasets [22, 31]. GoPro dataset [23] comprises 3,142 paired frames of sharp and blurred images, recorded at 240 frames per second. It employed a synthesis method akin to that of the REDS dataset but with a different camera response function. We utilize this dataset as the main target data for evaluating deblurring methods in combination with Blur2Blur. RSBlur dataset [29] contains 13,358 real blurred images. It provides sequences of sharp images alongside blurred ones for in-depth blur analysis and offers the higher resolution than similar datasets. Noise levels are also estimated to assess and compare to the noise present in real-world blur scenarios. In this paper, for the evaluation on the publicly available RSBlur dataset, we utilized the official dataset alongside its Additional set at a lower sampling rate, rather than generating blurry images from the RSBlur sharps set using dense sampling as described in the original paper. RB2V dataset [25] comprises about 11,000 real-world pairs of a blurry image and a sharp image sequence for street categories, denoted as RB2V street. Experiments on this dataset are crucial for confirming the effectiveness of our algorithm in handling real-world, camera-specific data.
+
+Number of data samples
+<table><tr><td rowspan="2">Dataset</td><td colspan="3"></td></tr><tr><td>U. blur (B)</td><td>U. sharp (S)</td><td>Test</td></tr><tr><td>RB2V_Street</td><td>5400</td><td>3600</td><td>2053</td></tr><tr><td>REDS</td><td>14400</td><td>9600</td><td>3000</td></tr><tr><td>RSBlur</td><td>8115</td><td>5410</td><td>8301</td></tr><tr><td>GoPro</td><td>1261</td><td>842</td><td>1111</td></tr></table>
+
+Table 1. Statistics of datasets used as unknown domains.
+
+Train and test data. To address practical deblurring problems, our method assumes access to unpaired sets containing blurry images B and sharp images S. When selecting a dataset as the source for our deblurring evaluation, we divide its training data into two disjoint subsets that capture different scenes with a specific ratio of 0.6:0.4. In the first subset, we select blurry images to form the unknown-blur image set B, while in the second subset, we choose sharp images to construct the sharp set S. For the chosen target dataset, representing the domain for blur kernel translation via the Blur2Blur mechanism, we employ the entire training dataset to train our Blur Kernel Extractor [37] and subsequently apply this extractor to map captured blur embeddings onto the sharp image set S, creating the known-blur image set K. The blurry images in the test data of the source dataset are used to evaluate image deblurring algorithms. The statistics of source image sets are reported in Tab. 1.
+
+Implementation Details. We implemented the blur-to-blur translation network G using MIMO-UNet [4] with the default configuration in Pix2Pix [8] implementation. For all experiments, we set the hyper-parameters $\lambda _ { r e c } = 0 . 8 , \lambda _ { g r a d } =$ 0.005 and batch size of 16. To enhance our understanding of the network G during its initial iterations, we sorted images based on their blur degree, determined by the variance of the responses obtained from applying the Laplacian operator. A lower variance corresponds to a reduced range of intensity changes, signaling a blurrier image with fewer edges. Initially, we optimized approximately 50% of the data within a single batch. Subsequently, after 200K iterations, we in crementally scaled this proportion to encompass the full batch. We evaluated Blur2Blur in combination with different state-of-the-arts deblurring network backbones, including NAFNet [3] and Restormer [40]. During training, we randomly cropped these images to obtain a square shape of 256×256 and augmented with rotation, flip and color-jitter.
+
+All experiments were performed using the Adam optimizer [11]. Training our model required roughly 3 days for 1M iterations on 2 Nvidia A100 GPUs. The learning rate is maintained constant for the first 500K iterations and then linearly reduced during the remaining iterations as in [36].
+
+## 4.1.2 Baselines
+
+We compared Blur2Blur with a comprehensive list of baseline methods from three categories: supervised methods (NAFNet [3], Restormer [40]), unpaired training (Cycle-GAN [44], DualGAN [38]), and generalized image deblurring (BSRGAN+NAFNet [41], RSBlur+NAFNet [28]).
+
+For fair comparisons, we retrained the supervised models using the blur-sharp pairs from the source dataset. Furthermore, to replicate real-world scenarios with the absence of paired data for deblurring network training, we generated synthetic motion-blur data derived from the unknown-sharp image set S by adding motion blur synthesis techniques, such as the one provided by the imgaug library [10]. This approach synthesized motion blur independently on each image. For the unpaired training and generalized image deblurring approaches, we used the blurry images in B and the sharp images from S for training the deblurring network. BSRGAN was originally designed for blind image super-resolution, and we adapted it to work on blind image deblurring by adding motion blur augmentation (via averaging with neighboring frames) into its augmentation pipeline.
+
+## 4.2. Image Deblurring Results
+
+To evaluate the performance of the Blur2Blur mechanism, we defined three data configurations. Each configuration consists of the Known-Blur dataset K, sourced from the Go-Pro dataset, and two unpaired datasets, B and S, derived from the training partitions of the deblurring dataset REDS, RSBlur, or RB2V Street. For a comprehensive evaluation of the Blur2Blur model, we integrated it with two supervised image deblurring backbones, Restormer and NAFNet. Additionally, we compared the results with state-of-the-art baselines. The quantitative results are summarized in Tab. 2.
+
+As observed, both unsupervised image deblurring and generalized deblurring approaches, despite expecting generalization power, exhibit poor performance on these challenging real-world datasets. Their scores are similar to, and sometimes significantly lower than, state-of-the-art supervised methods such as Restormer and NAFNet. In contrast, Blur2Blur demonstrates remarkable deblurring results. When combined with Restormer, Blur2Blur helps to increase the PSNR score by 2.63 dB on RB2V Street, 2.12 dB on REDS, and 2.91 dB on RSBlur. When combined with NAFNet, it provides consistent score increases, with 2.20 dB on RB2V Street, 2.31 dB on REDS, and 2.67 dB on RS-Blur. NAFNet outperforms Restormer overall, making the combination of NAFNet and Blur2Blur the most effective approach. Moreover, our method comes close to matching the best results of supervised models trained on source datasets.
+
+![](images/c1e7989a46c23b2a4cd9a9d3c6c1bed465fdbbfd81599c6a3f9aab3bf8699b7a.jpg)  
+Figure 3. Comparing image deblurring results on three benchmark datasets with NAFNet. Due to space limit, we skip the results with Restormer backbone, which is similar but slightly worse than those with NAFNet. Best viewed when magnified on a digital display.
+
+We provide a qualitative comparison between image deblurring results in Fig. 3. The comparison highlights a significant performance disparity between supervised methods and their counterparts. Unsupervised methods like Dual-GAN and CycleGAN struggle notably in deblurring, with DualGAN particularly unable to navigate the blur-to-sharp domain, tending instead to bridge the content and color distribution gap between the blurry (B) and sharp (S) datasets. Synthesis-based methods such as BSRGAN and RSBlur also fall short, failing to address unseen blurs, indicating the limitations of augmentation strategies, including those using the imgaug library. Supervised method NAFNet fails to handle unseen blurs, often yielding output mostly identical to the blurred inputs. However, our method effectively transforms unknown blurs into known ones. Our translation process successfully focuses on the blur kernel, minimizing bias from other image characteristics. By integrating Blur2Blur with NAFNet, we achieve a substantial recovery of high-quality sharp images, demonstrating the practical strength of our approach. Additional qualitative results for Restormer are provided in the supplementary material.
+
+<table><tr><td></td><td>RB2V_Street</td><td>REDS</td><td>RSBlur</td></tr><tr><td>NAFNet [3]</td><td></td><td></td><td></td></tr><tr><td>w/ GoPro</td><td>24.78 / 0.714</td><td>25.80 / 0.88026.33 / 0.790</td><td></td></tr><tr><td>w/ Synthetic Data</td><td>22.10 /0.644</td><td>25.07 / 0.853</td><td>23.53/0.659</td></tr><tr><td>w/ Blur2Blur (GoPro)</td><td>26.98 / 0.812</td><td>28.11 / 0.893</td><td>29.00 / 0.857</td></tr><tr><td>w/ the source domain*</td><td>28.72 / 0.883</td><td>29.09 / 0.927</td><td>33.06 / 0.888</td></tr><tr><td>Restormer [40]</td><td></td><td></td><td></td></tr><tr><td>w/ GoPro</td><td>23.34 / 0.698</td><td>25.43 / 0.775</td><td>25.98 / 0.788</td></tr><tr><td>w/ Synthetic Data</td><td>23.78 / 0.655</td><td>24.76 / 0.753</td><td>23.34 / 0.651</td></tr><tr><td>w/ Blur2Blur (GoPro)</td><td>25.97 / 0.750</td><td>27.55/0.885</td><td>28.89 / 0.850</td></tr><tr><td>w/ the source domain*</td><td>27.43 / 0.849</td><td>28.23 / 0.916</td><td>32.87 / 0.874</td></tr><tr><td>Generalized Deblurring</td><td></td><td></td><td></td></tr><tr><td>BSRGAN [41]</td><td>23.31 / 0.645</td><td>26.39 / 0.803</td><td>27.11/0.810</td></tr><tr><td>RSBlur [28]</td><td>23.42 / 0.603</td><td>26.32 / 0.812</td><td>26.98 / 0.798</td></tr><tr><td>Unpaired Training</td><td></td><td></td><td></td></tr><tr><td>CycleGAN [44]</td><td>21.21 / 0.582</td><td></td><td>23.92 /0.77523.34 / 0.782</td></tr><tr><td>DualGAN [38]</td><td>21.02 / 0.556</td><td></td><td>23.50 / 0.70022.78 / 0.704</td></tr></table>
+
+Table 2. Comparison of different deblurring methods on various datasets. For each test, we report PSNR↑ and SSIM↑ scores as evaluation metrics. The best scores are in bold and the second best score are in underline. For a supervised method, NAFNet or Restormer, we assess its upper-bound of deblurring performance by training it on the training set of the source dataset\*.
+
+<table><tr><td>Ratio B : S</td><td>5:5</td><td>6:4</td><td>7:3</td><td>8:2</td><td>9:1</td></tr><tr><td>GoPro-RB2V_Street</td><td>26.02</td><td>26.98</td><td>26.92</td><td>25.98</td><td>24.32</td></tr><tr><td>GoPro-REDS</td><td>27.53</td><td>28.11</td><td>28.10</td><td>27.00</td><td>26.43</td></tr></table>
+
+Table 3. PSNR debluring results with different Blur-to-Sharp ratios.
+
+## 4.3. Blur2Blur Visualization
+
+Fig. 4a provides a comparative visualization between the original blurry image and its Blur2Blur converted images using the same source and target datasets as detailed in Sec. 4.2. As can be seen, our transformed images effectively adopt the blur pattern of the GoPro dataset, noted for its low sampling rate blur (as further shown in Fig. 4b), while preserving other content elements identical to the input. This demonstrates the Blur2Blur conversion’s capability to produce transformed images that faithfully reflect the specific blur pattern while preserving the original content details.
+
+![](images/6c0dc89a73aae141ea5ca46e0cad1bc4e0512f3fa722b1c8ad11760a32ef2762.jpg)  
+Figure 4. (a) A comparison of original images and their corresponding Blur2Blur converted version; (b) Selected examples demonstrating the GoPro dataset’s blur pattern (Zoom for best view).
+
+![](images/c02342a0bf8738f909128c8207e4a3f3ab227b8f4b71c6bcd065603de7bc2751.jpg)  
+Figure 5. Qualitative comparison of deblurring models on the PhoneCraft dataset with multiple target datasets.
+
+## 4.4. Ablation Study for Blur to Sharp Ratio
+
+We evaluate the significance of the blur-to-sharp ratio, represented as the ratio between datasets Unknown-Blur (B) and Unknown-Sharp (S). Specifically, we consider NAFNet as the image deblurring backbone, and consider the GoPro-RB2V Street and GoPro-REDS dataset settings, where Go-Pro represents our target camera device for which we have tailored a deblurring model. We conducted B2B experiments across a range of ratios from 5:5 to 9:1. The deblurring result in Tab. 3 demonstrates that a greater proportion of blurry images in the dataset, as seen in the 6:4 and 7:3 ratios, allows for a deeper understanding of the blur patterns characteristic of the target device, leading to improved deblurring perfor mance. However, excessively few sharp images, as in the 9:1 ratio, may cause the Blur2Blur method to overfit to limited sharp content. To balance learning and prevent overfitting, a 6:4 ratio has been selected for all experiments in this study.
+
+## 4.5. Practicality Evaluation
+
+We evaluate the practicality of Blur2Blur in two imagined yet realistic scenarios. The first scenario involved a user desiring a deblurring algorithm for images taken with their smartphone camera. To facilitate this, we compiled a dataset named PhoneCraft, featuring images captured using a Samsung Galaxy Note 10 Plus. This dataset includes videos with motion-induced blur, refined through post-processing to remove other blur types, and clear, sharp videos recorded at 60fps. Over two hours, a variety of scenes and motions were captured, producing 12 blurry and 11 sharp video clips, each between 30 and 40 seconds long.
+
+![](images/021e3f58d207a267b3b5e0159ef9599f9528f3db4c47fc4c91d66f7c2aef34bc.jpg)  
+Figure 6. Results of using Blur2Blur on the WritingHands dataset.
+
+In deblurring PhoneCraft images, we used well-known blur datasets GoPro, REDS, and RSBlur. Results in Fig. 5 show Blur2Blur significantly improved image clarity over pre-trained models, especially with RSBlur’s complex blur patterns. The NIQE [21] scores of the deblurred images transformed by Blur2Blur, using the GoPro, REDS, and RSBlur as source datasets are 9.8, 9.2, and 8.8, respectively. For NIQE score, lower is better, and this demonstrates Blur2Blur’s ability to handle real-world blurs effectively.
+
+In our second scenario, we explored a webcam-based application for monitoring hand movements during writing exercises, aimed at assisting in rehabilitation therapy. The challenge here is motion blur, which complicates hand and object tracking. To test our approach, we created a dataset named WritingHands with four 30fps webcam-recorded videos, each about 40s long. From these, two videos provided over 1100 frames with motion blur for training, and one video offered sharp reference images. Leveraging insights from the PhoneCraft dataset, we used the RSBlur dataset and its pre-trained NAFNet model for a two-day training session. Results, shown in Fig. 6, indicate that while RSBlur’s model alone leaves some blur, integrating it with Blur2Blur significantly restores the image’s sharpness.
+
+## 5. Conclusions
+
+We have proposed Blur2Blur, an effective approach to address the practical challenge of adapting image deblurring techniques to handle unseen blur. The key is to learn to convert an unknown blur to a known blur that can be effectively deblurred using a deblurring network specifically trained to handle the known blur. Throughout extensive experiments on synthetic and real-world benchmarks, Blur2Blur consistently exhibited superior performance, delivering impressive quantitative and qualitative outcomes.
+
+## References
+
+[1] Tony F Chan and Chiu-Kwong Wong. Total variation blind deconvolution. IEEE Transactions on Image Processing, 7 (3):370–375, 1998.
+
+[2] Liangyu Chen, Xin Lu, Jie Zhang, Xiaojie Chu, and Chengpeng Chen. Hinet: Half instance normalization network for image restoration. In Proceedings ofthe IEEE Conference on Computer Vision and Pattern Recognition, 2021.
+
+[3] Liangyu Chen, Xiaojie Chu, Xiangyu Zhang, and Jian Sun. Simple baselines for image restoration. In Proceedings ofthe European Conference on Computer Vision, 2022.
+
+[4] Sung-Jin Cho, Seo-Won Ji, Jun-Pyo Hong, Seung-Won Jung, and Sung-Jea Ko. Rethinking coarse-to-fine approach in single image deblurring. In Proceedings ofthe International Conference on Computer Vision, 2021.
+
+[5] Ian Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David Warde-Farley, Sherjil Ozair, Aaron Courville, and Yoshua Bengio. Generative adversarial networks. Communications ofthe ACM, 63(11):139–144, 2020.
+
+[6] Ishaan Gulrajani, Faruk Ahmed, Martin Arjovsky, Vincent Dumoulin, and Aaron C Courville. Improved training of wasserstein gans. Advances in Neural Information Processing Systems, 30, 2017.
+
+[7] Michal Hradivs, Jan Kotera, Pavel Zemcik, and Filip vSroubek. Convolutional neural networks for direct text deblurring. In Proceedings of the British Machine Vision Conference, 2015.
+
+[8] Phillip Isola, Jun-Yan Zhu, Tinghui Zhou, and Alexei A Efros. Image-to-image translation with conditional adversarial networks. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, 2017.
+
+[9] Justin Johnson, Alexandre Alahi, and Li Fei-Fei. Perceptual losses for real-time style transfer and super-resolution. In Proceedings of the European Conference on Computer Vision, 2016.
+
+[10] Alexander B. Jung, Kentaro Wada, Jon Crall, Satoshi Tanaka, Jake Graving, Christoph Reinders, Sarthak Yadav, Joy Banerjee, Gabor Vecsei, Adam Kraft, Zheng Rui, Jirka Borovec,´ Christian Vallentin, Semen Zhydenko, Kilian Pfeiffer, Ben Cook, Ismael Fernandez, Fran´ ccois-Michel De Rainville, Chi-Hung Weng, Abner Ayala-Acevedo, Raphael Meudec, Matias Laporte, et al. imgaug. https://github.com/aleju/ imgaug, 2020. Online; accessed 01-Feb-2020.
+
+[11] Diederik P. Kingma and Jimmy Ba. Adam: A method for stochastic optimization. CoRR, abs/1412.6980, 2014.
+
+[12] Dilip Krishnan and Rob Fergus. Fast image deconvolution using hyper-laplacian priors. Advances in Neural Information Processing Systems, 22:1033–1041, 2009.
+
+[13] Dilip Krishnan, Terence Tay, and Rob Fergus. Blind deconvolution using a normalized sparsity measure. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. IEEE, 2011.
+
+[14] Orest Kupyn, Volodymyr Budzan, Mykola Mykhailych, Dmytro Mishkin, and Jivr´i Matas. Deblurgan: Blind motion deblurring using conditional adversarial networks. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, 2018.
+
+[15] Orest Kupyn, Tetiana Martyniuk, Junru Wu, and Zhangyang Wang. Deblurgan-v2: Deblurring (orders-of-magnitude) faster and better. In Proceedings of the International Conference on Computer Vision, 2019.
+
+[16] Anat Levin, Yair Weiss, Fredo Durand, and William T Free-
+
+man. Understanding and evaluating blind deconvolution algorithms. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. IEEE, 2009.
+
+[17] Chih-Hung Liang, Yu-An Chen, Yueh-Cheng Liu, and Winston H Hsu. Raw image deblurring. IEEE Transactions on Multimedia, 24:61–72, 2020.
+
+[18] Guangcan Liu, Shiyu Chang, and Yi Ma. Blind image deblurring using spectral properties of convolution operators. IEEE Transactions on Image Processing, 23(12):5047–5056, 2014.
+
+[19] Boyu Lu, Jun-Cheng Chen, and Rama Chellappa. Unsupervised domain-specific deblurring via disentangled representations. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, 2019.
+
+[20] Armin Mehri, Parichehr B Ardakani, and Angel D Sappa. Mprnet: Multi-path residual network for lightweight image super resolution. In Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision, 2021.
+
+[21] Anish Mittal, Rajiv Soundararajan, and Alan C Bovik. Making a “completely blind” image quality analyzer. IEEE Signal processing letters, 20(3):209–212, 2012.
+
+[22] Seungjun Nah, Tae Hyun Kim, and Kyoung Mu Lee. Deep multi-scale convolutional neural network for dynamic scene deblurring. In Proceedings ofthe IEEE Conference on Computer Vision and Pattern Recognition, 2017.
+
+[23] Seungjun Nah, Tae Hyun Kim, and Kyoung Mu Lee. Deep multi-scale convolutional neural network for dynamic scene deblurring. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, 2017.
+
+[24] Seungjun Nah, Radu Timofte, Sungyong Baik, Seokil Hong, Gyeongsik Moon, Sanghyun Son, and Kyoung Mu Lee. Ntire 2019 challenge on video deblurring: Methods and results. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops, 2019.
+
+[25] Bang-Dang Pham, Phong Tran, Anh Tran, Cuong Pham, Rang Nguyen, and Minh Hoai. Hypercut: Video sequence from a single blurry image using unsupervised ordering. In Proceedings ofthe IEEE Conference on Computer Vision and Pattern Recognition, 2023.
+
+[26] Dongwei Ren, Kai Zhang, Qilong Wang, Qinghua Hu, and Wangmeng Zuo. Neural blind deconvolution using deep priors. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, 2020.
+
+[27] Jaesung Rim, Haeyun Lee, Jucheol Won, and Sunghyun Cho. Real-world blur dataset for learning and benchmarking deblurring algorithms. In Proceedings ofthe European Conference on Computer Vision, 2020.
+
+[28] Jaesung Rim, Geonung Kim, Jungeon Kim, Junyong Lee, Seungyong Lee, and Sunghyun Cho. Realistic blur synthesis for learning image deblurring. In Proceedings ofthe European Conference on Computer Vision, 2022.
+
+[29] Jaesung Rim, Geonung Kim, Jungeon Kim, Junyong Lee, Seungyong Lee, and Sunghyun Cho. Realistic blur synthesis for learning image deblurring. In Proceedings ofthe European Conference on Computer Vision, 2022.
+
+[30] Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-net: Convolutional networks for biomedical image segmentation. In Proceedings ofthe International Conference on Medical Image Computing and Computer Assisted Intervention, 2015.
+
+[31] Ziyi Shen, Wenguan Wang, Xiankai Lu, Jianbing Shen, Haibin Ling, Tingfa Xu, and Ling Shao. Human-aware motion deblurring. In Proceedings ofthe International Confer ence on Computer Vision, 2019.
+
+[32] K Simonyan and A Zisserman. Very deep convolutional
+
+networks for large-scale image recognition. In Proceedings of International Conference on Learning and Representation, 2015.
+
+[33] Maitreya Suin, Kuldeep Purohit, and AN Rajagopalan. Spatially-attentive patch-hierarchical network for adaptive motion deblurring. In Proceedings ofthe IEEE Conference on Computer Vision and Pattern Recognition, 2020.
+
+[34] Xin Tao, Hongyun Gao, Xiaoyong Shen, Jue Wang, and Jiaya Jia. Scale-recurrent network for deep image deblurring. In Proceedings ofthe IEEE Conference on Computer Vision and Pattern Recognition, 2018.
+
+[35] Xin Tao, Hongyun Gao, Xiaoyong Shen, Jue Wang, and Jiaya Jia. Scale-recurrent network for deep image deblurring. In Proceedings ofthe IEEE Conference on Computer Vision and Pattern Recognition, 2018.
+
+[36] Dmitrii Torbunov, Yi Huang, Huan-Hsin Tseng, Haiwang Yu, Jin Huang, Shinjae Yoo, Meifeng Lin, Brett Viren, and Yihui Ren. Rethinking cyclegan: Improving quality of gans for unpaired image-to-image translation. arXiv preprint arXiv:2303.16280, 2023.
+
+[37] Phong Tran, Anh Tuan Tran, Quynh Phung, and Minh Hoai. Explore image deblurring via encoded blur kernel space. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, 2021.
+
+[38] Zili Yi, Hao Zhang, Ping Tan, and Minglun Gong. Dualgan: Unsupervised dual learning for image-to-image translation. In Proceedings of the International Conference on Computer Vision, 2017.
+
+[39] Syed Waqas Zamir, Aditya Arora, Salman Khan, Munawar Hayat, Fahad Shahbaz Khan, Ming-Hsuan Yang, and Ling Shao. Multi-stage progressive image restoration. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, 2021.
+
+[40] Syed Waqas Zamir, Aditya Arora, Salman Khan, Munawar Hayat, Fahad Shahbaz Khan, and Ming-Hsuan Yang. Restormer: Efficient transformer for high-resolution image restoration. In Proceedings ofthe IEEE Conference on Computer Vision and Pattern Recognition, 2022.
+
+[41] Kai Zhang, Jingyun Liang, Luc Van Gool, and Radu Timofte. Designing a practical degradation model for deep blind image super-resolution. In Proceedings of the International Conference on Computer Vision, 2021.
+
+[42] Suiyi Zhao, Zhao Zhang, Richang Hong, Mingliang Xu, Yi Yang, and Meng Wang. Fcl-gan: A lightweight and realtime baseline for unsupervised blind image deblurring. In Proceedings of the 30th ACM International Conference on Multimedia, 2022.
+
+[43] Zhihang Zhong, Ye Gao, Yinqiang Zheng, and Bo Zheng. Efficient spatio-temporal recurrent neural network for video deblurring. In Proceedings ofthe European Conference on Computer Vision, 2020.
+
+[44] Jun-Yan Zhu, Taesung Park, Phillip Isola, and Alexei A Efros. Unpaired image-to-image translation using cycle-consistent adversarial networks. In Proceedings of the International Conference on Computer Vision, 2017.
