@@ -4,5 +4,32 @@
  "title": "Confronting-Ambiguity-in-6D-Object-Pose-Estimation-via-Score",
  "token": "sk-U9tZkJPsQ...",
  "created_at": "2026-11-04 21:19:50",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/92b7f2c3-3f39-48cd-9b70-73abc878a586.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/92b7f2c3-3f39-48cd-9b70-73abc878a586.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:21:37",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "6D位姿估计",
+    "扩散模型",
+    "SE(3)李群",
+    "姿态模糊性",
+    "分数匹配",
+    "对称感知",
+    "李群生成模型"
+   ],
+   "field": "6D物体位姿估计",
+   "innovations": [
+    "首个在SE(3)李群上应用分数扩散模型解决6D位姿模糊性",
+    "提出SE(3)替代Stein分数提升去噪收敛性",
+    "设计基于傅里叶的周期条件机制增强SO(3)分布学习"
+   ],
+   "benchmarks": [
+    "SYMSOL",
+    "SYMSOL-T",
+    "T-LESS"
+   ]
+  }
+ }
 }

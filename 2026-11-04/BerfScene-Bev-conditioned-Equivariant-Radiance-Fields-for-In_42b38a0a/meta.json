@@ -4,5 +4,30 @@
  "title": "BerfScene-Bev-conditioned-Equivariant-Radiance-Fields-for-In",
  "token": "sk-aeujzMN4P...",
  "created_at": "2026-11-04 21:34:57",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/3195b7a2-734a-4d83-90d4-75c879f2d00a.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/3195b7a2-734a-4d83-90d4-75c879f2d00a.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:20:49",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D scene generation",
+    "radiance field",
+    "BEV conditioning",
+    "equivariance",
+    "infinite scene",
+    "neural rendering"
+   ],
+   "field": "3D生成与表示学习",
+   "innovations": [
+    "提出BEV条件等变辐射场，通过宽边距和低通滤波器保障等变性实现无限场景拼接",
+    "用2D BEV图高效指导3D场景空间配置，替代计算昂贵的显式3D约束"
+   ],
+   "benchmarks": [
+    "CLEVR",
+    "3D-Front",
+    "Carla"
+   ]
+  }
+ }
 }

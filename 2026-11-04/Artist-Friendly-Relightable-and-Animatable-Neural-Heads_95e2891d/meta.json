@@ -4,5 +4,33 @@
  "title": "Artist-Friendly-Relightable-and-Animatable-Neural-Heads",
  "token": "sk-rnwM2rvcl...",
  "created_at": "2026-11-04 21:09:26",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/ee0a3f21-7e79-4493-b00a-9d561a6c6739.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/ee0a3f21-7e79-4493-b00a-9d561a6c6739.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:20:24",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "neural avatar",
+    "relightable rendering",
+    "animatable head",
+    "MVP",
+    "nearfield lighting",
+    "volumetric primitives"
+   ],
+   "field": "神经辐射场与数字人渲染",
+   "innovations": [
+    "在MVP架构中引入per-primitive局部光照和视角方向条件，实现动态头部的近场光照与视角重渲染",
+    "纯表情驱动的外观解耦设计，支持艺术家创作的新表情泛化",
+    "仅用稀疏LED灯条阵列（32条）即可训练高质量relightable+animatable神经头部"
+   ],
+   "benchmarks": [
+    "TRAvatar*",
+    "novel light directions",
+    "novel performances",
+    "nearfield lighting",
+    "environment map relighting"
+   ]
+  }
+ }
 }

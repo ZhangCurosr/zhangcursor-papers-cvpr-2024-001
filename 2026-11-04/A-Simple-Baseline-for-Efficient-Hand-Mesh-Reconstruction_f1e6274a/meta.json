@@ -4,5 +4,30 @@
  "title": "A-Simple-Baseline-for-Efficient-Hand-Mesh-Reconstruction",
  "token": "sk-RiyVHqe9d...",
  "created_at": "2026-11-04 21:15:31",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/c9b96ba6-98f6-4455-824c-f1f465ecb836.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/c9b96ba6-98f6-4455-824c-f1f465ecb836.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:19:17",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "hand mesh reconstruction",
+    "efficient baseline",
+    "token generator",
+    "mesh regressor",
+    "real-time 3D hand recovery",
+    "ablation study"
+   ],
+   "field": "单目3D手部网格重建",
+   "innovations": [
+    "将mesh decoder分解为token generator与mesh regressor并提炼核心结构",
+    "提出仅1.9M参数的轻量级解码器在FreiHAND/DexYCB上刷新SOTA",
+    "通过系统消融证明关键点引导采样与级联tokens倍增上采样是最优设计"
+   ],
+   "benchmarks": [
+    "FreiHAND",
+    "DexYCB"
+   ]
+  }
+ }
 }

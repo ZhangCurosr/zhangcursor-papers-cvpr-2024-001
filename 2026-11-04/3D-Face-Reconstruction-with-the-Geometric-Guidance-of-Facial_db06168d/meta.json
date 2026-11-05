@@ -4,5 +4,30 @@
  "title": "3D-Face-Reconstruction-with-the-Geometric-Guidance-of-Facial",
  "token": "sk-RsuYjp77g...",
  "created_at": "2026-11-04 21:17:26",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/a4693ed0-9bea-4adc-8d0e-91ddb51752c9.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/a4693ed0-9bea-4adc-8d0e-91ddb51752c9.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:18:28",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D Face Reconstruction",
+    "Part Re-projection Distance Loss",
+    "Facial Part Segmentation",
+    "Extreme Expression",
+    "3DMM Fitting",
+    "Part IoU"
+   ],
+   "field": "3D人脸重建",
+   "innovations": [
+    "提出PRDL损失，利用面部分割几何信息指导3D重建，避免可微渲染器的梯度不稳定问题",
+    "提供与2D分割语义对齐的新3D网格注释及20万+极端表情合成数据集"
+   ],
+   "benchmarks": [
+    "REALY",
+    "Part IoU (proposed)",
+    "MEAD"
+   ]
+  }
+ }
 }

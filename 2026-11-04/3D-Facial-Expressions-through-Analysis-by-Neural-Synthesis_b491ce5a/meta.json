@@ -4,5 +4,31 @@
  "title": "3D-Facial-Expressions-through-Analysis-by-Neural-Synthesis",
  "token": "sk-rvQMAAO2D...",
  "created_at": "2026-11-04 21:25:37",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/ace75c69-e717-49b0-a72a-01e27e34b581.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/ace75c69-e717-49b0-a72a-01e27e34b581.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:18:30",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D面部重建",
+    "神经渲染",
+    "表达重建",
+    "自监督学习",
+    "分析-合成",
+    "FLAME"
+   ],
+   "field": "3D人脸重建与表达分析",
+   "innovations": [
+    "用U-Net神经渲染器替代传统可微渲染，减少domain gap",
+    "循环一致性表达式增强策略缓解表达坍缩",
+    "稀疏像素采样强制几何依赖"
+   ],
+   "benchmarks": [
+    "AffectNet",
+    "MEAD",
+    "FFHQ"
+   ]
+  }
+ }
 }

@@ -4,5 +4,30 @@
  "title": "Coupled-Laplacian-Eigenmaps-for-Locally-Aware-3D-Rigid-Point",
  "token": "sk-Wt6bONApk...",
  "created_at": "2026-11-04 21:09:51",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/8f9935c2-6b89-4c7f-8b67-def3494fa9fe.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/8f9935c2-6b89-4c7f-8b67-def3494fa9fe.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:22:22",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D point cloud matching",
+    "Coupled Laplacian",
+    "Laplacian eigenmaps",
+    "anomaly detection",
+    "bone side estimation",
+    "spectral shape matching"
+   ],
+   "field": "3D shape analysis and matching",
+   "innovations": [
+    "提出 Coupled Laplacian 算子实现多个已配准几何的自动对齐特征空间",
+    "基于对齐嵌入同时提供全局 Grassmann 距离与局部余弦相似度匹配",
+    "定义并构建 BSE 基准，结合镜像对称与刚性配准完成自动化骨侧判断"
+   ],
+   "benchmarks": [
+    "MVTec 3D-AD",
+    "Bone Side Estimation benchmark"
+   ]
+  }
+ }
 }

@@ -4,5 +4,29 @@
  "title": "360DVD-Controllable-Panorama-Video-Generation-with-360-Degre",
  "token": "sk-vo4GDqdWy...",
  "created_at": "2026-11-04 21:14:11",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/ece2bc54-0706-4114-b49f-0a793c7d462d.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/ece2bc54-0706-4114-b49f-0a793c7d462d.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:18:49",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "panorama video generation",
+    "controllable diffusion model",
+    "text-to-video",
+    "equirectangular projection",
+    "360-degree video"
+   ],
+   "field": "全景视频生成",
+   "innovations": [
+    "提出轻量级360-Adapter实现冻结T2V模型到全景视频的插件式适配",
+    "设计纬度感知损失与潜在旋转/循环填充机制解决ERP投影畸变与首尾不连续问题",
+    "构建WEB360全景视频-文本数据集并引入LLM辅助的多视角文本融合标注策略"
+   ],
+   "benchmarks": [
+    "User Preference Study",
+    "WEB360 Dataset"
+   ]
+  }
+ }
 }

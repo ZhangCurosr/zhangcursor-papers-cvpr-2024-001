@@ -4,5 +4,31 @@
  "title": "DiffAvatar-Simulation-Ready-Garment-Optimization-with-Differ",
  "token": "sk-Nw8TqBTK6...",
  "created_at": "2026-11-04 21:03:59",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/12df59ea-dda6-4612-9369-643e139c2510.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/12df59ea-dda6-4612-9369-643e139c2510.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:23:18",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "differentiable simulation",
+    "garment reconstruction",
+    "cloth material estimation",
+    "avatar generation",
+    "pattern optimization"
+   ],
+   "field": "可微分物理仿真与数字人类",
+   "innovations": [
+    "首个基于高分辨率可微分仿真的服装与人体协同资产恢复框架",
+    "提出可微分控制笼表示用于正则化2D版型优化",
+    "联合优化服装rest shape、材料参数与人体形状姿态生成仿真就绪资产"
+   ],
+   "benchmarks": [
+    "3dMD human scan dataset",
+    "Chamfer Distance",
+    "LPIPS/SSIM",
+    "Mesh Conditioning Quality"
+   ]
+  }
+ }
 }

@@ -4,5 +4,32 @@
  "title": "Diffusion-Models-Without-Attention",
  "token": "sk-KgtqP1w4p...",
  "created_at": "2026-11-04 21:11:32",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/66aa6e6a-b458-4a97-8151-06a3ca9c0b7e.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/66aa6e6a-b458-4a97-8151-06a3ca9c0b7e.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:23:32",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "扩散模型",
+    "状态空间模型",
+    "注意力替代",
+    "高效生成",
+    "ImageNet",
+    "DiT"
+   ],
+   "field": "生成模型架构",
+   "innovations": [
+    "提出完全去除注意力的扩散架构 DIFFUSSM，用门控双向 SSM 替代自注意力，避免 patchification 信息压缩",
+    "设计 SSM 全长度全局建模 + 沙漏式 MLP 降采样的高效块结构，显著降低 FLOPs",
+    "在 ImageNet 256x256 以 20% 更少 Gflops 超越 DiT-XL/2 FID，512x512 以 25% 更少 Gflops 达竞争性 sFID"
+   ],
+   "benchmarks": [
+    "ImageNet 256x256",
+    "ImageNet 512x512",
+    "LSUN Church",
+    "LSUN Bedroom"
+   ]
+  }
+ }
 }

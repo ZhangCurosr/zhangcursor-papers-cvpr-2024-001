@@ -4,5 +4,31 @@
  "title": "A-B-BNN-Add-Bit-Operation-Only-Hardware-Friendly-Binary-Neur",
  "token": "sk-b5uWIpmTE...",
  "created_at": "2026-11-04 21:21:08",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/f9cb0599-3bc5-45b5-b13c-50394be6137d.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/f9cb0599-3bc5-45b5-b13c-50394be6137d.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:18:59",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Binary Neural Network",
+    "Hardware-friendly",
+    "No Multiplication",
+    "BN-Free",
+    "Quantized Activation",
+    "Edge Deployment"
+   ],
+   "field": "模型压缩与硬件友好推理",
+   "innovations": [
+    "提出 Mask Layer 吸收 β 乘法并在推理时移除",
+    "设计 Quantized RPReLU 将斜率约束为 2 的整数次幂以位移替代乘法",
+    "实现推理阶段乘法操作数为 0 的 BNN 架构"
+   ],
+   "benchmarks": [
+    "ImageNet",
+    "CIFAR-10",
+    "CIFAR-100"
+   ]
+  }
+ }
 }

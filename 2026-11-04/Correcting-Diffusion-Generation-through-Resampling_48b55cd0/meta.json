@@ -4,5 +4,31 @@
  "title": "Correcting-Diffusion-Generation-through-Resampling",
  "token": "sk-1jVZGxTQ1...",
  "created_at": "2026-11-04 21:18:00",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/f79eac6c-02f0-4ae0-bf18-7fc3c09ac9bc.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/f79eac6c-02f0-4ae0-bf18-7fc3c09ac9bc.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:22:10",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Diffusion Model",
+    "Particle Filtering",
+    "Text-to-Image Generation",
+    "Distribution Correction",
+    "Resampling"
+   ],
+   "field": "文生图生成质量控制",
+   "innovations": [
+    "提出粒子滤波框架显式纠正扩散生成的分布差距",
+    "设计判别器与物体检测器混合权重实现细粒度纠错",
+    "在多种生成任务上达到SOTA并降低计算开销"
+   ],
+   "benchmarks": [
+    "MS-COCO",
+    "GPT-Synthetic",
+    "ImageNet-64",
+    "FFHQ"
+   ]
+  }
+ }
 }

@@ -4,5 +4,30 @@
  "title": "AirPlanes-Accurate-Plane-Estimation-via-3D-Consistent-Embedd",
  "token": "sk-wGl2gwQjA...",
  "created_at": "2026-11-04 21:10:52",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/affb9455-d1d2-4bad-9ad9-2b5e9318cb02.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/affb9455-d1d2-4bad-9ad9-2b5e9318cb02.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:20:44",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "plane estimation",
+    "3D reconstruction",
+    "multi-view stereo",
+    "plane embedding",
+    "RANSAC",
+    "neural implicit field",
+    "ScanNetV2"
+   ],
+   "field": "3D scene understanding / plane segmentation",
+   "innovations": [
+    "Test-time per-scene MLP distills multi-view consistent 3D plane embeddings from single-image associative embeddings.",
+    "Fuses per-pixel planar probability into TSDF to filter non-planar voxels before mesh extraction.",
+    "Joint geometry+embedding sequential RANSAC clustering separates adjacent coplanar instances with different semantics."
+   ],
+   "benchmarks": [
+    "ScanNetV2 (val_planes / test_planes)"
+   ]
+  }
+ }
 }

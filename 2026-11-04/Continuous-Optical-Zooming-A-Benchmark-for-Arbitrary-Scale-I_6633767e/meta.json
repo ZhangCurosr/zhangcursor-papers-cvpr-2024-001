@@ -4,5 +4,28 @@
  "title": "Continuous-Optical-Zooming-A-Benchmark-for-Arbitrary-Scale-I",
  "token": "sk-4GZLsbGFG...",
  "created_at": "2026-11-04 21:17:56",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/383d45e9-ac2b-4f39-a678-3cddc40fd673.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/383d45e9-ac2b-4f39-a678-3cddc40fd673.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:21:49",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "arbitrary-scale super-resolution",
+    "continuous optical zooming",
+    "real-world SR benchmark",
+    "implicit neural representation",
+    "MLP-mixer",
+    "meta-learning"
+   ],
+   "field": "任意尺度图像超分辨率",
+   "innovations": [
+    "提出首个面向真实任意尺度SR的COZ数据集",
+    "设计基于元学习的MSMM多坐标混合隐式网络LMI"
+   ],
+   "benchmarks": [
+    "COZ testing set"
+   ]
+  }
+ }
 }

@@ -4,5 +4,34 @@
  "title": "Continuous-Pose-for-Monocular-Cameras-in-Neural-Implicit-Rep",
  "token": "sk-40JBdijp9...",
  "created_at": "2026-11-04 21:22:27",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/ff01db39-33f8-4dc1-9a6a-e2941a474eb2.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/ff01db39-33f8-4dc1-9a6a-e2941a474eb2.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:22:02",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Continuous Pose",
+    "Neural Radiance Field",
+    "Visual SLAM",
+    "Event Camera",
+    "IMU Fusion",
+    "Implicit Neural Representation"
+   ],
+   "field": "神经渲染与视觉SLAM",
+   "innovations": [
+    "将相机位姿表示为时间的连续神经网络函数以实现与NeRF/SLAM的联合优化",
+    "提出本征运动分解框架以降低vSLAM中的优化自由度",
+    "在神经隐式表示框架内实现IMU的松耦合与紧耦合融合"
+   ],
+   "benchmarks": [
+    "LLFF",
+    "EventNeRF (Chair/Hotdog)",
+    "Replica",
+    "ScanNet",
+    "TUM-RGBD",
+    "EUROC"
+   ]
+  }
+ }
 }

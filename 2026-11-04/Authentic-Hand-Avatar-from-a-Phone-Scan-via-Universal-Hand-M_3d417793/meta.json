@@ -4,5 +4,33 @@
  "title": "Authentic-Hand-Avatar-from-a-Phone-Scan-via-Universal-Hand-M",
  "token": "sk-RV5chRIVy...",
  "created_at": "2026-11-04 21:12:51",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/42e7d03f-3dad-46ef-bfdf-e68d48403e1b.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/42e7d03f-3dad-46ef-bfdf-e68d48403e1b.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:20:33",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D hand model",
+    "hand avatar",
+    "universal hand model",
+    "simultaneous tracking and modeling",
+    "image matching loss",
+    "shadow removal",
+    "phone scan personalization"
+   ],
+   "field": "3D手势重建与人体数字化",
+   "innovations": [
+    "同步跟踪与建模避免累积误差",
+    "图像匹配损失抑制皮肤滑动",
+    "手机扫描高保真个人化身生成"
+   ],
+   "benchmarks": [
+    "MANO测试集",
+    "DHM数据集",
+    "HARP数据集",
+    "自建手机扫描测试集"
+   ]
+  }
+ }
 }

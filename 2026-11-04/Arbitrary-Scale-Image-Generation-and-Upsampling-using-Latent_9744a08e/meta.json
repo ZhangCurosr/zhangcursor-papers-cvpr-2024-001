@@ -4,5 +4,33 @@
  "title": "Arbitrary-Scale-Image-Generation-and-Upsampling-using-Latent",
  "token": "sk-n7iJ0Z1Ol...",
  "created_at": "2026-11-04 21:25:18",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/0c893f6f-c1e3-48b0-8a0c-6d1d5f859b81.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/0c893f6f-c1e3-48b0-8a0c-6d1d5f859b81.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:20:04",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "任意尺度超分辨率",
+    "潜在扩散模型",
+    "隐式神经表示",
+    "LIIF",
+    "图像生成",
+    "尺度一致性"
+   ],
+   "field": "任意尺度图像生成与超分辨率",
+   "innovations": [
+    "将扩散过程置于潜在空间并结合隐式神经解码器实现任意尺度输出",
+    "提出两阶段对齐训练过程减少LDM与解码器间的误差累积",
+    "统一框架支持任意尺度图像生成与超分辨率且推理速度显著提升"
+   ],
+   "benchmarks": [
+    "CelebA-HQ",
+    "FFHQ",
+    "LSUN Bedroom",
+    "DIV2K",
+    "Flickr2K"
+   ]
+  }
+ }
 }

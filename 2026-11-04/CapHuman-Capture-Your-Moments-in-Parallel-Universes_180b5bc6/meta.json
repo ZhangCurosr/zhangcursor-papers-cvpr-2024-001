@@ -4,5 +4,29 @@
  "title": "CapHuman-Capture-Your-Moments-in-Parallel-Universes",
  "token": "sk-o28Oo64R2...",
  "created_at": "2026-11-04 21:26:07",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/56724724-06d7-4337-af58-09fada9ec3f4.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/56724724-06d7-4337-af58-09fada9ec3f4.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:21:09",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "人-centric图像生成",
+    "身份保持",
+    "3D面部先验",
+    "扩散模型",
+    "可控生成",
+    "免微调个性化"
+   ],
+   "field": "可控图像生成",
+   "innovations": [
+    "提出\"编码后学习对齐\"范式实现可泛化免微调身份保持",
+    "首次将3DMM（FLAME+DECA）嵌入扩散生成实现3D一致细粒度头部控制"
+   ],
+   "benchmarks": [
+    "HumanIPHC",
+    "CelebA"
+   ]
+  }
+ }
 }

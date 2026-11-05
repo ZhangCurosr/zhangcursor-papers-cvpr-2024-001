@@ -4,5 +4,30 @@
  "title": "Diffusion-Model-Alignment-Using-Direct-Preference-Optimizati",
  "token": "sk-F0hECVUrq...",
  "created_at": "2026-11-04 21:18:46",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/c3b1953d-4e92-4657-91b2-e386aa407886.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/c3b1953d-4e92-4657-91b2-e386aa407886.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:23:19",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "扩散模型",
+    "偏好优化",
+    "DPO",
+    "文本到图像生成",
+    "对齐学习"
+   ],
+   "field": "生成模型对齐",
+   "innovations": [
+    "将DPO方法适配到扩散模型，推导基于ELBO的可微偏好优化损失",
+    "证明AI反馈可替代人类偏好训练扩散模型",
+    "3.5B参数DPO微调模型击败6.6B完整SDXL pipeline"
+   ],
+   "benchmarks": [
+    "PartiPrompts",
+    "HPSv2",
+    "Pick-a-Pic v2"
+   ]
+  }
+ }
 }

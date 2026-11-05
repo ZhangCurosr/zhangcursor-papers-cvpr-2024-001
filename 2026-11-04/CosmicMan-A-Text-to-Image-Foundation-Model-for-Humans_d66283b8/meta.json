@@ -4,5 +4,35 @@
  "title": "CosmicMan-A-Text-to-Image-Foundation-Model-for-Humans",
  "token": "sk-owp49a3rO...",
  "created_at": "2026-11-04 21:26:09",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/9717261c-8c48-4ff3-9206-4240d5845451.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/9717261c-8c48-4ff3-9206-4240d5845451.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:21:53",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "text-to-image generation",
+    "human image synthesis",
+    "foundation model",
+    "data flywheel",
+    "cross-attention alignment",
+    "diffusion model"
+   ],
+   "field": "文本到图像生成",
+   "innovations": [
+    "提出Annotate Anyone人机协作数据飞轮范式持续生产高质量人类图像数据",
+    "设计Daring训练框架与HOLA损失通过分解交叉注意力改善密集文本对齐",
+    "构建目前最大的人类专用高质量数据集CosmicMan-HQ 1.0含600万高分辨率图像"
+   ],
+   "benchmarks": [
+    "FID",
+    "HPSv2",
+    "CLIP-Score",
+    "Acc_obj",
+    "Acc_tex",
+    "Acc_shape",
+    "Acc_all"
+   ]
+  }
+ }
 }

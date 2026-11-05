@@ -4,5 +4,34 @@
  "title": "DaReNeRF-Direction-aware-Representation-for-Dynamic-Scenes",
  "token": "sk-Gq5lt3OzO...",
  "created_at": "2026-11-04 21:10:09",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/fc4bc603-dd82-427a-950b-a7ecd29ff27d.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/fc4bc603-dd82-427a-950b-a7ecd29ff27d.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 01:22:51",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "NeRF",
+    "动态场景重建",
+    "小波变换",
+    "DTCWT",
+    "novel view synthesis",
+    "场景分解",
+    "方向感知表示"
+   ],
+   "field": "动态场景神经辐射场",
+   "innovations": [
+    "首次将双树复小波变换(DTCWT)引入NeRF优化，提出方向感知表示解决DWT的移位变分和方向模糊问题",
+    "设计可学习掩码压缩方案，使DTCWT表示的存储效率与SOTA方法相当",
+    "统一适用于动态4D和静态3D场景重建，在性能与模型大小间取得更优平衡"
+   ],
+   "benchmarks": [
+    "Plenoptic Video Dataset",
+    "D-NeRF Dataset",
+    "NeRF Synthetic",
+    "NSVF",
+    "LLFF"
+   ]
+  }
+ }
 }
