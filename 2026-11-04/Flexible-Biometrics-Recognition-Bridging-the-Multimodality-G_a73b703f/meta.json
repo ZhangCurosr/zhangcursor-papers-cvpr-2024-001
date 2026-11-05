@@ -4,5 +4,10 @@
  "title": "Flexible-Biometrics-Recognition-Bridging-the-Multimodality-G",
  "token": "sk-f9bQDVs2Y...",
  "created_at": "2026-11-04 21:15:05",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/751f085b-72f5-442f-a7bb-1b84f9e34b1c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/751f085b-72f5-442f-a7bb-1b84f9e34b1c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 22:08:22",
+  "chunks": 1
+ }
 }
