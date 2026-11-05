@@ -4,5 +4,32 @@
  "title": "Efficient-Multi-scale-Network-with-Learnable-Discrete-Wavele",
  "token": "sk-HhSqimc2F...",
  "created_at": "2026-11-04 21:14:39",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/ca8651d2-fc92-4199-9a27-ceab392084bd.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/ca8651d2-fc92-4199-9a27-ceab392084bd.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 07:58:54",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "motion deblurring",
+    "multi-scale network",
+    "wavelet transform",
+    "blind image restoration",
+    "SIMO architecture",
+    "real-world blur"
+   ],
+   "field": "图像恢复与增强",
+   "innovations": [
+    "提出SIMO多尺度基线消除复杂融合模块",
+    "可学习小波变换节点受完美重构条件约束",
+    "利用方向连续性先验提升真实模糊恢复"
+   ],
+   "benchmarks": [
+    "RealBlur-J",
+    "RealBlur-R",
+    "RSBlur",
+    "GoPro"
+   ]
+  }
+ }
 }

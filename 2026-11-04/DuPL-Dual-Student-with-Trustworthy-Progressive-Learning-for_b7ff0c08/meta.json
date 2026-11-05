@@ -4,5 +4,30 @@
  "title": "DuPL-Dual-Student-with-Trustworthy-Progressive-Learning-for",
  "token": "sk-yoA5lsrHK...",
  "created_at": "2026-11-04 21:35:02",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/13a8888a-a920-42b3-8a3e-007ad157faab.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/13a8888a-a920-42b3-8a3e-007ad157faab.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 07:58:08",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "弱监督语义分割",
+    "CAM确认偏差",
+    "双学生协同训练",
+    "渐进式学习",
+    "噪声标签过滤",
+    "一致性正则化"
+   ],
+   "field": "弱监督视觉分割",
+   "innovations": [
+    "提出双学生架构缓解CAM确认偏差，首次在一阶WSSS中系统分析该问题",
+    "设计可信渐进式学习策略，结合动态阈值调整与自适应噪声滤波充分利用伪标签",
+    "提出一致性正则化充分利用被过滤像素，实现'Every Pixel Matters'"
+   ],
+   "benchmarks": [
+    "PASCAL VOC 2012",
+    "MS COCO 2014"
+   ]
+  }
+ }
 }

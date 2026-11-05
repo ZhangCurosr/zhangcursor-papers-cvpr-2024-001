@@ -4,5 +4,30 @@
  "title": "FreeDrag-Feature-Dragging-for-Reliable-Point-based-Image-Edi",
  "token": "sk-UDLQGxzLo...",
  "created_at": "2026-11-04 21:17:45",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/d17bf691-3ebb-4c22-ab59-c756e46c9cfc.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/d17bf691-3ebb-4c22-ab59-c756e46c9cfc.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 07:59:43",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "image editing",
+    "point-based editing",
+    "feature dragging",
+    "StyleGAN",
+    "diffusion model",
+    "interactive editing"
+   ],
+   "field": "点基图像编辑",
+   "innovations": [
+    "提出特征拖动范式替代逐帧点追踪，通过自适应模板特征缓解缺失追踪",
+    "设计带回溯的线搜索机制约束运动方向并快速纠正异常运动",
+    "构建FreeDragBench数据集并提出CCSD对称拖动评估指标"
+   ],
+   "benchmarks": [
+    "FreeDragBench",
+    "DragBench"
+   ]
+  }
+ }
 }

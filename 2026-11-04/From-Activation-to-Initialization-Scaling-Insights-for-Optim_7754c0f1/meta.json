@@ -4,5 +4,35 @@
  "title": "From-Activation-to-Initialization-Scaling-Insights-for-Optim",
  "token": "sk-uRWIgUMtb...",
  "created_at": "2026-11-04 21:23:27",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/1d1186f1-cf3c-49c4-b3e2-45257acc4739.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/1d1186f1-cf3c-49c4-b3e2-45257acc4739.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 08:00:23",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Neural Fields",
+    "Scaling Laws",
+    "Network Initialization",
+    "Sine Activation",
+    "Overparameterization",
+    "NeRF",
+    "PINNs"
+   ],
+   "field": "隐式神经表示与理论优化",
+   "innovations": [
+    "首次证明sine/sinc/Gaussian/wavelet激活神经场的参数缩放定律",
+    "提出将末层方差缩小1/√n因子的新初始化方案，参数需求从超线性降至线性",
+    "理论预测在6类实际任务中均获实验验证，统一指导神经场设计"
+   ],
+   "benchmarks": [
+    "1D Curve Fitting",
+    "Image Regression (512x512 Lion)",
+    "Single Image Super Resolution (DIV2K)",
+    "Occupancy Fields",
+    "NeRF Synthetic (Lego)",
+    "Navier-Stokes PINNs"
+   ]
+  }
+ }
 }

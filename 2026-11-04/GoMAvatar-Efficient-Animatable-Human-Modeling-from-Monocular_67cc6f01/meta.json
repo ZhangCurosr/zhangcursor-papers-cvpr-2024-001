@@ -4,5 +4,33 @@
  "title": "GoMAvatar-Efficient-Animatable-Human-Modeling-from-Monocular",
  "token": "sk-7NOZt17oN...",
  "created_at": "2026-11-04 21:08:35",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/022eddce-5d92-4180-b433-735fd1a6774c.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/022eddce-5d92-4180-b433-735fd1a6774c.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 08:01:28",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Gaussians-on-Mesh",
+    "单目人体建模",
+    "实时渲染",
+    "可形变网格",
+    "Gaussian Splatting",
+    "数字人",
+    "Novel View Synthesis",
+    "Articulatable Avatar"
+   ],
+   "field": "可动画数字人重建与实时渲染",
+   "innovations": [
+    "提出Gaussians-on-Mesh混合表示，将3D Gaussian绑定到可形变三角面片局部坐标系实现高效正向articulation",
+    "设计伪漫反射/伪阴影分解渲染管线，以I=I_GS·S解耦视图相关着色效应",
+    "端到端可微GoM表示兼容OpenGL图形管线，实现43 FPS实时渲染与3.63 MB极致压缩"
+   ],
+   "benchmarks": [
+    "ZJU-MoCap",
+    "PeopleSnapshot",
+    "YouTube in-the-wild videos"
+   ]
+  }
+ }
 }

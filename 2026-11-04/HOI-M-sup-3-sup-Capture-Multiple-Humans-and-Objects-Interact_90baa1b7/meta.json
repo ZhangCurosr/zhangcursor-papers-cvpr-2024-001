@@ -4,5 +4,30 @@
  "title": "HOI-M-sup-3-sup-Capture-Multiple-Humans-and-Objects-Interact",
  "token": "sk-fYugtz9Wo...",
  "created_at": "2026-11-04 21:27:26",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/eaf052ab-9869-4405-978d-062286823774.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/eaf052ab-9869-4405-978d-062286823774.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 08:02:11",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Human-Object Interaction",
+    "Motion Capture",
+    "Diffusion Model",
+    "Multi-person Multi-object",
+    "3D Reconstruction",
+    "Dataset"
+   ],
+   "field": "多主体人体-物体交互感知与生成",
+   "innovations": [
+    "首个多人多物3D MoCap数据集HOI-M³（181M帧/42视角/90物体）",
+    "IMU辅助多目标联合优化跟踪管线",
+    "单目一步式多人多物捕捉与未结构化扩散生成基线"
+   ],
+   "benchmarks": [
+    "HOI-M³ Capture Benchmark (PCK_rel/PCK_abs/Chamfer/V2V)",
+    "HOI-M³ Generation Benchmark (FID/Pene)"
+   ]
+  }
+ }
 }

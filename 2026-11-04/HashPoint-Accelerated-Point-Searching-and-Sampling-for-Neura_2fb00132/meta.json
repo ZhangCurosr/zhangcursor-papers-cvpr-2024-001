@@ -4,5 +4,32 @@
  "title": "HashPoint-Accelerated-Point-Searching-and-Sampling-for-Neura",
  "token": "sk-vBvZ06NsJ...",
  "created_at": "2026-11-04 21:10:43",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/12e4d6b7-8655-4e26-9ad1-55affd1e8d00.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/12e4d6b7-8655-4e26-9ad1-55affd1e8d00.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 08:02:05",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "神经渲染",
+    "点云渲染",
+    "光线追踪",
+    "哈希搜索",
+    "自适应采样",
+    "NeRF"
+   ],
+   "field": "神经辐射场与点云渲染",
+   "innovations": [
+    "哈希表加速的点云搜索（3D转2D哈希查找）",
+    "自适应主表面采样（仅对首次相交表面采样）",
+    "结合光栅化速度与光线追踪质量的新范式"
+   ],
+   "benchmarks": [
+    "Synthetic-NeRF",
+    "Replica",
+    "Waymo",
+    "ShapeNet"
+   ]
+  }
+ }
 }

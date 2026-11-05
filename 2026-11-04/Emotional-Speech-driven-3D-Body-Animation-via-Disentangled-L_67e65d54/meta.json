@@ -4,5 +4,34 @@
  "title": "Emotional-Speech-driven-3D-Body-Animation-via-Disentangled-L",
  "token": "sk-FmwWXAxnf...",
  "created_at": "2026-11-04 21:28:44",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/f9e2cd19-2547-4154-b092-6b0bce8eae16.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/f9e2cd19-2547-4154-b092-6b0bce8eae16.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 07:59:03",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "speech-driven gesture",
+    "emotional animation",
+    "latent diffusion",
+    "disentanglement",
+    "3D body generation",
+    "SMPL-X",
+    "BEAT dataset"
+   ],
+   "field": "语音驱动3D手势生成",
+   "innovations": [
+    "语音内容/情感/风格三路解耦潜变量建模",
+    "多条件潜扩散手势生成框架",
+    "零样本情感与风格手势编辑"
+   ],
+   "benchmarks": [
+    "BEAT",
+    "FGD",
+    "Beat Align",
+    "Gesture Emotion Accuracy",
+    "SRGR"
+   ]
+  }
+ }
 }

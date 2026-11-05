@@ -4,5 +4,33 @@
  "title": "Affine-Equivariant-Networks-Based-on-Differential-Invariants",
  "token": "sk-4xOJ8RgWe...",
  "created_at": "2026-11-04 21:11:59",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/cf0ebc3c-14fe-4b99-a5a2-cd149486d09e.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/cf0ebc3c-14fe-4b99-a5a2-cd149486d09e.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 07:56:25",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "等变网络",
+    "仿射等变性",
+    "微分不变量",
+    "对称PDE",
+    "SupNorm归一化",
+    "affConv"
+   ],
+   "field": "等变深度学习",
+   "innovations": [
+    "首次无需群离散化/采样构建仿射等变网络",
+    "提出SupNorm归一化微分不变量解决除零问题并提升表达能力",
+    "设计可嵌入现有CNN的InvarLayer模块实现多群统一等变"
+   ],
+   "benchmarks": [
+    "affNIST",
+    "Scale-MNIST",
+    "Scale-Fashion",
+    "RS-MNIST",
+    "RS-Fashion"
+   ]
+  }
+ }
 }

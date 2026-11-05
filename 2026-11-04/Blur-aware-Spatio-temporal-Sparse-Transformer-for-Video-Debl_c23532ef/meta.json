@@ -4,5 +4,29 @@
  "title": "Blur-aware-Spatio-temporal-Sparse-Transformer-for-Video-Debl",
  "token": "sk-hN9qFiLuN...",
  "created_at": "2026-11-04 21:07:01",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/97173917-b565-4de0-82f2-d1ed3ec0f327.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/97173917-b565-4de0-82f2-d1ed3ec0f327.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 07:56:57",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "video deblurring",
+    "spatio-temporal transformer",
+    "sparse attention",
+    "bidirectional propagation",
+    "blur map estimation"
+   ],
+   "field": "视频恢复与增强",
+   "innovations": [
+    "提出无参数模糊图估计方法引导时空稀疏注意力",
+    "设计模糊感知双向特征传播（BBFP）缓解光流误差累积",
+    "在更长时序窗口（T=48-60）下实现高效视频去模糊，超越 SOTA"
+   ],
+   "benchmarks": [
+    "GoPro",
+    "DVD"
+   ]
+  }
+ }
 }

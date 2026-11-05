@@ -4,5 +4,32 @@
  "title": "EventEgo3D-3D-Human-Motion-Capture-from-Egocentric-Event-Str",
  "token": "sk-6puwYp2kk...",
  "created_at": "2026-11-04 21:27:14",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/87ec17db-19be-4ba3-b6e9-1874fc3afe1f.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/87ec17db-19be-4ba3-b6e9-1874fc3afe1f.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 07:59:36",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "3D human pose estimation",
+    "event camera",
+    "egocentric vision",
+    "head-mounted device",
+    "real-time motion capture",
+    "LNES",
+    "residual event propagation"
+   ],
+   "field": "事件视觉与3D人体姿态估计",
+   "innovations": [
+    "首次提出从第一人称鱼眼事件相机进行端到端实时3D人体姿态估计的EE3D框架",
+    "设计残差事件传播模块（REPM）通过置信度加权历史LNES帧以抑制背景事件噪声",
+    "构建EE3D-S/EE3D-R合成与真实数据集并给出紧凑型HMD原型"
+   ],
+   "benchmarks": [
+    "EE3D-R",
+    "MPJPE",
+    "PA-MPJPE"
+   ]
+  }
+ }
 }

@@ -4,5 +4,30 @@
  "title": "Guided-Slot-Attention-for-Unsupervised-Video-Object-Segmenta",
  "token": "sk-xjs1Z4GZW...",
  "created_at": "2026-11-04 21:14:40",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/a1944281-9ddb-426d-8804-06504a006a3a.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/a1944281-9ddb-426d-8804-06504a006a3a.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 08:01:34",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "无监督视频对象分割",
+    "槽注意力",
+    "引导槽",
+    "特征聚合转换器",
+    "KNN过滤",
+    "光流"
+   ],
+   "field": "无监督视频对象分割",
+   "innovations": [
+    "引导槽注意力机制：用目标帧上下文初始化前景/背景槽替代随机空槽",
+    "特征聚合转换器（FAT）：双路注意力融合目标帧局部特征与多参考帧全局特征",
+    "KNN过滤降噪：在特征空间选取最近邻特征参与槽注意力迭代更新"
+   ],
+   "benchmarks": [
+    "DAVIS-16",
+    "FBMS"
+   ]
+  }
+ }
 }

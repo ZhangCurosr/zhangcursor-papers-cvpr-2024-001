@@ -4,5 +4,34 @@
  "title": "HIR-Diff-Unsupervised-Hyperspectral-Image-Restoration-Via-Im",
  "token": "sk-EKBGNBzZY...",
  "created_at": "2026-11-04 21:27:40",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/7c809fde-c38c-46d0-8654-a21e957a2486.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/7c809fde-c38c-46d0-8654-a21e957a2486.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 08:01:39",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Hyperspectral Image Restoration",
+    "Diffusion Model",
+    "Unsupervised Learning",
+    "Low-Rank Decomposition",
+    "Total Variation Prior",
+    "Noise Schedule"
+   ],
+   "field": "高光谱图像恢复与遥感影像处理",
+   "innovations": [
+    "提出基于预训练扩散模型的无监督 HSI 恢复框架，将干净 HSI 分解为降采样图像与系数矩阵并分步恢复",
+    "利用 SVD 与 RRQR 从退化观测中鲁棒估计系数矩阵并优选波段索引",
+    "设计含 TV 正则的条件引导与指数噪声调度，在 20 步内实现去噪加速并提升条件扩散稳定性"
+   ],
+   "benchmarks": [
+    "Washington DC Mall",
+    "Houston",
+    "Salinas",
+    "HSI Denoising",
+    "Noisy HSI Super-Resolution",
+    "Noisy HSI Inpainting"
+   ]
+  }
+ }
 }

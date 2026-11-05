@@ -4,5 +4,38 @@
  "title": "Boosting-Image-Restoration-via-Priors-from-Pre-trained-Model",
  "token": "sk-haVkJ3VAf...",
  "created_at": "2026-11-04 21:14:17",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/eb0bfeb8-7430-40d9-bcaf-f89322b162aa.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/eb0bfeb8-7430-40d9-bcaf-f89322b162aa.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 07:57:50",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "图像恢复",
+    "预训练模型",
+    "CLIP",
+    "轻量级插件",
+    "空间可变增强",
+    "通道-空间注意力"
+   ],
+   "field": "低层视觉图像恢复",
+   "innovations": [
+    "首次系统探索大规模预训练模型（CLIP/Stable Diffusion）在低层图像恢复任务中的应用",
+    "提出<1M参数的PTG-RM轻量插件，通过空间可变增强和通道-空间注意力自适应融合多尺度先验",
+    "利用预训练先验学习空间自适应融合mask，替代传统手工设计的SNR值融合策略"
+   ],
+   "benchmarks": [
+    "LOL-real",
+    "SID",
+    "Rain100H",
+    "Test100",
+    "GoPro",
+    "HIDE",
+    "RealBlur-R",
+    "DPDD",
+    "BSD68",
+    "SIDD"
+   ]
+  }
+ }
 }

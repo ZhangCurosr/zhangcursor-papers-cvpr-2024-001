@@ -4,5 +4,31 @@
  "title": "From-a-Bird-s-Eye-View-to-See-Joint-Camera-and-Subject-Regis",
  "token": "sk-5WOIsMt5v...",
  "created_at": "2026-11-04 21:12:10",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/6c14084e-f8cc-48ea-8f40-df2a35f10dd5.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/6c14084e-f8cc-48ea-8f40-df2a35f10dd5.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 08:00:45",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "相机注册",
+    "主体注册",
+    "鸟瞰图(BEV)",
+    "无标定",
+    "多视角视觉",
+    "跨视角关联"
+   ],
+   "field": "多视角视觉理解与注册",
+   "innovations": [
+    "首次提出无需相机标定的多视角相机与主体联合BEV注册问题",
+    "提出结合深度VTM与几何SAM的交替优化混合框架",
+    "构建大规模合成与真实数据集并提供无标定基准"
+   ],
+   "benchmarks": [
+    "CSRD-II",
+    "CSRD-V",
+    "CSRD-R"
+   ]
+  }
+ }
 }

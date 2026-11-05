@@ -4,5 +4,33 @@
  "title": "FocSAM-Delving-Deeply-into-Focused-Objects-in-Segmenting-Any",
  "token": "sk-4LF0lBYcu...",
  "created_at": "2026-11-04 21:10:46",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/86676072-d978-4b56-847c-74794f6c8092.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/86676072-d978-4b56-847c-74794f6c8092.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 08:00:56",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "交互式分割",
+    "Segment Anything Model",
+    "动态窗口注意力",
+    "ViT适配",
+    "高效推理"
+   ],
+   "field": "图像语义分割",
+   "innovations": [
+    "提出聚焦细化器框架，打破SAM预提取嵌入一次性局限，动态聚焦目标区域",
+    "设计Dwin-MSA，基于预测掩码动态选择计算窗口避免冗余背景处理",
+    "提出P-DyReLU，以像素级Query-Embedding相似度驱动自适应激活实现交互信息深度融合"
+   ],
+   "benchmarks": [
+    "SBD",
+    "COD10K",
+    "DAVIS",
+    "MVTec",
+    "Grab-Cut",
+    "Berkeley"
+   ]
+  }
+ }
 }
