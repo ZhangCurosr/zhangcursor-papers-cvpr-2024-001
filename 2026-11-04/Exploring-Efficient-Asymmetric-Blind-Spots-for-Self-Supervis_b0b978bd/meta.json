@@ -4,5 +4,28 @@
  "title": "Exploring-Efficient-Asymmetric-Blind-Spots-for-Self-Supervis",
  "token": "sk-wC6oFabBZ...",
  "created_at": "2026-11-04 21:14:38",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/0364095d-b3c6-4542-8e64-cb0debcd0383.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/0364095d-b3c6-4542-8e64-cb0debcd0383.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 16:50:50",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "自监督去噪",
+    "盲点网络",
+    "空间相关噪声",
+    "多教师蒸馏",
+    "非对称操作"
+   ],
+   "field": "自监督低层视觉",
+   "innovations": [
+    "提出在原始分辨率下训练并使用非对称可调盲点的AT-BSN框架，平衡噪声抑制与结构保留",
+    "将预训练网络视为meta-teacher，通过不同盲点采样生成多教师信号进行知识蒸馏"
+   ],
+   "benchmarks": [
+    "SIDD",
+    "DND"
+   ]
+  }
+ }
 }

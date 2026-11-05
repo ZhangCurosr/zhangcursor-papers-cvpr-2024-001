@@ -4,5 +4,31 @@
  "title": "Fast-ODE-based-Sampling-for-Diffusion-Models-in-Around-5-Ste",
  "token": "sk-Kd7pZOTW3...",
  "created_at": "2026-11-04 21:10:12",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/db8ddd5a-2daa-436c-920b-aab8b66cfeda.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/db8ddd5a-2daa-436c-920b-aab8b66cfeda.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 16:51:18",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "扩散模型",
+    "快速采样",
+    "ODE求解器",
+    "知识蒸馏",
+    "低NFE生成"
+   ],
+   "field": "扩散模型加速采样",
+   "innovations": [
+    "基于二维子空间几何性质的均值方向学习求解器",
+    "可即插即用的AME-Plugin插件框架"
+   ],
+   "benchmarks": [
+    "CIFAR-10",
+    "ImageNet 64x64",
+    "FFHQ 64x64",
+    "LSUN Bedroom 256x256",
+    "Stable Diffusion"
+   ]
+  }
+ }
 }

@@ -4,5 +4,37 @@
  "title": "CLIB-FIQA-Face-Image-Quality-Assessment-with-Confidence-Cali",
  "token": "sk-DBMW62NBu...",
  "created_at": "2026-11-04 21:27:21",
- "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/4927a5b5-5ae1-4174-b1c8-17882137b294.zip"
+ "result_url": "https://cdn-mineru.openxlab.org.cn/pdf/2026-11-05/4927a5b5-5ae1-4174-b1c8-17882137b294.zip",
+ "summarized": {
+  "model": "agnes-2.5-flash",
+  "at": "2026-11-05 16:50:49",
+  "chunks": 1,
+  "meta": {
+   "keywords": [
+    "Face Image Quality Assessment",
+    "Confidence Calibration",
+    "CLIP",
+    "Vision-Language Alignment",
+    "Quality Fitting",
+    "Multimodal Learning",
+    "Face Recognition"
+   ],
+   "field": "人脸图像质量评估（FIQA）",
+   "innovations": [
+    "首个基于CLIP的质量因子联合学习与置信度校准FIQA框架",
+    "用合并质量因子分布与质量分布的JS散度计算置信度以缓解拟合瓶颈",
+    "首次在深度FIQA中全量利用五类客观质量因子端到端辅助训练"
+   ],
+   "benchmarks": [
+    "LFW",
+    "CFP-FP",
+    "CPLFW",
+    "CALFW",
+    "AgeDB",
+    "XQLFW",
+    "Adience",
+    "TinyFace"
+   ]
+  }
+ }
 }
